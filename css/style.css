@@ -1,0 +1,485 @@
+html, body{
+    background: #ffffff;
+    color: #404040;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    height: 100%;
+}
+
+/*InVID logo*/
+#invid-logo {
+  text-align: center;
+  position: fixed;
+  padding: 0px 20px 20px;
+  cursor: pointer;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.icon {
+  height: 32px;
+  width: 32px;
+}
+
+/* Navigation bar Separator*/
+.navsep {
+     border-left:1px solid #38546d; 
+     border-right:1px solid #16222c; 
+     height:64px;
+     display: inline-block;
+     position:relative;
+     top: 10px;
+
+}
+
+/*Naviguation Bar*/
+/* Remove margins and padding from the list, and add a black background color */
+ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #edece8;
+    text-align: center;
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Float the list items side by side */
+ul.navbar li {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+/* Style the links inside the list items */
+ul.navbar li a {
+    display: inline-block;
+    color: #000000;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 11px;
+}
+
+/* Change background color of links on hover */
+ul.navbar li a:hover {background-color: #ddd;}
+
+/* Hide the list item that contains the link that should open and close the topnav on small screens */
+ul.navbar li.icon {display: none;}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+.active {
+    background-color: #ffffff;
+}
+
+/* Body */
+#body-content {
+    text-align: center;
+    height: calc(100% - 98px);
+}
+
+#body-content h1 {
+    color: #333;
+    font-weight: normal;
+    font-size: 26px;
+}
+
+#body-content h2 {
+    color: #333;
+    font-size: 18px;
+}
+
+.form-action {
+  height:100%;
+}
+
+
+/* Form */
+form {
+  padding-right: 20px !important;
+}
+
+#half_input {
+  width: 25%;
+}
+
+form input[type=text],
+form input[type=password] {
+  width: 50%;
+  height: 40px;
+  margin-bottom: 10px;
+  padding-left: 15px; 
+  background-color: #edece8;
+  border: none;
+  color: #000000;
+  outline: none;
+  border-radius: 5px;
+}
+
+/* Change autocomplete input color*/ 
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #edece8 inset;
+}
+
+/*Button*/
+.button {
+  font-size: 16px;
+    padding: 15px 15px 15px 15px;
+    cursor: pointer;
+    border: none;
+    background: #136899;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 5px;
+    /*box-shadow: 0px 3px 1px #2075aa;*/
+    -webkit-transition: all 0.15s linear;
+      -moz-transition: all 0.15s linear;
+      transition: all 0.15s linear;
+}
+
+.button:hover {
+  background: #1e75aa;
+  /*box-shadow: 0 3px 1px #237bb2;*/
+}
+
+.button:active {
+  background: #136899;
+  /*box-shadow: 0 3px 1px #0f608c;*/
+}
+
+/* Accordeon */
+ /* Style the buttons that are used to open and close the accordion panel */
+button.accordion {
+    display: inline-block;
+    width: 30%;
+    transition: 0.4s;
+    margin-left: 10px;
+
+    font-size: 16px;
+    padding: 15px 15px 15px 15px;
+    cursor: pointer;
+    border: none;
+    background: #136899;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 5px;
+    /*box-shadow: 0px 3px 1px #2075aa;*/
+    -webkit-transition: all 0.15s linear;
+      -moz-transition: all 0.15s linear;
+      transition: all 0.15s linear;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+button.accordion.active, button.accordion:hover {
+    background-color: #136899;
+}
+
+button.accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+button.accordion.active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+
+/* Style the accordion panel. Note: hidden by default */
+div.panel {
+    padding: 18px;
+    background-color: transparent;
+    display: none;
+    margin: 0 auto;
+}
+
+ /* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Api content */
+#api-content{
+  display: none;
+  margin: 50px auto 15px;
+  padding: 10px 50px 40px;
+  width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  line-height: 22px;
+  word-break: break-all;
+}
+
+/* fb content */
+#fb-content{
+  display: none;
+  margin: 50px auto 15px;
+  padding: 10px 50px 40px;
+  width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  line-height: 22px;
+  word-break: break-all;
+}
+
+/* Table */
+table { 
+    border: 1px solid #000;
+    border-collapse: separate;
+    border-left: 0;
+    border-radius: 4px;
+    border-spacing: 0px;
+    width: 100%;
+}
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+    border-collapse: separate;
+}
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+th, td {
+    padding: 5px 4px 6px 4px; 
+    text-align: left;
+    vertical-align: top;
+    border-left: 1px solid #000;    
+}
+
+th {
+    border-top: 1px solid #000;
+}
+
+td {
+    border-top: 1px solid #000;
+    width: 70%;    
+}
+thead:first-child tr:first-child th:first-child, tbody:first-child tr:first-child td:first-child {
+    border-radius: 4px 0 0 0;
+}
+thead:last-child tr:last-child th:first-child, tbody:last-child tr:last-child td:first-child {
+    border-radius: 0 0 0 4px;
+}
+
+/* About content */
+#about{
+  margin: 50px auto 15px;
+  padding: 0px 50px 40px;
+  width: 700px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #FFF;
+  text-align: justify;
+  line-height: 22px;
+  height: auto;
+}
+
+/* Loader */
+/* Center the loader */
+.loader {
+  display: none;
+  position: relative;
+  left: 50%;
+  top: 5%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: 0 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Google Maps */
+.controls {
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn-map {
+  margin-top: 10px;
+  border-radius: 2px 0 0 2px;
+  height: 32px;
+  border: none;
+  background: #136899;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 5px;
+  /*box-shadow: 0px 3px 1px #2075aa;*/
+  -webkit-transition: all 0.15s linear;
+  -moz-transition: all 0.15s linear;
+  transition: all 0.15s linear
+}
+
+.btn-map:hover {
+  background: #1e75aa;
+  /*box-shadow: 0 3px 1px #237bb2;*/
+}
+
+.btn-map:active {
+  background: #136899;
+  /*box-shadow: 0 3px 1px #0f608c;*/
+}
+
+/* Google Maps Search Box */ 
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 300px;
+}
+
+/* Comments */
+p.comment {
+  display: inline-block;
+  background-color: #dbedfe;
+  padding: 5px;
+  border-radius: 4px;
+  position: relative;
+  border-width: 1px;
+  border-style: solid;
+  border-color: grey;
+}
+
+/*File Chooser*/
+.image-upload {
+  display: inline;
+}
+
+.image-upload > input
+{
+    display: none;
+}
+
+.image-upload label img {
+  height: 40px;
+  width: 40px;
+  line-height: 2em;
+}
+
+/* Metadata content */
+#place-metadata{
+  display: none;
+  margin: 50px auto 15px;
+  padding: 10px 50px 40px;
+  width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  line-height: 22px;
+  word-break: break-all;
+}
+
+/* Raw content */
+#raw-data{
+  margin: 50px auto 15px;
+  padding: 0px 50px 40px;
+  width: 700px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #FFF;
+  text-align: justify;
+  line-height: 22px;
+  word-break: break-all;
+}
+
+/* Iframe */
+.ifr{
+  height:100%;
+  width:100%;
+}
