@@ -25,6 +25,7 @@ function makeTable(json, lst, lst_desc){
 function imgTable(json_str){
     var json = JSON.parse(json_str);
     var table = document.createElement("table");
+    table.id = "imgTable";
     for (var key in json) {
         var tr = document.createElement("tr");
         var th = document.createElement("th");
@@ -52,6 +53,7 @@ function getExif(img) {
         var json_str = JSON.stringify(allMetaData, null, "\t");
         var table = imgTable(json_str);
         allMetaDataSpan.appendChild(table);
+        getLocation();
     });
 }
 
@@ -225,4 +227,38 @@ function getDataUri(url) {
         placeRawData(data);
     };
     image.src = url;
+}
+
+/*GPS coordinates*/
+function getTableValue(thValue){
+    var table = document.getElementById('imgTable');
+    var thcells = table.getElementsByTagName('th');
+    var tdcells = table.getElementsByTagName('td');
+    for (var i=0; i<thcells.length; i++){  
+        if (thcells[i].innerHTML == thValue) {
+            return tdcells[i].innerHTML
+        }
+    }
+    return "";
+}
+
+function getLocation(){
+    var GPSLatitudeRef = getTableValue("GPSLatitudeRef");
+    var GPSLatitude = getTableValue("GPSLatitude");
+    var GPSLongitudeRef = getTableValue("GPSLongitudeRef");
+    var GPSLongitude = getTableValue("GPSLongitude");
+    if (GPSLatitude != "" && GPSLatitudeRef != "" && GPSLongitude != "" && GPSLongitudeRef != "") {
+        var div = document.getElementById("place-metadata");
+        var br = document.createElement("br");
+        div.appendChild(br);
+        var btn = document.createElement("button");
+        btn.setAttribute("class","button");
+        btn.innerHTML = "View GPS location"
+        div.appendChild(btn);
+        btn.onclick = function() {
+            var mapurl = "http://maps.google.com/maps?q=";
+            mapurl += replaceAll(GPSLatitude, ",", "%20") + GPSLatitudeRef + "%20" + replaceAll(GPSLongitude, ",", "%20") + GPSLongitudeRef;
+            chrome.tabs.create({url:mapurl});
+        };
+    }
 }
