@@ -1,6 +1,8 @@
 var video_thumbnails_lst = [];
 var twitter_url = "https://twitter.com/search";
 var tw_json = "";
+var google_reverse_search_urls = [];
+var yandex_reverse_search_urls = [];
 
 /* Detect http link and make hyperlink */
 function urlify(text) {
@@ -32,7 +34,9 @@ function make_table(json, key_lst, name_lst){
         var th = document.createElement("th");
         var td = document.createElement("td");
         th.innerHTML = name_lst[index];
-        td.innerHTML = urlify(String(json[key_lst[index]]));
+        var content = json[key_lst[index]];
+        content = (Array.isArray(content)) ? content.join("\n") : String(content);
+        td.innerHTML = urlify(content);
         //createPopUp(th, lst_desc[index]);
         tr.appendChild(th);
         tr.appendChild(td);
@@ -46,18 +50,36 @@ function updateTable(json, key_lst, table)
 {
     var list = table.getElementsByTagName("td");
     for (var index = 0; index < list.length; index++) {
-        if (json[key_lst[index]])
-            list[index].innerHTML = json[key_lst[index]];
+        if (json[key_lst[index]]) {
+            var content = json[key_lst[index]];
+            content = (Array.isArray(content)) ? content.join("\n") : String(content);
+            list[index].innerHTML = urlify(content);
+        }
     }
 }
 
+function createTimeRow(title, time) {
+    var regex = /(.*), (.*) \(?UTC\)?/;
+    var row = makeRowTable(title, time);
+    if (regex.test(time)) {
+        var date_and_time = time.match(regex);
+        var url = "http://www.timeanddate.com/worldclock/converter.html?iso=";
+        var query = url + date_and_time[1].replace(/-/g, "") + "T" + date_and_time[2].replace(/:/g, "");
+        var td = row.lastElementChild;
+        appendLink(td, query, "<br>Convert to local time");
+        td.lastElementChild.setAttribute("target", "_blank");
+    }
+    return row;
+}
+
 /* Diplay buttons "verification comments" and "maps"*/
-function displayButtons(verif_number, locations, fb){
+function displayButtons(verif_number, locations, not_yt){
     var verif = document.getElementById("verif-content");
     var maps = document.getElementById("maps-content");
     var google = document.getElementById("google_search_btn");
     var yandex = document.getElementById("yandex_search_btn");
-    //var timeline = document.getElementById("twitter-content");
+    var tineye = document.getElementById("tineye_search_btn")
+    //var timeline = document.getElementById("twitter-shares-content");
     var twitter = document.getElementById("twitter_search_btn");
     if (verif_number == "0"){
         verif.setAttribute("style", "display: none;");
@@ -69,16 +91,17 @@ function displayButtons(verif_number, locations, fb){
     } else {
         maps.setAttribute("style", "display: block;");
     }
-    if (fb)
+    if (not_yt)
         twitter.setAttribute("style", "display: none;");
     //timeline.setAttribute("style", "");
     google.setAttribute("style", "");
     yandex.setAttribute("style", "");
+    tineye.setAttribute("style", "");
 }
 
 function hideButtons() {
     var buttons_id = [ "verif-content", "maps-content", "google_search_btn", "yandex_search_btn",
-        "twitter-content", "twitter_search_btn"
+        "twitter-shares-content", "twitter_search_btn", "tineye_search_btn"
     ]
     for (id of buttons_id) {
         document.getElementById(id).setAttribute("style", "display: none");
@@ -117,64 +140,34 @@ function placeComments(analysis_json){
 
 /* Thumbnails clickable */
 function activeThumbnail(thumbnails_id){
-// constants
-var SHOW_CLASS = 'show',
-HIDE_CLASS = 'hide',
-ACTIVE_CLASS = 'active';
+    // constants
+    var SHOW_CLASS = 'show',
+    HIDE_CLASS = 'hide',
+    ACTIVE_CLASS = 'active';
 
-/* Change to magnifier tab */
-$( '#'+ thumbnails_id ).on( 'click', 'a', function(e){
-    e.preventDefault();
-    var $tab = $( this ),
-    href = $tab.attr( 'href' );
+    /* Change to magnifier tab */
+    $( '#'+ thumbnails_id ).on( 'click', 'a', function(e){
+        e.preventDefault();
+        var $tab = $( this ),
+        href = $tab.attr( 'href' );
 
-    $( '.active' ).removeClass( ACTIVE_CLASS );
-    $( '#magnifier_tab' ).addClass( ACTIVE_CLASS );
+        $( '.active' ).removeClass( ACTIVE_CLASS );
+        $( '#magnifier_tab' ).addClass( ACTIVE_CLASS );
 
-    $( '.show' )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-    .removeClass( SHOW_CLASS )
-    .addClass( HIDE_CLASS )
-    .hide();
-    
-    $(href)
-    .removeClass( HIDE_CLASS )
-    .addClass( SHOW_CLASS )
-    .hide()
-    .fadeIn( 550 );
+        $( '.show' )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        .removeClass( SHOW_CLASS )
+        .addClass( HIDE_CLASS )
+        .hide();
 
-    var url_img = $tab.children()[0].src;
-    callMagnifier(url_img);
-});
-}
+        $(href)
+        .removeClass( HIDE_CLASS )
+        .addClass( SHOW_CLASS )
+        .hide()
+        .fadeIn( 550 );
 
-/* Open reverse Search image tabs */
-function imgSearch(){
-    var search_url = "https://www.google.com/searchbyimage?&image_url="
-    var lst = [];
-    for (var count in video_thumbnails_lst){
-        lst.push(search_url + video_thumbnails_lst[count]);
-    }
-    for (index in lst){
-      if (typeof chrome != "undefined")
-        chrome.tabs.create({url:lst[index]});
-      else
-        window.open(lst[index]);
-    }
-}
-
-/*Open yandex search with thumbnails urls*/
-function yandexImgSearch(){
-    var search_url = "https://yandex.com/images/search?url=";
-    var lst = [];
-    for (var count in video_thumbnails_lst){
-        lst.push(search_url + video_thumbnails_lst[count] + "&rpt=imageview");
-    }
-    for (index in lst){
-      if (typeof chrome != "undefined")
-        chrome.tabs.create({url:lst[index]});
-      else
-        window.open(lst[index]);
-    }
+        var url_img = $tab.children()[0].src;
+        callMagnifier(url_img);
+    });
 }
 
 /* Create Carousel html*/
@@ -404,8 +397,8 @@ function parseYTJson(json){
     /* List of indexes */
     var key_list_video_a = ["video_title", "video_description"];
     var name_list_video_a = ["Video title", "Video description"];
-    var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_upload_time", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description"];
-    var name_list_video_b = ["Video view count", "Like count", "Dislike count", "Duration", "Upload time", "Licensed content", "Description mentioned locations", "Recording location description"];
+    var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description"];
+    var name_list_video_b = ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description"];
     var key_list_channel = ["channel_description", "channel_created_time", "channel_view_count", "channel_url", "channel_location"];
     var name_list_channel = ["Channel description", "Channel created time", "Channel view count", "Channel page", "Channel location"];
     var key_list_comment = ["video_comment_count", "num_verification_comments"];
@@ -420,6 +413,8 @@ function parseYTJson(json){
         div.appendChild(table);
         div.appendChild(document.createElement("br"));
         table = make_table(json,key_list_video_b, name_list_video_b);
+        var rowTime = createTimeRow("Upload time", json["video_upload_time"]);
+        table.appendChild(rowTime);
         div.appendChild(table);
         /*Channel table*/
         makeTitle("Channel:", div);
@@ -435,6 +430,8 @@ function parseYTJson(json){
         hasUpdateMap = false;
         hasPlaceImages = false;
         video_thumbnails_lst = [];
+        google_reverse_search_urls = [];
+        yandex_reverse_search_urls = [];
         twitter_url = "";
         document.getElementById("twitter_search_btn").setAttribute("style", "display: none;");
         hasDisplayButtons = false;
@@ -472,8 +469,10 @@ function parseYTJson(json){
         /* Place thumbnails */
         placeImages("place-carousel", "place-thumbnails", "place-preview", json.video_thumbnails);
         hasPlaceImages = true;
-        /* Update Google search button */
+        /* Update reverse search button */
         video_thumbnails_lst = json.video_thumbnails;
+        google_reverse_search_urls = json.reverse_image_thumbnails_search_url_google;
+        yandex_reverse_search_urls = json.reverse_image_thumbnails_search_url_yandex;
     }
     /* Update Twitter search button */
     if (json.twitter_search_url && twitter_url == "")
@@ -491,17 +490,17 @@ function parseYTJson(json){
 
 /*Parse the Facebook Json*/
 function parseFBJson(json){
-    /* boole value */
+    /* booleans values */
     var hasPlaceImages;
     var hasPlaceComments;
     var hasDisplayButtons;
     var hasUpdateMap;
 
     /* List of indexes */
-    var key_list_video = ["video_id", "title", "length", "updated_time", "created_time", "content_category", "content_tags", "video_description"];
-    var name_list_video = ["Video id", "Video title", "Duration", "Updated time", "Created time", "Content category", "Content tags", "Video description"];
-    var key_list_from = ["from", "from_about", "from_category", "from_link", "from_fan_count", "from_description", "from_location_city", "from_location_country", "from_website"];
-    var name_list_from = ["Page", "About", "Category", "Link", "Fan count", "Description", "Location city", "Location country", "Website"];
+    var key_list_video = ["video_id", "title", "length", "content_category", "content_tags", "video_description"];
+    var name_list_video = ["Video id", "Video title", "Duration", "Content category", "Content tags", "Video description"];
+    var key_list_from = ["from", "from_about", "from_is_verified", "from_category", "from_link", "from_fan_count", "from_description", "from_location_city", "from_location_country", "from_website"];
+    var name_list_from = ["Page", "About", "Verified profile", "Category", "Link", "Fan count", "Description", "Location city", "Location country", "Website"];
     var key_list_count = ["total_comment_count", "num_verification_comments"];
     var name_list_count = ["Video comment count", "Number verification comments"];
 
@@ -511,6 +510,10 @@ function parseFBJson(json){
         /*Video table*/
         makeTitle("Video:", div);
         var table = make_table(json, key_list_video, name_list_video);
+        var rowTime = createTimeRow("Updated time", json["updated_time"]);
+        table.appendChild(rowTime);
+        rowTime = createTimeRow("Created time", json["created_time"]);
+        table.appendChild(rowTime);
         div.appendChild(table);
         /*Page table*/
         makeTitle("Page:", div);
@@ -524,6 +527,8 @@ function parseFBJson(json){
         hasPlaceComments = false;
         hasDisplayButtons = false;
         hasUpdateMap = false;
+        google_reverse_search_urls = [];
+        yandex_reverse_search_urls = [];
     }
 
     function update(json) {
@@ -551,8 +556,10 @@ function parseFBJson(json){
         placeComments(json);
         hasPlaceComments = true;
     }
-    /* Update Google search button */
+    /* Update reverse search buttons */
     video_thumbnails_lst = json.video_thumbnails;
+    google_reverse_search_urls = json.reverse_image_thumbnails_search_url_google;
+    yandex_reverse_search_urls = json.reverse_image_thumbnails_search_url_yandex;
     /*Display buttons*/
     if (!hasDisplayButtons && (json.processing_status == 'done' || (json.num_verification_comments && json.video_description_mentioned_locations))) {
         displayButtons(json.num_verification_comments, json.video_description_mentioned_locations, true);
@@ -566,12 +573,142 @@ function parseFBJson(json){
     }
 }
 
+/*Parse the Twitter Json*/
+function parseTWJson(json){
+    /* booleans values */
+    var hasPlaceImages;
+    // var hasPlaceComments; when verified comments added by iti
+    var hasDisplayButtons;
+    var hasUpdateMapText;
+    var hasUpdateMapDesc;
+
+    /* List of indexes */
+    var key_list_video = ["id_str", "full_text", /*"created_at",*/ "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations"];
+    var name_list_video = ["Identifiant", "Content", /*"Created",*/ "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned"];
+    var key_list_user = ["user_name", "user_screen_name", "user_location", "user_url", "user_description", "user_protected", "user_verified", "user_followers_count", "user_friends_count", "user_listed_count", "user_favourites_count", "user_statuses_count", "user_created_at", "user_lang", "user_description_mentioned_locations"];
+    var name_list_user = ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Friends", "Lists", "Tweets liked", "Tweets count", "Created", "user_lang", "Locations mentioned"];
+    /*var key_list_comment = ["retweet_count"];
+    var name_list_comment = ["Retweets count"];*/
+
+    function chooseVideoUrl(urls) {
+        var max = 0;
+        var res = urls[0];
+        for (var url of urls) {
+            var regex = /\/([0-9])+x([0-9])+/;
+            if (regex.test(url)) {
+                var matches = url.match(regex);
+                var current = matches[1] * matches[2];
+                if (current > max) {
+                    max = current
+                    td.innerHTML = url;
+                }
+            }
+        }
+        return res;
+    }
+
+    function start(json) {
+        /* Video Infos*/
+        var div = document.getElementById("place-table")
+        /*Video table*/
+        makeTitle("Video:", div);
+        var table = make_table(json, key_list_video, name_list_video);
+        var rowTime = createTimeRow("Created", json["created_at"]);
+        table.appendChild(rowTime);
+        div.appendChild(table);
+        var row = document.createElement("tr");
+        var th = document.createElement("th");
+        th.innerHTML = "Video";
+        var td = document.createElement("td");
+        var urls = json["video_info_url"];
+        td.innerHTML = urlify(chooseVideoUrl(urls));
+        row.appendChild(th);
+        row.appendChild(td);
+        table.appendChild(row);
+        div.appendChild(table);
+        
+        /*Page table*/
+        makeTitle("User:", div);
+        table = make_table(json, key_list_user, name_list_user);
+        div.appendChild(table);
+        /* Comments */
+        /*makeTitle("Retweets:", div);
+        table = make_table(json, key_list_comment, name_list_comment); when verified comments added by iti
+        div.appendChild(table);*/
+        hasPlaceImages = false;
+        google_reverse_search_urls = [];
+        yandex_reverse_search_urls = [];
+        // hasPlaceComments = false; when verified comments added by iti
+        hasDisplayButtons = false;
+        hasUpdateMapText = false;
+        hasUpdateMapDesc = false;
+    }
+
+    function update(json) {
+        var tables = document.getElementById("place-table").getElementsByTagName("table");
+        /*Video table*/
+        updateTable(json, key_list_video, tables[0]);
+        /*Page table*/
+        updateTable(json, key_list_user, tables[1]);
+        /* Comments */
+        //updateTable(json, key_list_comment, tables[2]); when verified comments added by iti
+    }
+
+    if (!document.getElementById("place-table").hasChildNodes())
+        start(json);
+    else
+        update(json);
+
+    /* Place thumbnails */
+    if (!hasPlaceImages && json.user_profile_image_url_https_original) {
+        placeImages("place-carousel", "place-thumbnails", "place-preview", [json.user_profile_image_url_https_original]);
+        hasPlaceImages = true;
+    }
+
+    /* Update reverse search buttons */
+    video_thumbnails_lst = json.user_profile_image_url_https_original;
+    google_reverse_search_urls = json.reverse_image_thumbnails_search_url_google;
+    yandex_reverse_search_urls = json.reverse_image_thumbnails_search_url_yandex;
+
+    /* Display buttons */
+    if (!hasDisplayButtons && (json.processing_status == 'done' || (json.tweet_text_mentioned_locations.length && json.user_description_mentioned_locations.length))) {
+        var tmp = [];
+        if (json.user_description_mentioned_locations.length || json.tweet_text_mentioned_locations.length)
+            tmp.push("");
+        displayButtons(0/*json.num_verification_comments when added by iti*/, tmp, true);
+        hasDisplayButtons = true;
+    }
+
+    /* Update map*/
+    if ((!hasUpdateMapText && json.tweet_text_mentioned_locations.length) || (!hasUpdateMapDesc && json.user_description_mentioned_locations.length)) {
+        var tmp = [];
+        if (json.tweet_text_mentioned_locations) {
+            tmp = tmp.concat(json.tweet_text_mentioned_locations);
+            hasUpdateMapText = true;
+        }
+        if (json.user_description_mentioned_locations) {
+            tmp = tmp.concat(json.user_description_mentioned_locations);
+            hasUpdateMapDesc = true;
+        }
+        updateMap(tmp);
+        hasUpdateMap = true;
+    }
+
+    // when verified comments added by iti
+    // /* Place verification comments */
+    // if (!hasPlaceComments && json.processing_status == "done") {
+    //     placeComments(json);
+    //     hasPlaceComments = true;
+    // }
+
+    
+}
 
 /* Send requests for video analysis*/
-function video_api_analysis(video_id, isProcess){
+function video_api_analysis(video_url, isProcess){
     cleanElement("fb-content");
     document.getElementById("fb-content").style.display = "none";
-    var analysis_url = "http://caa.iti.gr/verify_videoV2?url=" + video_id;
+    var analysis_url = "http://caa.iti.gr/verify_videoV2?url=" + video_url;
     if (isProcess)
         analysis_url += "&reprocess=1"
     loaded_tw = false;
@@ -584,11 +721,15 @@ function video_api_analysis(video_id, isProcess){
         switch (err) {
             case "ERROR3":
             case "ERROR4":
-            return "Sorry but we cannot process this video link";
+                return "Sorry but we cannot process this video link";
             case "ERROR2":
-            return "This is a wrong url. Please check it and try again.";
+                return "This is a wrong url. Please check it and try again.";
+            case "share":
+                return "An error occured with the reception of Twitter shares.";
+            case "ERROR5":
+                return "No video found in this tweet";
             default:
-            return "There were an error while trying to process this video. Please check the link and try again.";
+                return "There were an error while trying to process this video. Please check the link and try again.";
         }
     }
 
@@ -622,7 +763,14 @@ function video_api_analysis(video_id, isProcess){
         errorElement.style.display = "block";
     }
 
-    
+    function share_fail(msg) {
+        document.getElementById("loader_tw").style.display = "none";
+        document.getElementById("verif-content").style.display = "none";
+        document.getElementById("twitter-shares-content").style.display = "none";
+        var errorElement = document.getElementById("error-content-share");
+        errorElement.innerHTML = msg;
+        errorElement.style.display = "block";
+    }
 
     /* Start Analysis */
     $.getJSON(analysis_url, function(data) {
@@ -636,23 +784,28 @@ function video_api_analysis(video_id, isProcess){
             return;
         }
         $.getJSON(analysis_url, function(data) {
-            /* Youtube Response */
+            /* Analysis Response */
             var url;
             var callback;
             if (data["youtube_response"] !== undefined)
-            {
+            { // YouTube
                 url = data["youtube_response"];
                 callback = parseYTJson;
             }
-            else /* Facebook response */
-            {
+            else if (data["facebook_response"] !== undefined)
+            { // Facebook
                 url = data["facebook_response"];
                 callback = parseFBJson;
+            }
+            else 
+            { // Twitter
+                url = data["twitter_response"];
+                callback = parseTWJson;
             }
             $.getJSON(url, function(data) {
                 parse_response(data, url, callback);
             }).fail(function(jqxhr, textStatus, error) {
-                console.error("yt or fb : " + url);
+                console.error("start response : " + url);
                 console.error(textStatus + ", " + error);
                 request_fail(get_error_message(""));
             })
@@ -666,9 +819,9 @@ function video_api_analysis(video_id, isProcess){
                             parse_tw(data);
                         }, 2000);
                     }).fail(function (jqxhr, textStatus, error) {
-                        console.error("twitter loop : " + url_twitter);
+                        console.error("parse share : " + url_twitter);
                         console.error(textStatus + ", " + error);
-                        request_fail(get_error_message(""));
+                        share_fail(get_error_message("share"));
                     });
                 }
                 else {
@@ -677,12 +830,12 @@ function video_api_analysis(video_id, isProcess){
                     document.getElementById("loader_tw").style.display = "none";
                 }
             }).fail(function( jqxhr, textStatus, error ) {
-                console.error("start tw : " + url_twitter);
+                console.error("start share : " + url_twitter);
                 console.error(textStatus + ", " + error);
-                request_fail(get_error_message(""));
+                share_fail(get_error_message("share"));
             });
         }).fail(function(jqxhr, textStatus, error) {
-            console.error("get url : " + analysis_url);
+            console.error("get urls : " + analysis_url);
             console.error(textStatus + ", " + error);
             request_fail(get_error_message(""));
         });
@@ -697,23 +850,23 @@ function video_api_analysis(video_id, isProcess){
 
 /*Get the video url and start youtube or facebook analysis*/
 function submit_form(){
-    var youtube_url = "https://www.youtube.com/watch?v=";
-    var facebook_url = "https://www.facebook.com"
+    //var youtube_url = "https://www.youtube.com/watch?v=";
+    var facebook_url = "https://www.facebook.com";
+    var twitter_url = "https://twitter.com"
 	var url = $("[name=video_url2]").val();
     var reprocessChecked = document.getElementById("api_reprocess").checked;
     document.getElementById("error-content").style.display = "none";
+    document.getElementById("error-content-share").style.display = "none";
     hideButtons();
 	if (url != "") {
         cleanElement("place-table");
-        var video_id = url;
-        if (url.substring(0, youtube_url.length) == youtube_url ||
-            url.substring(0, facebook_url.length) == facebook_url) {
+        if (isYtUrl(url) || url.startsWith(facebook_url) || url.startsWith(twitter_url)) {
             video_api_analysis(url, reprocessChecked);
         }
         else {
             document.getElementById("api-content").style.display = "none";
             var errorElement = document.getElementById("error-content");
-            errorElement.innerHTML = "Please enter a Youtube or a Facebook URL";
+            errorElement.innerHTML = "Please enter a Youtube, Facebook or Twitter URL";
             errorElement.style.display = "block";
         }
     }
@@ -729,21 +882,25 @@ form.addEventListener("submit", function(e){
 
 /* Google button : thumbnails reverse search */
 document.getElementById("google_search_btn").onclick = function() {
-    imgSearch();
+    //reverseImgSearch("google", video_thumbnails_lst);
+    openTab(google_reverse_search_urls);
 }
 
-/* Google button : thumbnails reverse search */
+/* Yandex button : thumbnails reverse search */
 document.getElementById("yandex_search_btn").onclick = function() {
-    yandexImgSearch();
+    //reverseImgSearch("yandex", video_thumbnails_lst);
+    openTab(yandex_reverse_search_urls);
 };
 
 
+/* Tineye button : thumbnails reverse search */
+document.getElementById("tineye_search_btn").onclick = function() {
+    reverseImgSearch("tineye", video_thumbnails_lst);
+};
+
 /* Twitter button : search video in twitter */
 document.getElementById("twitter_search_btn").onclick = function() {
-  if (typeof chrome != "undefined")
-    chrome.tabs.create({url:twitter_url});
-  else
-    window.open(twitter_url);
+  openTab(twitter_url);
 };
 
 /* Twitter timeline */
@@ -796,7 +953,6 @@ function makeJSON(data){
         obj_ex.text = new Object();
         var user =  data.tweets[index].user.screen_name;
         var user_name = data.tweets[index].user.name;
-        //var user_name = data.tweets[index].user.screen_name;
         var user_img = '<img src="' + data.tweets[index].user.profile_image_url_normal + '" />';
         obj_ex.text.headline = user_name + '<a href="https://twitter.com/'+ user + '" target="_blank"> @' + user + "</a>" + " " + user_img;
         obj_ex.text.text = data.tweets[index].text;
@@ -822,12 +978,12 @@ function loadTimeline(){
     if (loaded_tw) {
         loader.setAttribute("style", "display: none;");
         /* timeline disable */
-        document.getElementById("twitter-content").setAttribute("style", "display: none");
+        document.getElementById("twitter-shares-content").setAttribute("style", "display: none");
         /*
         if (tw_json.events.length)
-            document.getElementById("twitter-content").setAttribute("style", "");
+            document.getElementById("twitter-shares-content").setAttribute("style", "");
         else
-            document.getElementById("twitter-content").setAttribute("style", "display: none");*/
+            document.getElementById("twitter-shares-content").setAttribute("style", "display: none");*/
     } else {
         loader.setAttribute("style", "display: block;");
         tl.setAttribute("style", "width: 100%; height: 600px; display: none;");

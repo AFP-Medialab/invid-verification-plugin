@@ -31,13 +31,8 @@
 		<li><a href="#forensic" title="Image Verification Assistant"><img src="img/forensic_logo.svg" class="icon"><br>Forensic</a></li>
 		<div class="navsep"></div>
 		<li><a href="#about" title="About"><img src="img/info2.svg" class="icon"><br>About</a></li>
-		<li><a href="#survey" title="Survey"><img src="img/survey.svg" class="icon"><br>Survey
-			<!-- The "new" text -->
-			<p class="new_element" style="margin-left: 12px">new</p>
-		</a></li>
+		<li><a href="#survey" title="Survey"><img src="img/survey.svg" class="icon"><br>Survey</a></li>
 		<li><a href="#tutorial" title="Tutorial"><img src="img/tutorial1.svg" class="icon"><br>Tutorial
-			<!-- The "new" text -->
-			<p class="new_element" style="margin-left: 19px">new</p>
 		</a></li>
 	</ul>
 
@@ -47,7 +42,7 @@
 			<h1>Video contextual verification</h1>
 			<form id="video_form2">
 				<div>
-					<input type="text" id="apibox" name="video_url2" placeholder="Copy and paste a Youtube or Facebook url" />
+					<input type="text" id="apibox" name="video_url2" placeholder="Copy and paste a Youtube, Facebook or Twitter url" />
 					<br>
 					<input type="checkbox" id="api_reprocess" name="api_reprocess"/> <label for="api_reprocess"> Reprocess </label>
 					<br>
@@ -65,6 +60,7 @@
 						<div id="place-comments"></div>
 					</div>
 				</div>
+
 				<br>
 				<br>
 				<div id="maps-content">
@@ -85,16 +81,24 @@
 				<br>
 				<button id="google_search_btn" class="button">Google Image reverse search</button>
 				<button id="yandex_search_btn" class="button">Yandex Image reverse search</button>
+				<div style="display: inline-block;">
+					<button id="tineye_search_btn" class="button">Tineye Image reverse search
+						<p class="new_element" style="font-size: 15px; margin-left: 20px;">
+							new
+						</p>
+					</button>
+				</div>
 				<button id="twitter_search_btn" class="button">Twitter video search</button>
 				<br>
 				<br>
-				<div id="twitter-content">
+				<div id="twitter-shares-content">
 					<button class="accordion">Twitter timeline</button>
 					<div id="place-timeline"class="panel">
 						<div id="loader_tw" class="loader"></div>
 						<div id='timeline-embed' style="width: 100%; height: 100%;"></div>
 					</div>
 				</div>
+				<div id="error-content-share" style="display: none; color: red;"></div>
 				
 				
 				<!--<iframe id="twitter_overlay" allowTransparency="true" scrolling="no" frameborder="0" >
@@ -115,7 +119,18 @@
 				<ul>
 					<input type="text" name="video_url" placeholder="Youtube video URL" />
 					<br>
-					<div id="engine"><input type="radio" id="google_engine" name="engine" checked/> Google <input type="radio" id="yandex_engine" name="engine"/> Yandex <input type="radio" id="bing_engine" name="engine"> <div style="display: inline-block;"> Bing <p class="new_element">new</p></div> </div> <br>
+					<div id="engine">
+						<input type="radio" id="google_engine" name="engine" checked/> Google 
+						<input type="radio" id="yandex_engine" name="engine"/> Yandex 
+						<input type="radio" id="bing_engine" name="engine"> Bing 
+						<input type="radio" id="tineye_engine" name="engine"> 
+						<div style="display: inline-block;"> Tineye
+							<p class="new_element">
+								new
+							</p>
+						</div> 
+					</div> 
+					<br>
 					<input type="submit" value="Submit" class="button" />
 				</ul>
 			</form>
@@ -179,7 +194,10 @@
 					<form id="filter_form">
 						<ul>
 							<br>
-							<input type="radio" id="none" name="filter" checked/> None <input type="radio" id="sharp" name="filter"/> Sharp <input type="radio" id="flip" name="filter"> <div style="display: inline-block;"> Flip <p class="new_element">new</p> </div> <input type="radio" id="bicubic" name="filter"/> Bicubic
+							<input type="radio" id="none" name="filter" checked/> None 
+							<input type="radio" id="sharp" name="filter"/> Sharp 
+							<input type="radio" id="flip" name="filter"> Flip 
+							<input type="radio" id="bicubic" name="filter"/> Bicubic
 							<div id="scale_input" style="display: none;">
 								<br>
 								<input id="scale" type="range" min="25" max="400" value="100" step="1" />
@@ -216,16 +234,21 @@
 				<br>
 				<br>
 				<div style="display: inline;">
-					<!--<button class="button">-->
-						<a class="button" id="download_img_magnifier" href="" download="picture.png" style="color: white; text-decoration: none">Download</a>
-					<!--</button>-->
+					<a class="button" id="download_img_magnifier" href="" download="picture.png" style="color: white; text-decoration: none">Download
+					</a>
 					<div id="lst_search_btn" style="display: inline;">
 						<button id="img_rev_search_btn" class="button">Google Image</button>
 						<button id="baidu_rev_search_btn" class="button">Baidu Image</button>
 						<button id="yandex_rev_search_btn" class="button">Yandex Image</button>
+						<div style="display: inline-block;">
+							<button id="tineye_rev_search_btn" class="button">Tineye Image</button>
+							<p class="new_element" style="font-size: 12px; margin-left: 15px;">
+								new
+							</p>
+						</div>
 						<button id="img_verif_btn" class="button">Forensic</button>
 					</div>
-					<button id="copy_url_img_magnifier" class="button">Copy URL</button>
+					<button id="copy_url_img_magnifier" class="button">Google Image</button>
 				</div>
 			</div> 
 		</div>
@@ -251,6 +274,7 @@
 					<br>
 				</ul>
 			</form>
+			<div id="preview_metadata"></div>
 			<div id="place-metadata"></div>
 		</div>
 		<div id="forensic" class="form-action hide">
@@ -277,22 +301,43 @@
 
 		<div id="tutorial" class="form-action hide">
 			<h1>Tutorial</h1>
+			<img src="img/VideoURLmenu.png">
+			<p>
+				This is a new feature (v0.59) to access the InVID plugin and to help journalists to retrieve videos and images urls within the code of a web page: 
+				<ul>
+					<li>
+						<strong>Open InVID</strong> launches the plugin
+					</li>
+					<li> <strong>Video Urls</strong> displays the url of a video present on a web page</li>
+					<li><strong>Image Urls</strong> displays the url of an image present on a web page</li>
+				</ul>
+				Here, below, is an example of a video url retrieval on Instagram.
+			</p>
+			<img src="img/InstagramDemo.png" style="width: 100%">
 			<div style="text-align: center">
 				<iframe width="640" height="385"
 				src="https://www.youtube.com/embed/nmgbFODPiBY"
 				frameborder="0"></iframe> 
 			</div>
-			<p>The first <strong>Analysis tab</strong> allows you to query the InVID context aggregation and analysis service developed by the <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI). In a nutshell, this service is an enhanced metadata viewer for Youtube and Facebook videos that allows you to retrieve contextual information, location (if detected), most interesting comments, apply reverse image search and check for tweets on the video (on Youtube). Be aware that the service may take some time if the video processed has a lot of comments. A new feature (a reprocess button) allows you to refresh the analysis.</p>
-			<p>The second <strong>Keyframe tab</strong> is an iframe opening the website of <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI)  on video fragmentation. It allows you to copy a video url (from Youtube, Twitter, Facebook, Daily Motion or Dropbox) or to upload a video file (in mp4, webm, avi, mov, wmv, ogv, mpg, flv, and mkv format) in order to segment it in keyframes which then can be searched with a right click on Google, Yandex and Baidu images. Our service extracts more keyframes and therefore gives the opportunity to enhance the video reverse image search. Those are the real keyframes of the video, not the thumbnails served by Youtube or Facebook.</p>
-			<p>The <strong>Thumbnails tab</strong> allows you to quickly trigger a reverse image search on Google or Yandex Images with the four thumbnails extracted from a Youtube video. Up to four tabs (according to the number of thumbnails available) are opened automatically in your browser with the results of the reverse search while the four thumbnails are also displayed in the plugin page. This tab is somewhat redundant with what can be done with the <strong>Analysis tab</strong> but it is very fast and efficient if you just need to look whether a Youtube video has already been published previously. Please note that the Chinese search engine Baidu is not implemented here because it is filtering out Youtube content.</p>
+			<p>
+				The first <strong>Analysis tab</strong> allows you to query the InVID context aggregation and analysis service developed by the <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI). In a nutshell, this service is an enhanced metadata viewer for Youtube, Facebook and Twitter videos that allows you to retrieve contextual information, location (if detected), most interesting comments, apply reverse image search and check for tweets on the video (on Youtube). Be aware that the service may take some time if the video processed has a lot of comments. A new feature (a reprocess button) allows you to refresh the analysi
+			</p>
+			<p>
+				The second <strong>Keyframe tab</strong> is an iframe opening the website of <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI)  on video fragmentation. It allows you to copy a video url (from Youtube, Twitter, Facebook, Daily Motion or Dropbox) or to upload a video file (in mp4, webm, avi, mov, wmv, ogv, mpg, flv, and mkv format) in order to segment it in keyframes which then can be searched with a right click on Google, Yandex, Tineye and Baidu images. Our service extracts more keyframes and therefore gives the opportunity to enhance the video reverse image search. Those are the real keyframes of the video, not the thumbnails served by Youtube or Facebook.
+			</p>
+			<p>
+				The <strong>Thumbnails tab</strong> allows you to quickly trigger a reverse image search on Google, Bing, Tineye or Yandex Images with the four thumbnails extracted from a Youtube video. Up to four tabs (according to the number of thumbnails available) are opened automatically in your browser with the results of the reverse search while the four thumbnails are also displayed in the plugin page. This tab is somewhat redundant with what can be done with the <strong>Analysis tab</strong> but it is very fast and efficient if you just need to look whether a Youtube video has already been published previously. Please note that the Chinese search engine Baidu is not implemented here because it is filtering out Youtube content.
+			</p>
 			<p>The <strong>Search tab</strong> allows to enhance a Twitter advanced search for keywords or hashtag using the since and until operators, either separately or together to query within a time interval, up to the minute. It translates automatically the calendar date, hour and minutes into an unix timestamp to facilitate the query, e.g. of first eyewitness pictures or videos within a time range just after a breaking news event. We have also added other features from Twitter advanced such geocode, near, from, language and various filter operators.</p>
-			<p>The <strong>Magnifier lens tab</strong> allows you to display an image through its url and to zoom or apply a magnifying lens on the image, or/and to enhance it through a bicubic algorithm to help you discover implicit knowledge such as written words, signs, banners ... You can either enter the image url, upload an image from your local drive with the local file button, or drag and drop an image in another tab within your browser and copy and paste the local url. Once the image is displayed from an url, you can also perform a Google, Yandex and Baidu reverse image search on it or use the Image forensic service designed by ITI and DW in the <a href="https://revealproject.eu/" target="_blank">Reveal european project</a>. If you are using a local image or you have modified any image (sharp, flip, bicubic), you can either download your modified image or copy a new url to paste it in google images tab which opens in your browser (watch the video below). This feature also supports links of stored images in Dropbox and Google drive.</p>
+			<p>The <strong>Magnifier lens tab</strong> allows you to display an image through its url and to zoom or apply a magnifying lens on the image, or/and to enhance it through a bicubic algorithm to help you discover implicit knowledge such as written words, signs, banners ... You can either enter the image url, upload an image from your local drive with the local file button, or drag and drop an image in another tab within your browser and copy and paste the local url. Once the image is displayed from an url, you can also perform a Google, Yandex, Tineye and Baidu reverse image search on it or use the Image forensic service designed by ITI and DW in the <a href="https://revealproject.eu/" target="_blank">Reveal european project</a>. If you are using a local image or you have modified any image (sharp, flip, bicubic), you can either download your modified image or copy a new url to paste it in google images tab which opens in your browser (watch the video below). This feature also supports links of stored images in Dropbox and Google drive.</p>
 			<div style="text-align: center">
 				<iframe width="640" height="385"
 				src="https://www.youtube.com/embed/8S59OMBvT8w"
 				frameborder="0"></iframe> 
 			</div>	
-			<p>The <strong>Metadata tab</strong> allows you to check the Exif metadata of a picture in jpeg format or metadata of a vidéo in mp4/m4v format, either through a link either through a local file.</p>
+			<p>
+				The <strong>Metadata tab</strong> allows you to check the Exif metadata of a picture in jpeg format or metadata of a vidéo in mp4/m4v format, either through a link either through a local file. If geocoordinates are available in the picture metadata, a geolocalise button is provided automatically pointing to this location on Google map. 
+			</p>
 			<p>The <strong>Forensic tab</strong> is an iframe opening the still images forensic service developed by <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI) in a previous european project on social media verification, <a href="https://revealproject.eu/" target="_blank">Reveal</a>. </p>
 			<p>The <strong>Contextual menu</strong> (through a right click on an image or a video url) allows you to trigger this plugin on a still image or on a youtube video link. On an image, a right click will propose you either to open the picture in the Image magnifier to examine it more closely, or to launch reverse image search engines with the image. On a video link, a right click will propose you under the InVID menu to trigger either InVID video analysis or the Youtube thumbnail reverse search (for a Youtube video).</p>
 		</div>
@@ -304,6 +349,8 @@
 <script type="text/javascript" src="js/Filter.js"></script>
 <script src='js/Zoom.js'></script>
 <script type="text/javascript" src="js/img.js"></script>
+
+<script type="text/javascript" src="js/util.js"></script>
 
 <!-- For Api --> 
 <script type="text/javascript" src="js/api.js"></script>
