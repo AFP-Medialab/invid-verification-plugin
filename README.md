@@ -14,3 +14,6 @@ This plugin is brought to you by the InVID European project, a Horizon 2020 Inno
 
 ## Third party api keys
 
+This plugin use Google Analytics and Slack API that required your own keys. Please use yours on the files below:
+- Google-analytics: js/ga.js (line 8)
+- Slack: js/jquery.feedback_me.js (line 821)
