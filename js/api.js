@@ -72,6 +72,13 @@ function createTimeRow(title, time) {
     return row;
 }
 
+function updateTimeRow(table, nb, val) {
+    var row = table.getElementsByTagName("tr")[nb];
+    if (row.lastElementChild.innerHTML == "") {
+        $(row).replaceWith(createTimeRow(row.firstElementChild.innerHTML, val));
+    }
+}
+
 /* Diplay buttons "verification comments" and "maps"*/
 function displayButtons(verif_number, locations, not_yt){
     var verif = document.getElementById("verif-content");
@@ -442,6 +449,8 @@ function parseYTJson(json){
         /*Video table*/
         updateTable(json, key_list_video_a, tables[0]);
         updateTable(json, key_list_video_b, tables[1]);
+        var index = key_list_video_b.length;
+        updateTimeRow(tables[1], index++, json["video_upload_time"]);
         /*Channel table*/
         updateTable(json, key_list_channel, tables[2]);
         /* Comments*/
@@ -497,8 +506,8 @@ function parseFBJson(json){
     var hasUpdateMap;
 
     /* List of indexes */
-    var key_list_video = ["video_id", "title", "length", "content_category", "content_tags", "video_description"];
-    var name_list_video = ["Video id", "Video title", "Duration", "Content category", "Content tags", "Video description"];
+    var key_list_video = ["video_id", "title", "length", "content_category", "content_tags", "video_description", "video_likes"];
+    var name_list_video = ["Video id", "Video title", "Duration", "Content category", "Content tags", "Video description", "Likes count"];
     var key_list_from = ["from", "from_about", "from_is_verified", "from_category", "from_link", "from_fan_count", "from_description", "from_location_city", "from_location_country", "from_website"];
     var name_list_from = ["Page", "About", "Verified profile", "Category", "Link", "Fan count", "Description", "Location city", "Location country", "Website"];
     var key_list_count = ["total_comment_count", "num_verification_comments"];
@@ -535,6 +544,9 @@ function parseFBJson(json){
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video, tables[0]);
+        var index = key_list_video.length;
+        updateTimeRow(tables[0], index++, json["updated_time"]);
+        updateTimeRow(tables[0], index++, json["created_time"]);
         /*Page table*/
         updateTable(json, key_list_from, tables[1]);
         /* Comments */
@@ -648,6 +660,8 @@ function parseTWJson(json){
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video, tables[0]);
+        var index = key_list_video.length;
+        updateTimeRow(tables[0], index++, json["created_at"]);
         /*Page table*/
         updateTable(json, key_list_user, tables[1]);
         /* Comments */
@@ -704,6 +718,8 @@ function parseTWJson(json){
     
 }
 
+var analysisUrls = {};
+
 /* Send requests for video analysis*/
 function video_api_analysis(video_url, isProcess){
     cleanElement("fb-content");
@@ -735,6 +751,8 @@ function video_api_analysis(video_url, isProcess){
 
     /* Get response every 2 second until process done */
     function parse_response(data, url, callback) {
+        if (analysisUrls.response != url)
+            return;
         callback(data);
         if (data["processing_status"] != "done")
         {
@@ -773,6 +791,7 @@ function video_api_analysis(video_url, isProcess){
     }
 
     /* Start Analysis */
+    analysisUrls.submit = analysis_url;
     $.getJSON(analysis_url, function(data) {
         document.getElementById("api-content").style.display = "block";
         /* Error Gestion */
@@ -802,6 +821,7 @@ function video_api_analysis(video_url, isProcess){
                 url = data["twitter_response"];
                 callback = parseTWJson;
             }
+            analysisUrls.response = url;
             $.getJSON(url, function(data) {
                 parse_response(data, url, callback);
             }).fail(function(jqxhr, textStatus, error) {
@@ -811,7 +831,10 @@ function video_api_analysis(video_url, isProcess){
             })
             /* Twitter Part response */
             var url_twitter = data["twitter_shares"];
+            analysisUrls.tweets = url_twitter;
             $.getJSON(url_twitter, function parse_tw(data) {
+                if (analysisUrls.tweets != url_twitter)
+                    return;
                 tw_json = makeJSON(data);
                 if (data["processing_status"] != "done") {
                     $.getJSON(url_twitter, function(data) {

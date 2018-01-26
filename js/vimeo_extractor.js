@@ -21,6 +21,6 @@
 	}
 
 	function getId(url) {
-		return url.match(/https:\/\/vimeo\.com\/(.*)/)[1];
+		return url.match(/https:\/\/vimeo\.com\/(?:.*[^/]\/)*([^/]+)/)[1];
 	}
 })();
