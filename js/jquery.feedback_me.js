@@ -537,7 +537,7 @@ var fm = (function ($) {
 
 		$('body').append('<div '/*onclick="fm.stopPropagation(event);fm.triggerAction(event,\'' + fm_options.position + '\');"*/ + ' class="feedback_trigger feedback_trigger_closed ' + fm_options.position + jQueryUIClasses1 + fm_class + jquery_class + bootstrap_class + bootstrap_hero_unit + '">'
 				+	'<span class="feedback_trigger_text">' + fm_options.trigger_label
-				+	'</span><p class="new_element" style="position: relative; bottom: 16px; font-size: 15px;">new</p></div>');
+				+	'</span></div>');
 		
 
 		$('body').append('<div class="feedback_content feedback_content_closed ' + fm_options.position + email_feedback_content_class + radio_button_list_class + jQueryUIClasses2 + fm_class + jquery_class + bootstrap_class + bootstrap_hero_unit + '">'

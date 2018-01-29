@@ -6498,9 +6498,9 @@ MP4Box.prototype.getInfo = function() {
 		movie.hasIOD = (this.inputIsoFile.moov.iods != null);
 		movie.brands = []; 
 		movie.brands.push(this.inputIsoFile.ftyp.major_brand);
-		movie.brands = movie.brands.concat(this.inputIsoFile.ftyp.compatible_brands);	
-		movie.created = new Date(_1904+this.inputIsoFile.moov.mvhd.creation_time*1000);
-		movie.modified = new Date(_1904+this.inputIsoFile.moov.mvhd.modification_time*1000);
+		movie.brands = movie.brands.concat(this.inputIsoFile.ftyp.compatible_brands);
+		movie.created = (this.inputIsoFile.moov.mvhd.creation_time != 0) ? new Date(_1904+this.inputIsoFile.moov.mvhd.creation_time*1000) : "no date";
+		movie.modified = (this.inputIsoFile.moov.mvhd.modification_time != 0) ? new Date(_1904+this.inputIsoFile.moov.mvhd.modification_time*1000) : "no date";
 		movie.tracks = [];
 		movie.audioTracks = [];
 		movie.videoTracks = [];
@@ -6523,8 +6523,8 @@ MP4Box.prototype.getInfo = function() {
 					ref.track_ids = trak.tref.boxes[j].track_ids;
 				}
 			}
-			track.created = new Date(_1904+trak.tkhd.creation_time*1000);
-			track.modified = new Date(_1904+trak.tkhd.modification_time*1000);
+			track.created = (trak.tkhd.creation_time) ? new Date(_1904+trak.tkhd.creation_time*1000) : "no date";
+			track.modified = (trak.tkhd.modification_time) ? new Date(_1904+trak.tkhd.modification_time*1000) : "no date";
 			track.movie_duration = trak.tkhd.duration;
 			track.layer = trak.tkhd.layer;
 			track.alternate_group = trak.tkhd.alternate_group;

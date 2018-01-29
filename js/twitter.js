@@ -65,12 +65,9 @@ function submit_form(){
 	var from_date = document.getElementById("from-date").value;
 	var to_date = document.getElementById("to-date").value;
 	if (!(term==""&&account==""&&filter==""&&lang==""&&geocode==""&&near==""&&from_date==""&&to_date=="")) {
-    var url = create_url(term, account, filter, lang, geocode, near, within, from_date, to_date);
-    ga('send', 'event', 'Url_provided', 'submit', url);
-	if (typeof chrome != "undefined")
-      chrome.tabs.create({url:url})
-    else
-      window.open(url);
+		var url = create_url(term, account, filter, lang, geocode, near, within, from_date, to_date);
+		ga('send', 'event', 'Url_provided', 'submit', url);
+		openTab(url);
 	}
 }
 
@@ -84,9 +81,9 @@ form.addEventListener("submit", function(e){
 });
 
 $(document).ready(function(){
-$( "#from-date" ).datetimepicker();
+	$( "#from-date" ).datetimepicker();
 });
 
 $(document).ready(function(){
-$( "#to-date" ).datetimepicker();
+	$( "#to-date" ).datetimepicker();
 });

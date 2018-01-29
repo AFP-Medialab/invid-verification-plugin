@@ -10,99 +10,152 @@ function get_images(url){
 	return img_arr;
 }
 
-searchVideo = function(word){
+thumbnailsSearch = function(word){
 	var checkLink = "https://www.youtube.com/watch?v="
-	var url = String(word.linkUrl);
+	var url = word.linkUrl;
 	if (url != "") {
 		var lst = get_images(url);
 		for (index in lst){
 			chrome.tabs.create({url:lst[index]});
 		}
 	}
-};	
+};
 
-imageMagnifier = function(word){
-	var url = String(word.srcUrl);
+function getUrlImg(word) {
+	if (word.srcUrl)
+		return String(word.srcUrl);
+	return String(word.linkUrl);
+}
+
+analysisVideo = function(word){
+	var url = word.linkUrl;
 	if (url != "") {
-		chrome.tabs.create({url:"invid.html?img="+url});
+		chrome.tabs.create({url:"invid.html?video=" + url});
 	}
 };
 
-verifVideo = function(word){
-	var url = String(word.linkUrl);
+imageMagnifier = function(word){
+	var url = getUrlImg(word);
 	if (url != "") {
-		chrome.tabs.create({url:"invid.html?video="+url});
+		chrome.tabs.create({url:"invid.html?img=" + url});
 	}
 };
 
 imageReverseSearch = function(word){
-	var search_url = "https://www.google.com/searchbyimage?&image_url=";
-	var url = String(word.srcUrl);
+	var search_url = "https://www.google.com/searchbyimage?image_url=";
+	var url = getUrlImg(word);
 	if (url != ""){
-		chrome.tabs.create({url:search_url+url});
+		chrome.tabs.create({url:search_url + url});
 	}
 };
 
 imageReverseSearchBaidu = function(word){
 	var search_url = "https://image.baidu.com/n/pc_search?queryImageUrl=";
-	var url = String(word.srcUrl);
+	var url = getUrlImg(word);
 	if (url != ""){
-		chrome.tabs.create({url:search_url+url+"&fm=index&uptype=urlsearch"});
+		chrome.tabs.create({url:search_url + url + "&fm=index&uptype=urlsearch"});
 	}
 };
 
 imageReverseSearchYandex = function(word){
 	var search_url = "https://yandex.com/images/search?url=";
-	var url = String(word.srcUrl);
+	var url = getUrlImg(word);
 	if (url != ""){
-		chrome.tabs.create({url:search_url+url+"&rpt=imageview"});
+		chrome.tabs.create({url:search_url + url + "&rpt=imageview"});
+	}
+};
+
+imageReverseSearchTineye = function(word){
+	var search_url = "https://www.tineye.com/search?url=";
+	var url = getUrlImg(word);
+	if (url != "") {
+		chrome.tabs.create({url:search_url + url});
 	}
 };
 
 chrome.contextMenus.create({
  title: "Youtube thumbnails reverse search",
- contexts:["link"],  // ContextType
- onclick: searchVideo // A callback function
+ contexts:["link", "video"], 
+ onclick: thumbnailsSearch, 
+ targetUrlPatterns: ["https://www.youtube.com/*", "https://youtu.be/*"]
 });
 
 chrome.contextMenus.create({
  title: "Video contextual analysis",
- contexts:["link"],  // ContextType
- onclick: verifVideo // A callback function
+ contexts:["link"], 
+ onclick: analysisVideo,
+ targetUrlPatterns: ["https://www.youtube.com/*", "https://youtu.be/*", "https://www.facebook.com/*/videos/*"] 
 });
 
 chrome.contextMenus.create({
- title: "Youtube thumbnails reverse search",
- contexts:["video"],  // ContextType
- onclick: searchVideo // A callback function
+ title: "Video contextual analysis",
+ contexts:["video"],  
+ onclick: analysisVideo, 
+ targetUrlPatterns: ["https://www.youtube.com/*", "https://youtu.be/*", "https://www.facebook.com/*", "https://twitter.com/*"] 
 });
 
-chrome.contextMenus.create({
- title: "Youtube contextual verification",
- contexts:["video"],  // ContextType
- onclick: verifVideo // A callback function
-});
 
 chrome.contextMenus.create({
  title: "Image Magnifier",
- contexts:["image"],  // ContextType
- onclick: imageMagnifier // A callback function
+ contexts:["image"],  
+ onclick: imageMagnifier
+});
+
+chrome.contextMenus.create({
+	title: "Image Magnifier",
+	contexts: ["link"],
+	onclick: imageMagnifier,
+	targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, "*://*/*.png*"]
 });
 
 chrome.contextMenus.create({
  title: "Image Reverse Search - Google",
- contexts:["image"],  // ContextType
- onclick: imageReverseSearch // A callback function
+ contexts:["image"],
+ onclick: imageReverseSearch
+});
+
+chrome.contextMenus.create({
+ title: "Image Reverse Search - Google",
+ contexts:["link"], 
+ onclick: imageReverseSearch,
+ targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, "*://*/*.png*"]
 });
 
 chrome.contextMenus.create({
  title: "Image Reverse Search - Baidu",
- contexts:["image"],  // ContextType
- onclick: imageReverseSearchBaidu // A callback function
+ contexts:["image"],  
+ onclick: imageReverseSearchBaidu 
+});
+
+chrome.contextMenus.create({
+ title: "Image Reverse Search - Baidu",
+ contexts:["link"],
+ onclick: imageReverseSearchBaidu,
+ targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, "*://*/*.png"]
 });
 
 chrome.contextMenus.create({
  title: "Image Reverse Search - Yandex",
- contexts:["image"],  // ContextType
- onclick: imageReverseSearchYandex // A callback function
+ contexts:["image"],
+ onclick: imageReverseSearchYandex
+});
+
+chrome.contextMenus.create({
+ title: "Image Reverse Search - Yandex",
+ contexts:["link"],
+ onclick: imageReverseSearchYandex,
+ targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, "*://*/*.png"]
+});
+
+chrome.contextMenus.create({
+ title: "Image Reverse Search - Tineye",
+ contexts:["image"],
+ onclick: imageReverseSearchTineye
+});
+
+chrome.contextMenus.create({
+ title: "Image Reverse Search - Tineye",
+ contexts:["link"],
+ onclick: imageReverseSearchTineye,
+ targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, "*://*/*.png"]
 });

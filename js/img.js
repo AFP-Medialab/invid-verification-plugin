@@ -99,31 +99,13 @@ function rebuild(img_url){
 /*Check if url is valid*/
 function ValidURL(str) {
     var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-    if(!regex .test(str)) {
-        return false;
-    } 
-    else {
-        return true;
-    }
+    return regex.test(str);
 }
 /*submit image url*/
 function submit_img(){
-    //document.getElementById("zoom").style = "";
     var img_url = document.getElementById("urlbox").value;
-    /*
-    if (document.getElementById("localrad").checked)
-        img_url = document.getElementById("filechooser").value
-    */
     if (img_url != "") {
-        var regex_drive = /https:\/\/drive\.google\.com\/file\/d\/(.*)\/view\?usp=sharing/i;
-        var special_url = regex_drive.test(img_url);
-        if (special_url)
-            img_url = "https://drive.google.com/uc?id=" + regex_drive.exec(img_url)[1];
-        else if (/^https:\/\/www.dropbox.com\//i.test(img_url))
-        {
-            img_url = img_url.replace(/:\/\/www./, "://dl.");
-            special_url = true;
-        }
+        img_url = get_real_url_img(img_url);
         var old = histo.local;
         histo = new History(img_url);
         histo.local_path = old;
@@ -133,7 +115,7 @@ function submit_img(){
         var e = document.getElementById("scale_input");
         e.style.display = "none";
         document.getElementById("copy_url_img_magnifier").style.display = (histo.local_path) ? "" : "none";
-        if (!special_url && !ValidURL(img_url)) {
+        if (!ValidURL(img_url)) {
             document.getElementById("lst_search_btn").setAttribute("style", "display: none");
             document.getElementById("magnifier-content").style.display = (histo.local_path) ? "" : "none";
         }
@@ -190,7 +172,6 @@ document.getElementById("scale").onchange = function(){
 
 /*get selected filter and apply it*/
 function apply_filter(){
-    //document.getElementById("test").setAttribute("crossOrigin", "");
     if (!document.getElementById('none').checked && document.getElementById("copy_url_img_magnifier").style.display == "none")
         hideRevBtnMagnifier();
     var new_url = histo.getHistory();
@@ -232,82 +213,38 @@ $('#file-input').change( function(event) {
     submit_img();
 });
 
-/*Search image with google*/
-function imageSearch(){
-    var search_url = "https://www.google.com/searchbyimage?&image_url=";
-    var img = document.getElementById("urlbox").value;
-    search_url += encodeURIComponent(img);
-    if (typeof chrome != "undefined")
-        chrome.tabs.create({url:search_url});
-    else
-        window.open(search_url);
-}
+/* Add reverse search */
+(function() {
 
-/*Search image with baidu*/
-function baiduSearch(){
-    var search_url = "https://image.baidu.com/n/pc_search?queryImageUrl=";
-    var img = document.getElementById("urlbox").value;
-    search_url += encodeURIComponent(img);
-    search_url += "&fm=index&uptype=urlsearch";
-    if (typeof chrome != "undefined")
-        chrome.tabs.create({url:search_url});
-    else
-        window.open(search_url);
-}
+    function getImg() {
+        var url = histo.getHistory();
+        return encodeURIComponent(url);
+    }
 
-/*Search image with yandex*/
-function yandexSearch(){
-    var search_url = "https://yandex.com/images/search?url=";
-    var img = document.getElementById("urlbox").value;
-    search_url += encodeURIComponent(img);
-    search_url += "&rpt=imageview";
-    if (typeof chrome != "undefined")
-        chrome.tabs.create({url:search_url});
-    else
-        window.open(search_url);
-}
+    /* Google button : Image reverse search */
+    document.getElementById("img_rev_search_btn").onclick = function() {
+        reverseImgSearch('google', getImg());
+    };
 
-/*Open image verification assistant*/
-function imageVerification(){
-    var search_url = "http://reveal-mklab.iti.gr/reveal/?image=";
-    var img = document.getElementById("urlbox").value;
-    search_url += encodeURIComponent(img);
-    if (typeof chrome != "undefined")
-        chrome.tabs.create({url:search_url});
-    else
-        window.open(search_url);
-}
+    /* Google button : Image reverse search */
+    document.getElementById("baidu_rev_search_btn").onclick = function() {
+        reverseImgSearch('baidu', getImg());
+    };
 
-/* Google button : Image reverse search */
-document.getElementById("img_rev_search_btn").onclick = function() {
-    imageSearch();
-};
+    /* Google button : Image reverse search */
+    document.getElementById("yandex_rev_search_btn").onclick = function() {
+        reverseImgSearch('yandex', getImg());
+    };
 
-/* Google button : Image reverse search */
-document.getElementById("baidu_rev_search_btn").onclick = function() {
-    baiduSearch();
-};
+    document.getElementById("tineye_rev_search_btn").onclick = function() {
+        reverseImgSearch('tineye', getImg());
+    }
 
-/* Google button : Image reverse search */
-document.getElementById("yandex_rev_search_btn").onclick = function() {
-    yandexSearch();
-};
-
-/* Verification button : Image Verification Assistant */
-document.getElementById("img_verif_btn").onclick = function() {
-    imageVerification();
-};
-
-function copyText(text) {
-    var textarea = document.createElement("textarea");
-    textarea.innerHTML = text;
-    textarea.style.rows = "1";
-    textarea.style.cols = "1";
-    $("body")[0].appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    textarea.remove();
-}
+    /* Verification button : Image Verification Assistant */
+    document.getElementById("img_verif_btn").onclick = function() {
+        openTab("http://reveal-mklab.iti.gr/reveal/?image=" + histo.getHistory());
+    };
+})();
 
 document.getElementById("copy_url_img_magnifier").addEventListener("click", function() {
     var text = histo.getHistory();
@@ -315,7 +252,7 @@ document.getElementById("copy_url_img_magnifier").addEventListener("click", func
         text = Filters.filterImage(document.getElementById("test"), "none", 1);
     copyText(text);
     this.innerHTML = "URL copied";
-    window.open("https://www.google.com/searchbyimage?&image_url=");
+    openTab("https://www.google.com/searchbyimage?&image_url=")
 });
 document.getElementById("download_img_magnifier").addEventListener("click", function() {
     this.href = histo.getHistory();

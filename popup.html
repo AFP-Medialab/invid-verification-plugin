@@ -1,14 +1,40 @@
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
-	<title>Hero Slideshow</title>
+    <link rel="stylesheet" type="text/css" href="css/popup.css">
+    <title>Hero Slideshow</title>
 </head>
 <body>
-	<h1>InVID toolkit </h1>
-	<p>This toolkit is provided in open source (under an MIT Licence) by the InVID european project to help journalists to verify content on social networks.</p>
-	<p>The Twitter tab allows to search for keywords or hashtag using the until operator of the advanced search. It translates automatically the calendar date and hour into an unix timestamp to facilitate the search for example of first pictures or video in a breaking news event.</p>
-	<p>The Youtube tab allows to undertake a reverse image search on Google Images with the four thumbnails extracted from a Youtube video. Up to four tabs (according to the number of thumbnails available) are opened automatically in your Chrome browser with the results of the reverse search. </p>
-	<p>InVID is a Horizon 2020 innovation action funded by the European Union under grant agreement 687786. For more information, visit our <a href="http://www.invid-project.eu/" target="_blank">InVID website</a> or follow us on <a href="https://twitter.com/InVID_EU" target="_blank">Twitter.</a> </p>
-	<script type="text/javascript" src="js/popup.js"></script>
+    <h1>InVID toolkit</h1>
+    <div id="invid-item" class="element-menu">
+        <h2><img src="img/InVID-logo.svg" class="logo"> Open InVID</h2>
+    </div>
+    <div class="element-menu">
+        <div id="video-button">
+            <h2>Video Urls</h2>
+        </div>
+        <div id="video-content"></div>
+    </div>
+    <div class="element-menu">
+        <div id="image-button">
+            <h2>Images Urls</h2>
+        </div>
+        <div id="image-content"></div>
+    </div>
+    <!--<div class="element-menu">
+        <div id="link-button">
+            <h2>Link Urls</h2>
+        </div>
+        <div id="link-content"></div>
+    </div>-->
 </body>
-</html>
+<script type="text/javascript" src="js/util.js"></script>
+
+<!-- extractors -->
+<script type="text/javascript" src="js/liveleak_extractor.js"></script>
+<script type="text/javascript" src="js/reddit_extractor.js"></script>
+<script type="text/javascript" src="js/vimeo_extractor.js"></script>
+<script type="text/javascript" src="js/youtube_extractor.js"></script>
+
+<script type="text/javascript" src="js/popup.js"></script>
+</html> 
