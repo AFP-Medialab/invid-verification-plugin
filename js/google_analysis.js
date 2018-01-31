@@ -1,8 +1,5 @@
 /* Analysis */
 $("#video_form2 > input")[0].addEventListener("click", function ga_analysis_url(e) {
-	/*gtag('event', 'Url_provided', {
-		'url': $("#apibox").val()
-	});*/
 	ga("send", "event", "Url_provided", 'submit', $("#apibox").val());
 });
 
@@ -14,9 +11,6 @@ $("#video_form2 > input")[0].addEventListener("click", function ga_analysis_url(
 	};
 	for (index in list) {
 		$(list[index])[0].addEventListener("click", function ga_analysis_reverse_event(e) {
-			/*gtag('event', 'ReverseSearch', {
-				'searchEngine': index
-			});*/
 			ga("send", "event", "ReverseSearch", "click", index);
 		});
 	}
@@ -37,15 +31,11 @@ $("#video_form input[type='submit']")[0].addEventListener("click", function ga_t
 			break;
 		}
 	}
-	/*gtag('event', 'Url_provided', {
-		'url': url,
-		'searchEngine': engine
-	});*/
 	ga("send", "event", "Url_provided", 'submit', engine);
 });
 
 /* Twitter */
-/*$("#twitter_form input[type=submit]")[0].addEventListener("click", function ga_twitter_search(e) {
+$("#twitter_form input[type=submit]")[0].addEventListener("click", function ga_twitter_search(e) {
 	var form = {
 		'keyword': "#termbox",
 		'from': "#tw-account",
@@ -70,23 +60,19 @@ $("#video_form input[type='submit']")[0].addEventListener("click", function ga_t
 			break;
 		}
 	}
-	/*gtag('event', 'Url_provided', form);
-	ga('send', 'event', 'Url_provided', 'submit', form);
-});*/
+	ga('send', 'event', 'Url_provided', 'submit', JSON.stringify(form));
+});
 
 /* Magnifier */
 $("#img_form input[type='submit']")[0].addEventListener("click", function ga_magnifier_search(e) {
 	var url = $("#urlbox").val();
 	if (url.match(/https?:\/\//))
-		/*gtag('event', 'Url_provided', {
-			'url': url
-		});*/
 		ga('send', 'event', 'Url_provided', 'submit', url);
 });
 
 /* Metadata */
 $("#metadata_form input[type='submit']")[0].addEventListener("click", function ga_metadata_search(e) {
-	var url = $("url-metadata").val();
+	var url = $("#url-metadata").val();
 	var types = {
 		image: "#img-meta-radio",
 		video: "#video-meta-radio"
@@ -100,10 +86,6 @@ $("#metadata_form input[type='submit']")[0].addEventListener("click", function g
 		}
 	}
 	if (url.match(/https?:\/\//)) {
-		/*gtag('event', 'Url_provided', {
-			'url': url,
-			'type': type
-		});*/
 		ga("send", "event", "Url_provided", "submit", url);
 	}
 });

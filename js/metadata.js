@@ -55,7 +55,8 @@ function getExif(img) {
         var json_str = JSON.stringify(allMetaData, null, "\t");
         var table = imgTable(json_str);
         allMetaDataSpan.appendChild(table);
-        getLocation();
+        if (json_str != "{}")
+            getLocation();
     });
 }
 
@@ -149,7 +150,9 @@ function getMp4(vid) {
 }
 
 function submit_metadata(){
+    cleanElement("preview_metadata")
     var url = document.getElementById("url-metadata").value;
+    url = get_real_url_img(url);
     var img_radio = document.getElementById("img-meta-radio");
     if (img_radio.checked) {
         /* Metadata */
@@ -157,9 +160,16 @@ function submit_metadata(){
         img.src = url;
         /* No Metadata if img is not loaded */
         img.onload = function(){
+            var scale = Math.max(img.width/600, img.height/600);
+            if (scale > 1)
+            {
+                img.width = Math.round(img.width/scale);
+                img.height = Math.round(img.height/scale);
+            }
             getExif(img);
             //getImgRawData(img.src);
         }
+        $("#preview_metadata").append(img);
     }
     else {
         getMp4(url);
@@ -257,10 +267,7 @@ function getLocation(){
         btn.onclick = function() {
             var mapurl = "http://maps.google.com/maps?q=";
             mapurl += replaceAll(GPSLatitude, ",", "%20") + GPSLatitudeRef + "%20" + replaceAll(GPSLongitude, ",", "%20") + GPSLongitudeRef;
-            if (typeof chrome != "undefined")
-              chrome.tabs.create({url:mapurl});
-          else
-            window.open(mapurl);
+            openTab(mapurl);
         };
     }
 }
