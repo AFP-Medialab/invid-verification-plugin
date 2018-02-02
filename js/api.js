@@ -313,7 +313,7 @@ function createGoogleMaps(){
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(submit);
   submit.addEventListener("click", function(){
       if(searchBox){
-        google.maps.event.trigger(input, 'focus')
+        searchBox.focus();
         google.maps.event.trigger(input, 'keydown', { keyCode: 13 });
     }
   })
@@ -375,8 +375,8 @@ function updateMap(places){
     if (places != []){
         var searchBox = document.getElementById("pac-input");
         if(searchBox){
-            searchBox.value =places;
-            google.maps.event.trigger(searchBox, 'focus')
+            searchBox.value = places;
+            searchBox.focus();
             google.maps.event.trigger(searchBox, 'keydown', { keyCode: 13 });
         }
     }
@@ -386,7 +386,7 @@ function updateMap(places){
 function triggerMap(){
     var searchBox = document.getElementById("pac-input");
     if(searchBox){
-        google.maps.event.trigger(searchBox, 'focus')
+        searchBox.focus();
         google.maps.event.trigger(searchBox, 'keydown', { keyCode: 13 });
     }
 }
@@ -832,7 +832,8 @@ function video_api_analysis(video_url, isProcess){
             /* Twitter Part response */
             var url_twitter = data["twitter_shares"];
             analysisUrls.tweets = url_twitter;
-            $.getJSON(url_twitter, function parse_tw(data) {
+            /*ICI ERREUR TWITTER */
+           /* $.getJSON(url_twitter, function parse_tw(data) {
                 if (analysisUrls.tweets != url_twitter)
                     return;
                 tw_json = makeJSON(data);
@@ -856,7 +857,8 @@ function video_api_analysis(video_url, isProcess){
                 console.error("start share : " + url_twitter);
                 console.error(textStatus + ", " + error);
                 share_fail(get_error_message("share"));
-            });
+            });*/
+             /*FIN ERREUR TWITTER */
         }).fail(function(jqxhr, textStatus, error) {
             console.error("get urls : " + analysis_url);
             console.error(textStatus + ", " + error);
