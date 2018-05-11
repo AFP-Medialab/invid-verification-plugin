@@ -1,12 +1,32 @@
 <h2>Reuse Conditions</h2>
 
-  <% if (obj.license == "youtube") { obj.license = "YouTube License" %>
-  <p>This video is licensed under the Standard YouTube license, defined in YouTube's
-    <a href="https://www.youtube.com/static?template=terms" target="_blank">Terms of Service</a>.
-    <% if (obj.licensedContent) { %>
-    <span>Moreover, it is from a <a href="https://support.google.com/youtube/answer/72851?hl=en" target="_blank">
-    YouTube Content Partner</a>, likely the content owner and potentially monetizing it.</span>
+  <% if (obj.ugvKind == "YouTube") { %>
+    <% if (obj.license == "youtube") { obj.license = "YouTube License Summary" %>
+    <p>This video is licensed under the Standard YouTube license, defined in YouTube's
+      <a href="https://www.youtube.com/static?template=terms" target="_blank">Terms of Service</a>.
+      <% if (obj.licensedContent) { %>
+      <span>Moreover, it is from a <a href="https://support.google.com/youtube/answer/72851?hl=en" target="_blank">
+      YouTube Content Partner</a>, likely the content owner and potentially monetizing it.</span>
+      <% } %>
+    </p>
     <% } %>
+
+    <% if (obj.license == "creativeCommon") { obj.license = "Creative Commons License Summary" %>
+    <p>This video is licensed under a Creative Commons Attribution license
+        (<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">details</a>).
+    </p>
+    <% } %>
+  <% } %>
+
+  <% if (obj.ugvKind == "Twitter") { obj.license = "Twitter License Summary" %>
+  <p>This video is licensed under the Standard Twitter license, defined in Twitter's
+    <a href="https://twitter.com/tos" target="_blank">Terms of Service</a>.
+  </p>
+  <% } %>
+
+  <% if (obj.ugvKind == "Facebook") { obj.license = "Facebook License Summary" %>
+  <p>This video is licensed under the Standard Facebook license, defined in Facebook's
+    <a href="https://www.facebook.com/legal/terms" target="_blank">Terms of Service</a>.
   </p>
   <% } %>
 
@@ -35,13 +55,17 @@
     </div>
   </div>
 
+  <p>For other usage purposes, if no reuse agreement has been stated, it is recommended to contact
+  the video uploader and request permission.</p>
+
 <h3>Request Reuse</h3>
 
 <p>To request other reuse conditions to the content owner, you can try the
 <a href="<%= obj.RIGHTS_APP %>" target="_blank">InVID Rights Management Tool</a>:</p>
 
 <p style="text-align: center">
-  <a href="<%= obj.RIGHTS_APP %>youtube/<%= obj.id %>" target="_blank" class="copyright-button">Request Reuse</a>
+  <a href="<%= obj.RIGHTS_APP %>/<%= obj.RIGHTS_APP_ENDPOINT %>/<%= obj.id %>"
+     target="_blank" class="copyright-button">Request Reuse</a>
 </p>
 
 <h2>Copyright Exceptions</h2>
@@ -57,20 +81,3 @@ in any case, proper <b>attribution</b> should be provided.
 <h3>Sample attribution</h3>
 
 <p><%= obj.attribution %></p>
-
-<h2>Contact</h2>
-
-<ul class="contact__list no-dotted">
-  <% if (obj.channel.contactURL) { %>
-  <li>
-    <i class="fa fa-youtube-play" aria-hidden="true"></i>
-    <a href="<%= obj.channel.contactURL %>" class="neat" target="_blank"><%= obj.channel.contactURL %></a>
-  </li>
-  <% } %>
-  <% if (obj.channel.contactInformation) { _.each(obj.channel.contactInformation, function(type, value) { %>
-  <li>
-    <i class="fa fa-link" aria-hidden="true"></i>
-    <a href="<%= value %>" class="neat" rel="nofollow noopener" target="_blank"><%= value %></a>
-  </li>
-  <% }) } %>
-</ul>
