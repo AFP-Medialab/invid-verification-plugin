@@ -46,6 +46,7 @@
   border-radius: 4px;
   margin-bottom: 2.5rem;
   background-color: #fff;
+  font-family: sans-serif;
 }
 
 .reuse-table__header, .reuse-table__items {
