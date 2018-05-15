@@ -55,29 +55,35 @@
     </div>
   </div>
 
-  <p>For other usage purposes, if no reuse agreement has been stated, it is recommended to contact
-  the video uploader and request permission.</p>
 
-<h3>Request Reuse</h3>
+<h2>Contact</h2>
 
-<p>To request other reuse conditions to the content owner, you can try the
-<a href="<%= obj.RIGHTS_APP %>" target="_blank">InVID Rights Management Tool</a>:</p>
-
-<p style="text-align: center">
-  <a href="<%= obj.RIGHTS_APP %>/<%= obj.RIGHTS_APP_ENDPOINT %>/<%= obj.id %>"
-     target="_blank" class="copyright-button">Request Reuse</a>
-</p>
+  <p>For other uses, it is recommended to contact the video uploader and <b>request permission</b>:</p>
+  <ul>
+    <li>Direct contact:
+      <% if (obj.ugvKind == "YouTube") { %><span class="fa fa-youtube-play"></span><% } %>
+      <% if (obj.ugvKind == "Facebook") { %><span class="fa fa-facebook"></span><% } %>
+      <% if (obj.ugvKind == "Twitter") { %><span class="fa fa-twitter"></span><% } %>
+      <a href="<%= obj.user.url %>" target="_blank"> <%= obj.user.name %></a>
+    </li>
+    <li>Or try: <a href="<%= obj.RIGHTS_APP %>/<%= obj.id %>" target="_blank">
+      <span class="invid-mini-logo"></span>InVID Rights Management Tool</a>.</li>
+  </ul>
 
 <h2>Copyright Exceptions</h2>
 
-<p><b>Exceptionally</b>, in some jurisdictions, this video might be directly reused to report about
-<b>current events</b> under <b>copyright exceptions</b> like
-<a href="http://copyrightexceptions.eu/#Art. 5.3(c)" target="_blank"><b>use by the press</b></a> or
-<a href="http://infojustice.org/wp-content/uploads/2015/03/fair-use-handbook-march-2015.pdf" target="_blank">
-<b>fair user/fair dealing</b></a>. This reuse is under your or your organization sole responsibility and,
-in any case, proper <b>attribution</b> should be provided.
-</p>
+  <p><b>Exceptionally</b>, in some jurisdictions, this video might be directly reused to report about
+  <b>current events</b> under <b>copyright exceptions</b> like
+  <a href="http://copyrightexceptions.eu/#Art. 5.3(c)" target="_blank"><b>use by the press</b></a> or
+  <a href="http://infojustice.org/wp-content/uploads/2015/03/fair-use-handbook-march-2015.pdf" target="_blank">
+  <b>fair user/fair dealing</b></a>. This reuse is under your or your organization sole responsibility and,
+  in any case, proper <b>attribution</b> should be provided.
+  </p>
 
-<h3>Sample attribution</h3>
+  <h4>How to Give Attribution</h4>
 
-<p><%= obj.attribution %></p>
+    <div class="reuse-table">
+      <div class="reuse-table__items">
+        <p><%= obj.attribution %></p>
+      </div>
+    </div>

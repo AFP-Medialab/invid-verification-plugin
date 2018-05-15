@@ -1,6 +1,8 @@
 $(document).ready(function() {
   var RIGHTS_API = "https://rights-api.dev.rhizomik.net";
   var RIGHTS_APP = "https://rights.dev.rhizomik.net";
+  // var RIGHTS_API = "https://rights-api.invid.udl.cat";
+  // var RIGHTS_APP = "https://rights.invid.udl.cat";
   var UGV_URLS = {
     "YouTube": ["youtube.com", "youtu.be"],
     "Facebook": ["facebook.com"],
@@ -23,7 +25,7 @@ $(document).ready(function() {
       })
     });
 
-    if (ugvKind.length === 1) {
+    if (ugvKind.length > 0) {
       $.ajax(RIGHTS_API + "/" + ENDPOINTS[ugvKind[0]].API, {
         data: JSON.stringify({"url": videoURL}),
         contentType: "application/json",
@@ -31,12 +33,14 @@ $(document).ready(function() {
         dataType: "json",
         success: function (data) {
           data.ugvKind = ugvKind;
-          $.get(data._links.reuseTerms.href, function (terms) {
-            data.terms = terms._embedded.defaultReuseTerms;
-            data.RIGHTS_APP = RIGHTS_APP;
-            data.RIGHTS_APP_ENDPOINT = ENDPOINTS[ugvKind[0]].APP;
-            renderCopyrightTemplate(data);
-          });
+          data.RIGHTS_APP = RIGHTS_APP + "/" + ENDPOINTS[ugvKind[0]].APP;
+          $.when(
+            $.get(data._links.reuseTerms.href),
+            $.get(data._links.user.href)).then(function (terms, user) {
+              data.terms = terms[0]._embedded.defaultReuseTerms;
+              data.user = user[0];
+              renderCopyrightTemplate(data);
+            });
         },
         error: function (response, status, error) {
           displayErrorMessage(status + ": " + response.responseJSON.message);
@@ -49,7 +53,7 @@ $(document).ready(function() {
   });
 
   function renderCopyrightTemplate(data) {
-    $.get("copyright.thtml", function (template) {
+    $.get("copyright.html", function (template) {
       var applyTemplate = _.template(template);
       $("#copyright-summary").html(applyTemplate(data));
       $("#copyright-loader").css("display", "none");
