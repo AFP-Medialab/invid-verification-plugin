@@ -1,8 +1,6 @@
 $(document).ready(function() {
-  var RIGHTS_API = "https://rights-api.dev.rhizomik.net";
-  var RIGHTS_APP = "https://rights.dev.rhizomik.net";
-  // var RIGHTS_API = "https://rights-api.invid.udl.cat";
-  // var RIGHTS_APP = "https://rights.invid.udl.cat";
+  var RIGHTS_API = "https://rights-api.invid.udl.cat";
+  var RIGHTS_APP = "https://rights.invid.udl.cat";
   var UGV_URLS = {
     "YouTube": ["youtube.com", "youtu.be"],
     "Facebook": ["facebook.com"],
