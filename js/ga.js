@@ -1,5 +1,5 @@
 /* Set here your own Tracking ID */
-var trackingID = 'UA-90711710-3';
+var trackingID = 'UA-XXXXXXXX-Y';
 
 window.addEventListener("load", function(){
   window.cookieconsent.initialise({
