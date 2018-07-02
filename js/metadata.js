@@ -6,15 +6,15 @@ function makeTitle(title, div){
 }
 
 /*Create table for video metadata*/
-function makeTable(json, lst, lst_desc){
+function makeTableMetadata(json, indexJson, names, lst_desc){
     var table = document.createElement("table");
-    for (var index in lst){
+    for (var index in indexJson){
         var tr = document.createElement("tr");
         var th = document.createElement("th");
         var td = document.createElement("td");
-        th.innerHTML = lst[index];
+        th.innerHTML = names[index];
         th.title = lst_desc[index];
-        td.innerHTML = json[lst[index]];
+        td.innerHTML = json[indexJson[index]];
         //createPopUp(th, lst_desc[index]);
         tr.appendChild(th);
         tr.appendChild(td);
@@ -40,18 +40,30 @@ function imgTable(json_str){
     }
     if(json_str == "{}") {
         table = document.createElement("div");
-        table.innerHTML = "No EXIF Metadata was found. <strong>Note:</strong> The EXIF standard applies only to .jpg and .tiff images";
+        switch (global_language){
+            case "fr":
+                table.innerHTML = "Aucune métadonnée EXIF n'a été trouvée. <strong>Note:<strong> Le Format EXIF s'applique uniquement aux images .jpg et .tiff";
+                break;
+            case "en":
+            default:
+                table.innerHTML = "No EXIF Metadata was found. <strong>Note:</strong> The EXIF standard applies only to .jpg and .tiff images";
+                break;
+        }
     }
     return table
 }
 
 /* get Exif Metadata */
+var jsonTitleImageMetadata = {
+    en: "Image Metadata",
+    fr: "Metadonnée de l'image"
+};
 function getExif(img) {
     cleanElement("place-metadata");
     EXIF.getData(img, function() {
         var allMetaData = EXIF.getAllTags(this);
         var allMetaDataSpan = document.getElementById("place-metadata");
-        makeTitle("Image Metadata", allMetaDataSpan);
+        makeTitle(jsonTitleImageMetadata[global_language], allMetaDataSpan);
         var json_str = JSON.stringify(allMetaData, null, "\t");
         var table = imgTable(json_str);
         allMetaDataSpan.appendChild(table);
@@ -60,6 +72,106 @@ function getExif(img) {
     });
 }
 
+var jsonTitleTableMetadata = {
+    index: {
+        metadata: ["hasMoov", "duration", "timescale", "isFragmented", "fragment_duration", "isProgressive", "hasIOD",
+            "brands", "created", "modified"],
+        track: ["id", "references", "created", "modified", "movie_duration", "layer", "alternate_group", "volume",
+            "track_width","track_height", "timescale", "duration", "codec", "language", "nb_samples", "size", "bitrate"],
+        audio: ["id", "references", "created", "modified", "movie_duration", "layer", "alternate_group", "volume",
+            "track_width","track_height", "timescale", "duration", "codec", "language", "nb_samples", "size", "bitrate"]  
+    },
+    en: {
+        metadata: {
+            title: "Video Metadata",
+            name: ["Moov", "Duration", "Fragmented", "Duration of fragment", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
+            desc: ["", "Number, providing the duration of the movie (unfragmented part) in timescale units",
+            "Number, corresponding to the timescale as given in the movie header",
+            "boolean, indicating if the file is already fragmented",
+            "Number, giving the duration of the fragmented part of the file, in timescale units",
+            "boolean, indicating if the file can be played progressively",
+            "boolean, indicating if the the file contains an MPEG-4 Initial Object Descriptor",
+            "Array of 4CC codes corresponding to the file brands as given in the ftyp box",
+            "Date object, indicating the creation date of the file as given in the movie header",
+            "Date object, indicating the last modification date of the file as given in the movie header"]
+        },
+        track: {
+            title: "Video Track",
+            name: ["Identifier", "References", "Created time", "Modified time", "Movie duration", "Layer", "Alternate group", "Volume", "Width", "Height", "Timescale",
+            "Duration", "Codec", "Language", "Samples", "Size", "Bitrate"],
+            desc: ["Number, giving track identifier", "", "Date object, indicating the creation date of the file as given in the track header",
+            "Date object, indicating the last modification date of the file as given in the track header", "",
+            "Number, layer information as indicated in the track header",
+            "Number, identifier of the alternate group the track belongs to",
+            "", "Number, width of the track as indicated in the track header", "Number, height of the track as indicated in the track header",
+            "Number, indicating the track timescale, as given in the track header", "Number, providing the duration of the (unfragmented part of) track, in timescale units",
+            "String, giving the MIME codecs parameter for this track (e.g. \"avc1.42c00d\" or \"mp4a.40.2\"), to be used to create SourceBuffer objects with Media Source Extensions",
+            "String, giving the 3-letter language code",
+            "Number, giving the number of track samples (ie. frames)",
+            "", "Number, providing the bitrate of the track in bits per second"]
+        },
+        audio: {
+            title: "Audio track",
+            name: ["Identifier", "References", "Created time", "Modified time", "Movie duration", "Layer", "Alternate group",
+            "Volume", "Width", "Height", "Timescale", "Duration", "Codec", "Language", "Samples", "Size", "Bitrate"],
+            desc: ["Number, giving track identifier", "", "Date object, indicating the creation date of the file as given in the track header",
+            "Date object, indicating the last modification date of the file as given in the track header", "",
+            "Number, layer information as indicated in the track header",
+            "Number, identifier of the alternate group the track belongs to",
+            "", "Number, width of the track as indicated in the track header", "Number, height of the track as indicated in the track header",
+            "Number, indicating the track timescale, as given in the track header", "Number, providing the duration of the (unfragmented part of) track, in timescale units",
+            "String, giving the MIME codecs parameter for this track (e.g. \"avc1.42c00d\" or \"mp4a.40.2\"), to be used to create SourceBuffer objects with Media Source Extensions",
+            "String, giving the 3-letter language code",
+            "Number, giving the number of track samples (ie. frames)",
+            "", "Number, providing the bitrate of the track in bits per second"]
+        }   
+    },
+    fr: {
+        metadata: {
+            title: "Metadonné de la video",
+            name: ["Moov", "Durée", "Unité de temps", "Fragmenté", "Durée d'un fragment", "Progressive", "IOD", "Type", "Date de création", "Date de modification"],
+            desc: ["", "Nombre, donnant la durée du film (partie défragmentée) en unité de temps",
+            "Nombre, correspondant è l'unité de temps donnée dans l'entête du film",
+            "Booléen, indiquant si le film est déjà fragmenté",
+            "Number, donnant la durée de la partie fragmentée du film, en unité de temps",
+            "Booléen, indiquant si le fichier peut être lu progressivement",
+            "Booléen, indiquant si le fichier contient un MPEG-4 Initial Object Descriptor",
+            "Tableau de code 4CC correspondant au type de fichier comme donné dans la boite ftyp",
+            "Date, indiquant la date de création du fichier comme donné dans l'entête du film",
+            "Date, indiquant la date de dernière modification du fichier comme donnée dans l'entête du film"]
+        },
+        track: {
+            title: "Piste vidéo",
+            name: ["Identifiant", "Réferences", "Date de création", "Date de modification", "Durée du film", "Couches", "Groupes alternatifs", "Volume", "Largeur", "Hauteur", "Unité de temps",
+            "Durée", "Codec", "Langage", "Echantillon", "Taille", "Taux de bit"],
+            desc: ["Nombre, Identifiant de la piste", "", "Date, indiquant la date de création du fichier comme donnée dans l'entête de la piste",
+            "Date, indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste", "",
+            "Nombre, information de couche indiqué dans l'entête de piste",
+            "Nombre, identifiant du groupe alternatif auquel la piste appartient",
+            "", "Nombre, largeur de la piste comme indiqué dans l'entête de piste", "Nombre, hauteur de la piste comme indiqué dans l'entête de piste",
+            "Nombre, indiquant l'unité de temps de la piste comme donné dans l'entête de la piste", "Nombre, donnant la duréee de la (partie défragmentée de la) piste, en unité de temps",
+            "Chaine de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
+            "Chaine de charactère, donnant le code de langage à 3 lettres",
+            "Nombre, donnant le nombre d'échantillons de piste (c-à-d images)",
+            "", "Nombre, taux de bits par second de la piste"]
+        },
+        audio: {
+            title: "Piste audio",
+            name: ["Identifiant", "Réferences", "Date de création", "Date de modification", "Durée du film", "Couches", "Groupes alternatifs", "Volume", "Largeur", "Hauteur", "Unité de temps",
+            "Durée", "Codec", "Langage", "Echantillon", "Taille", "Taux de bit"],
+            desc: ["Nombre, Identifiant de la piste", "", "Date, indiquant la date de création du fichier comme donnée dans l'entête de la piste",
+            "Date, indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste", "",
+            "Nombre, information de couche indiqué dans l'entête de piste",
+            "Nombre, identifiant du groupe alternatif auquel la piste appartient",
+            "", "Nombre, largeur de la piste comme indiqué dans l'entête de piste", "Nombre, hauteur de la piste comme indiqué dans l'entête de piste",
+            "Nombre, indiquant l'unité de temps de la piste comme donné dans l'entête de la piste", "Nombre, donnant la duréee de la (partie défragmentée de la) piste, en unité de temps",
+            "Chaine de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
+            "Chaine de charactère, donnant le code de langage à 3 lettres",
+            "Nombre, donnant le nombre d'échantillon de piste (c-à-d. images)",
+            "", "Nombre, taux de bits par seconde de la piste"]
+        }  
+    }
+}
 
 /* get Mp4 Metadata */
 function getMp4(vid) {
@@ -80,52 +192,23 @@ function getMp4(vid) {
             allMetaDataSpan.appendChild(divError);
             return;
         }
-        makeTitle("Video Metadata", allMetaDataSpan);
-        var lst = ["hasMoov", "duration", "timescale", "isFragmented", "fragment_duration", "isProgressive", "hasIOD",
-        "brands", "created", "modified"];
-        var lst_desc = ["", "Number, providing the duration of the movie (unfragmented part) in timescale units",
-        "Number, corresponding to the timescale as given in the movie header",
-        "boolean, indicating if the file is already fragmented",
-        "Number, giving the duration of the fragmented part of the file, in timescale units",
-        "boolean, indicating if the file can be played progressively",
-        "boolean, indicating if the the file contains an MPEG-4 Initial Object Descriptor",
-        "Array of 4CC codes corresponding to the file brands as given in the ftyp box",
-        "Date object, indicating the creation date of the file as given in the movie header",
-        "Date object, indicating the last modification date of the file as given in the movie header"]
-        var table = makeTable(info, lst, lst_desc);
+        var indexes = jsonTitleTableMetadata["index"];
+        var languageText = jsonTitleTableMetadata[global_language];
+        var metadataText = languageText["metadata"];
+        //metadata
+        makeTitle(metadataText["title"], allMetaDataSpan);
+        var table = makeTableMetadata(info, indexes["metadata"], metadataText["name"], metadataText["desc"]);
         allMetaDataSpan.appendChild(table);
         //video Tracks
-        makeTitle("Video Track", allMetaDataSpan);
-        lst = ["id", "references", "created", "modified", "movie_duration", "layer", "alternate_group", "volume",
-        "track_width","track_height", "timescale", "duration", "codec", "language", "nb_samples", "size", "bitrate"];
-        lst_desc = ["Number, giving track identifier", "", "Date object, indicating the creation date of the file as given in the track header",
-        "Date object, indicating the last modification date of the file as given in the track header", "",
-        "Number, layer information as indicated in the track header",
-        "Number, identifier of the alternate group the track belongs to",
-        "", "Number, width of the track as indicated in the track header", "Number, height of the track as indicated in the track header",
-        "Number, indicating the track timescale, as given in the track header", "Number, providing the duration of the (unfragmented part of) track, in timescale units",
-        "String, giving the MIME codecs parameter for this track (e.g. \"avc1.42c00d\" or \"mp4a.40.2\"), to be used to create SourceBuffer objects with Media Source Extensions",
-        "String, giving the 3-letter language code",
-        "Number, giving the number of track samples (ie. frames)",
-        "", "Number, providing the bitrate of the track in bits per second"];
-        table = makeTable(info.videoTracks[0], lst, lst_desc);
+        var trackText = languageText["track"];
+        makeTitle(trackText["title"], allMetaDataSpan);
+        table = makeTableMetadata(info.videoTracks[0], indexes["track"], trackText["name"], trackText["desc"]);
         allMetaDataSpan.appendChild(table);
         //audio Tracks
-        makeTitle("Audio Track", allMetaDataSpan);
+        var audioText = languageText["audio"];
+        makeTitle(audioText["title"], allMetaDataSpan);
         json_str = JSON.stringify(info.audioTracks[0], null, "\t");
-        lst = ["id", "references", "created", "modified", "movie_duration", "layer", "alternate_group", "volume",
-        "track_width","track_height", "timescale", "duration", "codec", "language", "nb_samples", "size", "bitrate"];
-        lst_desc = ["Number, giving track identifier", "", "Date object, indicating the creation date of the file as given in the track header",
-        "Date object, indicating the last modification date of the file as given in the track header", "",
-        "Number, layer information as indicated in the track header",
-        "Number, identifier of the alternate group the track belongs to",
-        "", "Number, width of the track as indicated in the track header", "Number, height of the track as indicated in the track header",
-        "Number, indicating the track timescale, as given in the track header", "Number, providing the duration of the (unfragmented part of) track, in timescale units",
-        "String, giving the MIME codecs parameter for this track (e.g. \"avc1.42c00d\" or \"mp4a.40.2\"), to be used to create SourceBuffer objects with Media Source Extensions",
-        "String, giving the 3-letter language code",
-        "Number, giving the number of track samples (ie. frames)",
-        "", "Number, providing the bitrate of the track in bits per second"];
-        table = makeTable(info.audioTracks[0], lst, lst_desc);
+        table = makeTableMetadata(info.audioTracks[0], indexes["audio"], audioText["name"], audioText["desc"]);
         allMetaDataSpan.appendChild(table);
     };
 
@@ -150,7 +233,7 @@ function getMp4(vid) {
 }
 
 function submit_metadata(){
-    cleanElement("preview_metadata")
+    cleanElement("preview-metadata")
     var url = document.getElementById("url-metadata").value;
     url = get_real_url_img(url);
     var img_radio = document.getElementById("img-meta-radio");
@@ -169,7 +252,7 @@ function submit_metadata(){
             getExif(img);
             //getImgRawData(img.src);
         }
-        $("#preview_metadata").append(img);
+        $("#preview-metadata").append(img);
     }
     else {
         getMp4(url);
@@ -270,4 +353,25 @@ function getLocation(){
             openTab(mapurl);
         };
     }
+}
+
+function updateTableLanguageMetadata(lang) {
+    if (!document.getElementById("place-metadata").hasChildNodes())
+        return;
+    if (document.getElementById("preview-metadata").hasChildNodes()) // image selected
+        $("#place-metadata > h3").html(jsonTitleImageMetadata[lang]);
+        return;
+    var jsonText = jsonTitleTableMetadata[lang];
+    var partNames = [];
+    var titles = [];
+    for (var part of ["metadata", "track", "audio"])
+    {
+        var text = jsonText[part];
+        partNames.push(text["title"]);
+        titles = titles.concat(text["name"]);
+    }
+    $("#place-metadata").find("h3").html(function (index) {
+        return partNames[index];
+    })
+    updateTitleTable("place-metadata", titles);
 }

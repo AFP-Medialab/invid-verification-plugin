@@ -1,11 +1,4 @@
-/* Clean element by id */
-function cleanElement(id){
-	var div = document.getElementById(id);
-	/* Clear content*/
-	while(div.hasChildNodes()){
-		div.removeChild(div.firstChild);
-	}
-}
+/* Thumbnails */
 
 function get_images(url){
 	var video_id = getYtIdFromUrlString(url);

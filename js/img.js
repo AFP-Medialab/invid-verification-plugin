@@ -50,14 +50,6 @@ class History{
 
 var histo = new History("test");
 histo.local = false;
-/* Clean element by id */
-function cleanElement(id){
-    var div = document.getElementById(id);
-    /* Clear content*/
-    while(div.hasChildNodes()){
-        div.removeChild(div.firstChild);
-    }
-}
 
 function removeElementsByClass(className){
     var elements = document.getElementsByClassName(className);
@@ -246,6 +238,7 @@ $('#file-input').change( function(event) {
     };
 })();
 
+/* For button to encode imge modified */
 document.getElementById("copy_url_img_magnifier").addEventListener("click", function() {
     var text = histo.getHistory();
     if (!/data:image\/png/.test(text))
@@ -254,6 +247,7 @@ document.getElementById("copy_url_img_magnifier").addEventListener("click", func
     this.innerHTML = "URL copied";
     openTab("https://www.google.com/searchbyimage?&image_url=")
 });
+
 document.getElementById("download_img_magnifier").addEventListener("click", function() {
     this.href = histo.getHistory();
     var url_start = histo.history[0];
@@ -264,12 +258,14 @@ document.getElementById("download_img_magnifier").addEventListener("click", func
     this.download = image_name;
 });
 
+/* Hide reverse button */
 function hideRevBtnMagnifier()
 {
     document.getElementById("lst_search_btn").style.display = "none";
     document.getElementById("copy_url_img_magnifier").style.display = "";
 }
 
+/* Display reverse button */
 function displayRevBtnMagnifier()
 {
     document.getElementById("lst_search_btn").style.display = "inline";

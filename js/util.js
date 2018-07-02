@@ -125,7 +125,7 @@ function isYtUrl(url) {
 /* Build the url for the image from the url given :
 /* - drive.google.com/file/d/(.*)/view?usp=sharing
 /* - www.dropbox.com/* 
-/* return the the url given if no pattern match*/
+/* return the url given if no pattern match*/
 function get_real_url_img(url)
 {
 	var regex_drive = /https:\/\/drive\.google\.com\/file\/d\/(.*)\/view\?usp=sharing/i;
@@ -136,6 +136,22 @@ function get_real_url_img(url)
 	return url;
 }
 
+/* Update the title of a table */
+function updateTitleTable(tableId, titles) {
+	var listTitle = $("#" + tableId).find("th");
+	for (var i = 0; i < listTitle.length; i++) {
+		listTitle[i].innerHTML = titles[i];
+	}
+}
+
+/* Clean element by id */
+function cleanElement(id){
+    var div = document.getElementById(id);
+    /* Clear content*/
+    while(div.hasChildNodes()){
+        div.removeChild(div.firstChild);
+    }
+}
 /* Add a link to the dom element */
 /* If content is null, url is used */
 function appendLink(dom, url, content) {

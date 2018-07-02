@@ -20,7 +20,7 @@
 			}
 		})();
 	*/
-	/* and the file must be hadded to popup.html in the list of extractor */
+	/* and the file must be added to popup.html in the list of extractor */
 
 	var nothing_found_msg = "<div class='centerText'>Service not available on this page</div>";
 

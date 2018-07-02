@@ -1,3 +1,5 @@
+/* ANALYSIS */
+
 var video_thumbnails_lst = [];
 var twitter_url = "https://twitter.com/search";
 var tw_json = "";
@@ -13,8 +15,6 @@ function urlify(text) {
         })
     }
     return "";
-    // or alternatively
-    // return text.replace(urlRegex, '<a href="$1">$1</a>')
 }
 
 /*Create a title in the div argument*/
@@ -37,7 +37,6 @@ function make_table(json, key_lst, name_lst){
         var content = json[key_lst[index]];
         content = (Array.isArray(content)) ? content.join("\n") : String(content);
         td.innerHTML = urlify(content);
-        //createPopUp(th, lst_desc[index]);
         tr.appendChild(th);
         tr.appendChild(td);
         table.appendChild(tr);
@@ -115,15 +114,6 @@ function hideButtons() {
     }
 }
 
-/* Clean element by id */
-function cleanElement(id){
-    var div = document.getElementById(id);
-    /* Clear content*/
-    while(div.hasChildNodes()){
-        div.removeChild(div.firstChild);
-    }
-}
-
 /* Place verification comments */
 function placeComments(analysis_json){
     cleanElement("place-comments");
@@ -146,6 +136,7 @@ function placeComments(analysis_json){
 }
 
 /* Thumbnails clickable */
+/* Send to magnifier tab */
 function activeThumbnail(thumbnails_id){
     // constants
     var SHOW_CLASS = 'show',
@@ -313,7 +304,7 @@ function createGoogleMaps(){
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(submit);
   submit.addEventListener("click", function(){
       if(searchBox){
-        searchBox.focus();
+         searchBox.focus();
         google.maps.event.trigger(input, 'keydown', { keyCode: 13 });
     }
   })
@@ -375,7 +366,7 @@ function updateMap(places){
     if (places != []){
         var searchBox = document.getElementById("pac-input");
         if(searchBox){
-            searchBox.value = places;
+            searchBox.value =places;
             searchBox.focus();
             google.maps.event.trigger(searchBox, 'keydown', { keyCode: 13 });
         }
@@ -391,7 +382,102 @@ function triggerMap(){
     }
 }
 
+var jsonTitleTableApi = {
+    youtube: {
+        en: {
+            video: {
+                title: "Video:",
+                name1: ["Video title", "Video description"],
+                name2: ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description", "Upload time"]
+            },
+            channel:{
+                title: "Channel:",
+                name: ["Channel description", "Channel created time", "Channel view count", "Channel page", "Channel location"]
+            },
+            comment: {
+                title: "Comments",
+                name: ["Video comment count", "Number verification comments"]
+            }
+        },
+        fr:{
+            video: {
+                title: "Video:",
+                name1: ["Titre de la vidéo", "Description de la vidéo"],
+                name2: ["Nombre de vue", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Localisations mentionnés dans la description", "Description de la localisation de l'enregistrement", "Date de mise en ligne"]
+            },
+            channel: {
+                title: "Chaine:",
+                name: ["Description de la chaine", "Date de la création de la chaine", "Nombre de vue de la chaine", "Page de la chaine", "Localisation de la chaine"]
+            },
+            comment: {
+                title: "Commentaires:",
+                name: ["Nombre de commentaire de la vidéo", "Nombre de commentaires vérifiés"]
+            }
+        }
+    },
+    facebook: {
+        en: {
+            video: {
+                title: "Video:",
+                name: ["Video id", "Video title", "Duration", "Content category", "Content tags", "Video description", "Like count", "Updated time", "Created time"]
+            },
+            page: {
+                title: "Page:",
+                name: ["Page", "About", "Verified account", "Category", "Link", "Fan count", "Description", "Location city", "Location country", "Website"]
+            },
+            comment: {
+                title: "Comments",
+                name: ["Video comment count", "Number verification comments"]
+            }
+        },
+        fr: {
+            video: {
+                title: "Video:",
+                name: ["Identifiant de la vidéo", "Titre de la vidéo", "Durée", "Catégorie du contenu", "Tag du contenu", "Description de la vidéo", "Nombre de \"j'aime\"", "Date de mise en ligne", "Date de création"]
+            },
+            page: {
+                title: "Page:",
+                name: ["Page", "A propos", "Compte vérifié", "Catégorie", "Lien", "Nombre de fan", "Description", "Ville", "Pays", "Site web"]
+            },
+            comment: {
+                title: "Commentaires",
+                name: ["Nombre de commentaire de la vidéo", "Nombre de commentaires vérifiés"]
+            }
+        }
+    },
+    twitter: {
+        en: {
+            video: {
+                title:"Video",
+                name: ["Identifiant", "Content", "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned", "Created", "Video"]
+            },
+            user: {
+                title: "user",
+                name: ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Friends", "Lists", "Tweets liked", "Tweets count", "Created", "User language", "Locations mentioned", "Date de création", "Vidéo"]
+            }/*,
+            comment: {
+                title: "Replies",
+                name: ["Retweets count"]
+            }*/
+        },
+        fr: {
+            video: {
+                title:"Vidéo",
+                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Localisations mentionnées", "Date de création", "Vidéo"]
+            },
+            user: {
+                title: "Utilisateur",
+                name: ["Nom", "Pseudonyme", "Localisation", "Profil", "Description", "Utilisateur protégé", "Utilisateur vérifié", "Nombre de personne qui le suivent", "Nombre d'amis", "Lists", "Tweets \"aimé\"", "Nombre de tweet", "Date de création", "Langue de l'utilisateur", "Localisations mentionées"]
+            }/*,
+            comment: {
+                title: "Réponse",
+                name: ["Nombre de réponse"]
+            }*/
+        }
+    }
+}
 
+var analysisType = "";
 
 /* Parse the YouTube json */
 function parseYTJson(json){
@@ -403,33 +489,31 @@ function parseYTJson(json){
 
     /* List of indexes */
     var key_list_video_a = ["video_title", "video_description"];
-    var name_list_video_a = ["Video title", "Video description"];
     var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description"];
-    var name_list_video_b = ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description"];
     var key_list_channel = ["channel_description", "channel_created_time", "channel_view_count", "channel_url", "channel_location"];
-    var name_list_channel = ["Channel description", "Channel created time", "Channel view count", "Channel page", "Channel location"];
     var key_list_comment = ["video_comment_count", "num_verification_comments"];
-    var name_list_comment = ["Video comment count", "Number verification comments"];
+    var jsonName = jsonTitleTableApi["youtube"][global_language];
 
     function start(json) {
         /* Video Infos*/
         var div = document.getElementById("place-table");
         /*Video table*/
-        makeTitle("Video:", div);
-        var table = make_table(json,key_list_video_a, name_list_video_a);
+        makeTitle(jsonName.video.title, div);
+        var table = make_table(json, key_list_video_a, jsonName.video.name1);
         div.appendChild(table);
         div.appendChild(document.createElement("br"));
-        table = make_table(json,key_list_video_b, name_list_video_b);
-        var rowTime = createTimeRow("Upload time", json["video_upload_time"]);
+        table = make_table(json, key_list_video_b, jsonName.video.name2);
+        var index = key_list_video_b.length;
+        var rowTime = createTimeRow(jsonName.video.name2[index++], json["video_upload_time"]);
         table.appendChild(rowTime);
         div.appendChild(table);
         /*Channel table*/
-        makeTitle("Channel:", div);
-        table = make_table(json, key_list_channel, name_list_channel);
+        makeTitle(jsonName.channel.title, div);
+        table = make_table(json, key_list_channel, jsonName.channel.name);
         div.appendChild(table);
         /* Comments*/
-        makeTitle("Comments:", div);
-        table = make_table(json, key_list_comment, name_list_comment);
+        makeTitle(jsonName.comment.title, div);
+        table = make_table(json, key_list_comment, jsonName.comment.name);
         div.appendChild(table);
 
         /* Init variable */
@@ -507,30 +591,29 @@ function parseFBJson(json){
 
     /* List of indexes */
     var key_list_video = ["video_id", "title", "length", "content_category", "content_tags", "video_description", "video_likes"];
-    var name_list_video = ["Video id", "Video title", "Duration", "Content category", "Content tags", "Video description", "Likes count"];
     var key_list_from = ["from", "from_about", "from_is_verified", "from_category", "from_link", "from_fan_count", "from_description", "from_location_city", "from_location_country", "from_website"];
-    var name_list_from = ["Page", "About", "Verified profile", "Category", "Link", "Fan count", "Description", "Location city", "Location country", "Website"];
     var key_list_count = ["total_comment_count", "num_verification_comments"];
-    var name_list_count = ["Video comment count", "Number verification comments"];
+    var arrayTitle = jsonTitleTableApi["facebook"][global_language];
 
     function start(json) {
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
-        makeTitle("Video:", div);
-        var table = make_table(json, key_list_video, name_list_video);
-        var rowTime = createTimeRow("Updated time", json["updated_time"]);
+        makeTitle(arrayTitle.video.title, div);
+        var table = make_table(json, key_list_video, arrayTitle.video.name);
+        var index = key_list_video.length;
+        var rowTime = createTimeRow(arrayTitle.video.name[index++], json["updated_time"]);
         table.appendChild(rowTime);
-        rowTime = createTimeRow("Created time", json["created_time"]);
+        rowTime = createTimeRow(arrayTitle.video.name[index++], json["created_time"]);
         table.appendChild(rowTime);
         div.appendChild(table);
         /*Page table*/
-        makeTitle("Page:", div);
-        table = make_table(json, key_list_from, name_list_from);
+        makeTitle(arrayTitle.page.title, div);
+        table = make_table(json, key_list_from, arrayTitle.page.name);
         div.appendChild(table);
         /* Comments */
-        makeTitle("Comments:", div);
-        table = make_table(json, key_list_count, name_list_count);
+        makeTitle(arrayTitle.comment.title, div);
+        table = make_table(json, key_list_count, arrayTitle.comment.name);
         div.appendChild(table);
         hasPlaceImages = false;
         hasPlaceComments = false;
@@ -595,12 +678,10 @@ function parseTWJson(json){
     var hasUpdateMapDesc;
 
     /* List of indexes */
-    var key_list_video = ["id_str", "full_text", /*"created_at",*/ "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations"];
-    var name_list_video = ["Identifiant", "Content", /*"Created",*/ "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned"];
+    var key_list_video = ["id_str", "full_text", "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations"];
     var key_list_user = ["user_name", "user_screen_name", "user_location", "user_url", "user_description", "user_protected", "user_verified", "user_followers_count", "user_friends_count", "user_listed_count", "user_favourites_count", "user_statuses_count", "user_created_at", "user_lang", "user_description_mentioned_locations"];
-    var name_list_user = ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Friends", "Lists", "Tweets liked", "Tweets count", "Created", "user_lang", "Locations mentioned"];
-    /*var key_list_comment = ["retweet_count"];
-    var name_list_comment = ["Retweets count"];*/
+    /*var key_list_comment = ["retweet_count"];*/
+    var arrayTitle = jsonTitleTableApi["twitter"][global_language];
 
     function chooseVideoUrl(urls) {
         var max = 0;
@@ -623,25 +704,19 @@ function parseTWJson(json){
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
-        makeTitle("Video:", div);
-        var table = make_table(json, key_list_video, name_list_video);
-        var rowTime = createTimeRow("Created", json["created_at"]);
+        makeTitle(arrayTitle.video.title, div);
+        var table = make_table(json, key_list_video, arrayTitle.video.name);
+        var index = key_list_video.length;
+        var rowTime = createTimeRow(arrayTitle.video.name[index++], json["created_at"]);
         table.appendChild(rowTime);
-        div.appendChild(table);
-        var row = document.createElement("tr");
-        var th = document.createElement("th");
-        th.innerHTML = "Video";
-        var td = document.createElement("td");
         var urls = json["video_info_url"];
-        td.innerHTML = urlify(chooseVideoUrl(urls));
-        row.appendChild(th);
-        row.appendChild(td);
+        var row = makeRowTable(arrayTitle.video.name[index++], urlify(chooseVideoUrl(urls)));
         table.appendChild(row);
         div.appendChild(table);
         
         /*Page table*/
-        makeTitle("User:", div);
-        table = make_table(json, key_list_user, name_list_user);
+        makeTitle(arrayTitle.user.title, div);
+        table = make_table(json, key_list_user, arrayTitle.user.name);
         div.appendChild(table);
         /* Comments */
         /*makeTitle("Retweets:", div);
@@ -810,16 +885,19 @@ function video_api_analysis(video_url, isProcess){
             { // YouTube
                 url = data["youtube_response"];
                 callback = parseYTJson;
+                analysisType = "youtube";
             }
             else if (data["facebook_response"] !== undefined)
             { // Facebook
                 url = data["facebook_response"];
                 callback = parseFBJson;
+                analysisType = "facebook";
             }
             else 
             { // Twitter
                 url = data["twitter_response"];
                 callback = parseTWJson;
+                analysisType = "twitter";
             }
             analysisUrls.response = url;
             $.getJSON(url, function(data) {
@@ -832,8 +910,7 @@ function video_api_analysis(video_url, isProcess){
             /* Twitter Part response */
             var url_twitter = data["twitter_shares"];
             analysisUrls.tweets = url_twitter;
-            /*ICI ERREUR TWITTER */
-           /* $.getJSON(url_twitter, function parse_tw(data) {
+            $.getJSON(url_twitter, function parse_tw(data) {
                 if (analysisUrls.tweets != url_twitter)
                     return;
                 tw_json = makeJSON(data);
@@ -857,8 +934,7 @@ function video_api_analysis(video_url, isProcess){
                 console.error("start share : " + url_twitter);
                 console.error(textStatus + ", " + error);
                 share_fail(get_error_message("share"));
-            });*/
-             /*FIN ERREUR TWITTER */
+            });
         }).fail(function(jqxhr, textStatus, error) {
             console.error("get urls : " + analysis_url);
             console.error(textStatus + ", " + error);
@@ -907,13 +983,11 @@ form.addEventListener("submit", function(e){
 
 /* Google button : thumbnails reverse search */
 document.getElementById("google_search_btn").onclick = function() {
-    //reverseImgSearch("google", video_thumbnails_lst);
     openTab(google_reverse_search_urls);
 }
 
 /* Yandex button : thumbnails reverse search */
 document.getElementById("yandex_search_btn").onclick = function() {
-    //reverseImgSearch("yandex", video_thumbnails_lst);
     openTab(yandex_reverse_search_urls);
 };
 
@@ -957,7 +1031,6 @@ function convertDate(date){
 
 /* parse the json from twitter api and make json for the timeline */
 function makeJSON(data){
-    //console.log(data);
     var json = "";
     var obj = new Object();
     obj.title = new Object();
@@ -965,14 +1038,10 @@ function makeJSON(data){
     obj.title.media.url = "img/invid_logo.png";
     obj.title.text = new Object();
     obj.title.text.headline = "Twitter timeline";
-    //obj.timeline.startDate = convertDate(data.aggregate_stats.min_tweet_timestamp);
     obj.events = [];
     for (var index in data.tweets) {
         obj_ex = new Object();
         obj_ex.media = new Object();
-        //obj_ex.media.url = data.tweets[index].user.profile_image_url;
-        //obj_ex.media.caption = "";
-        //obj_ex.media.credit = data.tweets[index].user.description;
         obj_ex.media.thumbnail = "img/twitter_logo.png";
         obj_ex.start_date = convertDate(data.tweets[index].created_at);
         obj_ex.text = new Object();
@@ -984,7 +1053,6 @@ function makeJSON(data){
         obj.events.push(obj_ex);
     }
     json = obj;
-    //console.log(json);
     return json;
 }
 
@@ -1026,3 +1094,41 @@ function callApi(url){
 var video_thumbnails_lst = [];
 var twitter_url = "https://twitter.com/search";
 var tw_json = "";
+
+
+function updateTableLanguageAnalysis(lang) {
+    if (!document.getElementById("place-table").hasChildNodes())
+        return;
+    var partNames = [];
+    var titles = [];
+    switch (analysisType) {
+        case "youtube":
+            var jsonName = jsonTitleTableApi["youtube"][lang];
+            partNames = [jsonName["video"].title, jsonName["channel"].title, jsonName["comment"].title]
+            titles = titles.concat(jsonName["video"]["name1"]);
+            titles = titles.concat(jsonName["video"]["name2"]);
+            titles = titles.concat(jsonName["channel"]["name"]);
+            titles = titles.concat(jsonName["comment"]["name"]);
+            break;
+        case "facebook":
+            var jsonName = jsonTitleTableApi["facebook"][lang];
+            partNames = [jsonName["video"].title, jsonName["page"].title, jsonName["comment"].title]
+            titles = titles.concat(jsonName["video"]["name"]);
+            titles = titles.concat(jsonName["page"]["name"]);
+            titles = titles.concat(jsonName["comment"]["name"]);
+            break;
+        case "twitter":
+            var jsonName = jsonTitleTableApi["twitter"][lang];
+            partNames = [jsonName["video"].title, jsonName["user"].title/*, jsonName["comment"].title*/]
+            titles = titles.concat(jsonName["video"]["name"]);
+            titles = titles.concat(jsonName["user"]["name"]);
+            //titles = titles.concat(jsonName["comment"]["name"]);
+            break;
+        default:
+            return;
+    }
+    $("#place-table").find("h3").html(function (index) {
+        return partNames[index];
+    })
+    updateTitleTable("place-table", titles);
+}

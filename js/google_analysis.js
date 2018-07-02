@@ -7,7 +7,8 @@ $("#video_form2 > input")[0].addEventListener("click", function ga_analysis_url(
 	var list = {
 		google: "#google_search_btn",
 		yandex: "#yandex_search_btn",
-		twitter: "#twitter_search_btn"
+		twitter: "#twitter_search_btn",
+		tineye: "#tineye_search_btn"
 	};
 	for (index in list) {
 		$(list[index])[0].addEventListener("click", function ga_analysis_reverse_event(e) {
@@ -22,7 +23,8 @@ $("#video_form input[type='submit']")[0].addEventListener("click", function ga_t
 	var engines = {
 		google: "#google_engine",
 		yandex: "#yandex_engine",
-		bing: "#bing_engine"
+		bing: "#bing_engine",
+		tineye: "#tineye_engine"
 	};
 	var engine = "google";
 	for (index in engines) {
