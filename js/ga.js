@@ -13,6 +13,7 @@ window.addEventListener("load", function(){
         "text": "#ffffff"
       }
     },
+    "position" : "top",
     "type": "opt-in",
     "revokable": true,
     "law.regionalLaw": false,
