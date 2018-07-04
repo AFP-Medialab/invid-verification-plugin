@@ -10,7 +10,6 @@ var onMessageHandler = function(message) {
 		hiddenField.setAttribute("type", "hidden");
 		hiddenField.setAttribute("name", key);
 		hiddenField.setAttribute("value", message.data[key]);
-		alert(message.data[key]);
 		form.appendChild(hiddenField);
 	}
 	document.body.appendChild(form);
