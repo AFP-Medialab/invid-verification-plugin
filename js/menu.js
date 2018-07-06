@@ -64,7 +64,7 @@ imageMagnifier = function(word){
 
 imageReverseSearch = function(word){
 	var search_url = "https://www.google.com/searchbyimage?image_url=";
-	var url = word.linkUrl;
+	var url = getUrlImg(word);
 	if (url != ""){
 		chrome.tabs.create({url:search_url + url});
 	}

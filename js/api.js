@@ -749,13 +749,13 @@ function parseTWJson(json){
         update(json);
 
     /* Place thumbnails */
-    if (!hasPlaceImages && json.user_profile_image_url_https_original) {
-        placeImages("place-carousel", "place-thumbnails", "place-preview", [json.user_profile_image_url_https_original]);
+    if (!hasPlaceImages && json.media_url) {
+        placeImages("place-carousel", "place-thumbnails", "place-preview", [json.media_url]);
         hasPlaceImages = true;
     }
 
     /* Update reverse search buttons */
-    video_thumbnails_lst = json.user_profile_image_url_https_original;
+    video_thumbnails_lst = json.media_url;
     google_reverse_search_urls = json.reverse_image_thumbnails_search_url_google;
     yandex_reverse_search_urls = json.reverse_image_thumbnails_search_url_yandex;
 
