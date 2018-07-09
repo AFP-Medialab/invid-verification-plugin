@@ -105,7 +105,7 @@ imageReverseSearchBing = function(word){
 	var search_url = "https://www.bing.com/images/search?q=imgurl:";
 	var url = getUrlImg(word);
 	if (url != "") {
-		chrome.tabs.create({url:search_url + url});
+		chrome.tabs.create({url:search_url + url + "&view=detailv2&iss=sbi"});
 	}
 };
 
