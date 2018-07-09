@@ -101,6 +101,14 @@ imageReverseSearchTineye = function(word){
 	}
 };
 
+imageReverseSearchBing = function(word){
+	var search_url = "https://www.bing.com/images/search?q=imgurl:";
+	var url = getUrlImg(word);
+	if (url != "") {
+		chrome.tabs.create({url:search_url + url});
+	}
+};
+
 chrome.contextMenus.create({
  title: "Youtube thumbnails reverse search",
  contexts:["link", "video"], 
@@ -133,7 +141,7 @@ chrome.contextMenus.create({
 chrome.contextMenus.create({
 	title: "Image Forensic",
 	contexts:["image"],
-	onclick: imageForensic
+	onclick: imageForensic,
 });
 
 chrome.contextMenus.create({
@@ -169,9 +177,15 @@ chrome.contextMenus.create({
 });
 
 chrome.contextMenus.create({
+	title: "Image Reverse Search - Bing",
+	contexts:["image"],
+	onclick: imageReverseSearchBing,
+});
+
+chrome.contextMenus.create({
 	title: "Image Reverse Search - Reddit",
 	contexts:["image"],
-	onclick: karmadecaySearch
+	onclick: karmadecaySearch,
 });
 
 
