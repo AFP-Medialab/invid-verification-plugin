@@ -403,15 +403,15 @@ var jsonTitleTableApi = {
             video: {
                 title: "Video:",
                 name1: ["Titre de la vidéo", "Description de la vidéo"],
-                name2: ["Nombre de vue", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Localisations mentionnés dans la description", "Description de la localisation de l'enregistrement", "Date de mise en ligne"]
+                name2: ["Nombre de vues", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Lieux dans la description", "Lieu de l'enregistrement", "Date de mise en ligne"]
             },
             channel: {
-                title: "Chaine:",
-                name: ["Description de la chaine", "Date de la création de la chaine", "Nombre de vue de la chaine", "Page de la chaine", "Localisation de la chaine"]
+                title: "Chaîne:",
+                name: ["Description de la chaîne", "Date de la création de la chaîne", "Nombre de vues de la chaine", "Page de la chaîne", "Localisation de la chaîne"]
             },
             comment: {
-                title: "Commentaires:",
-                name: ["Nombre de commentaire de la vidéo", "Nombre de commentaires vérifiés"]
+                title: "Commentaires sur la vidéo:",
+                name: ["Nombre de commentaires", "Nbre de com. pour vérification"]
             }
         }
     },
@@ -437,11 +437,11 @@ var jsonTitleTableApi = {
             },
             page: {
                 title: "Page:",
-                name: ["Page", "A propos", "Compte vérifié", "Catégorie", "Lien", "Nombre de fan", "Description", "Ville", "Pays", "Site web"]
+                name: ["Page", "A propos", "Compte vérifié", "Catégorie", "Lien", "Nombre de fans", "Description", "Ville", "Pays", "Site web"]
             },
             comment: {
-                title: "Commentaires",
-                name: ["Nombre de commentaire de la vidéo", "Nombre de commentaires vérifiés"]
+                title: "Commentaires sur la vidéo",
+                name: ["Nbre de commentaires", "Nbre de commentaires vérifiés"]
             }
         }
     },
@@ -453,7 +453,7 @@ var jsonTitleTableApi = {
             },
             user: {
                 title: "user",
-                name: ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Friends", "Lists", "Tweets liked", "Tweets count", "Created", "User language", "Locations mentioned", "Date de création", "Vidéo"]
+                name: ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Following", "Lists", "Tweets liked", "Tweets count", "Created", "User language", "Locations mentioned", "Date de création", "Vidéo"]
             }/*,
             comment: {
                 title: "Replies",
@@ -463,11 +463,11 @@ var jsonTitleTableApi = {
         fr: {
             video: {
                 title:"Vidéo",
-                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Localisations mentionnées", "Date de création", "Vidéo"]
+                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Lieux mentionnés", "Date de création", "Vidéo"]
             },
             user: {
                 title: "Utilisateur",
-                name: ["Nom", "Pseudonyme", "Localisation", "Profil", "Description", "Utilisateur protégé", "Utilisateur vérifié", "Nombre de personne qui le suivent", "Nombre d'amis", "Lists", "Tweets \"aimé\"", "Nombre de tweet", "Date de création", "Langue de l'utilisateur", "Localisations mentionées"]
+                name: ["Nom", "Pseudonyme", "Localisation", "Profil", "Description", "Utilisateur protégé", "Utilisateur vérifié", "Nombre d'abonnés", "Nombre d'abonnements", "Listes", "Tweets \"aimés\"", "Nombre de tweets", "Date de création", "Langue de l'utilisateur", "Lieux mentionnés"]
             }/*,
             comment: {
                 title: "Réponse",
