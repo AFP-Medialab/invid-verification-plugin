@@ -132,6 +132,7 @@ input:-webkit-autofill {
 .button {
   font-size: 16px;
     padding: 15px 15px 15px 15px;
+    margin: 5px;
     cursor: pointer;
     border: none;
     background: #136899;

@@ -1,0 +1,89 @@
+<h2>Reuse Conditions</h2>
+
+  <% if (obj.ugvKind == "YouTube") { %>
+    <% if (obj.license == "youtube") { obj.license = "YouTube License Summary" %>
+    <p>This video is licensed under the Standard YouTube license, defined in YouTube's
+      <a href="https://www.youtube.com/static?template=terms" target="_blank">Terms of Service</a>.
+      <% if (obj.licensedContent) { %>
+      <span>Moreover, it is from a <a href="https://support.google.com/youtube/answer/72851?hl=en" target="_blank">
+      YouTube Content Partner</a>, likely the content owner and potentially monetizing it.</span>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if (obj.license == "creativeCommon") { obj.license = "Creative Commons License Summary" %>
+    <p>This video is licensed under a Creative Commons Attribution license
+        (<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">details</a>).
+    </p>
+    <% } %>
+  <% } %>
+
+  <% if (obj.ugvKind == "Twitter") { obj.license = "Twitter License Summary" %>
+  <p>This video is licensed under the Standard Twitter license, defined in Twitter's
+    <a href="https://twitter.com/tos" target="_blank">Terms of Service</a>.
+  </p>
+  <% } %>
+
+  <% if (obj.ugvKind == "Facebook") { obj.license = "Facebook License Summary" %>
+  <p>This video is licensed under the Standard Facebook license, defined in Facebook's
+    <a href="https://www.facebook.com/legal/terms" target="_blank">Terms of Service</a>.
+  </p>
+  <% } %>
+
+  <div class="reuse-table">
+    <header class="reuse-table__header"><%= obj.license %></header>
+    <div class="reuse-table__items">
+      <ul class="no-dotted">
+        <% _.each(obj.terms, function(term) { %>
+        <li class="reuse-table__item">
+          <% if (term.status === "Permitted") { %>
+          <i title="Permitted" class="reuse-table__value authorised fa fa-check-circle"></i>
+          <% } %>
+          <% if (term.status === "Prohibited") { %>
+          <i title="Prohibited" class="reuse-table__value prohibited fa fa-minus-circle"></i>
+          <% } %>
+          <% if (term.status === "Required") { %>
+          <i title="Required" class="reuse-table__value required fa fa-exclamation-circle"></i>
+          <% } %>
+          <div>
+            <div class="reuse-table__label"><%= term.action %></div>
+            <div class="reuse-table__description"><%= term.description %></div>
+          </div>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+
+
+<h2>Contact</h2>
+
+  <p>For other uses, it is recommended to contact the video uploader and <b>request permission</b>:</p>
+  <ul>
+    <li>Direct contact:
+      <% if (obj.ugvKind == "YouTube") { %><span class="fa fa-youtube-play"></span><% } %>
+      <% if (obj.ugvKind == "Facebook") { %><span class="fa fa-facebook"></span><% } %>
+      <% if (obj.ugvKind == "Twitter") { %><span class="fa fa-twitter"></span><% } %>
+      <a href="<%= obj.user.url %>" target="_blank"> <%= obj.user.name %></a>
+    </li>
+    <li>Or try: <a href="<%= obj.RIGHTS_APP %>/<%= obj.id %>" target="_blank">
+      <span class="invid-mini-logo"></span>InVID Rights Management Tool</a>.</li>
+  </ul>
+
+<h2>Copyright Exceptions</h2>
+
+  <p><b>Exceptionally</b>, in some jurisdictions, this video might be directly reused to report about
+  <b>current events</b> under <b>copyright exceptions</b> like
+  <a href="http://copyrightexceptions.eu/#Art. 5.3(c)" target="_blank"><b>use by the press</b></a> or
+  <a href="http://infojustice.org/wp-content/uploads/2015/03/fair-use-handbook-march-2015.pdf" target="_blank">
+  <b>fair user/fair dealing</b></a>. This reuse is under your or your organization sole responsibility and,
+  in any case, proper <b>attribution</b> should be provided.
+  </p>
+
+  <h4>How to Give Attribution</h4>
+
+    <div class="reuse-table">
+      <div class="reuse-table__items">
+        <p><%= obj.attribution %></p>
+      </div>
+    </div>

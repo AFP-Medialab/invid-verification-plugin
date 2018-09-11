@@ -1,6 +1,6 @@
 {
 "name" :"Fake video news debunker by InVID",
-"version" :"0.62",
+"version" :"0.63",
 "manifest_version": 2,
 "description" :"InVID extension",
 "permissions": [
@@ -29,5 +29,5 @@
         "128": "img/InVID_black.png"
     },
 "options_page": "invid.html",
-"content_security_policy": "script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://cdn.knightlab.com https://www.google-analytics.com https://www.googletagmanager.com/gtag/; object-src 'self'"
+"content_security_policy": "script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://cdn.knightlab.com https://www.google-analytics.com https://www.googletagmanager.com/gtag/ 'unsafe-eval'; object-src 'self'"
 }

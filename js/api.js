@@ -388,7 +388,7 @@ var jsonTitleTableApi = {
             video: {
                 title: "Video:",
                 name1: ["Video title", "Video description"],
-                name2: ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description", "Upload time"]
+                name2: ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description", "Debunked", "Upload time"]
             },
             channel:{
                 title: "Channel:",
@@ -403,15 +403,15 @@ var jsonTitleTableApi = {
             video: {
                 title: "Video:",
                 name1: ["Titre de la vidéo", "Description de la vidéo"],
-                name2: ["Nombre de vue", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Localisations mentionnés dans la description", "Description de la localisation de l'enregistrement", "Date de mise en ligne"]
+                name2: ["Nombre de vues", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Lieux dans la description", "Lieu de l'enregistrement", "Déjà traitée", "Date de mise en ligne"]
             },
             channel: {
-                title: "Chaine:",
-                name: ["Description de la chaine", "Date de la création de la chaine", "Nombre de vue de la chaine", "Page de la chaine", "Localisation de la chaine"]
+                title: "Chaîne:",
+                name: ["Description de la chaîne", "Date de la création de la chaîne", "Nombre de vues de la chaine", "Page de la chaîne", "Localisation de la chaîne"]
             },
             comment: {
-                title: "Commentaires:",
-                name: ["Nombre de commentaire de la vidéo", "Nombre de commentaires vérifiés"]
+                title: "Commentaires sur la vidéo:",
+                name: ["Nombre de commentaires", "Nbre de com. pour vérification"]
             }
         }
     },
@@ -422,8 +422,8 @@ var jsonTitleTableApi = {
                 name: ["Video id", "Video title", "Duration", "Content category", "Content tags", "Video description", "Like count", "Updated time", "Created time"]
             },
             page: {
-                title: "Page:",
-                name: ["Page", "About", "Verified account", "Category", "Link", "Fan count", "Description", "Location city", "Location country", "Website"]
+                title: "Details:",
+                name: ["Page", "Description mentioned locations", "Privacy", "Embeddable", "Facebook type", "Debunked"]
             },
             comment: {
                 title: "Comments",
@@ -436,12 +436,12 @@ var jsonTitleTableApi = {
                 name: ["Identifiant de la vidéo", "Titre de la vidéo", "Durée", "Catégorie du contenu", "Tag du contenu", "Description de la vidéo", "Nombre de \"j'aime\"", "Date de mise en ligne", "Date de création"]
             },
             page: {
-                title: "Page:",
-                name: ["Page", "A propos", "Compte vérifié", "Catégorie", "Lien", "Nombre de fan", "Description", "Ville", "Pays", "Site web"]
+                title: "Détails:",
+                name: ["Page", "Lieux dans la description", "Confidentialité", "Incorporé YouTube", "Type Facebook", "Déjà traitée"]
             },
             comment: {
-                title: "Commentaires",
-                name: ["Nombre de commentaire de la vidéo", "Nombre de commentaires vérifiés"]
+                title: "Commentaires sur la vidéo",
+                name: ["Nbre de commentaires", "Nbre de commentaires vérifiés"]
             }
         }
     },
@@ -449,11 +449,11 @@ var jsonTitleTableApi = {
         en: {
             video: {
                 title:"Video",
-                name: ["Identifiant", "Content", "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned", "Created", "Video"]
+                name: ["Identifiant", "Content", "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned", "Debunked", " Embedded YouTube", "Created", "Video"]
             },
             user: {
                 title: "user",
-                name: ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Friends", "Lists", "Tweets liked", "Tweets count", "Created", "User language", "Locations mentioned", "Date de création", "Vidéo"]
+                name: ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Following", "Lists", "Tweets liked", "Tweets count", "Created", "User language", "Locations mentioned", "Date de création", "Vidéo"]
             }/*,
             comment: {
                 title: "Replies",
@@ -463,11 +463,11 @@ var jsonTitleTableApi = {
         fr: {
             video: {
                 title:"Vidéo",
-                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Localisations mentionnées", "Date de création", "Vidéo"]
+                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Lieux mentionnés", "Déjà traitée", "Incorporé de YouTube", "Date de création", "Vidéo"]
             },
             user: {
                 title: "Utilisateur",
-                name: ["Nom", "Pseudonyme", "Localisation", "Profil", "Description", "Utilisateur protégé", "Utilisateur vérifié", "Nombre de personne qui le suivent", "Nombre d'amis", "Lists", "Tweets \"aimé\"", "Nombre de tweet", "Date de création", "Langue de l'utilisateur", "Localisations mentionées"]
+                name: ["Nom", "Pseudonyme", "Localisation", "Profil", "Description", "Utilisateur protégé", "Utilisateur vérifié", "Nombre d'abonnés", "Nombre d'abonnements", "Listes", "Tweets \"aimés\"", "Nombre de tweets", "Date de création", "Langue de l'utilisateur", "Lieux mentionnés"]
             }/*,
             comment: {
                 title: "Réponse",
@@ -489,7 +489,7 @@ function parseYTJson(json){
 
     /* List of indexes */
     var key_list_video_a = ["video_title", "video_description"];
-    var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description"];
+    var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description", "isDebunked"];
     var key_list_channel = ["channel_description", "channel_created_time", "channel_view_count", "channel_url", "channel_location"];
     var key_list_comment = ["video_comment_count", "num_verification_comments"];
     var jsonName = jsonTitleTableApi["youtube"][global_language];
@@ -591,7 +591,7 @@ function parseFBJson(json){
 
     /* List of indexes */
     var key_list_video = ["video_id", "title", "length", "content_category", "content_tags", "video_description", "video_likes"];
-    var key_list_from = ["from", "from_about", "from_is_verified", "from_category", "from_link", "from_fan_count", "from_description", "from_location_city", "from_location_country", "from_website"];
+    var key_list_details = ["from", "video_description_mentioned_locations", "privacy", "embeddable", "facebook_type", "isDebunked"];
     var key_list_count = ["total_comment_count", "num_verification_comments"];
     var arrayTitle = jsonTitleTableApi["facebook"][global_language];
 
@@ -609,7 +609,7 @@ function parseFBJson(json){
         div.appendChild(table);
         /*Page table*/
         makeTitle(arrayTitle.page.title, div);
-        table = make_table(json, key_list_from, arrayTitle.page.name);
+        table = make_table(json, key_list_details, arrayTitle.page.name);
         div.appendChild(table);
         /* Comments */
         makeTitle(arrayTitle.comment.title, div);
@@ -631,7 +631,7 @@ function parseFBJson(json){
         updateTimeRow(tables[0], index++, json["updated_time"]);
         updateTimeRow(tables[0], index++, json["created_time"]);
         /*Page table*/
-        updateTable(json, key_list_from, tables[1]);
+        updateTable(json, key_list_details, tables[1]);
         /* Comments */
         updateTable(json, key_list_count, tables[2]);
     }
@@ -678,7 +678,7 @@ function parseTWJson(json){
     var hasUpdateMapDesc;
 
     /* List of indexes */
-    var key_list_video = ["id_str", "full_text", "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations"];
+    var key_list_video = ["id_str", "full_text", "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations", "isDebunked", "embedded_youtube"];
     var key_list_user = ["user_name", "user_screen_name", "user_location", "user_url", "user_description", "user_protected", "user_verified", "user_followers_count", "user_friends_count", "user_listed_count", "user_favourites_count", "user_statuses_count", "user_created_at", "user_lang", "user_description_mentioned_locations"];
     /*var key_list_comment = ["retweet_count"];*/
     var arrayTitle = jsonTitleTableApi["twitter"][global_language];
@@ -799,7 +799,11 @@ var analysisUrls = {};
 function video_api_analysis(video_url, isProcess){
     cleanElement("fb-content");
     document.getElementById("fb-content").style.display = "none";
-    var analysis_url = "http://caa.iti.gr/verify_videoV2?url=" + video_url;
+    //Video verification V2
+    //var analysis_url = "http://caa.iti.gr/verify_videoV2?url=" + video_url;
+
+    //Video verification V3
+    var analysis_url = "http://caa.iti.gr/verify_videoV3?url=" + video_url;
     if (isProcess)
         analysis_url += "&reprocess=1"
     loaded_tw = false;
@@ -816,7 +820,7 @@ function video_api_analysis(video_url, isProcess){
             case "ERROR2":
                 return "This is a wrong url. Please check it and try again.";
             case "share":
-                return "An error occured with the reception of Twitter shares.";
+                return "";
             case "ERROR5":
                 return "No video found in this tweet";
             default:
@@ -881,13 +885,13 @@ function video_api_analysis(video_url, isProcess){
             /* Analysis Response */
             var url;
             var callback;
-            if (data["youtube_response"] !== undefined)
+            if (data["youtube_response"] !== null)
             { // YouTube
                 url = data["youtube_response"];
                 callback = parseYTJson;
                 analysisType = "youtube";
             }
-            else if (data["facebook_response"] !== undefined)
+            else if (data["facebook_response"] !== null)
             { // Facebook
                 url = data["facebook_response"];
                 callback = parseFBJson;

@@ -128,7 +128,7 @@ var jsonTitleTableMetadata = {
     },
     fr: {
         metadata: {
-            title: "Metadonné de la video",
+            title: "Metadonnées de la video",
             name: ["Moov", "Durée", "Unité de temps", "Fragmenté", "Durée d'un fragment", "Progressive", "IOD", "Type", "Date de création", "Date de modification"],
             desc: ["", "Nombre, donnant la durée du film (partie défragmentée) en unité de temps",
             "Nombre, correspondant è l'unité de temps donnée dans l'entête du film",

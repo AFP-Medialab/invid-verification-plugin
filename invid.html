@@ -10,6 +10,8 @@
 	<link rel="stylesheet" type="text/css" href="css/carousel.css">
 	<link rel="stylesheet" type="text/css" href="css/jquery.feedback_me.css">
 	<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+	<link rel="stylesheet" type="text/css" href="css/copyright.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<!-- Google Analytics -->
 	<link rel="stylesheet" type="text/css" href="css/cookieconsent.min.css" />
@@ -71,6 +73,13 @@
 			</a>
 		</li>
 		<li>
+			<a href="#copyright-tab" title="Video Copyright">
+				<img src="img/copyright.svg" class="icon">
+				<br>
+				<span lang="en">Video Rights</span>
+				<span lang="fr" hidden="hidden">Droits Video</span>
+				</a></li>
+		<li>
 			<a href="#forensic" title="Image Verification Assistant">
 				<img src="img/forensic_logo.svg" class="icon">
 				<br>
@@ -126,7 +135,7 @@
 				<div id="verif-content">
 					<button class="accordion">
 						<span lang="en">Verification comments</span>
-						<span lang="fr" hidden="hidden">Commentaires de vérification</span>
+						<span lang="fr" hidden="hidden">Vérification</span>
 					</button>
 					<div class="panel">
 						<div id="place-comments"></div>
@@ -169,9 +178,6 @@
 					<button id="tineye_search_btn" class="button">
 						<span lang="en">Tineye Image reverse search</span>
 						<span lang="fr" hidden="hidden">Recherche inversée Tineye</span>
-						<p class="new_element" style="font-size: 15px; margin-left: 20px;">
-							new
-						</p>
 					</button>
 				</div>
 				<button id="twitter_search_btn" class="button">
@@ -384,7 +390,7 @@
 
 		<div id="metadata" class="form-action hide">
 			<h1 lang="en">Metadata</h1>
-			<h1 lang="fr" hidden="hidden">Metadonnée</h1>
+			<h1 lang="fr" hidden="hidden">Métadonnées</h1>
 			<form id="metadata_form">
 				<ul>
 					<input type="text" id="url-metadata" name="url" data-text='{"en": "Image URL in jpg/jpeg or video URL in mp4/m4v format", "fr": "Adresse de l&apos;image au format jpg/jpeg ou video au format mp4/m4v"}' placeholder="Image URL in jpg/jpeg or video URL in mp4/m4v format" style="" />
@@ -414,6 +420,29 @@
 			</form>
 			<div id="preview-metadata"></div>
 			<div id="place-metadata"></div>
+		</div>
+
+
+		<div id="copyright-tab" class="form-action hide">
+			<h1 lang="en">Check Video Copyright Status</h1>
+			<h1 lang="fr" hidden="hidden">Vérifier le copyright de la vidéo</h1>
+			<form id="copyright-form">
+				<div>
+					<input type="text" id="copyright-video_url" name="copyright-video_url" data-text='{"en": "Paste a Youtube, Twitter of Facebook video URL", "fr": "Copier une l'url de la video Youtube, Twitter ou Facebook"}'
+								 placeholder="Paste a Youtube, Twitter of Facebook video URL"/>
+					<br>
+					<br>
+				</div>
+				<input id="copyright-form_submit" type="submit" value="Submit" class="button"/>
+			</form>
+			<div id="copyright-loader" class="loader"></div>
+			<div id="copyright-content">
+				<div id="copyright-summary"></div>
+			</div>
+			<div id="copyright-error"></div>
+			<div class="copyright-footer">Developed by the GRIHO Research Group © 2018 Universitat de Lleida<br>
+				Contact: <a href="mailto:invid@udl.cat">invid@udl.cat</a>
+			</div>
 		</div>
 
 		<div id="forensic" class="form-action hide">
@@ -598,6 +627,10 @@
 
 <!-- For Api (Analysis) --> 
 <script type="text/javascript" src="js/api.js"></script>
+
+<!-- For Copyright Management -->
+<script type="text/javascript" src="js/copyright.js"></script>
+<script type="text/javascript" src="js/underscore-min.js"></script>
 
 <!-- For Navigation bar -->
 <script src="js/nav.js"></script>
