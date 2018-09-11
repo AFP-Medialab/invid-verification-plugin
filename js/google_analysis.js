@@ -91,3 +91,8 @@ $("#metadata_form input[type='submit']")[0].addEventListener("click", function g
 		ga("send", "event", "Url_provided", "submit", url);
 	}
 });
+
+/* Copyright */
+$("#copyright-form > input")[0].addEventListener("click", function ga_analysis_url(e) {
+  ga("send", "event", "Url_provided", 'submit', $("#copyright-video_url").val());
+});
