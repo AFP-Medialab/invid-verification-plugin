@@ -36,9 +36,9 @@ function openTab(urls, backgroud) {
 	if (typeof urls === "string")
 		urls = [urls];
 	for (var query of urls) {
-		if (window.chrome !== undefined)
+		if (window.chrome !== undefined && chrome.tabs !== undefined)
 			chrome.tabs.create({url: query});
-		else if (window.safari !== undefined) {
+		else if (window.safari !== undefined && safari.self.tab !== undefined) {
 			safari.self.tab.dispatchMessage("openTabs", urls, backgroud);
 			break;
 		}

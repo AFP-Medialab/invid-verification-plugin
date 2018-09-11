@@ -820,7 +820,7 @@ function video_api_analysis(video_url, isProcess){
             case "ERROR2":
                 return "This is a wrong url. Please check it and try again.";
             case "share":
-                return "An error occured with the reception of Twitter shares.";
+                return "";
             case "ERROR5":
                 return "No video found in this tweet";
             default:
