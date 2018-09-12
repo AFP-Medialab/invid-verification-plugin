@@ -84,7 +84,7 @@ var jsonTitleTableMetadata = {
     en: {
         metadata: {
             title: "Video Metadata",
-            name: ["Moov", "Duration", "Fragmented", "Duration of fragment", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
+            name: ["Moov", "Duration", "Duration of fragment", "Fragmented", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
             desc: ["", "Number, providing the duration of the movie (unfragmented part) in timescale units",
             "Number, corresponding to the timescale as given in the movie header",
             "boolean, indicating if the file is already fragmented",
@@ -358,9 +358,11 @@ function getLocation(){
 function updateTableLanguageMetadata(lang) {
     if (!document.getElementById("place-metadata").hasChildNodes())
         return;
-    if (document.getElementById("preview-metadata").hasChildNodes()) // image selected
+
+    if (document.getElementById("preview-metadata").hasChildNodes()) { // image selected
         $("#place-metadata > h3").html(jsonTitleImageMetadata[lang]);
         return;
+    }
     var jsonText = jsonTitleTableMetadata[lang];
     var partNames = [];
     var titles = [];
@@ -368,6 +370,8 @@ function updateTableLanguageMetadata(lang) {
     {
         var text = jsonText[part];
         partNames.push(text["title"]);
+        partNames.push(text["name"]);
+        partNames.push(text["desc"]);
         titles = titles.concat(text["name"]);
     }
     $("#place-metadata").find("h3").html(function (index) {
