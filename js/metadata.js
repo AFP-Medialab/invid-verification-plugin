@@ -56,7 +56,7 @@ function imgTable(json_str){
 /* get Exif Metadata */
 var jsonTitleImageMetadata = {
     en: "Image Metadata",
-    fr: "Metadonnée de l'image"
+    fr: "Métadonnées de l'image"
 };
 function getExif(img) {
     cleanElement("place-metadata");
@@ -128,7 +128,7 @@ var jsonTitleTableMetadata = {
     },
     fr: {
         metadata: {
-            title: "Metadonnées de la video",
+            title: "Métadonnées de la video",
             name: ["Moov", "Durée", "Unité de temps", "Fragmenté", "Durée d'un fragment", "Progressive", "IOD", "Type", "Date de création", "Date de modification"],
             desc: ["", "Nombre, donnant la durée du film (partie défragmentée) en unité de temps",
             "Nombre, correspondant è l'unité de temps donnée dans l'entête du film",
@@ -150,8 +150,8 @@ var jsonTitleTableMetadata = {
             "Nombre, identifiant du groupe alternatif auquel la piste appartient",
             "", "Nombre, largeur de la piste comme indiqué dans l'entête de piste", "Nombre, hauteur de la piste comme indiqué dans l'entête de piste",
             "Nombre, indiquant l'unité de temps de la piste comme donné dans l'entête de la piste", "Nombre, donnant la duréee de la (partie défragmentée de la) piste, en unité de temps",
-            "Chaine de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
-            "Chaine de charactère, donnant le code de langage à 3 lettres",
+            "Chaîne de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
+            "Chaîne de charactère, donnant le code de langage à 3 lettres",
             "Nombre, donnant le nombre d'échantillons de piste (c-à-d images)",
             "", "Nombre, taux de bits par second de la piste"]
         },
