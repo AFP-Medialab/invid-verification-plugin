@@ -24,25 +24,12 @@ function get_images(url){
 }
 
 karmadecaySearch = function(word){
-	search_url = "http://karmadecay.com/index/";
+	var search_url = "http://karmadecay.com/search?kdtoolver=b1&q="; // from User JavaScript @https://static.karmadecay.com/js/karma-decay.user.js
 	var url = getUrlImg(word);
 	if (url != "") {
-		data = {"url": url};
+		chrome.tabs.create({ url: search_url + url});
 		//Google analytics
 		ga("send", "event", "Contextual Menu - Reddit", "click", url);
-		chrome.tabs.create(
-				{url: chrome.runtime.getURL("post-redirect.html")},
-				function(tab) {
-					var handler = function(tabId, changeInfo) {
-						if(tabId === tab.id && changeInfo.status === "complete"){
-							chrome.tabs.onUpdated.removeListener(handler);
-							chrome.tabs.sendMessage(tabId, {url: search_url, data: data});
-						}
-					};
-					chrome.tabs.onUpdated.addListener(handler);
-					chrome.tabs.sendMessage(tab.id, {url: search_url, data: data});
-				}
-		);
 	}	
 }
 
