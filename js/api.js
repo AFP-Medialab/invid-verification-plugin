@@ -1012,7 +1012,7 @@ function convertDate(date){
     lst = String(date).split(" ");
     var new_month = "";
     var new_day = "";
-    if (lst[2].charAt(0) == "0") {
+    if (lst[2] !== undefined && lst[2].charAt(0) == "0") {
         new_day = lst[2].replace("0", "");
     }
     else {
@@ -1026,10 +1026,12 @@ function convertDate(date){
     new_date.month = new_month;
     new_date.day = new_day;
     new_date.year = lst[5];
-    var hour = lst[3].split(":");
-    new_date.hour = hour[0];
-    new_date.minute = hour[1];
-    new_date.second = hour[2];
+    if (lst[3] !== undefined) {
+    	var hour = lst[3].split(":");
+    	new_date.hour = hour[0];
+    	new_date.minute = hour[1];
+    	new_date.second = hour[2];
+	}
     return new_date;
 }
 
