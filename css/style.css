@@ -503,7 +503,8 @@ p.comment {
   color: red !important;
   font-size: 7px;
   margin: 1px;
-  position: absolute;
+  position: relative;
   font-weight: bold;
+  vertical-align: text-bottom;
   text-align: center;
 }

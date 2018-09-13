@@ -76,8 +76,13 @@
 			<a href="#copyright-tab" title="Video Copyright">
 				<img src="img/copyright.svg" class="icon">
 				<br>
-				<span lang="en">Video Rights</span>
-				<span lang="fr" hidden="hidden">Droits Video</span>
+				<span lang="en"><p class="new_element">
+					<span>new</span></p>Video Rights 							
+					
+				</span>
+				<span lang="fr" hidden="hidden"><p class="new_element">
+					<span>nouveau</span></p>Droits Video
+				</span>
 				</a></li>
 		<li>
 			<a href="#forensic" title="Image Verification Assistant">
@@ -426,16 +431,8 @@
 
 
 		<div id="copyright-tab" class="form-action hide">
-			<h1 lang="en">Check Video Copyright Status
-							<p class="new_element">
-								<span>new</span>
-
-							</p></h1>
-			<h1 lang="fr" hidden="hidden">Vérifier le copyright de la vidéo
-								<p class="new_element">
-								<span>nouveau</span>
-							</p>
-			</h1>
+			<h1 lang="en">Check Video Copyright Status </h1>
+			<h1 lang="fr" hidden="hidden">Vérifier le copyright de la vidéo</h1>
 			<form id="copyright-form">
 				<div>
 					<input type="text" id="copyright-video_url" name="copyright-video_url" data-text='{"en": "Paste a Youtube, Twitter of Facebook video URL", "fr": "Copier une l&apos;url de la video Youtube, Twitter ou Facebook"}'
@@ -450,6 +447,7 @@
 				<div id="copyright-summary"></div>
 			</div>
 			<div id="copyright-error"></div>
+			<br><br>
 			<div class="copyright-footer">Developed by the GRIHO Research Group © 2018 Universitat de Lleida<br>
 				Contact: <a href="mailto:invid@udl.cat">invid@udl.cat</a>
 			</div>
