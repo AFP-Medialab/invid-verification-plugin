@@ -262,10 +262,23 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+#place-debunked{
+  display: none;
+  margin: 50px auto 15px;
+  padding: 20px 20px 20px;
+  width: 650px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  font-weight: bold;
+  line-height: 22px;
+}
+
 /* Api content */
 #api-content{
   display: none;
-  margin: 50px auto 15px;
+  margin: 30px auto 15px;
   padding: 10px 50px 40px;
   width: 800px;
   border: 1px solid #ccc;
