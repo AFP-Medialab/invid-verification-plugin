@@ -914,6 +914,7 @@ function video_api_analysis(video_url, isProcess){
     }
 
     /* Start Analysis */
+    analysis_url = analysis_url.replace("&", "%26");	//encode & character to avoid error of arguments
     analysisUrls.submit = analysis_url;
     $.getJSON(analysis_url, function(data) {
         document.getElementById("api-content").style.display = "block";
@@ -947,6 +948,7 @@ function video_api_analysis(video_url, isProcess){
                 callback = parseTWJson;
                 analysisType = "twitter";
             }
+            url = url.replace("&", "%26");	//encode & character to avoid error of arguments
             analysisUrls.response = url;
             $.getJSON(url, function(data) {
                 parse_response(data, url, callback);
