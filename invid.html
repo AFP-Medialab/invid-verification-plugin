@@ -76,8 +76,13 @@
 			<a href="#copyright-tab" title="Video Copyright">
 				<img src="img/copyright.svg" class="icon">
 				<br>
-				<span lang="en">Video Rights</span>
-				<span lang="fr" hidden="hidden">Droits Video</span>
+				<span lang="en"><p class="new_element">
+					<span>new</span></p>Video Rights 							
+					
+				</span>
+				<span lang="fr" hidden="hidden"><p class="new_element">
+					<span>nouveau</span></p>Droits Video
+				</span>
 				</a></li>
 		<li>
 			<a href="#forensic" title="Image Verification Assistant">
@@ -129,6 +134,8 @@
 				<input type="submit" value="Submit" class="button" />
 			</form>
 			<div id="loader" class="loader"></div>
+			<div id="place-debunked">
+			</div>
 			<div id="api-content">
 				<div id="place-table"></div>
 				<br>
@@ -224,10 +231,10 @@
 						<input type="radio" id="bing_engine" name="engine" translate="no"> Bing 
 						<input type="radio" id="tineye_engine" name="engine" translate="no"> 
 						<div style="display: inline-block;"> Tineye
-							<p class="new_element">
+							<!--<p class="new_element">
 								<span lang="en">new</span>
 								<span lang="fr" hidden="hidden">nouveau</span>
-							</p>
+							</p>-->
 						</div> 
 					</div> 
 					<br>
@@ -424,11 +431,11 @@
 
 
 		<div id="copyright-tab" class="form-action hide">
-			<h1 lang="en">Check Video Copyright Status</h1>
+			<h1 lang="en">Check Video Copyright Status </h1>
 			<h1 lang="fr" hidden="hidden">Vérifier le copyright de la vidéo</h1>
 			<form id="copyright-form">
 				<div>
-					<input type="text" id="copyright-video_url" name="copyright-video_url" data-text='{"en": "Paste a Youtube, Twitter of Facebook video URL", "fr": "Copier une l'url de la video Youtube, Twitter ou Facebook"}'
+					<input type="text" id="copyright-video_url" name="copyright-video_url" data-text='{"en": "Paste a Youtube, Twitter of Facebook video URL", "fr": "Copier une l&apos;url de la video Youtube, Twitter ou Facebook"}'
 								 placeholder="Paste a Youtube, Twitter of Facebook video URL"/>
 					<br>
 					<br>
@@ -440,6 +447,7 @@
 				<div id="copyright-summary"></div>
 			</div>
 			<div id="copyright-error"></div>
+			<br><br>
 			<div class="copyright-footer">Developed by the GRIHO Research Group © 2018 Universitat de Lleida<br>
 				Contact: <a href="mailto:invid@udl.cat">invid@udl.cat</a>
 			</div>

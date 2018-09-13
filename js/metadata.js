@@ -56,7 +56,7 @@ function imgTable(json_str){
 /* get Exif Metadata */
 var jsonTitleImageMetadata = {
     en: "Image Metadata",
-    fr: "Metadonnée de l'image"
+    fr: "Métadonnées de l'image"
 };
 function getExif(img) {
     cleanElement("place-metadata");
@@ -84,7 +84,7 @@ var jsonTitleTableMetadata = {
     en: {
         metadata: {
             title: "Video Metadata",
-            name: ["Moov", "Duration", "Fragmented", "Duration of fragment", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
+            name: ["Moov", "Duration", "Duration of fragment", "Fragmented", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
             desc: ["", "Number, providing the duration of the movie (unfragmented part) in timescale units",
             "Number, corresponding to the timescale as given in the movie header",
             "boolean, indicating if the file is already fragmented",
@@ -128,7 +128,7 @@ var jsonTitleTableMetadata = {
     },
     fr: {
         metadata: {
-            title: "Metadonnées de la video",
+            title: "Métadonnées de la video",
             name: ["Moov", "Durée", "Unité de temps", "Fragmenté", "Durée d'un fragment", "Progressive", "IOD", "Type", "Date de création", "Date de modification"],
             desc: ["", "Nombre, donnant la durée du film (partie défragmentée) en unité de temps",
             "Nombre, correspondant è l'unité de temps donnée dans l'entête du film",
@@ -150,8 +150,8 @@ var jsonTitleTableMetadata = {
             "Nombre, identifiant du groupe alternatif auquel la piste appartient",
             "", "Nombre, largeur de la piste comme indiqué dans l'entête de piste", "Nombre, hauteur de la piste comme indiqué dans l'entête de piste",
             "Nombre, indiquant l'unité de temps de la piste comme donné dans l'entête de la piste", "Nombre, donnant la duréee de la (partie défragmentée de la) piste, en unité de temps",
-            "Chaine de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
-            "Chaine de charactère, donnant le code de langage à 3 lettres",
+            "Chaîne de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
+            "Chaîne de charactère, donnant le code de langage à 3 lettres",
             "Nombre, donnant le nombre d'échantillons de piste (c-à-d images)",
             "", "Nombre, taux de bits par second de la piste"]
         },
@@ -358,9 +358,11 @@ function getLocation(){
 function updateTableLanguageMetadata(lang) {
     if (!document.getElementById("place-metadata").hasChildNodes())
         return;
-    if (document.getElementById("preview-metadata").hasChildNodes()) // image selected
+
+    if (document.getElementById("preview-metadata").hasChildNodes()) { // image selected
         $("#place-metadata > h3").html(jsonTitleImageMetadata[lang]);
         return;
+    }
     var jsonText = jsonTitleTableMetadata[lang];
     var partNames = [];
     var titles = [];
@@ -368,6 +370,8 @@ function updateTableLanguageMetadata(lang) {
     {
         var text = jsonText[part];
         partNames.push(text["title"]);
+        partNames.push(text["name"]);
+        partNames.push(text["desc"]);
         titles = titles.concat(text["name"]);
     }
     $("#place-metadata").find("h3").html(function (index) {
