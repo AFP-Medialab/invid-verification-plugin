@@ -489,12 +489,19 @@ function parseYTJson(json){
 
     /* List of indexes */
     var key_list_video_a = ["video_title", "video_description"];
-    var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description", "isDebunked"];
+    var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description"];
     var key_list_channel = ["channel_description", "channel_created_time", "channel_view_count", "channel_url", "channel_location"];
     var key_list_comment = ["video_comment_count", "num_verification_comments"];
     var jsonName = jsonTitleTableApi["youtube"][global_language];
 
     function start(json) {
+    	/* isDebunked field */
+    	if (json["isDebunked"] !== "") {
+    		document.getElementById("place-debunked").style.display = "block";
+        	$("#place-debunked").append(json["isDebunked"]);
+    	}
+        else
+        	document.getElementById("place-debunked").style.display = "none";
         /* Video Infos*/
         var div = document.getElementById("place-table");
         /*Video table*/
@@ -529,6 +536,13 @@ function parseYTJson(json){
     }
 
     function update(json) {
+    	/* isDebunked field */
+    	if (json["isDebunked"] !== "") {
+    		document.getElementById("place-debunked").style.display = "block";
+        	$("#place-debunked").append(json["isDebunked"]);
+    	}
+        else
+        	document.getElementById("place-debunked").style.display = "none";
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video_a, tables[0]);
@@ -591,11 +605,18 @@ function parseFBJson(json){
 
     /* List of indexes */
     var key_list_video = ["video_id", "title", "length", "content_category", "content_tags", "video_description", "video_likes"];
-    var key_list_details = ["from", "video_description_mentioned_locations", "privacy", "embeddable", "facebook_type", "isDebunked"];
+    var key_list_details = ["from", "video_description_mentioned_locations", "privacy", "embeddable", "facebook_type"];
     var key_list_count = ["total_comment_count", "num_verification_comments"];
     var arrayTitle = jsonTitleTableApi["facebook"][global_language];
 
     function start(json) {
+    	/* isDebunked field */
+    	if (json["isDebunked"] !== "") {
+    		document.getElementById("place-debunked").style.display = "block";
+        	$("#place-debunked").append(json["isDebunked"]);
+    	}
+        else
+        	document.getElementById("place-debunked").style.display = "none";
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
@@ -624,6 +645,13 @@ function parseFBJson(json){
     }
 
     function update(json) {
+    	/* isDebunked field */
+    	if (json["isDebunked"] !== "") {
+    		document.getElementById("place-debunked").style.display = "block";
+        	$("#place-debunked").append(json["isDebunked"]);
+    	}
+        else
+        	document.getElementById("place-debunked").style.display = "none";
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video, tables[0]);
@@ -678,7 +706,7 @@ function parseTWJson(json){
     var hasUpdateMapDesc;
 
     /* List of indexes */
-    var key_list_video = ["id_str", "full_text", "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations", "isDebunked", "embedded_youtube"];
+    var key_list_video = ["id_str", "full_text", "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations", "embedded_youtube"];
     var key_list_user = ["user_name", "user_screen_name", "user_location", "user_url", "user_description", "user_protected", "user_verified", "user_followers_count", "user_friends_count", "user_listed_count", "user_favourites_count", "user_statuses_count", "user_created_at", "user_lang", "user_description_mentioned_locations"];
     /*var key_list_comment = ["retweet_count"];*/
     var arrayTitle = jsonTitleTableApi["twitter"][global_language];
@@ -701,6 +729,13 @@ function parseTWJson(json){
     }
 
     function start(json) {
+    	/* isDebunked field */
+    	if (json["isDebunked"] !== "") {
+    		document.getElementById("place-debunked").style.display = "block";
+        	$("#place-debunked").append(json["isDebunked"]);
+    	}
+        else
+        	document.getElementById("place-debunked").style.display = "none";
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
@@ -732,6 +767,13 @@ function parseTWJson(json){
     }
 
     function update(json) {
+    	/* isDebunked field */
+    	if (json["isDebunked"] !== "") {
+    		document.getElementById("place-debunked").style.display = "block";
+        	$("#place-debunked").append(json["isDebunked"]);
+    	}
+        else
+        	document.getElementById("place-debunked").style.display = "none";
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video, tables[0]);
@@ -809,6 +851,7 @@ function video_api_analysis(video_url, isProcess){
     loaded_tw = false;
     document.getElementById("loader").style.display = "block";
     document.getElementById("api-content").style.display = "none";
+    document.getElementById("place-debunked").style.display = "none";
     var response_done = false;
 
     /* return the error message for the error which occur */
@@ -853,6 +896,7 @@ function video_api_analysis(video_url, isProcess){
 
     function request_fail(msg) {
         document.getElementById("api-content").style.display = "none";
+        document.getElementById("place-debunked").style.display = "none";
         document.getElementById("loader").style.display = "none";
         document.getElementById("loader_tw").style.display = "none";
         var errorElement = document.getElementById("error-content");
@@ -965,11 +1009,13 @@ function submit_form(){
     hideButtons();
 	if (url != "") {
         cleanElement("place-table");
+        cleanElement("place-debunked");
         if (isYtUrl(url) || url.startsWith(facebook_url) || url.startsWith(twitter_url)) {
             video_api_analysis(url, reprocessChecked);
         }
         else {
             document.getElementById("api-content").style.display = "none";
+            document.getElementById("place-debunked").style.display = "none";
             var errorElement = document.getElementById("error-content");
             errorElement.innerHTML = "Please enter a Youtube, Facebook or Twitter URL";
             errorElement.style.display = "block";
