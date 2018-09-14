@@ -25,6 +25,14 @@ var  json_table_lang = {
       "ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE" : "L'analyse de la vidéo s'est arrêté dû à des fichiers vidéos corrompus.",
       "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté."
     }
+  },
+  "wait" : {
+    "en" : {
+//TODO
+    },
+    "fr" : {
+
+    }
   }
 }
 
@@ -44,6 +52,8 @@ function submit_form() {
 * @status error tag as string
 */
 function error_message(status) {
+  //hide wait status display
+  document.getElementById("keyframes-wait").setAttribute("style", "display: block");
   var err_field = document.getElementById("error-keyframes");
   err_field.setAttribute("style", "display: block; color: red");
   if (json_table_lang["error"][global_language][status] !== undefined) {
@@ -51,6 +61,15 @@ function error_message(status) {
   } else {
     err_field.innerHTML = "Unknown error occured. Please try again later or with another video.";
   }
+}
+
+/**
+* @func update the wait message of the html page
+* @data the json containing the status, type of process and percentage of work done
+*/
+function update_wait(data, video_id) {
+  var wait_field = document.getElementById("keyframes-wait");
+//TODO
 }
 
 /**
@@ -72,6 +91,7 @@ function parse_response(data, url, video_id) {
     $.getJSON(url + video_id, function (data) {
       setTimeout(function() {
         parse_response(data, url, video_id);
+        update_wait(data, video_id);
       }, 2000);
     }).fail(function(jqxhr, textStatus, error) {
       console.error("start response : " + url + video_id);
@@ -96,8 +116,8 @@ function display_result(data) {
 */
 function send_keyframe_video(video_url) {
   //post request to send video
-  //wait till status change, wait for error
-  //if no error translate as json every info
+  //wait until status change, wait for error
+  //if no error translate every info
   //display
 
   //hide the precedent error message if there was one
@@ -108,6 +128,8 @@ function send_keyframe_video(video_url) {
   if (annotation_check)
     post_url += "-annotation";
 
+  //display wait message status
+  document.getElementById("keyframes-wait").setAttribute("style", "display: block");
   //send video and wait for response
   $.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key}), function (data) {
     var video_id = data["video_id"];
