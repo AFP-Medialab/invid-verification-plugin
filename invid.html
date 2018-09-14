@@ -129,8 +129,7 @@
 				<input type="submit" value="Submit" class="button" />
 			</form>
 			<div id="loader" class="loader"></div>
-			<div id="place-debunked">
-			</div>
+			<div id="place-debunked"></div>
 			<div id="api-content">
 				<div id="place-table"></div>
 				<br>
@@ -207,12 +206,26 @@
 			<div id="fb-content" style="display: none;"></div>
 			<br>
 			<div id="error-content" style="display: none; color: red;"></div>
-			
+		</div>
+
+		<div id="keyframes" class="form-action hide">
+			<h1 lang="en">Video fragmentation and reverse image search</h1>
+			<h1 lang="fr" hidden="hidden">Fragmentation vidéo et recherche inversée d'image</h1>
+			<form id="keyframes_form">
+				<ul>
+					<input type="text" name="keyframes_url" data-text='{"en": "Insert the video URL", "fr": "Adresse de la vidéo"}'
+					placeholder="Video URL">
+					<br>
+					<input type="checkbox" id="annotation_checkbox" name="annotation" translate="no" /> Annotation analysis
+					<br>
+					<br>
+					<input type="submit" value="Submit" class="button">
+				</ul>
+			</form>
+			<div id="error-keyframes" style="display: none; color: red;"></div>
 
 		</div>
-		<div id="keyframes" class="form-action hide">
-			<iframe src="http://multimedia3.iti.gr/video_fragmentation/service/start.html" class="ifr" frameborder="0"></iframe>
-		</div>
+
 		<div id="video" class="form-action hide">
 			<h1 lang="en">Youtube thumbnails reverse search</h1>
 			<h1 lang="fr" hidden="hidden">Recherche inversée des imagettes Youtube</h1>
@@ -629,6 +642,9 @@
 
 <!-- For Api (Analysis) --> 
 <script type="text/javascript" src="js/api.js"></script>
+
+<!-- For Keyframes --> 
+<script type="text/javascript" src="js/keyframes.js"></script>
 
 <!-- For Copyright Management -->
 <script type="text/javascript" src="js/copyright.js"></script>
