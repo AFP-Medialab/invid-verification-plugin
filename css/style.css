@@ -262,6 +262,20 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+/* Api content */
+#api-content{
+  display: none;
+  margin: 30px auto 15px;
+  padding: 10px 50px 40px;
+  width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  line-height: 22px;
+  word-break: break-all;
+}
+
 #place-debunked{
   display: none;
   margin: 50px auto 15px;
@@ -275,8 +289,8 @@ input:checked + .slider:before {
   line-height: 22px;
 }
 
-/* Api content */
-#api-content{
+/* Keyframes content */
+#keyframes-content{
   display: none;
   margin: 30px auto 15px;
   padding: 10px 50px 40px;
@@ -286,7 +300,6 @@ input:checked + .slider:before {
   background: #edece8;
   text-align: center;
   line-height: 22px;
-  word-break: break-all;
 }
 
 /* fb content */
