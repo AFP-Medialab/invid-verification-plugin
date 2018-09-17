@@ -1,8 +1,8 @@
 //@user_key for keyframes api
-var user_key = "fhgQ8P2EqRrJhnNM5xXpVf7BYeCnKgeM";
+var user_key = "2gzvbfUVUdATyf4ujcnZ8eurEEy8xA2n";
 
 //@base_url where to send all get or post requests
-var base_url = "http://multimedia2.iti.gr:8080/";
+var base_url = "http://multimedia3.iti.gr:8080/";
 
 //@json_table_lang json format of needed translation for display
 var  json_table_lang = {
@@ -28,10 +28,14 @@ var  json_table_lang = {
   },
   "wait" : {
     "en" : {
-//TODO
+      "VIDEO_WAITING_IN_QUEUE" : "Video in queue for analysis. The analysis of your video will start immediately after all preceding videos in the queue have been processed.",
+      "VIDEO_DOWNLOAD_STARTED" : "The video is being downloaded before its analysis.",
+      "STARTED" : "Video analysis running. Step "
     },
     "fr" : {
-
+      "VIDEO_WAITING_IN_QUEUE" : "Vidéo en file d'attente pour analyse. L'analyse de votre vidéo commencera immédiatement après que toutes les vidéos précédentes de la file d'attente auront été traitées.",
+      "VIDEO_DOWNLOAD_STARTED" : "La vidéo est en train d'être téléchargé avant analyse.",
+      "STARTED" : "Analyse de la vidéo en cours. Etape "
     }
   }
 }
@@ -53,7 +57,9 @@ function submit_form() {
 */
 function error_message(status) {
   //hide wait status display
-  document.getElementById("keyframes-wait").setAttribute("style", "display: block");
+  document.getElementById("keyframes-wait").setAttribute("style", "display: none");
+  document.getElementById("loader-keyframes").style.display = "none";
+  //set error messga eand display error field
   var err_field = document.getElementById("error-keyframes");
   err_field.setAttribute("style", "display: block; color: red");
   if (json_table_lang["error"][global_language][status] !== undefined) {
@@ -66,10 +72,28 @@ function error_message(status) {
 /**
 * @func update the wait message of the html page
 * @data the json containing the status, type of process and percentage of work done
+* @video_id the id given from base_url json answer
 */
 function update_wait(data, video_id) {
   var wait_field = document.getElementById("keyframes-wait");
+  var loader_key = document.getElementById("loader-keyframes");
+  var json_table_wait = json_table_lang["wait"][global_language];
+  loader_key.style.display = "block";
 //TODO
+  if (data["status"] !== undefined) {
+    if (json_table_wait[data["status"]] !== undefined) {
+      wait_field.setAttribute("style", "display: block;");
+      wait_field.innerHTML = json_table_wait[data["status"]];
+    } else if (data["status"].endsWith("STARTED")) {
+      wait_field.setAttribute("style", "display: block;");
+      wait_field.innerHTML = json_table_wait["STARTED"] + data["step"] + " (" + data["process"] + ") " +
+        (data["progress"] == "N/A" ? "" : data["progress"]);
+    } 
+  } else {
+    wait_field.setAttribute("style", "display: none;");
+    wait_field.innerHTML = "";
+    document.getElementById("loader-keyframes").style.display = "none";
+  }
 }
 
 /**
@@ -78,10 +102,10 @@ function update_wait(data, video_id) {
 * @url at what adress to send our request
 */
 function parse_response(data, url, video_id) {
-  console.log(data);
   //send get requests every 2s to verify status of video process
   if (data["status"].endsWith("COMPLETED")) {
     $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
+      update_wait(data, video_id)
       display_result(data);
     }).fail(function(jqxhr, textStatus, error) {
       console.error("start response : " + base_url + "result/" + video_id);
@@ -90,14 +114,15 @@ function parse_response(data, url, video_id) {
   } else if (data["status"].endsWith("QUEUE") || data["status"].endsWith("STARTED")) {
     $.getJSON(url + video_id, function (data) {
       setTimeout(function() {
-        parse_response(data, url, video_id);
         update_wait(data, video_id);
-      }, 2000);
+        parse_response(data, url, video_id);
+      }, 1000);
     }).fail(function(jqxhr, textStatus, error) {
       console.error("start response : " + url + video_id);
       console.error(textStatus + ", " + error);
     });
   } else {
+    update_wait(data, video_id)
     error_message(data["status"]);
   }
 }
@@ -107,7 +132,14 @@ function parse_response(data, url, video_id) {
 * @data the json containing all informations needed (including link to thumbnails/keyframes)
 */
 function display_result(data) {
-  console.log(data);
+  document.getElementById("keyframes-content").style.display = "block";
+  var thumbnails_list = [];
+  var data_th = data.thumbnails;
+  for (var el in data_th) {
+    thumbnails_list.push(data_th[el].url);
+  }
+  //@api.js call to function creating and filling carrousel
+  placeImages("keyframes-carrousel", "keyframes-thumbnails", "keyframes-preview", JSON.parse(JSON.stringify(thumbnails_list)));
 }
 
 /**
@@ -120,6 +152,8 @@ function send_keyframe_video(video_url) {
   //if no error translate every info
   //display
 
+  //hide precedent result keyframes
+  document.getElementById("keyframes-content").style.display = "none";
   //hide the precedent error message if there was one
   document.getElementById("error-keyframes").setAttribute("style", "display: none");
   //create url to send video
@@ -130,6 +164,7 @@ function send_keyframe_video(video_url) {
 
   //display wait message status
   document.getElementById("keyframes-wait").setAttribute("style", "display: block");
+  document.getElementById("loader-keyframes").style.display = "none";
   //send video and wait for response
   $.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key}), function (data) {
     var video_id = data["video_id"];
