@@ -157,6 +157,8 @@ function display_result(data, video_id) {
   var key_cont = document.getElementById("keyframes-place");
   var key_cont2 = document.getElementById("keyframes-place2");
   document.getElementById("error-keyframes").style.display = "none";
+  document.getElementById("loader-keyframes").style.display = "none";
+  document.getElementById("keyframes-wait").style.display = "none";
   key_cont.style.display = "block";
   key_cont2.style.display = "block";
   //clear precedent display
@@ -176,7 +178,7 @@ function display_result(data, video_id) {
     a.href = "#magnifier";
     a.class = "mouse-preview";
     var img = document.createElement("img");
-    img.src = data.thumbnails[el].url;
+    img.src = data.thumbnails[el].url + "?dl=0";
     img.style = "width: 100%; height: auto;";
     a.appendChild(img);
     column.appendChild(a);
@@ -186,10 +188,29 @@ function display_result(data, video_id) {
 
   //display of scene keyframes
   var row2 = document.createElement("div");
-  //TODO
+  row2.setAttribute("class", "row");
+
+  for (sc in data.scenes) {
+    for (kf in data.scenes[sc].keyframes) {
+      var column2 = document.createElement("div");
+      column2.setAttribute("class", "column");
+      var a = document.createElement("a");
+
+      a.href = "#magnifier";
+      a.class = "mouse-preview";
+      var img = document.createElement("img");
+      img.src = data.scenes[sc].keyframes[kf].url + "?dl=0";
+      img.style = "width: 100%; height: auto;";
+      a.appendChild(img);
+      column2.appendChild(a);
+      row2.appendChild(column2);
+    }
+    key_cont2.appendChild(row2);
+  }
 
   //call to @api.js function (l.140)
   activeThumbnail("keyframes-place");
+  activeThumbnail("keyframes-place2");
 }
 
 /**
@@ -214,26 +235,30 @@ function send_keyframe_video(video_url) {
 
   //display wait message status
   document.getElementById("keyframes-wait").setAttribute("style", "display: block");
+  //hide loader display
   document.getElementById("loader-keyframes").style.display = "none";
   //send video and wait for response
   $.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key}), function (data) {
     var video_id = data["video_id"];
     //verify if video not already done process
     $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
-      //if yes display already computed results
-      display_result(data, video_id);
+      //if yes stop process if one and display already computed results
+      if (is_analysing) {
+        ask_analyse = true;
+      }
+      setTimeout(function() {
+        display_result(data, video_id);
+      }, 1100);
     }).fail(function(jqxhr, textStatus, error) {
       //else it will throw 404 error Not Found, then ask for video status
       if (error == "Not Found") {
         $.getJSON(base_url + "status/" + video_id, function(data) {
-          if (!is_analysing) {
-            parse_response(data, base_url + "status/", video_id);
-          } else {
+          if (is_analysing) {
             ask_analyse = true;
-            setTimeout(function() {
-              parse_response(data, base_url + "status/", video_id);
-            }, 1100);
           }
+          setTimeout(function() {
+            parse_response(data, base_url + "status/", video_id);
+          }, 1100);
         }).fail(function(jqxhr, textStatus, error) {
           console.error("start response : " + post_url);
           console.error(textStatus + ", " + error);
