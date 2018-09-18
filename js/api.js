@@ -128,7 +128,9 @@ function placeComments(analysis_json){
         if (index != -1){
             var elem = document.createElement("p");
             elem.setAttribute("class", "comment");
-            var author_head = '<a href="'+video_author_url_comments[count]+'"><strong>'+video_author_comments[count]+'</strong></a>'+" at <strong>" + video_publishedAt_comments[count] +"</strong>:<br>";
+            var author_head = '<a href="'+ (video_author_url_comments !== undefined ? video_author_url_comments[count] : "Unknown") +
+            	'"><strong>' + (video_author_comments !== undefined ? video_author_comments[count] : "Unknown") + '</strong></a>' + " at <strong>" +
+            	(video_publishedAt_comments !== undefined ? video_publishedAt_comments[count] : "Unknown") +"</strong>:<br>";
             elem.innerHTML = author_head + video_comments[count];
             div.appendChild(elem);
         }
@@ -844,8 +846,11 @@ function video_api_analysis(video_url, isProcess){
     //Video verification V2
     //var analysis_url = "http://caa.iti.gr/verify_videoV2?url=" + video_url;
 
+    //encode video to avoid & problem arguments
+    video_url = video_url.replace("&", "%26");
+
     //Video verification V3
-    var analysis_url = "http://caa.iti.gr/verify_videoV3?url=" + video_url;
+    var analysis_url = "http://caa.iti.gr/verify_videoV3?url=" + video_url + "&twtimeline=0";
     if (isProcess)
         analysis_url += "&reprocess=1"
     loaded_tw = false;
@@ -914,7 +919,6 @@ function video_api_analysis(video_url, isProcess){
     }
 
     /* Start Analysis */
-    analysis_url = analysis_url.replace("&", "%26");	//encode & character to avoid error of arguments
     analysisUrls.submit = analysis_url;
     $.getJSON(analysis_url, function(data) {
         document.getElementById("api-content").style.display = "block";
