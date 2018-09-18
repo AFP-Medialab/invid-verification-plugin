@@ -302,6 +302,21 @@ input:checked + .slider:before {
   line-height: 22px;
 }
 
+.column{
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+  box-sizing: border-box;
+
+}
+
+.row::after{
+  content: "";
+  clear: both;
+  display: table;
+  box-sizing: border-box;
+}
+
 /* fb content */
 #fb-content{
   display: none;
