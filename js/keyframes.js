@@ -4,6 +4,12 @@ var user_key = "2gzvbfUVUdATyf4ujcnZ8eurEEy8xA2n";
 //@base_url where to send all get or post requests
 var base_url = "http://multimedia3.iti.gr:8080/";
 
+//variables to stop or continue video status getting when two videos are POST to base_url
+//@is_analysing true if process of getting get request for a video is on, otherwise false
+var is_analysing = false;
+//@ask_analyse true if {{is_analysing is true and another video has been submitted}}, otherwise false
+var ask_analyse = false;
+
 //@json_table_lang json format of needed translation for display
 var  json_table_lang = {
   "error" : {
@@ -105,11 +111,20 @@ function update_wait(data, video_id) {
 * @video_id the given identifier for the video given through json answered
 */
 function parse_response(data, url, video_id) {
+  //if other video requested, stop asking
+  if (ask_analyse) {
+    ask_analyse = false;
+    is_analysing = false;
+    return;
+  }
+  //set analysing status to true
+  is_analysing = true;
   //send get requests every 2s to verify status of video process
   if (data["status"].endsWith("COMPLETED")) {
     $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
       update_wait(data, video_id)
       display_result(data, video_id);
+      is_analysing = false;
     }).fail(function(jqxhr, textStatus, error) {
       console.error("start response : " + base_url + "result/" + video_id);
       console.error(textStatus + ", " + error);
@@ -136,6 +151,7 @@ function parse_response(data, url, video_id) {
 * @video_id the given identifier for the video given through json answered
 */
 function display_result(data, video_id) {
+  console.log(data);
   //display or hide elements we need
   document.getElementById("keyframes-content").style.display = "block";
   var key_cont = document.getElementById("keyframes-place");
@@ -202,21 +218,39 @@ function send_keyframe_video(video_url) {
   //send video and wait for response
   $.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key}), function (data) {
     var video_id = data["video_id"];
-    $.getJSON(base_url + "status/" + video_id, function(data) {
-      parse_response(data, base_url + "status/", video_id);
+    //verify if video not already done process
+    $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
+      //if yes display already computed results
+      display_result(data, video_id);
     }).fail(function(jqxhr, textStatus, error) {
-      console.error("start response : " + post_url);
-      console.error(textStatus + ", " + error);
+      //else it will throw 404 error Not Found, then ask for video status
+      if (error == "Not Found") {
+        $.getJSON(base_url + "status/" + video_id, function(data) {
+          if (!is_analysing) {
+            parse_response(data, base_url + "status/", video_id);
+          } else {
+            ask_analyse = true;
+            setTimeout(function() {
+              parse_response(data, base_url + "status/", video_id);
+            }, 1100);
+          }
+        }).fail(function(jqxhr, textStatus, error) {
+          console.error("start response : " + post_url);
+          console.error(textStatus + ", " + error);
+        }); 
+      } else {
+        console.error("start response : " + post_url);
+        console.error(textStatus + ", " + error);
+      }
     });
-
-  }, "json").fail(function(jqxhr, textStatus, error) {
-                if (error !== "Conflict") {
-                  console.error("start response : " + post_url);
-                  console.error(textStatus + ", " + error);
-                } else {
-                  error_message("CONFLICT");
-                }
-            });
+    }, "json").fail(function(jqxhr, textStatus, error) {
+                  if (error !== "Conflict") {
+                    console.error("start response : " + post_url);
+                    console.error(textStatus + ", " + error);
+                  } else {
+                    error_message("CONFLICT");
+                  }
+              });
 }
 
 //add submit function to submit button of the page
