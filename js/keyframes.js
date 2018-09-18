@@ -14,7 +14,8 @@ var  json_table_lang = {
       "VIDEO_SEGMENTATION_ANNOTATION_FAILED" : "Video segmentation analysis failed.",
       "PROCESS_INTERRUPTED" : "Video analysis interrupted due to unknown cause. Please re-submit the video.",
       "ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE" : "Video analysis quitted due to corrupted video file.",
-      "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "Video analysis quitted due to unsupported file extension."
+      "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "Video analysis quitted due to unsupported file extension.",
+      "CONFLICT" : "The video is already being processed by this user."
     },
     "fr": {
       "VIDEO_DOWNLOAD_FAILED" : "Le téléchargement de la vidéo à échoué. Veuillez essayer avec une autre vidéo.",
@@ -23,7 +24,8 @@ var  json_table_lang = {
       "VIDEO_SEGMENTATION_ANNOTATION_FAILED" : "L'analyse de segmentation vidéo à échoué.",
       "PROCESS_INTERRUPTED" : "L'analyse de la vidéo à été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo.",
       "ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE" : "L'analyse de la vidéo s'est arrêté dû à des fichiers vidéos corrompus.",
-      "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté."
+      "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté.",
+      "CONFLICT" : "La vidéo est déjà en analyse par cet utilisateur."
     }
   },
   "wait" : {
@@ -79,7 +81,7 @@ function update_wait(data, video_id) {
   var loader_key = document.getElementById("loader-keyframes");
   var json_table_wait = json_table_lang["wait"][global_language];
   loader_key.style.display = "block";
-//TODO
+
   if (data["status"] !== undefined) {
     if (json_table_wait[data["status"]] !== undefined) {
       wait_field.setAttribute("style", "display: block;");
@@ -100,13 +102,14 @@ function update_wait(data, video_id) {
 * @func parse the response of the get request and send it again every 2s while either process fails or is done
 * @data data of the precedent get request
 * @url at what adress to send our request
+* @video_id the given identifier for the video given through json answered
 */
 function parse_response(data, url, video_id) {
   //send get requests every 2s to verify status of video process
   if (data["status"].endsWith("COMPLETED")) {
     $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
       update_wait(data, video_id)
-      display_result(data);
+      display_result(data, video_id);
     }).fail(function(jqxhr, textStatus, error) {
       console.error("start response : " + base_url + "result/" + video_id);
       console.error(textStatus + ", " + error);
@@ -130,16 +133,47 @@ function parse_response(data, url, video_id) {
 /**
 * @func pretty display of results used in data to html page
 * @data the json containing all informations needed (including link to thumbnails/keyframes)
+* @video_id the given identifier for the video given through json answered
 */
-function display_result(data) {
+function display_result(data, video_id) {
+  //display or hide elements we need
   document.getElementById("keyframes-content").style.display = "block";
-  var thumbnails_list = [];
-  var data_th = data.thumbnails;
-  for (var el in data_th) {
-    thumbnails_list.push(data_th[el].url);
+  var key_cont = document.getElementById("keyframes-place");
+  var key_cont2 = document.getElementById("keyframes-place2");
+  document.getElementById("error-keyframes").style.display = "none";
+  key_cont.style.display = "block";
+  key_cont2.style.display = "block";
+  //clear precedent display
+  key_cont.innerHTML = "";
+  key_cont2.innerHTML = "";
+
+  //creation of rows and columns (css style) to display 3 images by row
+  var row = document.createElement("div");
+  row.setAttribute("class", "row");
+
+  //display of thumbnails
+  for (el in data.thumbnails) {  
+    var column = document.createElement("div");
+    column.setAttribute("class", "column");
+    var a = document.createElement("a");
+    //to redirect to magnifier on click (for activeThumbnail function)
+    a.href = "#magnifier";
+    a.class = "mouse-preview";
+    var img = document.createElement("img");
+    img.src = data.thumbnails[el].url;
+    img.style = "width: 100%; height: auto;";
+    a.appendChild(img);
+    column.appendChild(a);
+    row.appendChild(column);
   }
-  //@api.js call to function creating and filling carrousel
-  placeImages("keyframes-carrousel", "keyframes-thumbnails", "keyframes-preview", JSON.parse(JSON.stringify(thumbnails_list)));
+  key_cont.appendChild(row);
+
+  //display of scene keyframes
+  var row2 = document.createElement("div");
+  //TODO
+
+  //call to @api.js function (l.140)
+  activeThumbnail("keyframes-place");
 }
 
 /**
@@ -176,8 +210,12 @@ function send_keyframe_video(video_url) {
     });
 
   }, "json").fail(function(jqxhr, textStatus, error) {
-                console.error("start response : " + post_url);
-                console.error(textStatus + ", " + error);
+                if (error !== "Conflict") {
+                  console.error("start response : " + post_url);
+                  console.error(textStatus + ", " + error);
+                } else {
+                  error_message("CONFLICT");
+                }
             });
 }
 
