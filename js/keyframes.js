@@ -211,6 +211,19 @@ function display_result(data, video_id) {
   //call to @api.js function (l.140)
   activeThumbnail("keyframes-place");
   activeThumbnail("keyframes-place2");
+
+  //add the download to download .zip file buttons
+  //thumbnails button
+  var thumbnails = document.getElementById("thumbnails-download");
+  thumbnails.href = "http://multimedia2.iti.gr:8080/thumbnails/" + video_id;
+
+  //shots button
+  var shots = document.getElementById("shots-download");
+  shots.href = "http://multimedia2.iti.gr:8080/keyframes/" + video_id + "/Shots";
+
+  //subshots button
+  var shots = document.getElementById("subshots-download");
+  shots.href = "http://multimedia2.iti.gr:8080/keyframes/" + video_id + "/Subshots";
 }
 
 /**
