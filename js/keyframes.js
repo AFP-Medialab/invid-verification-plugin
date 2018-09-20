@@ -155,57 +155,60 @@ function display_result(data, video_id) {
   //display or hide elements we need
   document.getElementById("keyframes-content").style.display = "block";
   var key_cont = document.getElementById("keyframes-place");
-  var key_cont2 = document.getElementById("keyframes-place2");
+  var panel_shot = document.getElementById("panel-shots");
   document.getElementById("error-keyframes").style.display = "none";
   document.getElementById("loader-keyframes").style.display = "none";
   document.getElementById("keyframes-wait").style.display = "none";
   key_cont.style.display = "block";
-  key_cont2.style.display = "block";
   //clear precedent display
   key_cont.innerHTML = "";
-  key_cont2.innerHTML = "";
+  panel_shot.innerHTML = "";
 
   //creation of rows and columns (css style) to display 3 images by row
+  //display of scene keyframes
   var row = document.createElement("div");
   row.setAttribute("class", "row");
 
-  //display of thumbnails
-  for (el in data.thumbnails) {  
-    var column = document.createElement("div");
-    column.setAttribute("class", "column");
-    var a = document.createElement("a");
-    //to redirect to magnifier on click (for activeThumbnail function)
-    a.href = "#magnifier";
-    a.class = "mouse-preview";
-    var img = document.createElement("img");
-    img.src = data.thumbnails[el].url + "?dl=0";
-    img.style = "width: 100%; height: auto;";
-    a.appendChild(img);
-    column.appendChild(a);
-    row.appendChild(column);
-  }
-  key_cont.appendChild(row);
-
-  //display of scene keyframes
-  var row2 = document.createElement("div");
-  row2.setAttribute("class", "row");
-
   for (sc in data.scenes) {
     for (kf in data.scenes[sc].keyframes) {
-      var column2 = document.createElement("div");
-      column2.setAttribute("class", "column");
+      var column = document.createElement("div");
+      column.setAttribute("class", "column");
       var a = document.createElement("a");
-
       a.href = "#magnifier";
       a.class = "mouse-preview";
       var img = document.createElement("img");
       img.src = data.scenes[sc].keyframes[kf].url + "?dl=0";
       img.style = "width: 100%; height: auto;";
+
       a.appendChild(img);
-      column2.appendChild(a);
-      row2.appendChild(column2);
+      column.appendChild(a);
+      row.appendChild(column);
     }
-    key_cont2.appendChild(row2);
+    key_cont.appendChild(row);
+  }
+
+  //load and put every shots under accordion
+  var row2 = document.createElement("div");
+  row2.setAttribute("class", "row");
+
+  for (sc in data.scenes) {
+    for (sh in data.scenes[sc].shots) {
+      for (kf in data.scenes[sc].shots[sh].keyframes) {
+        var column2 = document.createElement("div");
+        column2.setAttribute("class", "column");
+        var a = document.createElement("a");
+        a.href = "#magnifier";
+        a.class = "mouse-preview";
+        var img = document.createElement("img");
+        img.src = data.scenes[sc].shots[sh].keyframes[kf].url;
+        img.style = "width: 100%; height: auto;"
+
+        a.appendChild(img);
+        column2.appendChild(a);
+        row2.appendChild(column2);
+      }
+      panel_shot.appendChild(row2);
+    }
   }
 
   //call to @api.js function (l.140)
