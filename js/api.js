@@ -390,7 +390,7 @@ var jsonTitleTableApi = {
             video: {
                 title: "Video:",
                 name1: ["Video title", "Video description"],
-                name2: ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description", "Debunked", "Upload time"]
+                name2: ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description", "Upload time"]
             },
             channel:{
                 title: "Channel:",
@@ -405,7 +405,7 @@ var jsonTitleTableApi = {
             video: {
                 title: "Video:",
                 name1: ["Titre de la vidéo", "Description de la vidéo"],
-                name2: ["Nombre de vues", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Lieux dans la description", "Lieu de l'enregistrement", "Déjà traitée", "Date de mise en ligne"]
+                name2: ["Nombre de vues", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Lieux dans la description", "Lieu de l'enregistrement", "Date de mise en ligne"]
             },
             channel: {
                 title: "Chaîne:",
