@@ -425,7 +425,7 @@ var jsonTitleTableApi = {
             },
             page: {
                 title: "Details:",
-                name: ["Page", "Description mentioned locations", "Privacy", "Embeddable", "Facebook type", "Debunked"]
+                name: ["Page", "Description mentioned locations", "Privacy", "Embeddable", "Facebook type"]
             },
             comment: {
                 title: "Comments",
@@ -439,7 +439,7 @@ var jsonTitleTableApi = {
             },
             page: {
                 title: "Détails:",
-                name: ["Page", "Lieux dans la description", "Confidentialité", "Incorporé YouTube", "Type Facebook", "Déjà traitée"]
+                name: ["Page", "Lieux dans la description", "Confidentialité", "Incorporé YouTube", "Type Facebook"]
             },
             comment: {
                 title: "Commentaires sur la vidéo",
@@ -451,7 +451,7 @@ var jsonTitleTableApi = {
         en: {
             video: {
                 title:"Video",
-                name: ["Identifiant", "Content", "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned", "Debunked", " Embedded YouTube", "Created", "Video"]
+                name: ["Identifiant", "Content", "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned", " Embedded YouTube", "Created", "Video"]
             },
             user: {
                 title: "user",
@@ -465,7 +465,7 @@ var jsonTitleTableApi = {
         fr: {
             video: {
                 title:"Vidéo",
-                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Lieux mentionnés", "Déjà traitée", "Incorporé de YouTube", "Date de création", "Vidéo"]
+                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Lieux mentionnés", "Incorporé de YouTube", "Date de création", "Vidéo"]
             },
             user: {
                 title: "Utilisateur",
