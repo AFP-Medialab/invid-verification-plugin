@@ -952,7 +952,9 @@ function video_api_analysis(video_url, isProcess){
                 callback = parseTWJson;
                 analysisType = "twitter";
             }
-            url = url.replace("&", "%26");	//encode & character to avoid error of arguments
+            if (url) {
+                url = url.replace("&", "%26");	//encode & character to avoid error of arguments
+            }
             analysisUrls.response = url;
             $.getJSON(url, function(data) {
                 parse_response(data, url, callback);
