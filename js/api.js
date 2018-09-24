@@ -483,7 +483,7 @@ var jsonTitleTableApi = {
 var table_error_message = {
     "en": {
         "removed_video": "This video has been previously processed by the CAA service but it is no longer available on the video platform. All metadata associated with that video have been deleted",
-        "no_video": "This video cannot be found. It might no longer be available on the video platform or the provided ID is missing. Please provide a valid video URL",
+        "no_video": "The metadata associated with this video could not be extracted. The video is either posted by Facebook User or Group, and due to Facebook API limitations it  can not be processed, or it might no longer be available on the video platform",
         "no_video_id": "A video ID cannot be extracted by the submitted URL. Please check the URL",
         "empty_url": "The submitted URL parameter is empty. Please provide a valid video URL",
         "facebook_group": "The provided Video is posted by a Facebook Group. Due to Facebook API restrictions no information can be retrieved for videos posted by Facebook Groups",
@@ -492,7 +492,7 @@ var table_error_message = {
     },
     "fr": {
         "removed_video": "Cette vidéo a été précédemment traitée par le service CAA mais elle n'est maintenant plus accessible via la plateforme vidéo. Toutes les meta données de cette vidéo ont été effacées",
-        "no_video": "Cette vidéo est introuvable. Elle peut ne plus être accessible sur la plateforme vidéo ou l'ID donné est manquant. Veuillez utiliser une URL valide",
+        "no_video": "Les métadonnées associées à cette vidéo n'ont pas pu être extraites. La vidéo est publiée par l'utilisateur ou le groupe Facebook et, en raison des limitations de l'API Facebook, elle ne peut pas être traitée ou peut ne plus être disponible sur la plateforme vidéo.",
         "no_video_id": "Un identifiant vidéo ne peut pas être extrait de l'URL donnée. Veuillez vérifier cette URL.",
         "empty_url": "L'URL donnée en paramètre est vide. Veuillez utilisez une URL valide",
         "facebook_group": "La vidéo fournie vient d'un Groupe Facebook. En raison des restrictions de l'API Facebook, aucune information ne peut être récupérée pour les vidéos postées par les Groupes Facebook.",
