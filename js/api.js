@@ -482,19 +482,21 @@ var jsonTitleTableApi = {
 
 var table_error_message = {
     "en": {
-        "ERROR3" : "Sorry but we cannot process this video link",
-        "ERROR4" : "Sorry but we cannot process this video link",
-        "ERROR2" : "This is a wrong url. Please check it and try again.",
-        "share" : "",
-        "ERROR5" : "No video found in this tweet",
+        "removed_video": "This video has been previously processed by the CAA service but it is no longer available on the video platform. All metadata associated with that video have been deleted",
+        "no_video": "This video cannot be found. It might no longer be available on the video platform or the provided ID is missing. Please provide a valid video URL",
+        "no_video_id": "A video ID cannot be extracted by the submitted URL. Please check the URL",
+        "empty_url": "The submitted URL parameter is empty. Please provide a valid video URL",
+        "facebook_group": "The provided Video is posted by a Facebook Group. Due to Facebook API restrictions no information can be retrieved for videos posted by Facebook Groups",
+        "facebook_photo": "The provided URL is not supported. It is a photo URL",
         "default" : "There were an error while trying to process this video. Please check the link and try again."
     },
     "fr": {
-        "ERROR3" : "Pardon, nous ne pouvons pas traiter ce lien vidéo",
-        "ERROR4" : "Pardon, nous ne pouvons pas traiter ce lien vidéo",
-        "ERROR2" : "Cet url est invalide. Veuillez verifier le lien et réessayer.",
-        "share" : "",
-        "ERROR5" : "Aucune vidéo trouvée dans ce tweet",
+        "removed_video": "Cette vidéo a été précédemment traitée par le service CAA mais elle n'est maintenant plus accessible via la plateforme vidéo. Toutes les meta données de cette vidéo ont été effacées",
+        "no_video": "Cette vidéo est introuvable. Elle peut ne plus être accessible sur la plateforme vidéo ou l'ID donné est manquant. Veuillez utiliser une URL valide",
+        "no_video_id": "Un identifiant vidéo ne peut pas être extrait de l'URL donnée. Veuillez vérifier cette URL.",
+        "empty_url": "L'URL donnée en paramètre est vide. Veuillez utilisez une URL valide",
+        "facebook_group": "La vidéo fournie vient d'un Groupe Facebook. En raison des restrictions de l'API Facebook, aucune information ne peut être récupérée pour les vidéos postées par les Groupes Facebook.",
+        "facebook_photo": "L'URL fournie n'est pas prise en charge. C'est une URL de photo",
         "default" : "Une erreur est survenue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer."
     }
 };
@@ -957,7 +959,7 @@ function video_api_analysis(video_url, isProcess){
     $.getJSON(analysis_url, function(data) {
         document.getElementById("api-content").style.display = "block";
         /* Error Gestion */
-        if (data["status"].startsWith("ERROR"))
+        if (table_error_message[global_language][data["status"]] !== undefined)
         {
             console.error("error return : " + analysis_url);
             console.error(data["message"]);
@@ -1014,7 +1016,7 @@ function video_api_analysis(video_url, isProcess){
                     }).fail(function (jqxhr, textStatus, error) {
                         console.error("parse share : " + url_twitter);
                         console.error(textStatus + ", " + error);
-                        share_fail(table_error_message[global_language]["share"]);
+                        share_fail(table_error_message[global_language]["default"]);
                     });
                 }
                 else {
@@ -1025,7 +1027,7 @@ function video_api_analysis(video_url, isProcess){
             }).fail(function( jqxhr, textStatus, error ) {
                 console.error("start share : " + url_twitter);
                 console.error(textStatus + ", " + error);
-                share_fail(table_error_message[global_language]["share"]);
+                share_fail(table_error_message[global_language]["default"]);
             });
         }).fail(function(jqxhr, textStatus, error) {
             console.error("get urls : " + analysis_url);
