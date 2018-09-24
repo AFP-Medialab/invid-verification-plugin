@@ -5,6 +5,7 @@ var twitter_url = "https://twitter.com/search";
 var tw_json = "";
 var google_reverse_search_urls = [];
 var yandex_reverse_search_urls = [];
+var error_type = "";
 
 /* Detect http link and make hyperlink */
 function urlify(text) {
@@ -479,6 +480,25 @@ var jsonTitleTableApi = {
     }
 }
 
+var table_error_message = {
+    "en": {
+        "ERROR3" : "Sorry but we cannot process this video link",
+        "ERROR4" : "Sorry but we cannot process this video link",
+        "ERROR2" : "This is a wrong url. Please check it and try again.",
+        "share" : "",
+        "ERROR5" : "No video found in this tweet",
+        "default" : "There were an error while trying to process this video. Please check the link and try again."
+    },
+    "fr": {
+        "ERROR3" : "Pardon, nous ne pouvons pas traiter ce lien vidéo",
+        "ERROR4" : "Pardon, nous ne pouvons pas traiter ce lien vidéo",
+        "ERROR2" : "Cet url est invalide. Veuillez verifier le lien et réessayer.",
+        "share" : "",
+        "ERROR5" : "Aucune vidéo trouvée dans ce tweet",
+        "default" : "Une erreur est survenue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer."
+    }
+};
+
 var analysisType = "";
 
 /* Parse the YouTube json */
@@ -837,6 +857,17 @@ function parseTWJson(json){
     
 }
 
+
+function request_fail(msg) {
+    document.getElementById("api-content").style.display = "none";
+    document.getElementById("place-debunked").style.display = "none";
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader_tw").style.display = "none";
+    var errorElement = document.getElementById("error-content");
+    errorElement.innerHTML = msg;
+    errorElement.style.display = "block";
+}
+
 var analysisUrls = {};
 
 /* Send requests for video analysis*/
@@ -860,21 +891,33 @@ function video_api_analysis(video_url, isProcess){
     var response_done = false;
 
     /* return the error message for the error which occur */
-    function get_error_message(err) {
+    /*function get_error_message(err) {
         switch (err) {
             case "ERROR3":
             case "ERROR4":
-                return "Sorry but we cannot process this video link";
+                if (global_language == "en")
+                    return "Sorry but we cannot process this video link";
+                else if (global_language == "fr")
+                    return "Pardon, nous ne pouvons pas traiter ce lien vidéo";
             case "ERROR2":
-                return "This is a wrong url. Please check it and try again.";
+                if (global_language == "en")
+                    return "This is a wrong url. Please check it and try again.";
+                else if (global_language == "fr")
+                    return "Cet url est invalide. Veuillez verifier le lien et réessayer."
             case "share":
                 return "";
             case "ERROR5":
-                return "No video found in this tweet";
+                if (global_language == "en")
+                    return "No video found in this tweet";
+                else if (global_language == "fr")
+                    return "Aucune vidéo trouvée dans ce tweet"
             default:
-                return "There were an error while trying to process this video. Please check the link and try again.";
+                if (global_language == "en")
+                    return "There were an error while trying to process this video. Please check the link and try again.";
+                else if (global_language == "fr")
+                    return "Une erreur est apparue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer.";
         }
-    }
+    }*/
 
     /* Get response every 2 second until process done */
     function parse_response(data, url, callback) {
@@ -890,23 +933,14 @@ function video_api_analysis(video_url, isProcess){
             }).fail(function( jqxhr, textStatus, error ) {
                 console.error("parse_response : " + url);
                 console.error(textStatus + ", " + error);
-                request_fail(get_error_message(""));
+                error_type = "default";
+                request_fail(table_error_message[global_language]["default"]);
             });
         }
         else {
             response_done = true;
             document.getElementById("loader").style.display = "none";
         }
-    }
-
-    function request_fail(msg) {
-        document.getElementById("api-content").style.display = "none";
-        document.getElementById("place-debunked").style.display = "none";
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("loader_tw").style.display = "none";
-        var errorElement = document.getElementById("error-content");
-        errorElement.innerHTML = msg;
-        errorElement.style.display = "block";
     }
 
     function share_fail(msg) {
@@ -927,7 +961,8 @@ function video_api_analysis(video_url, isProcess){
         {
             console.error("error return : " + analysis_url);
             console.error(data["message"]);
-            request_fail(get_error_message(data["status"]));
+            error_type = data["status"];
+            request_fail(table_error_message[global_language][data["status"]]);
             return;
         }
         $.getJSON(analysis_url, function(data) {
@@ -961,7 +996,8 @@ function video_api_analysis(video_url, isProcess){
             }).fail(function(jqxhr, textStatus, error) {
                 console.error("start response : " + url);
                 console.error(textStatus + ", " + error);
-                request_fail(get_error_message(""));
+                error_type = "default";
+                request_fail(table_error_message[global_language]["default"]);
             })
             /* Twitter Part response */
             var url_twitter = data["twitter_shares"];
@@ -978,7 +1014,7 @@ function video_api_analysis(video_url, isProcess){
                     }).fail(function (jqxhr, textStatus, error) {
                         console.error("parse share : " + url_twitter);
                         console.error(textStatus + ", " + error);
-                        share_fail(get_error_message("share"));
+                        share_fail(table_error_message[global_language]["share"]);
                     });
                 }
                 else {
@@ -989,17 +1025,19 @@ function video_api_analysis(video_url, isProcess){
             }).fail(function( jqxhr, textStatus, error ) {
                 console.error("start share : " + url_twitter);
                 console.error(textStatus + ", " + error);
-                share_fail(get_error_message("share"));
+                share_fail(table_error_message[global_language]["share"]);
             });
         }).fail(function(jqxhr, textStatus, error) {
             console.error("get urls : " + analysis_url);
             console.error(textStatus + ", " + error);
-            request_fail(get_error_message(""));
+            error_type = "default";
+            request_fail(table_error_message[global_language]["default"]);
         });
     }).fail(function( jqxhr, textStatus, error ) {
         console.error("start analysis : " + analysis_url);
         console.error(textStatus + ", " + error);
-        request_fail(get_error_message(""));
+        error_type = "default";
+        request_fail(table_error_message[global_language]["default"]);
     });
 }
 
@@ -1157,6 +1195,9 @@ var tw_json = "";
 
 
 function updateTableLanguageAnalysis(lang) {
+    if (document.getElementById("error-content").style.display !== "none") {
+        request_fail(table_error_message[global_language][error_type]);
+    }
     if (!document.getElementById("place-table").hasChildNodes())
         return;
     var partNames = [];
@@ -1169,6 +1210,7 @@ function updateTableLanguageAnalysis(lang) {
             titles = titles.concat(jsonName["video"]["name2"]);
             titles = titles.concat(jsonName["channel"]["name"]);
             titles = titles.concat(jsonName["comment"]["name"]);
+
             break;
         case "facebook":
             var jsonName = jsonTitleTableApi["facebook"][lang];
@@ -1189,6 +1231,6 @@ function updateTableLanguageAnalysis(lang) {
     }
     $("#place-table").find("h3").html(function (index) {
         return partNames[index];
-    })
+    });
     updateTitleTable("place-table", titles);
 }
