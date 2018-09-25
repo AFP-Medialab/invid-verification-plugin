@@ -1004,7 +1004,7 @@ function video_api_analysis(video_url, isProcess){
             /* Twitter Part response */
             var url_twitter = data["twitter_shares"];
             analysisUrls.tweets = url_twitter;
-            $.getJSON(url_twitter, function parse_tw(data) {
+            /*$.getJSON(url_twitter, function parse_tw(data) {
                 if (analysisUrls.tweets != url_twitter)
                     return;
                 tw_json = makeJSON(data);
@@ -1028,7 +1028,7 @@ function video_api_analysis(video_url, isProcess){
                 console.error("start share : " + url_twitter);
                 console.error(textStatus + ", " + error);
                 share_fail(table_error_message[global_language]["default"]);
-            });
+            });*/
         }).fail(function(jqxhr, textStatus, error) {
             console.error("get urls : " + analysis_url);
             console.error(textStatus + ", " + error);
