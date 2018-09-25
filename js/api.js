@@ -632,7 +632,7 @@ function parseFBJson(json){
     var key_list_video = ["video_id", "title", "length", "content_category", "content_tags", "video_description", "video_likes"];
     var key_list_details = ["from", "video_description_mentioned_locations", "privacy", "embeddable", "facebook_type"];
     var key_list_count = ["total_comment_count", "num_verification_comments"];
-    var arrayTitle = jsonTitleTableApi["facebook"][global_language];
+    var arrayTitle = json_lang_translate[global_language];//jsonTitleTableApi["facebook"][global_language];
 
     function start(json) {
     	/* isDebunked field */
@@ -645,21 +645,21 @@ function parseFBJson(json){
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
-        makeTitle(arrayTitle.video.title, div);
-        var table = make_table(json, key_list_video, arrayTitle.video.name);
+        makeTitle(arrayTitle["facebook_video_title"], div);
+        var table = make_table(json, key_list_video, list_from_json(arrayTitle, "facebook_video_name_"));
         var index = key_list_video.length;
-        var rowTime = createTimeRow(arrayTitle.video.name[index++], json["updated_time"]);
+        var rowTime = createTimeRow(list_from_json(arrayTitle, "facebook_video_name_")[index++], json["updated_time"]);
         table.appendChild(rowTime);
-        rowTime = createTimeRow(arrayTitle.video.name[index++], json["created_time"]);
+        rowTime = createTimeRow(list_from_json(arrayTitle, "facebook_video_name_")[index++], json["created_time"]);
         table.appendChild(rowTime);
         div.appendChild(table);
         /*Page table*/
-        makeTitle(arrayTitle.page.title, div);
-        table = make_table(json, key_list_details, arrayTitle.page.name);
+        makeTitle(arrayTitle["facebook_page_title"], div);
+        table = make_table(json, key_list_details, list_from_json(arrayTitle, "facebook_page_name_"));
         div.appendChild(table);
         /* Comments */
-        makeTitle(arrayTitle.comment.title, div);
-        table = make_table(json, key_list_count, arrayTitle.comment.name);
+        makeTitle(arrayTitle["facebook_comment_title"], div);
+        table = make_table(json, key_list_count, list_from_json(arrayTitle, "facebook_comment_name_"));
         div.appendChild(table);
         hasPlaceImages = false;
         hasPlaceComments = false;
@@ -734,7 +734,7 @@ function parseTWJson(json){
     var key_list_video = ["id_str", "full_text", "source",  "favorite_count", "retweet_count", "hashtags", "urls", "user_mentions", "lang", "media_url", "video_info_aspect_ratio", "video_info_duration", "tweet_text_mentioned_locations", "embedded_youtube"];
     var key_list_user = ["user_name", "user_screen_name", "user_location", "user_url", "user_description", "user_protected", "user_verified", "user_followers_count", "user_friends_count", "user_listed_count", "user_favourites_count", "user_statuses_count", "user_created_at", "user_lang", "user_description_mentioned_locations"];
     /*var key_list_comment = ["retweet_count"];*/
-    var arrayTitle = jsonTitleTableApi["twitter"][global_language];
+    var arrayTitle = json_lang_translate[global_language];//jsonTitleTableApi["twitter"][global_language];
 
     function chooseVideoUrl(urls) {
         var max = 0;
@@ -764,19 +764,19 @@ function parseTWJson(json){
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
-        makeTitle(arrayTitle.video.title, div);
-        var table = make_table(json, key_list_video, arrayTitle.video.name);
+        makeTitle(arrayTitle["twitter_video_title"], div);
+        var table = make_table(json, key_list_video, list_from_json(arrayTitle, "twitter_video_name_"));
         var index = key_list_video.length;
-        var rowTime = createTimeRow(arrayTitle.video.name[index++], json["created_at"]);
+        var rowTime = createTimeRow(list_from_json(arrayTitle, "twitter_video_name_")[index++], json["created_at"]);
         table.appendChild(rowTime);
         var urls = json["video_info_url"];
-        var row = makeRowTable(arrayTitle.video.name[index++], urlify(chooseVideoUrl(urls)));
+        var row = makeRowTable(list_from_json(arrayTitle, "twitter_video_name_")[index++], urlify(chooseVideoUrl(urls)));
         table.appendChild(row);
         div.appendChild(table);
         
         /*Page table*/
-        makeTitle(arrayTitle.user.title, div);
-        table = make_table(json, key_list_user, arrayTitle.user.name);
+        makeTitle(arrayTitle["twitter_user_title"], div);
+        table = make_table(json, key_list_user, list_from_json(arrayTitle, "twitter_user_name_"));
         div.appendChild(table);
         /* Comments */
         /*makeTitle("Retweets:", div);
@@ -1207,26 +1207,25 @@ function updateTableLanguageAnalysis(lang) {
     var titles = [];
     switch (analysisType) {
         case "youtube":
-            var jsonName = jsonTitleTableApi["youtube"][lang];
-            partNames = [jsonName["video"].title, jsonName["channel"].title, jsonName["comment"].title]
-            titles = titles.concat(jsonName["video"]["name1"]);
-            titles = titles.concat(jsonName["video"]["name2"]);
-            titles = titles.concat(jsonName["channel"]["name"]);
-            titles = titles.concat(jsonName["comment"]["name"]);
-
+            var jsonName = json_lang_translate[lang];//jsonTitleTableApi["youtube"][lang];
+            partNames = [jsonName["youtube_video_title"], jsonName["youtube_channel_title"], jsonName["youtube_comment_title"]]
+            titles = titles.concat(list_from_json(jsonName, "youtube_video_name1_"));
+            titles = titles.concat(list_from_json(jsonName, "youtube_video_name2_"));
+            titles = titles.concat(list_from_json(jsonName, "youtube_channel_name_"));
+            titles = titles.concat(list_from_json(jsonName, "youtube_comment_name_"));
             break;
         case "facebook":
-            var jsonName = jsonTitleTableApi["facebook"][lang];
-            partNames = [jsonName["video"].title, jsonName["page"].title, jsonName["comment"].title]
-            titles = titles.concat(jsonName["video"]["name"]);
-            titles = titles.concat(jsonName["page"]["name"]);
-            titles = titles.concat(jsonName["comment"]["name"]);
+            var jsonName = json_lang_translate[lang];//jsonTitleTableApi["facebook"][lang];
+            partNames = [jsonName["facebook_video_title"], jsonName["facebook_page_title"], jsonName["facebook_comment_title"]]
+            titles = titles.concat(list_from_json(jsonName, "facebook_video_name_"));
+            titles = titles.concat(list_from_json(jsonName, "facebook_page_name_"));
+            titles = titles.concat(list_from_json(jsonName, "facebook_comment_name_"));
             break;
         case "twitter":
-            var jsonName = jsonTitleTableApi["twitter"][lang];
-            partNames = [jsonName["video"].title, jsonName["user"].title/*, jsonName["comment"].title*/]
-            titles = titles.concat(jsonName["video"]["name"]);
-            titles = titles.concat(jsonName["user"]["name"]);
+            var jsonName = json_lang_translate[lang];//jsonTitleTableApi["twitter"][lang];
+            partNames = [jsonName["twitter_video_title"], jsonName["twitter_user_title"]/*, jsonName["twitter_comment_title"]*/]
+            titles = titles.concat(list_from_json(jsonName, "twitter_video_name_"));
+            titles = titles.concat(list_from_json(jsonName, "twitter_user_name_"));
             //titles = titles.concat(jsonName["comment"]["name"]);
             break;
         default:
