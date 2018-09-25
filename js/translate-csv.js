@@ -6,15 +6,15 @@ var lang_array_csv = [];
 
 /**
 * @func returns a list containing all field starting with startswith to ease access of json (example: 'video_desc_1', 'video_desc_2', ...)
-* @json contains the translation spreadsheet as json
+* @json contains the translation spreadsheet as json, without the language variables
 * @startswith the static part of the json having key starting with startswith
 * @return list containing all texts havi
 */
 function list_from_json(json, startswith) {
   var i = 1;
   var res = [];
-  while (json[global_language][startswith + i] !== undefined) {
-    res.push(json[global_language][startswith + i]);
+  while (json[startswith + i] !== undefined) {
+    res.push(json[startswith + i]);
     ++i;
   }
   return res;
