@@ -174,6 +174,7 @@ function activeThumbnail(thumbnails_id){
 /* Create Carousel html*/
 function buildCarousel(carousel_id, thumbnails_id){
     var div = document.getElementById(carousel_id);
+    div.style.display = "block";
     var jssor1 = document.createElement("div");
     jssor1.setAttribute("id", "jssor_1");
     jssor1.setAttribute("style", "position:relative;margin:0 auto;top:0px;left:0px;width:800px;height:200px;overflow:hidden;visibility:hidden;background-color: #000000;");
@@ -890,6 +891,7 @@ function video_api_analysis(video_url, isProcess){
     document.getElementById("loader").style.display = "block";
     document.getElementById("api-content").style.display = "none";
     document.getElementById("place-debunked").style.display = "none";
+    document.getElementById("place-carousel").style.display = "none";
     var response_done = false;
 
     /* return the error message for the error which occur */
