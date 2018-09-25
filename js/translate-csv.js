@@ -1,9 +1,25 @@
 /* @url_csv link to download google spreadsheet as csv or to the csv file directly */
-var url_csv = "https://docs.google.com/spreadsheets/d/1LjKcRb6JfN7PUC0PBLvB4t-cq6qem5RnmuR81oR1dpg/export?format=csv&id=1LjKcRb6JfN7PUC0PBLvB4t-cq6qem5RnmuR81oR1dpg&gid=0"
+var url_csv = "https://docs.google.com/spreadsheets/u/1/d/1LysXU1gjKLFKJgp6iwYSsvc1rImAJTjt0JmdtHNNFUI/export?format=csv&id=1LysXU1gjKLFKJgp6iwYSsvc1rImAJTjt0JmdtHNNFUI&gid=87249312"
 
 /* @lang_array_csv variable containing csv as array, used to save result from translate_csv */
 var lang_array_csv = [];
- 
+
+/**
+* @func returns a list containing all field starting with startswith to ease access of json (example: 'video_desc_1', 'video_desc_2', ...)
+* @json contains the translation spreadsheet as json
+* @startswith the static part of the json having key starting with startswith
+* @return list containing all texts havi
+*/
+function list_from_json(json, startswith) {
+  var i = 1;
+  var res = [];
+  while (json[global_language][startswith + i] !== undefined) {
+    res.push(json[global_language][startswith + i]);
+    ++i;
+  }
+  return res;
+}
+
 /**
 * @func transform array in json representation of translation (access this way: json[global_language][id_translate])
 * @array the array representation of the csv
