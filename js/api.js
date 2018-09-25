@@ -517,7 +517,7 @@ function parseYTJson(json){
     var key_list_video_b = ["video_view_count", "video_like_count", "video_dislike_count", "video_duration", "video_licensed_content", "video_description_mentioned_locations", "video_recording_location_description"];
     var key_list_channel = ["channel_description", "channel_created_time", "channel_view_count", "channel_url", "channel_location"];
     var key_list_comment = ["video_comment_count", "num_verification_comments"];
-    var jsonName = jsonTitleTableApi["youtube"][global_language];
+    var jsonName = json_lang_translate[global_language]; //jsonTitleTableApi["youtube"][global_language];
 
     function start(json) {
     	/* isDebunked field */
@@ -530,22 +530,22 @@ function parseYTJson(json){
         /* Video Infos*/
         var div = document.getElementById("place-table");
         /*Video table*/
-        makeTitle(jsonName.video.title, div);
-        var table = make_table(json, key_list_video_a, jsonName.video.name1);
+        makeTitle(jsonName["youtube_video_title"], div);
+        var table = make_table(json, key_list_video_a, list_from_json(jsonName, "youtube_video_name1_"));
         div.appendChild(table);
         div.appendChild(document.createElement("br"));
-        table = make_table(json, key_list_video_b, jsonName.video.name2);
+        table = make_table(json, key_list_video_b, list_from_json(jsonName, "youtube_video_name2_"));
         var index = key_list_video_b.length;
-        var rowTime = createTimeRow(jsonName.video.name2[index++], json["video_upload_time"]);
+        var rowTime = createTimeRow(list_from_json(jsonName, "youtube_video_name_2_")[index++], json["video_upload_time"]);
         table.appendChild(rowTime);
         div.appendChild(table);
         /*Channel table*/
-        makeTitle(jsonName.channel.title, div);
-        table = make_table(json, key_list_channel, jsonName.channel.name);
+        makeTitle(jsonName["youtube_channel_title"], div);
+        table = make_table(json, key_list_channel, list_from_json(jsonName, "youtube_channel_name_"));
         div.appendChild(table);
         /* Comments*/
-        makeTitle(jsonName.comment.title, div);
-        table = make_table(json, key_list_comment, jsonName.comment.name);
+        makeTitle(jsonName["youtube_comment_title"], div);
+        table = make_table(json, key_list_comment, list_from_json(jsonName, "youtube_comment_name_"));
         div.appendChild(table);
 
         /* Init variable */
