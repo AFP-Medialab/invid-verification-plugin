@@ -350,22 +350,22 @@ function getMp4(vid) {
             return;
         }
         var indexes = jsonTitleTableMetadata["index"];
-        var languageText = jsonTitleTableMetadata[global_language];
-        var metadataText = languageText["metadata"];
+        var languageText = json_lang_translate[global_language];//jsonTitleTableMetadata[global_language];
+        //var metadataText = languageText["metadata"];
         //metadata
-        makeTitle(metadataText["title"], allMetaDataSpan);
-        var table = makeTableMetadata(info, indexes["metadata"], metadataText["name"], metadataText["desc"]);
+        makeTitle(json_lang_translate["metadata_title"], allMetaDataSpan);
+        var table = makeTableMetadata(info, indexes["metadata"], list_from_json(languageText, "metadata_name_"), list_from_json(languageText, "metadata_desc_"));
         allMetaDataSpan.appendChild(table);
         //video Tracks
-        var trackText = languageText["track"];
-        makeTitle(trackText["title"], allMetaDataSpan);
-        table = makeTableMetadata(info.videoTracks[0], indexes["track"], trackText["name"], trackText["desc"]);
+        //var trackText = languageText["track"];
+        makeTitle(json_lang_translate["track_title"], allMetaDataSpan);
+        table = makeTableMetadata(info.videoTracks[0], indexes["track"], list_from_json(languageText, "track_name_"), list_from_json(languageText, "track_desc_"));
         allMetaDataSpan.appendChild(table);
         //audio Tracks
-        var audioText = languageText["audio"];
-        makeTitle(audioText["title"], allMetaDataSpan);
+        //var audioText = languageText["audio"];
+        makeTitle(json_lang_translate["audio_title"], allMetaDataSpan);
         json_str = JSON.stringify(info.audioTracks[0], null, "\t");
-        table = makeTableMetadata(info.audioTracks[0], indexes["audio"], audioText["name"], audioText["desc"]);
+        table = makeTableMetadata(info.audioTracks[0], indexes["audio"], list_from_json(languageText, "audio_name_"), list_from_json(languageText, "audio_desc_"));
         allMetaDataSpan.appendChild(table);
     };
 
@@ -558,20 +558,20 @@ function updateTableLanguageMetadata(lang) {
         getLocation();
         return;
     } else {
-        var jsonText = jsonTitleTableMetadata[lang];
+        var jsonText = json_lang_translate[lang];
         var partNames = [];
         var titles = [];
-        var descs = [];
         for (var part of ["metadata", "track", "audio"])
         {
-            var text = jsonText[part];
-            partNames.push(text["title"]);
-            titles = titles.concat(text["name"]);
-            descs = descs.concat(text["desc"]);
+            var text = part;
+            partNames.push(json_lang_translate[text + "_title"]);
+            partNames.push(list_from_json(jsonText, text + "_name_"));
+            partNames.push(list_from_json(jsonText, text + "_desc_"));
+            titles = titles.concat(list_from_json(jsonText, text + "_name_"));
         }
         $("#place-metadata").find("h3").html(function (index) {
             return partNames[index];
         })
-        updateTitleTableMetadata("place-metadata", titles, descs);
+        updateTitleTable("place-metadata", titles);
     }
 }
