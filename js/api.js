@@ -926,7 +926,7 @@ function video_api_analysis(video_url, isProcess){
         if (analysisUrls.response != url)
             return;
         callback(data);
-        if (data["processing_status"] != "done")
+        if (data["processing_status"] != "done" && !response_done)
         {
             $.getJSON(url, function(data) {
                 setTimeout(function() {
