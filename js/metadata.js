@@ -355,6 +355,20 @@ function getLocation(){
     }
 }
 
+/**
+* @func sets the titles and descriptions of each 'th' element in a table
+* @tableId string, the id of the table to update
+* @titles array of strings containing, ordered, titles for the table
+* @descs array of strings containing, ordered, descriptions for the titles of the table
+*/
+function updateTitleTableMetadata(tableId, titles, descs) {
+    var listTitle = $("#" + tableId).find("th");
+    for (var i = 0; i < listTitle.length; i++) {
+        listTitle[i].innerHTML = titles[i];
+        listTitle[i].title = descs[i];
+    }
+}
+
 function updateTableLanguageMetadata(lang) {
     if (!document.getElementById("place-metadata").hasChildNodes())
         return;
@@ -366,16 +380,16 @@ function updateTableLanguageMetadata(lang) {
     var jsonText = jsonTitleTableMetadata[lang];
     var partNames = [];
     var titles = [];
+    var descs = [];
     for (var part of ["metadata", "track", "audio"])
     {
         var text = jsonText[part];
         partNames.push(text["title"]);
-        partNames.push(text["name"]);
-        partNames.push(text["desc"]);
         titles = titles.concat(text["name"]);
+        descs = descs.concat(text["desc"]);
     }
     $("#place-metadata").find("h3").html(function (index) {
         return partNames[index];
     })
-    updateTitleTable("place-metadata", titles);
+    updateTitleTableMetadata("place-metadata", titles, descs);
 }
