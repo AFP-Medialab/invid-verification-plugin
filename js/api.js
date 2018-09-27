@@ -536,7 +536,7 @@ function parseYTJson(json){
         div.appendChild(document.createElement("br"));
         table = make_table(json, key_list_video_b, list_from_json(jsonName, "youtube_video_name2_"));
         var index = key_list_video_b.length;
-        var rowTime = createTimeRow(list_from_json(jsonName, "youtube_video_name_2_")[index++], json["video_upload_time"]);
+        var rowTime = createTimeRow(list_from_json(jsonName, "youtube_video_name2_")[index++], json["video_upload_time"]);
         table.appendChild(rowTime);
         div.appendChild(table);
         /*Channel table*/
