@@ -23,20 +23,94 @@ function makeTableMetadata(json, indexJson, names, lst_desc){
     return table
 }
 
+var json_translate_img = {
+    "en": {
+        "software": {
+            "title": "Software infos",
+            "fields": ["Make", "Model", "Orientation", "X Resolution", "Y Resolution", "Resolution Unit", "Software", "Modify Date",
+                "YCbCr Positioning", "Copyright"],
+            "desc": ["", "", "", "", "", "", "", "",
+                "Specifies the positioning of subsampled chrominance components relative to luminance samples. Field value 1 (centered) must be specified for compatibility with industry standards such as PostScript Level 2 and QuickTime. Field value 2 (cosited) must be specified for compatibility with most digital video standards, such as CCIR Recommendation 601-1",
+                ""]
+        },
+        "general": {
+            "title": "General EXIF infos",
+            "fields": ["Exposure Time", "F-Number", "Exposure Program", "Exif Version", "Date Time Original",
+                "Date Time Digitized", "Components Configuration", "Compressed Bits Per Pixel", "Exposure Bias", "Max Aperture Value", "Metering Mode",
+                "Flash", "Focal Length", "User Comment", "Flashpix Version", "Color Space", "Pixel X Dimension", "Pixel Y Dimension", "File Source"],
+            "desc": ["The length of time when the film or digital sensor inside the camera is exposed to light",
+                "The ratio of the system's focal length to the diameter of the entrance pupil",
+                "The program used by the camera to set exposure when the picture is taken",
+                "", "The date and time when the original image data was generated",
+                "The date and time when the image was stored as digital data",
+                "Provided for cases when compressed data uses components other than Y, Cb, and Cr and to enable support of other sequences",
+                "", "Adjustment to either underexpose or overexpose the image", "The smallest F number of the lens",
+                "", "", "The actual focal length of the lens, in mm", "Keywords or comments on the image, as decimal ASCII representation",
+                "", "Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set. Image data recorded as Uncalibrated can be treated as sRGB when it is converted to Flashpix",
+                "", "", ""]
+        },
+        "gps": {
+            "title": "GPS Informations",
+            "fields": ["GPS Latitude Ref.", "GPS Latitude", "GPS Longitude Ref.", "GPS Longitude", "GPS Time Stamp"],
+            "desc": ["", "", "", "", ""]
+        }
+    },
+    "fr": {
+        "software": {
+            "title": "Informations logicielles",
+            "fields": [],
+            "desc": []
+        },
+        "general": {
+            "title": "Informations EXIF",
+            "fields": [],
+            "desc": []
+        },
+        "gps": {
+            "title": "Informations GPS",
+            "fields": [],
+            "desc": []
+        }
+    }
+};
+
 /*Create table for image metadata*/
 function imgTable(json_str){
+    var topics = ["software", "general", "gps"];
+    var soft_keys = ["Make", "Model", "Orientation", "XResolution", "YResolution", "ResolutionUnit", "Software", "ModifyDate",
+        "YCbCrPositioning", "Copyright"];
+    var gene_keys = ["ExposureTime", "FNumber", "ExposureProgram", "ExifVersion", "DateTimeOriginal",
+        "DateTimeDigitized", "ComponentsConfiguration", "CompressedBitsPerPixel", "ExposureBias", "MaxApertureValue", "MeteringMode",
+        "Flash", "FocalLength", "UserComment", "FlashpixVersion", "ColorSpace", "PixelXDimension", "PixelYDimension", "FileSource"];
+    var gps_keys = ["GPSLatitudeRef", "GPSLatitude", "GPSLongitudeRef", "GPSLongitude", "GPSTimeStamp"];
+    var all_keys = [soft_keys, gene_keys, gps_keys];
     var json = JSON.parse(json_str);
-    var table = document.createElement("table");
-    table.id = "imgTable";
-    for (var key in json) {
-        var tr = document.createElement("tr");
-        var th = document.createElement("th");
-        var td = document.createElement("td");
-        th.innerHTML = key;
-        td.innerHTML = json[key];
-        tr.appendChild(th);
-        tr.appendChild(td);
-        table.appendChild(tr);
+    var jsonLang = json_translate_img[global_language];
+
+    var meta_place = document.getElementById("place-metadata");
+
+    for (var i = 0; i < topics.length; ++i) {
+        var arr_keys = all_keys[i];
+        var jsonTable = jsonLang[topics[i]];
+        makeTitle(jsonTable["title"], meta_place);
+        var table = document.createElement("table");
+        table.id = "imgTable_" + topics[i];
+
+        for (var j = 0; j < arr_keys.length; ++j) {
+            if (json[arr_keys[j]] !== undefined) {
+                var tr = document.createElement("tr");
+                var th = document.createElement("th");
+                var td = document.createElement("td");
+                th.innerHTML = jsonTable['fields'][j];
+                th.title = jsonTable['desc'][j];
+                td.innerHTML = json[arr_keys[j]];
+                tr.appendChild(th);
+                tr.appendChild(td);
+                table.appendChild(tr);
+            }
+        }
+        if (table.hasChildNodes())
+            meta_place.appendChild(table);
     }
     if(json_str == "{}") {
         table = document.createElement("div");
@@ -50,7 +124,6 @@ function imgTable(json_str){
                 break;
         }
     }
-    return table
 }
 
 /* get Exif Metadata */
@@ -58,15 +131,15 @@ var jsonTitleImageMetadata = {
     en: "Image Metadata",
     fr: "Métadonnées de l'image"
 };
+
+/* exif metadata translations */
+
 function getExif(img) {
     cleanElement("place-metadata");
     EXIF.getData(img, function() {
         var allMetaData = EXIF.getAllTags(this);
-        var allMetaDataSpan = document.getElementById("place-metadata");
-        makeTitle(jsonTitleImageMetadata[global_language], allMetaDataSpan);
         var json_str = JSON.stringify(allMetaData, null, "\t");
-        var table = imgTable(json_str);
-        allMetaDataSpan.appendChild(table);
+        imgTable(json_str);
         if (json_str != "{}")
             getLocation();
     });
@@ -323,7 +396,7 @@ function getDataUri(url) {
 
 /*GPS coordinates*/
 function getTableValue(thValue){
-    var table = document.getElementById('imgTable');
+    var table = document.getElementById('imgTable_gps');
     var thcells = table.getElementsByTagName('th');
     var tdcells = table.getElementsByTagName('td');
     for (var i=0; i<thcells.length; i++){  
@@ -335,21 +408,26 @@ function getTableValue(thValue){
 }
 
 function getLocation(){
-    var GPSLatitudeRef = getTableValue("GPSLatitudeRef");
-    var GPSLatitude = getTableValue("GPSLatitude");
-    var GPSLongitudeRef = getTableValue("GPSLongitudeRef");
-    var GPSLongitude = getTableValue("GPSLongitude");
+    var GPSLatitudeRef = getTableValue("GPS Latitude Ref.");
+    var GPSLatitude = getTableValue("GPS Latitude");
+    var GPSLongitudeRef = getTableValue("GPS Longitude Ref.");
+    var GPSLongitude = getTableValue("GPS Longitude");
     if (GPSLatitude != "" && GPSLatitudeRef != "" && GPSLongitude != "" && GPSLongitudeRef != "") {
         var div = document.getElementById("place-metadata");
         var br = document.createElement("br");
         div.appendChild(br);
         var btn = document.createElement("button");
         btn.setAttribute("class","button");
-        btn.innerHTML = "View GPS location"
+        btn.innerHTML = '<span lang="en" ' + (global_language == 'en' ? '' : 'hidden="hidden"') +
+            '>View GPS location</span><span lang="fr" ' + (global_language == 'fr' ? '' : 'hidden="hidden"') +
+            '>Afficher localisation GPS</span>';
         div.appendChild(btn);
         btn.onclick = function() {
             var mapurl = "http://maps.google.com/maps?q=";
-            mapurl += replaceAll(GPSLatitude, ",", "%20") + GPSLatitudeRef + "%20" + replaceAll(GPSLongitude, ",", "%20") + GPSLongitudeRef;
+            var arr_lat = GPSLatitude.split(",");
+            var arr_long = GPSLongitude.split(",");
+            mapurl += arr_lat[0] + "° " + arr_lat[1] + "' " + GPSLatitudeRef + " " +
+                arr_long[0] + "° " + arr_long[1] + "' " + GPSLongitudeRef;
             openTab(mapurl);
         };
     }
