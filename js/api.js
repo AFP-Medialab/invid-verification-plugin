@@ -484,8 +484,8 @@ var jsonTitleTableApi = {
 var table_error_message = {
     "en": {
         "removed_video": "This video has been previously processed by the CAA service but it is no longer available on the video platform. All metadata associated with that video have been deleted",
-        "no_video": "The metadata associated with this video could not be extracted. The video is either posted by Facebook User or a Group, and due to Facebook API limitations it  can not be processed, or it might no longer be available on Facebook",
-        "no_video_id": "A video ID can not be extracted by the submitted URL. Please check the URL",
+        "no_video": "The metadata associated with this video could not be extracted. The video is either posted by Facebook User or a Group, and due to Facebook API limitations it  cannot be processed, or it might no longer be available on Facebook",
+        "no_video_id": "A video ID cannot be extracted by the submitted URL. Please check the URL",
         "empty_url": "The submitted URL parameter is empty. Please provide a valid video URL",
         "facebook_group": "The provided Video is posted by a Facebook Group. Due to Facebook API restrictions no information can be retrieved for videos posted by Facebook Groups",
         "facebook_photo": "The provided URL is not supported. It is a photo URL",
