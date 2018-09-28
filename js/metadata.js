@@ -157,7 +157,7 @@ var jsonTitleTableMetadata = {
     en: {
         metadata: {
             title: "Video Metadata",
-            name: ["Moov", "Duration", "Duration of fragment", "Fragmented", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
+            name: ["Moov", "Duration", "Duration of fragment", "Fragmented", "Fragment time", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
             desc: ["", "Number, providing the duration of the movie (unfragmented part) in timescale units",
             "Number, corresponding to the timescale as given in the movie header",
             "boolean, indicating if the file is already fragmented",
