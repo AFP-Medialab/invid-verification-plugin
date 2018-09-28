@@ -29,7 +29,7 @@ var json_translate_img = {
             "title": "Software infos",
             "fields": ["Make", "Model", "Orientation", "X Resolution", "Y Resolution", "Resolution Unit", "Software", "Modify Date",
                 "YCbCr Positioning", "Copyright"],
-            "desc": ["", "", "", "", "", "", "", "",
+            "desc": ["", "", "", "", "", "", "", "Timestamp for when you might alter the image or it's metadata",
                 "Specifies the positioning of subsampled chrominance components relative to luminance samples. Field value 1 (centered) must be specified for compatibility with industry standards such as PostScript Level 2 and QuickTime. Field value 2 (cosited) must be specified for compatibility with most digital video standards, such as CCIR Recommendation 601-1",
                 ""]
         },
@@ -46,7 +46,7 @@ var json_translate_img = {
                 "Provided for cases when compressed data uses components other than Y, Cb, and Cr and to enable support of other sequences",
                 "", "Adjustment to either underexpose or overexpose the image", "The smallest F number of the lens",
                 "", "", "The actual focal length of the lens, in mm", "Keywords or comments on the image, as decimal ASCII representation",
-                "", "Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set. Image data recorded as Uncalibrated can be treated as sRGB when it is converted to Flashpix",
+                "", "Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set",
                 "", "", ""]
         },
         "gps": {
@@ -59,18 +59,32 @@ var json_translate_img = {
     "fr": {
         "software": {
             "title": "Informations logicielles",
-            "fields": [],
-            "desc": []
+            "fields": ["Marque", "Modèle", "Orientation", "Résolution X", "Résolution Y", "Unité de résolution", "Logiciel", "Date modifcation",
+                 "Positionnement YCbCr", "Droits d'auteurs"],
+            "desc": ["", "", "", "", "", "", "", "Horodatage de la possibilité de modification de l'image ou de ses métadonnées",
+                "Spécifie le positionnement des composants de chrominance sous-échantillonnés par rapport aux échantillons de luminance. La valeur de champ 1 (center) doit être spécifiée pour la compatibilité avec les normes de l'industrie telles que PostScript Level 2 et QuickTime. La valeur de champ 2 (cosited) doit être spécifiée pour la compatibilité avec la plupart des normes vidéo numériques, telles que la Recommandation 601-1 du CCIR",
+                ""]
         },
         "general": {
             "title": "Informations EXIF",
-            "fields": [],
-            "desc": []
+            "fields": ["Temps d'exposition", "Nombre F", "Programme d'exposition", "Version Exif", "Horodatage d'origine",
+                 "Horodatage numérisée", "Configuration des composants", "Bits compressés par pixel", "Biais d'exposition", "Valeur d'ouverture maximale", "Mode de mesure",
+                 "Flash", "Longueur focale", "Commentaire utilisateur", "Version Flashpix", "Espace colorimétrique", "Dimension Pixel X", "Dimension Pixel Y", "Source du fichier"],
+            "desc": ["La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière",
+                "Le rapport entre la distance focale du système et le diamètre de la pupille d'entrée",
+                "Le programme utilisé par l'appareil photo pour définir l'exposition lorsque la photo est prise",
+                "", "La date et l'heure auxquelles les données de l'image d'origine ont été générées",
+                "La date et l'heure à laquelle l'image a été stockée sous forme de données numériques",
+                "Fourni pour les cas où des données compressées utilisent des composants autres que Y, Cb et Cr et pour permettre la prise en charge d'autres séquences",
+                "", "Réglage pour sous-exposer ou surexposer l'image", "Le plus petit nombre F de l'objectif",
+                "", "", "La distance focale réelle de l'objectif, en mm", "Mots-clés ou commentaires sur l'image, sous forme de représentation ASCII décimale",
+                "", "Normalement, sRGB (= 1) est utilisé pour définir l’espace colorimétrique en fonction des conditions et de l’environnement du moniteur. Si un espace colorimétrique autre que sRGB est utilisé, le paramètre 'Uncalibrated' (= 65535) est défini",
+                "", "", ""]
         },
         "gps": {
             "title": "Informations GPS",
-            "fields": [],
-            "desc": []
+            "fields": ["Ref. Latitude GPS", "Latitude GPS", "Ref. Longitude GPS", "Longitude GPS", "Horodatage GPS"],
+            "desc": ["", "", "", "", ""]
         },
         "error": "Image impossible à charger. Veuillez verifier l'URL et réessayer"
     }
@@ -493,6 +507,7 @@ function updateTableLanguageMetadata(lang) {
         document.getElementById("error-metadata").style.display = "none";
         document.getElementById("place-metadata").style.display = "block";
         imgTable(jsonLastImg, lang);
+        getLocation();
         return;
     } else {
         var jsonText = jsonTitleTableMetadata[lang];
