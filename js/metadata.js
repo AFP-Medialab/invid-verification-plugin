@@ -53,7 +53,8 @@ var json_translate_img = {
             "title": "GPS Informations",
             "fields": ["GPS Latitude Ref.", "GPS Latitude", "GPS Longitude Ref.", "GPS Longitude", "GPS Time Stamp"],
             "desc": ["", "", "", "", ""]
-        }
+        },
+        "error": "Image failed loading. Check the URL and try again"
     },
     "fr": {
         "software": {
@@ -70,12 +71,17 @@ var json_translate_img = {
             "title": "Informations GPS",
             "fields": [],
             "desc": []
-        }
+        },
+        "error": "Image impossible a charger. Veuillez verifier l'URL et réessayer"
     }
 };
 
+var jsonLastImg = "{}";
+
 /*Create table for image metadata*/
-function imgTable(json_str){
+function imgTable(json_str, lang){
+    jsonLastImg = json_str;
+    cleanElement("place-metadata");
     var topics = ["software", "general", "gps"];
     var soft_keys = ["Make", "Model", "Orientation", "XResolution", "YResolution", "ResolutionUnit", "Software", "ModifyDate",
         "YCbCrPositioning", "Copyright"];
@@ -85,14 +91,13 @@ function imgTable(json_str){
     var gps_keys = ["GPSLatitudeRef", "GPSLatitude", "GPSLongitudeRef", "GPSLongitude", "GPSTimeStamp"];
     var all_keys = [soft_keys, gene_keys, gps_keys];
     var json = JSON.parse(json_str);
-    var jsonLang = json_translate_img[global_language];
+    var jsonLang = json_translate_img[lang];
 
     var meta_place = document.getElementById("place-metadata");
 
     for (var i = 0; i < topics.length; ++i) {
         var arr_keys = all_keys[i];
         var jsonTable = jsonLang[topics[i]];
-        makeTitle(jsonTable["title"], meta_place);
         var table = document.createElement("table");
         table.id = "imgTable_" + topics[i];
 
@@ -109,12 +114,14 @@ function imgTable(json_str){
                 table.appendChild(tr);
             }
         }
-        if (table.hasChildNodes())
+        if (table.hasChildNodes()) {
+            makeTitle(jsonTable["title"], meta_place);
             meta_place.appendChild(table);
+        }
     }
     if(json_str == "{}") {
         table = document.createElement("div");
-        switch (global_language){
+        switch (lang){
             case "fr":
                 table.innerHTML = "Aucune métadonnée EXIF n'a été trouvée. <strong>Note:<strong> Le Format EXIF s'applique uniquement aux images .jpg et .tiff";
                 break;
@@ -123,6 +130,7 @@ function imgTable(json_str){
                 table.innerHTML = "No EXIF Metadata was found. <strong>Note:</strong> The EXIF standard applies only to .jpg and .tiff images";
                 break;
         }
+        meta_place.appendChild(table);
     }
 }
 
@@ -139,7 +147,7 @@ function getExif(img) {
     EXIF.getData(img, function() {
         var allMetaData = EXIF.getAllTags(this);
         var json_str = JSON.stringify(allMetaData, null, "\t");
-        imgTable(json_str);
+        imgTable(json_str, global_language);
         if (json_str != "{}")
             getLocation();
     });
@@ -324,7 +332,11 @@ function submit_metadata(){
             }
             getExif(img);
             //getImgRawData(img.src);
-        }
+        };
+        /* If error display error message */
+        img.onerror = function() {
+            document.getElementById("place-metadata").innerHTML = '<div style="color: red;">' + json_translate_img[global_language]["error"] + '</div>';
+        };
         $("#preview-metadata").append(img);
     }
     else {
@@ -452,7 +464,8 @@ function updateTableLanguageMetadata(lang) {
         return;
 
     if (document.getElementById("preview-metadata").hasChildNodes()) { // image selected
-        $("#place-metadata > h3").html(jsonTitleImageMetadata[lang]);
+        cleanElement("place-metadata");
+        imgTable(jsonLastImg, lang);
         return;
     }
     var jsonText = jsonTitleTableMetadata[lang];
