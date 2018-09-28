@@ -72,7 +72,7 @@ var json_translate_img = {
             "fields": [],
             "desc": []
         },
-        "error": "Image impossible a charger. Veuillez verifier l'URL et réessayer"
+        "error": "Image impossible à charger. Veuillez verifier l'URL et réessayer"
     }
 };
 
@@ -82,6 +82,8 @@ var jsonLastImg = "{}";
 function imgTable(json_str, lang){
     jsonLastImg = json_str;
     cleanElement("place-metadata");
+    cleanElement("error-metadata");
+    document.getElementById("error-metadata").style.display = "none";
     var topics = ["software", "general", "gps"];
     var soft_keys = ["Make", "Model", "Orientation", "XResolution", "YResolution", "ResolutionUnit", "Software", "ModifyDate",
         "YCbCrPositioning", "Copyright"];
@@ -144,6 +146,8 @@ var jsonTitleImageMetadata = {
 
 function getExif(img) {
     cleanElement("place-metadata");
+    cleanElement("error-metadata");
+    document.getElementById("error-metadata").style.display = "none";
     EXIF.getData(img, function() {
         var allMetaData = EXIF.getAllTags(this);
         var json_str = JSON.stringify(allMetaData, null, "\t");
@@ -205,7 +209,8 @@ var jsonTitleTableMetadata = {
             "String, giving the 3-letter language code",
             "Number, giving the number of track samples (ie. frames)",
             "", "Number, providing the bitrate of the track in bits per second"]
-        }   
+        },
+        "error": "Video failed loading. Check the URL and try again"
     },
     fr: {
         metadata: {
@@ -250,21 +255,31 @@ var jsonTitleTableMetadata = {
             "Chaine de charactère, donnant le code de langage à 3 lettres",
             "Nombre, donnant le nombre d'échantillon de piste (c-à-d. images)",
             "", "Nombre, taux de bits par seconde de la piste"]
-        }  
+        },
+        "error": "Vidéo impossible à charger. Veuillez verifier l'URL et réessayer"
     }
 }
 
 /* get Mp4 Metadata */
 function getMp4(vid) {
     cleanElement("place-metadata");
+    cleanElement("error-metadata");
+    document.getElementById("error-metadata").style.display = "none";
 
     var allMetaDataSpan = document.getElementById("place-metadata");
 
     var mp4box = new MP4Box();
-    mp4box.onError = function(e) {};
+    mp4box.onError = function(e) {
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").innerHTML = jsonTitleTableMetadata[global_language]["error"];
+        document.getElementById("place-metadata").style.display = "none";
+        document.getElementById("error-metadata").style.display = "block";
+    };
     /* display metadata info when mp4box parsing isfinished */
     mp4box.onReady = function(info) {
         cleanElement("place-metadata");
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").style.display = "none";
         var allMetaDataSpan = document.getElementById("place-metadata");
         var json_str = JSON.stringify(info, null, "\t");
         if(json_str == "{}") {
@@ -314,7 +329,8 @@ function getMp4(vid) {
 }
 
 function submit_metadata(){
-    cleanElement("preview-metadata")
+    cleanElement("preview-metadata");
+    cleanElement("error-metadata");
     var url = document.getElementById("url-metadata").value;
     url = get_real_url_img(url);
     var img_radio = document.getElementById("img-meta-radio");
@@ -335,7 +351,10 @@ function submit_metadata(){
         };
         /* If error display error message */
         img.onerror = function() {
-            document.getElementById("place-metadata").innerHTML = '<div style="color: red;">' + json_translate_img[global_language]["error"] + '</div>';
+            cleanElement("error-metadata");
+            document.getElementById("error-metadata").innerHTML = json_translate_img[global_language]["error"];
+            document.getElementById("place-metadata").style.display = "none";
+            document.getElementById("error-metadata").style.display = "block";
         };
         $("#preview-metadata").append(img);
     }
@@ -460,27 +479,36 @@ function updateTitleTableMetadata(tableId, titles, descs) {
 }
 
 function updateTableLanguageMetadata(lang) {
-    if (!document.getElementById("place-metadata").hasChildNodes())
+    if (document.getElementById("error-metadata").style.display !== "none") { // if error
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").innerHTML = json_translate_img[lang]["error"];
+        document.getElementById("place-metadata").style.display = "none";
+        document.getElementById("error-metadata").style.display = "block";
         return;
+    }
 
     if (document.getElementById("preview-metadata").hasChildNodes()) { // image selected
         cleanElement("place-metadata");
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").style.display = "none";
+        document.getElementById("place-metadata").style.display = "block";
         imgTable(jsonLastImg, lang);
         return;
+    } else {
+        var jsonText = jsonTitleTableMetadata[lang];
+        var partNames = [];
+        var titles = [];
+        var descs = [];
+        for (var part of ["metadata", "track", "audio"])
+        {
+            var text = jsonText[part];
+            partNames.push(text["title"]);
+            titles = titles.concat(text["name"]);
+            descs = descs.concat(text["desc"]);
+        }
+        $("#place-metadata").find("h3").html(function (index) {
+            return partNames[index];
+        })
+        updateTitleTableMetadata("place-metadata", titles, descs);
     }
-    var jsonText = jsonTitleTableMetadata[lang];
-    var partNames = [];
-    var titles = [];
-    var descs = [];
-    for (var part of ["metadata", "track", "audio"])
-    {
-        var text = jsonText[part];
-        partNames.push(text["title"]);
-        titles = titles.concat(text["name"]);
-        descs = descs.concat(text["desc"]);
-    }
-    $("#place-metadata").find("h3").html(function (index) {
-        return partNames[index];
-    })
-    updateTitleTableMetadata("place-metadata", titles, descs);
 }
