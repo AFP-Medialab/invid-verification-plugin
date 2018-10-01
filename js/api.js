@@ -521,12 +521,12 @@ function parseYTJson(json){
 
     function start(json) {
     	/* isDebunked field */
-    	if (json["isDebunked"] !== "") {
+    	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
             document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
-        	document.getElementById("place-debunked").style.display = "none";
+        	document.getElementById("place-debunked").style.display = "none";*/
         /* Video Infos*/
         var div = document.getElementById("place-table");
         /*Video table*/
@@ -562,13 +562,13 @@ function parseYTJson(json){
 
     function update(json) {
     	/* isDebunked field */
-    	if (json["isDebunked"] !== "") {
+    	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
         	document.getElementById("place-debunked").style.display = "none";
-        var tables = document.getElementById("place-table").getElementsByTagName("table");
+        var tables = document.getElementById("place-table").getElementsByTagName("table");*/
         /*Video table*/
         updateTable(json, key_list_video_a, tables[0]);
         updateTable(json, key_list_video_b, tables[1]);
@@ -636,12 +636,12 @@ function parseFBJson(json){
 
     function start(json) {
     	/* isDebunked field */
-    	if (json["isDebunked"] !== "") {
+    	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
-        	document.getElementById("place-debunked").style.display = "none";
+        	document.getElementById("place-debunked").style.display = "none";*/
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
@@ -671,12 +671,12 @@ function parseFBJson(json){
 
     function update(json) {
     	/* isDebunked field */
-    	if (json["isDebunked"] !== "") {
+    	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
-        	document.getElementById("place-debunked").style.display = "none";
+        	document.getElementById("place-debunked").style.display = "none";*/
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video, tables[0]);
@@ -755,12 +755,12 @@ function parseTWJson(json){
 
     function start(json) {
     	/* isDebunked field */
-    	if (json["isDebunked"] !== "") {
+    	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
-        	document.getElementById("place-debunked").style.display = "none";
+        	document.getElementById("place-debunked").style.display = "none";*/
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
@@ -793,12 +793,12 @@ function parseTWJson(json){
 
     function update(json) {
     	/* isDebunked field */
-    	if (json["isDebunked"] !== "") {
+    	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
-        	document.getElementById("place-debunked").style.display = "none";
+        	document.getElementById("place-debunked").style.display = "none";*/
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video, tables[0]);
@@ -863,7 +863,7 @@ function parseTWJson(json){
 
 function request_fail(msg) {
     document.getElementById("api-content").style.display = "none";
-    document.getElementById("place-debunked").style.display = "none";
+    //document.getElementById("place-debunked").style.display = "none";
     document.getElementById("loader").style.display = "none";
     document.getElementById("loader_tw").style.display = "none";
     var errorElement = document.getElementById("error-content");
@@ -890,7 +890,7 @@ function video_api_analysis(video_url, isProcess){
     loaded_tw = false;
     document.getElementById("loader").style.display = "block";
     document.getElementById("api-content").style.display = "none";
-    document.getElementById("place-debunked").style.display = "none";
+    //document.getElementById("place-debunked").style.display = "none";
     document.getElementById("place-carousel").style.display = "none";
     var response_done = false;
 
@@ -1058,13 +1058,13 @@ function submit_form(){
     hideButtons();
 	if (url != "") {
         cleanElement("place-table");
-        cleanElement("place-debunked");
+        //cleanElement("place-debunked");
         if (isYtUrl(url) || url.startsWith(facebook_url) || url.startsWith(twitter_url)) {
             video_api_analysis(url, reprocessChecked);
         }
         else {
             document.getElementById("api-content").style.display = "none";
-            document.getElementById("place-debunked").style.display = "none";
+            //document.getElementById("place-debunked").style.display = "none";
             var errorElement = document.getElementById("error-content");
             errorElement.innerHTML = "Please enter a Youtube, Facebook or Twitter URL";
             errorElement.style.display = "block";
