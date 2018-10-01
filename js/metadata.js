@@ -35,10 +35,10 @@ var json_translate_img = {
         },
         "general": {
             "title": "General EXIF infos",
-            "fields": ["Exposure Time", "F-Number", "Exposure Program", "Exif Version", "Date Time Original",
+            "fields": ["Artist", "Exposure Time", "F-Number", "Exposure Program", "Exif Version", "Date Time Original",
                 "Date Time Digitized", "Components Configuration", "Compressed Bits Per Pixel", "Exposure Bias", "Max Aperture Value", "Metering Mode",
                 "Flash", "Focal Length", "User Comment", "Flashpix Version", "Color Space", "Pixel X Dimension", "Pixel Y Dimension", "File Source"],
-            "desc": ["The length of time when the film or digital sensor inside the camera is exposed to light",
+            "desc": ["Person who created the image", "The length of time when the film or digital sensor inside the camera is exposed to light",
                 "The ratio of the system's focal length to the diameter of the entrance pupil",
                 "The program used by the camera to set exposure when the picture is taken",
                 "", "The date and time when the original image data was generated",
@@ -67,10 +67,10 @@ var json_translate_img = {
         },
         "general": {
             "title": "Informations EXIF",
-            "fields": ["Temps d'exposition", "Nombre F", "Programme d'exposition", "Version Exif", "Horodatage d'origine",
+            "fields": ["Artiste", "Temps d'exposition", "Nombre F", "Programme d'exposition", "Version Exif", "Horodatage d'origine",
                  "Horodatage numérisée", "Configuration des composants", "Bits compressés par pixel", "Biais d'exposition", "Valeur d'ouverture maximale", "Mode de mesure",
                  "Flash", "Longueur focale", "Commentaire utilisateur", "Version Flashpix", "Espace colorimétrique", "Dimension Pixel X", "Dimension Pixel Y", "Source du fichier"],
-            "desc": ["La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière",
+            "desc": ["Personne qui a créé l'image", "La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière",
                 "Le rapport entre la distance focale du système et le diamètre de la pupille d'entrée",
                 "Le programme utilisé par l'appareil photo pour définir l'exposition lorsque la photo est prise",
                 "", "La date et l'heure auxquelles les données de l'image d'origine ont été générées",
@@ -101,7 +101,7 @@ function imgTable(json_str, lang){
     var topics = ["software", "general", "gps"];
     var soft_keys = ["Make", "Model", "Orientation", "XResolution", "YResolution", "ResolutionUnit", "Software", "ModifyDate",
         "YCbCrPositioning", "Copyright"];
-    var gene_keys = ["ExposureTime", "FNumber", "ExposureProgram", "ExifVersion", "DateTimeOriginal",
+    var gene_keys = ["Artist", "ExposureTime", "FNumber", "ExposureProgram", "ExifVersion", "DateTimeOriginal",
         "DateTimeDigitized", "ComponentsConfiguration", "CompressedBitsPerPixel", "ExposureBias", "MaxApertureValue", "MeteringMode",
         "Flash", "FocalLength", "UserComment", "FlashpixVersion", "ColorSpace", "PixelXDimension", "PixelYDimension", "FileSource"];
     var gps_keys = ["GPSLatitudeRef", "GPSLatitude", "GPSLongitudeRef", "GPSLongitude", "GPSTimeStamp"];
@@ -453,10 +453,11 @@ function getTableValue(thValue){
 }
 
 function getLocation(){
-    var GPSLatitudeRef = getTableValue("GPS Latitude Ref.");
-    var GPSLatitude = getTableValue("GPS Latitude");
-    var GPSLongitudeRef = getTableValue("GPS Longitude Ref.");
-    var GPSLongitude = getTableValue("GPS Longitude");
+    var jsonGpsImg = json_translate_img[global_language]["gps"]["fields"];
+    var GPSLatitudeRef = getTableValue(jsonGpsImg[0]);
+    var GPSLatitude = getTableValue(jsonGpsImg[1]);
+    var GPSLongitudeRef = getTableValue(jsonGpsImg[2]);
+    var GPSLongitude = getTableValue(jsonGpsImg[3]);
     if (GPSLatitude != "" && GPSLatitudeRef != "" && GPSLongitude != "" && GPSLongitudeRef != "") {
         var div = document.getElementById("place-metadata");
         var br = document.createElement("br");
