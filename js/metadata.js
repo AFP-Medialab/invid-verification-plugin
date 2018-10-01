@@ -20,32 +20,46 @@ function makeTableMetadata(json, indexJson, names, lst_desc){
         tr.appendChild(td);
         table.appendChild(tr);
     }
-    return table
+    return table;
+}
+
+/**
+* @func translate ascii decimal representation of str and gives a string of character
+* @arr ascii decimal representation to translate
+* @return string containing the translated str
+*/
+function translateASCII(arr) {
+    var res = "";
+    for (var i = 0; i < arr.length; ++i) {
+        res += String.fromCharCode(parseInt(arr[i], 10));
+    }
+    return res;
 }
 
 var json_translate_img = {
     "en": {
         "software": {
             "title": "Software infos",
-            "fields": ["Make", "Model", "Orientation", "X Resolution", "Y Resolution", "Resolution Unit", "Software", "Modify Date",
+            "fields": ["Make", "Model", "Orientation", "X Resolution", "Y Resolution", "Resolution Unit", "Host Computer", "Software", "Modify Date",
                 "YCbCr Positioning", "Copyright"],
-            "desc": ["", "", "", "", "", "", "", "Timestamp for when you might alter the image or it's metadata",
+            "desc": ["", "", "", "", "", "", "The computer and/or operating system in use at the time of image creation", "", "Timestamp for when you might alter the image or it's metadata",
                 "Specifies the positioning of subsampled chrominance components relative to luminance samples. Field value 1 (centered) must be specified for compatibility with industry standards such as PostScript Level 2 and QuickTime. Field value 2 (cosited) must be specified for compatibility with most digital video standards, such as CCIR Recommendation 601-1",
                 ""]
         },
         "general": {
             "title": "General EXIF infos",
-            "fields": ["Artist", "Exposure Time", "F-Number", "Exposure Program", "Exif Version", "Date Time Original",
+            "fields": ["Artist", "Document Name", "Page Name", "Exposure Time", "F-Number", "Exposure Program", "Exif Version", "Date Time Original",
                 "Date Time Digitized", "Components Configuration", "Compressed Bits Per Pixel", "Exposure Bias", "Max Aperture Value", "Metering Mode",
-                "Flash", "Focal Length", "User Comment", "Flashpix Version", "Color Space", "Pixel X Dimension", "Pixel Y Dimension", "File Source"],
-            "desc": ["Person who created the image", "The length of time when the film or digital sensor inside the camera is exposed to light",
+                "Flash", "Focal Length", "User Comment", "Image Description", "Maker Note", "Subject Distance", "Flashpix Version", "Color Space", "X Dimension", "Y Dimension", "File Source"],
+            "desc": ["Person who created the image", "", "", "The length of time when the film or digital sensor inside the camera is exposed to light",
                 "The ratio of the system's focal length to the diameter of the entrance pupil",
                 "The program used by the camera to set exposure when the picture is taken",
                 "", "The date and time when the original image data was generated",
                 "The date and time when the image was stored as digital data",
                 "Provided for cases when compressed data uses components other than Y, Cb, and Cr and to enable support of other sequences",
                 "", "Adjustment to either underexpose or overexpose the image", "The smallest F number of the lens",
-                "", "", "The actual focal length of the lens, in mm", "Keywords or comments on the image, as decimal ASCII representation",
+                "", "", "The actual focal length of the lens, in mm", "Keywords or comments on the image",
+                "A string that describes the subject of the image", "Manufacturer specific information", "The distance to the subject, given in meters (0 if unknown and FFFFFFFF if infinite)",
                 "", "Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set",
                 "", "", ""]
         },
@@ -59,25 +73,26 @@ var json_translate_img = {
     "fr": {
         "software": {
             "title": "Informations logicielles",
-            "fields": ["Marque", "Modèle", "Orientation", "Résolution X", "Résolution Y", "Unité de résolution", "Logiciel", "Date modifcation",
+            "fields": ["Marque", "Modèle", "Orientation", "Résolution X", "Résolution Y", "Unité de résolution", "Ordinateur hôte", "Logiciel", "Date modifcation",
                  "Positionnement YCbCr", "Droits d'auteurs"],
-            "desc": ["", "", "", "", "", "", "", "Horodatage de la possibilité de modification de l'image ou de ses métadonnées",
+            "desc": ["", "", "", "", "", "", "L'ordinateur et/ou système opérateur utilisé au moment où la photo à été créée", "", "Horodatage de la possibilité de modification de l'image ou de ses métadonnées",
                 "Spécifie le positionnement des composants de chrominance sous-échantillonnés par rapport aux échantillons de luminance. La valeur de champ 1 (center) doit être spécifiée pour la compatibilité avec les normes de l'industrie telles que PostScript Level 2 et QuickTime. La valeur de champ 2 (cosited) doit être spécifiée pour la compatibilité avec la plupart des normes vidéo numériques, telles que la Recommandation 601-1 du CCIR",
                 ""]
         },
         "general": {
             "title": "Informations EXIF",
-            "fields": ["Artiste", "Temps d'exposition", "Nombre F", "Programme d'exposition", "Version Exif", "Horodatage d'origine",
+            "fields": ["Artiste", "Nom du document", "Nom de la page", "Temps d'exposition", "Nombre F", "Programme d'exposition", "Version Exif", "Horodatage d'origine",
                  "Horodatage numérisée", "Configuration des composants", "Bits compressés par pixel", "Biais d'exposition", "Valeur d'ouverture maximale", "Mode de mesure",
-                 "Flash", "Longueur focale", "Commentaire utilisateur", "Version Flashpix", "Espace colorimétrique", "Dimension Pixel X", "Dimension Pixel Y", "Source du fichier"],
-            "desc": ["Personne qui a créé l'image", "La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière",
+                 "Flash", "Longueur focale", "Commentaire utilisateur", "Description de l'image", "Note de la marque", "Distance du sujet", "Version Flashpix", "Espace colorimétrique", "Dimension X", "Dimension Y", "Source du fichier"],
+            "desc": ["Personne qui a créé l'image", "", "", "La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière",
                 "Le rapport entre la distance focale du système et le diamètre de la pupille d'entrée",
                 "Le programme utilisé par l'appareil photo pour définir l'exposition lorsque la photo est prise",
                 "", "La date et l'heure auxquelles les données de l'image d'origine ont été générées",
                 "La date et l'heure à laquelle l'image a été stockée sous forme de données numériques",
                 "Fourni pour les cas où des données compressées utilisent des composants autres que Y, Cb et Cr et pour permettre la prise en charge d'autres séquences",
                 "", "Réglage pour sous-exposer ou surexposer l'image", "Le plus petit nombre F de l'objectif",
-                "", "", "La distance focale réelle de l'objectif, en mm", "Mots-clés ou commentaires sur l'image, sous forme de représentation ASCII décimale",
+                "", "", "La distance focale réelle de l'objectif, en mm", "Mots-clés ou commentaires sur l'image",
+                "Un texte décrivant le sujet de l'image", "Note du fabricant", "La distance jusqu'au sujet de la photo, en mètre (0 si inconnu et FFFFFFFF si infini)",
                 "", "Normalement, sRGB (= 1) est utilisé pour définir l’espace colorimétrique en fonction des conditions et de l’environnement du moniteur. Si un espace colorimétrique autre que sRGB est utilisé, le paramètre 'Uncalibrated' (= 65535) est défini",
                 "", "", ""]
         },
@@ -99,11 +114,11 @@ function imgTable(json_str, lang){
     cleanElement("error-metadata");
     document.getElementById("error-metadata").style.display = "none";
     var topics = ["software", "general", "gps"];
-    var soft_keys = ["Make", "Model", "Orientation", "XResolution", "YResolution", "ResolutionUnit", "Software", "ModifyDate",
+    var soft_keys = ["Make", "Model", "Orientation", "XResolution", "YResolution", "ResolutionUnit", "HostComputer", "Software", "ModifyDate",
         "YCbCrPositioning", "Copyright"];
-    var gene_keys = ["Artist", "ExposureTime", "FNumber", "ExposureProgram", "ExifVersion", "DateTimeOriginal",
+    var gene_keys = ["Artist", "DocumentName", "PageName", "ExposureTime", "FNumber", "ExposureProgram", "ExifVersion", "DateTimeOriginal",
         "DateTimeDigitized", "ComponentsConfiguration", "CompressedBitsPerPixel", "ExposureBias", "MaxApertureValue", "MeteringMode",
-        "Flash", "FocalLength", "UserComment", "FlashpixVersion", "ColorSpace", "PixelXDimension", "PixelYDimension", "FileSource"];
+        "Flash", "FocalLength", "UserComment", "ImageDescription", "MakerNote", "SubjectDistance", "FlashpixVersion", "ColorSpace", "PixelXDimension", "PixelYDimension", "FileSource"];
     var gps_keys = ["GPSLatitudeRef", "GPSLatitude", "GPSLongitudeRef", "GPSLongitude", "GPSTimeStamp"];
     var all_keys = [soft_keys, gene_keys, gps_keys];
     var json = JSON.parse(json_str);
@@ -124,7 +139,12 @@ function imgTable(json_str, lang){
                 var td = document.createElement("td");
                 th.innerHTML = jsonTable['fields'][j];
                 th.title = jsonTable['desc'][j];
-                td.innerHTML = json[arr_keys[j]];
+                if (arr_keys[j] === "UserComment" ||
+                    arr_keys[j] === "MakerNote") {
+                    td.innerHTML = translateASCII(json[arr_keys[j]]);
+                } else {
+                    td.innerHTML = json[arr_keys[j]];
+                }
                 tr.appendChild(th);
                 tr.appendChild(td);
                 table.appendChild(tr);
