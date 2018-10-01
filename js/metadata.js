@@ -20,27 +20,144 @@ function makeTableMetadata(json, indexJson, names, lst_desc){
         tr.appendChild(td);
         table.appendChild(tr);
     }
-    return table
+    return table;
 }
 
+/**
+* @func translate ascii decimal representation of str and gives a string of character
+* @arr ascii decimal representation to translate
+* @return string containing the translated str
+*/
+function translateASCII(arr) {
+    var res = "";
+    for (var i = 0; i < arr.length; ++i) {
+        res += String.fromCharCode(parseInt(arr[i], 10));
+    }
+    return res;
+}
+
+var json_translate_img = {
+    "en": {
+        "software": {
+            "title": "Software infos",
+            "fields": ["Make", "Model", "Orientation", "X Resolution", "Y Resolution", "Resolution Unit", "Host Computer", "Software", "Modify Date",
+                "YCbCr Positioning", "Copyright"],
+            "desc": ["", "", "", "", "", "", "The computer and/or operating system in use at the time of image creation", "", "Timestamp for when you might alter the image or it's metadata",
+                "Specifies the positioning of subsampled chrominance components relative to luminance samples. Field value 1 (centered) must be specified for compatibility with industry standards such as PostScript Level 2 and QuickTime. Field value 2 (cosited) must be specified for compatibility with most digital video standards, such as CCIR Recommendation 601-1",
+                ""]
+        },
+        "general": {
+            "title": "General EXIF infos",
+            "fields": ["Artist", "Document Name", "Page Name", "Exposure Time", "F-Number", "Exposure Program", "Exif Version", "Date Time Original",
+                "Date Time Digitized", "Components Configuration", "Compressed Bits Per Pixel", "Exposure Bias", "Max Aperture Value", "Metering Mode",
+                "Flash", "Focal Length", "User Comment", "Image Description", "Maker Note", "Subject Distance", "Flashpix Version", "Color Space", "X Dimension", "Y Dimension", "File Source"],
+            "desc": ["Person who created the image", "", "", "The length of time when the film or digital sensor inside the camera is exposed to light",
+                "The ratio of the system's focal length to the diameter of the entrance pupil",
+                "The program used by the camera to set exposure when the picture is taken",
+                "", "The date and time when the original image data was generated",
+                "The date and time when the image was stored as digital data",
+                "Provided for cases when compressed data uses components other than Y, Cb, and Cr and to enable support of other sequences",
+                "", "Adjustment to either underexpose or overexpose the image", "The smallest F number of the lens",
+                "", "", "The actual focal length of the lens, in mm", "Keywords or comments on the image",
+                "A string that describes the subject of the image", "Manufacturer specific information", "The distance to the subject, given in meters (0 if unknown and FFFFFFFF if infinite)",
+                "", "Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set",
+                "", "", ""]
+        },
+        "gps": {
+            "title": "GPS Informations",
+            "fields": ["GPS Latitude Ref.", "GPS Latitude", "GPS Longitude Ref.", "GPS Longitude", "GPS Time Stamp"],
+            "desc": ["", "", "", "", ""]
+        },
+        "error": "Image failed loading. Check the URL and try again"
+    },
+    "fr": {
+        "software": {
+            "title": "Informations logicielles",
+            "fields": ["Marque", "Modèle", "Orientation", "Résolution X", "Résolution Y", "Unité de résolution", "Ordinateur hôte", "Logiciel", "Date modifcation",
+                 "Positionnement YCbCr", "Droits d'auteurs"],
+            "desc": ["", "", "", "", "", "", "L'ordinateur et/ou système opérateur utilisé au moment où la photo à été créée", "", "Horodatage de la possibilité de modification de l'image ou de ses métadonnées",
+                "Spécifie le positionnement des composants de chrominance sous-échantillonnés par rapport aux échantillons de luminance. La valeur de champ 1 (center) doit être spécifiée pour la compatibilité avec les normes de l'industrie telles que PostScript Level 2 et QuickTime. La valeur de champ 2 (cosited) doit être spécifiée pour la compatibilité avec la plupart des normes vidéo numériques, telles que la Recommandation 601-1 du CCIR",
+                ""]
+        },
+        "general": {
+            "title": "Informations EXIF",
+            "fields": ["Artiste", "Nom du document", "Nom de la page", "Temps d'exposition", "Nombre F", "Programme d'exposition", "Version Exif", "Horodatage d'origine",
+                 "Horodatage numérisée", "Configuration des composants", "Bits compressés par pixel", "Biais d'exposition", "Valeur d'ouverture maximale", "Mode de mesure",
+                 "Flash", "Longueur focale", "Commentaire utilisateur", "Description de l'image", "Note de la marque", "Distance du sujet", "Version Flashpix", "Espace colorimétrique", "Dimension X", "Dimension Y", "Source du fichier"],
+            "desc": ["Personne qui a créé l'image", "", "", "La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière",
+                "Le rapport entre la distance focale du système et le diamètre de la pupille d'entrée",
+                "Le programme utilisé par l'appareil photo pour définir l'exposition lorsque la photo est prise",
+                "", "La date et l'heure auxquelles les données de l'image d'origine ont été générées",
+                "La date et l'heure à laquelle l'image a été stockée sous forme de données numériques",
+                "Fourni pour les cas où des données compressées utilisent des composants autres que Y, Cb et Cr et pour permettre la prise en charge d'autres séquences",
+                "", "Réglage pour sous-exposer ou surexposer l'image", "Le plus petit nombre F de l'objectif",
+                "", "", "La distance focale réelle de l'objectif, en mm", "Mots-clés ou commentaires sur l'image",
+                "Un texte décrivant le sujet de l'image", "Note du fabricant", "La distance jusqu'au sujet de la photo, en mètre (0 si inconnu et FFFFFFFF si infini)",
+                "", "Normalement, sRGB (= 1) est utilisé pour définir l’espace colorimétrique en fonction des conditions et de l’environnement du moniteur. Si un espace colorimétrique autre que sRGB est utilisé, le paramètre 'Uncalibrated' (= 65535) est défini",
+                "", "", ""]
+        },
+        "gps": {
+            "title": "Informations GPS",
+            "fields": ["Ref. Latitude GPS", "Latitude GPS", "Ref. Longitude GPS", "Longitude GPS", "Horodatage GPS"],
+            "desc": ["", "", "", "", ""]
+        },
+        "error": "Image impossible à charger. Veuillez verifier l'URL et réessayer"
+    }
+};
+
+var jsonLastImg = "{}";
+
 /*Create table for image metadata*/
-function imgTable(json_str){
+function imgTable(json_str, lang){
+    jsonLastImg = json_str;
+    cleanElement("place-metadata");
+    cleanElement("error-metadata");
+    document.getElementById("error-metadata").style.display = "none";
+    var topics = ["software", "general", "gps"];
+    var soft_keys = ["Make", "Model", "Orientation", "XResolution", "YResolution", "ResolutionUnit", "HostComputer", "Software", "ModifyDate",
+        "YCbCrPositioning", "Copyright"];
+    var gene_keys = ["Artist", "DocumentName", "PageName", "ExposureTime", "FNumber", "ExposureProgram", "ExifVersion", "DateTimeOriginal",
+        "DateTimeDigitized", "ComponentsConfiguration", "CompressedBitsPerPixel", "ExposureBias", "MaxApertureValue", "MeteringMode",
+        "Flash", "FocalLength", "UserComment", "ImageDescription", "MakerNote", "SubjectDistance", "FlashpixVersion", "ColorSpace", "PixelXDimension", "PixelYDimension", "FileSource"];
+    var gps_keys = ["GPSLatitudeRef", "GPSLatitude", "GPSLongitudeRef", "GPSLongitude", "GPSTimeStamp"];
+    var all_keys = [soft_keys, gene_keys, gps_keys];
     var json = JSON.parse(json_str);
-    var table = document.createElement("table");
-    table.id = "imgTable";
-    for (var key in json) {
-        var tr = document.createElement("tr");
-        var th = document.createElement("th");
-        var td = document.createElement("td");
-        th.innerHTML = key;
-        td.innerHTML = json[key];
-        tr.appendChild(th);
-        tr.appendChild(td);
-        table.appendChild(tr);
+    var jsonLang = json_translate_img[lang];
+
+    var meta_place = document.getElementById("place-metadata");
+
+    for (var i = 0; i < topics.length; ++i) {
+        var arr_keys = all_keys[i];
+        var jsonTable = jsonLang[topics[i]];
+        var table = document.createElement("table");
+        table.id = "imgTable_" + topics[i];
+
+        for (var j = 0; j < arr_keys.length; ++j) {
+            if (json[arr_keys[j]] !== undefined) {
+                var tr = document.createElement("tr");
+                var th = document.createElement("th");
+                var td = document.createElement("td");
+                th.innerHTML = jsonTable['fields'][j];
+                th.title = jsonTable['desc'][j];
+                if (arr_keys[j] === "UserComment" ||
+                    arr_keys[j] === "MakerNote") {
+                    td.innerHTML = translateASCII(json[arr_keys[j]]);
+                } else {
+                    td.innerHTML = json[arr_keys[j]];
+                }
+                tr.appendChild(th);
+                tr.appendChild(td);
+                table.appendChild(tr);
+            }
+        }
+        if (table.hasChildNodes()) {
+            makeTitle(jsonTable["title"], meta_place);
+            meta_place.appendChild(table);
+        }
     }
     if(json_str == "{}") {
         table = document.createElement("div");
-        switch (global_language){
+        switch (lang){
             case "fr":
                 table.innerHTML = "Aucune métadonnée EXIF n'a été trouvée. <strong>Note:<strong> Le Format EXIF s'applique uniquement aux images .jpg et .tiff";
                 break;
@@ -49,8 +166,8 @@ function imgTable(json_str){
                 table.innerHTML = "No EXIF Metadata was found. <strong>Note:</strong> The EXIF standard applies only to .jpg and .tiff images";
                 break;
         }
+        meta_place.appendChild(table);
     }
-    return table
 }
 
 /* get Exif Metadata */
@@ -58,15 +175,17 @@ var jsonTitleImageMetadata = {
     en: "Image Metadata",
     fr: "Métadonnées de l'image"
 };
+
+/* exif metadata translations */
+
 function getExif(img) {
     cleanElement("place-metadata");
+    cleanElement("error-metadata");
+    document.getElementById("error-metadata").style.display = "none";
     EXIF.getData(img, function() {
         var allMetaData = EXIF.getAllTags(this);
-        var allMetaDataSpan = document.getElementById("place-metadata");
-        makeTitle(jsonTitleImageMetadata[global_language], allMetaDataSpan);
         var json_str = JSON.stringify(allMetaData, null, "\t");
-        var table = imgTable(json_str);
-        allMetaDataSpan.appendChild(table);
+        imgTable(json_str, global_language);
         if (json_str != "{}")
             getLocation();
     });
@@ -84,7 +203,7 @@ var jsonTitleTableMetadata = {
     en: {
         metadata: {
             title: "Video Metadata",
-            name: ["Moov", "Duration", "Duration of fragment", "Fragmented", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
+            name: ["Moov", "Duration", "Duration of fragment", "Fragmented", "Fragment time", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
             desc: ["", "Number, providing the duration of the movie (unfragmented part) in timescale units",
             "Number, corresponding to the timescale as given in the movie header",
             "boolean, indicating if the file is already fragmented",
@@ -124,7 +243,8 @@ var jsonTitleTableMetadata = {
             "String, giving the 3-letter language code",
             "Number, giving the number of track samples (ie. frames)",
             "", "Number, providing the bitrate of the track in bits per second"]
-        }   
+        },
+        "error": "Video failed loading. Check the URL and try again"
     },
     fr: {
         metadata: {
@@ -169,21 +289,31 @@ var jsonTitleTableMetadata = {
             "Chaine de charactère, donnant le code de langage à 3 lettres",
             "Nombre, donnant le nombre d'échantillon de piste (c-à-d. images)",
             "", "Nombre, taux de bits par seconde de la piste"]
-        }  
+        },
+        "error": "Vidéo impossible à charger. Veuillez verifier l'URL et réessayer"
     }
 }
 
 /* get Mp4 Metadata */
 function getMp4(vid) {
     cleanElement("place-metadata");
+    cleanElement("error-metadata");
+    document.getElementById("error-metadata").style.display = "none";
 
     var allMetaDataSpan = document.getElementById("place-metadata");
 
     var mp4box = new MP4Box();
-    mp4box.onError = function(e) {};
+    mp4box.onError = function(e) {
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").innerHTML = jsonTitleTableMetadata[global_language]["error"];
+        document.getElementById("place-metadata").style.display = "none";
+        document.getElementById("error-metadata").style.display = "block";
+    };
     /* display metadata info when mp4box parsing isfinished */
     mp4box.onReady = function(info) {
         cleanElement("place-metadata");
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").style.display = "none";
         var allMetaDataSpan = document.getElementById("place-metadata");
         var json_str = JSON.stringify(info, null, "\t");
         if(json_str == "{}") {
@@ -233,7 +363,8 @@ function getMp4(vid) {
 }
 
 function submit_metadata(){
-    cleanElement("preview-metadata")
+    cleanElement("preview-metadata");
+    cleanElement("error-metadata");
     var url = document.getElementById("url-metadata").value;
     url = get_real_url_img(url);
     var img_radio = document.getElementById("img-meta-radio");
@@ -251,7 +382,14 @@ function submit_metadata(){
             }
             getExif(img);
             //getImgRawData(img.src);
-        }
+        };
+        /* If error display error message */
+        img.onerror = function() {
+            cleanElement("error-metadata");
+            document.getElementById("error-metadata").innerHTML = json_translate_img[global_language]["error"];
+            document.getElementById("place-metadata").style.display = "none";
+            document.getElementById("error-metadata").style.display = "block";
+        };
         $("#preview-metadata").append(img);
     }
     else {
@@ -323,7 +461,7 @@ function getDataUri(url) {
 
 /*GPS coordinates*/
 function getTableValue(thValue){
-    var table = document.getElementById('imgTable');
+    var table = document.getElementById('imgTable_gps');
     var thcells = table.getElementsByTagName('th');
     var tdcells = table.getElementsByTagName('td');
     for (var i=0; i<thcells.length; i++){  
@@ -335,47 +473,78 @@ function getTableValue(thValue){
 }
 
 function getLocation(){
-    var GPSLatitudeRef = getTableValue("GPSLatitudeRef");
-    var GPSLatitude = getTableValue("GPSLatitude");
-    var GPSLongitudeRef = getTableValue("GPSLongitudeRef");
-    var GPSLongitude = getTableValue("GPSLongitude");
+    var jsonGpsImg = json_translate_img[global_language]["gps"]["fields"];
+    var GPSLatitudeRef = getTableValue(jsonGpsImg[0]);
+    var GPSLatitude = getTableValue(jsonGpsImg[1]);
+    var GPSLongitudeRef = getTableValue(jsonGpsImg[2]);
+    var GPSLongitude = getTableValue(jsonGpsImg[3]);
     if (GPSLatitude != "" && GPSLatitudeRef != "" && GPSLongitude != "" && GPSLongitudeRef != "") {
         var div = document.getElementById("place-metadata");
         var br = document.createElement("br");
         div.appendChild(br);
         var btn = document.createElement("button");
         btn.setAttribute("class","button");
-        btn.innerHTML = "View GPS location"
+        btn.innerHTML = '<span lang="en" ' + (global_language == 'en' ? '' : 'hidden="hidden"') +
+            '>View GPS location</span><span lang="fr" ' + (global_language == 'fr' ? '' : 'hidden="hidden"') +
+            '>Afficher localisation GPS</span>';
         div.appendChild(btn);
         btn.onclick = function() {
             var mapurl = "http://maps.google.com/maps?q=";
-            mapurl += replaceAll(GPSLatitude, ",", "%20") + GPSLatitudeRef + "%20" + replaceAll(GPSLongitude, ",", "%20") + GPSLongitudeRef;
+            var arr_lat = GPSLatitude.split(",");
+            var arr_long = GPSLongitude.split(",");
+            mapurl += arr_lat[0] + "° " + arr_lat[1] + "' " + GPSLatitudeRef + " " +
+                arr_long[0] + "° " + arr_long[1] + "' " + GPSLongitudeRef;
             openTab(mapurl);
         };
     }
 }
 
+/**
+* @func sets the titles and descriptions of each 'th' element in a table
+* @tableId string, the id of the table to update
+* @titles array of strings containing, ordered, titles for the table
+* @descs array of strings containing, ordered, descriptions for the titles of the table
+*/
+function updateTitleTableMetadata(tableId, titles, descs) {
+    var listTitle = $("#" + tableId).find("th");
+    for (var i = 0; i < listTitle.length; i++) {
+        listTitle[i].innerHTML = titles[i];
+        listTitle[i].title = descs[i];
+    }
+}
+
 function updateTableLanguageMetadata(lang) {
-    if (!document.getElementById("place-metadata").hasChildNodes())
+    if (document.getElementById("error-metadata").style.display !== "none") { // if error
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").innerHTML = json_translate_img[lang]["error"];
+        document.getElementById("place-metadata").style.display = "none";
+        document.getElementById("error-metadata").style.display = "block";
         return;
+    }
 
     if (document.getElementById("preview-metadata").hasChildNodes()) { // image selected
-        $("#place-metadata > h3").html(jsonTitleImageMetadata[lang]);
+        cleanElement("place-metadata");
+        cleanElement("error-metadata");
+        document.getElementById("error-metadata").style.display = "none";
+        document.getElementById("place-metadata").style.display = "block";
+        imgTable(jsonLastImg, lang);
+        getLocation();
         return;
+    } else {
+        var jsonText = jsonTitleTableMetadata[lang];
+        var partNames = [];
+        var titles = [];
+        var descs = [];
+        for (var part of ["metadata", "track", "audio"])
+        {
+            var text = jsonText[part];
+            partNames.push(text["title"]);
+            titles = titles.concat(text["name"]);
+            descs = descs.concat(text["desc"]);
+        }
+        $("#place-metadata").find("h3").html(function (index) {
+            return partNames[index];
+        })
+        updateTitleTableMetadata("place-metadata", titles, descs);
     }
-    var jsonText = jsonTitleTableMetadata[lang];
-    var partNames = [];
-    var titles = [];
-    for (var part of ["metadata", "track", "audio"])
-    {
-        var text = jsonText[part];
-        partNames.push(text["title"]);
-        partNames.push(text["name"]);
-        partNames.push(text["desc"]);
-        titles = titles.concat(text["name"]);
-    }
-    $("#place-metadata").find("h3").html(function (index) {
-        return partNames[index];
-    })
-    updateTitleTable("place-metadata", titles);
 }

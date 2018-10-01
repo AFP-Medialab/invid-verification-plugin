@@ -262,6 +262,19 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+#error-content{
+  display: none;
+  margin: 15px auto 15px;
+  padding: 20px 20px 20px;
+  width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  font-weight: bold;
+  line-height: 22px;
+}
+
 #place-debunked{
   display: none;
   margin: 50px auto 15px;
@@ -469,7 +482,7 @@ p.comment {
 #place-metadata{
   display: none;
   margin: 50px auto 15px;
-  padding: 10px 50px 40px;
+  padding: 20px 50px 20px;
   width: 800px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -477,6 +490,20 @@ p.comment {
   text-align: center;
   line-height: 22px;
   word-break: break-all;
+}
+
+#error-metadata{
+  display: none;
+  color: red;
+  margin: 15px auto 15px;
+  padding: 20px 20px 20px;
+  width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  font-weight: bold;
+  line-height: 22px;
 }
 
 /* Raw content */
