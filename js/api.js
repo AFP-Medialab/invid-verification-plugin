@@ -567,8 +567,8 @@ function parseYTJson(json){
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
-        	document.getElementById("place-debunked").style.display = "none";
-        var tables = document.getElementById("place-table").getElementsByTagName("table");*/
+        	document.getElementById("place-debunked").style.display = "none";*/
+        var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video_a, tables[0]);
         updateTable(json, key_list_video_b, tables[1]);
