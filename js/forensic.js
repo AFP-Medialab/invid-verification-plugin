@@ -6,7 +6,20 @@ var base_url = "http://reveal-mklab.iti.gr/";
 * @hash used to retrieve the video reports
 */
 function request_status(hash) {
-
+  $.getJSON(base_url + "imageforensicsv2/generatereport?hash=" + hash, function (data) {
+    if (data.status === "processing") {
+      setTimeout(function () {
+        request_status(hash);
+      }, 2000);
+    } else if (data.status === "completed") {
+      display_forensic(hash);
+    } else {
+      display_error(data);
+    }
+  }).fail(function(jqxhr, textStatus, error) {
+          console.error("start response : " + post_url);
+          console.error(textStatus + ", " + error);
+        });
 }
 
 /**
@@ -48,7 +61,7 @@ function send_forensic_video(video_url) {
   }).fail(function(jqxhr, textStatus, error) {
           console.error("start response : " + post_url);
           console.error(textStatus + ", " + error);
-        }); ;
+        });
 }
 
 /**
