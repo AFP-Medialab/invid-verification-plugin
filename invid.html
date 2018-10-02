@@ -457,7 +457,33 @@
 		</div>
 
 		<div id="forensic" class="form-action hide">
-			<iframe src="http://reveal-mklab.iti.gr/reveal/index.html" class="ifr" frameborder="0"></iframe>
+			<h1 lang="en">Image forensic analysis</h1>
+			<h1 lang="fr" hidden="hidden">Analyse forensic d'image</h1>
+			<form id="forensic_form">
+				<ul>
+					<input type="text" name="forensic_url" data-text='{"en": "Insert the image URL", "fr": "Insérez l&#39URL d&#39une image"}'
+					placeholder="Video URL">
+					<br>
+					<br>
+					<br>
+					<input type="submit" value="Submit" class="button">
+					<br>
+					<br>
+					<div id="forensic-wait" style="display: none;"></div>
+					<br>
+					<br>
+					<div id="loader-forensic" class="loader"></div>
+				</ul>
+			</form>
+			<div id="error-forensic" style="display: none; color: red;"></div>
+			<div id="forensic-content">
+				<h3 lang="en">Video keyframes</h3>
+				<h3 lang="fr" hidden="hidden">Images clés de la vidéo</h3>
+				<br>
+				<div id="forensic-place"></div>
+				<br>
+				<br>
+			</div>
 		</div>
 
 		<div id="about" class="form-action hide">
@@ -644,6 +670,9 @@
 
 <!-- For Api (Analysis) --> 
 <script type="text/javascript" src="js/api.js"></script>
+
+<!-- For Forensic Analysis-->
+<script type="text/javascript" src="js/forensic.js"></script>
 
 <!-- For Copyright Management -->
 <script type="text/javascript" src="js/copyright.js"></script>
