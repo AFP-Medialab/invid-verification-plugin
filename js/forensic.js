@@ -2,6 +2,30 @@
 var base_url = "http://reveal-mklab.iti.gr/";
 
 /**
+* @func request loop to get status until process done
+* @hash used to retrieve the video reports
+*/
+function request_status(hash) {
+
+}
+
+/**
+* @func displays on the error field the corresponding error message
+* @data json answered after get, contains status field
+*/
+function display_error(data) {
+
+}
+
+/**
+* @func display the results of forensic api
+* @hash used to retrieve the video reports
+*/
+function display_forensic(hash) {
+
+}
+
+/**
 * @func send get request to forensic server to process a video
 * @video_url the url of the video to process
 */
@@ -13,6 +37,18 @@ function send_forensic_video(video_url) {
   //create url to send video
   var forensic_url = base_url + "imageforensicsv2/addurl?url=" + encodeURIComponent(video_url);
   console.log(forensic_url);
+  $.getJSON(forensic_url, function(data) {
+    if (data.status === "downloaded") {
+      request_status(data.hash);
+    } else if (data.status === "exist") {
+      display_forensic(data.hash);
+    } else {
+      display_error(data);
+    }
+  }).fail(function(jqxhr, textStatus, error) {
+          console.error("start response : " + post_url);
+          console.error(textStatus + ", " + error);
+        }); ;
 }
 
 /**
