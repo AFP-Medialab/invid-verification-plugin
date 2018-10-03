@@ -6,7 +6,7 @@ var base_url = "http://reveal-mklab.iti.gr/";
 * @hash used to retrieve the video reports
 */
 function request_status(hash) {
-  $.getJSON(base_url + "imageforensicsv2/generatereport?hash=" + hash, function (data) {
+  $.getJSON(base_url + "imageforensicsv3/generatereport?hash=" + hash, function (data) {
     if (data.status === "processing") {
       setTimeout(function () {
         request_status(hash);
@@ -17,7 +17,7 @@ function request_status(hash) {
       display_error(data);
     }
   }).fail(function(jqxhr, textStatus, error) {
-          console.error("start response : " + post_url);
+          console.error("start response : " + base_url + "imageforensicsv3/generatereport?hash=" + hash);
           console.error(textStatus + ", " + error);
         });
 }
@@ -48,8 +48,7 @@ function send_forensic_video(video_url) {
   //hide the precedent error message if there was one
   document.getElementById("error-forensic").setAttribute("style", "display: none");
   //create url to send video
-  var forensic_url = base_url + "imageforensicsv2/addurl?url=" + encodeURIComponent(video_url);
-  console.log(forensic_url);
+  var forensic_url = base_url + "imageforensicsv3/addurl?url=" + encodeURIComponent(video_url);
   $.getJSON(forensic_url, function(data) {
     if (data.status === "downloaded") {
       request_status(data.hash);
@@ -59,7 +58,7 @@ function send_forensic_video(video_url) {
       display_error(data);
     }
   }).fail(function(jqxhr, textStatus, error) {
-          console.error("start response : " + post_url);
+          console.error("start response : " + forensic_url);
           console.error(textStatus + ", " + error);
         });
 }
