@@ -316,6 +316,21 @@ input:checked + .slider:before {
   word-break: break-all;
 }
 
+/* Forensic */
+#error-forensic{
+  display: none;
+  margin: 15px auto 15px;
+  padding: 20px 20px 20px;
+  width: 650px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  color: red;
+  text-align: center;
+  font-weight: bold;
+  line-height: 22px;
+}
+
 /* Table */
 table { 
     border: 1px solid #000;
