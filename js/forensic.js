@@ -66,13 +66,25 @@ function display_error(data) {
 * @hash used to retrieve the video reports
 */
 function display_forensic(hash) {
-  cleanElement("forensic-content");
+  cleanElement("forensic-place");
   document.getElementById("loader-forensic").style.display = "none";
+
 
   //get request for report
   $.getJSON(base_url + "imageforensicsv3/getreport?hash=" + hash, function (data) {
     if (data.status === "completed") {
       //display all datas with images in cards
+      var datas = ["dqReport", "dwNoiseReport", "elaReport", "blockingReport"];
+      for (var i = 0; i < datas.length; ++i) {
+        var div = document.createElement("div");
+        div.id = datas[i];
+        var img = document.createElement("img");
+        img.src = data[datas[i]]["map"];
+        img.style = "width: 33%; height: auto;";
+        div.appendChild(img);
+        document.getElementById("forensic-place").appendChild(div);
+      }
+      document.getElementById("forensic-content").style.display = "block";
     } else {
       display_error(data);
     }
