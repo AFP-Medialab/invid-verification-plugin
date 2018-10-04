@@ -331,6 +331,19 @@ input:checked + .slider:before {
   line-height: 22px;
 }
 
+#forensic-content{
+  display: none;
+  margin: 15px auto 15px;
+  padding: 10px 50px 10px;
+  width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #edece8;
+  text-align: center;
+  line-height: 22px;
+  word-break: break-all;
+}
+
 /* Table */
 table { 
     border: 1px solid #000;
