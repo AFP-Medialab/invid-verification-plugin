@@ -53,6 +53,7 @@ function request_status(hash) {
 */
 function display_error(data) {
   cleanElement("error-forensic");
+  document.getElementById("forensic-image").style.display = "none";
   document.getElementById("loader-forensic").style.display = "none";
 
   var error_msg = json_lang_trans[global_language]["error"][data.status] != undefined ?
@@ -69,7 +70,6 @@ function display_forensic(hash) {
   cleanElement("forensic-place");
   document.getElementById("loader-forensic").style.display = "none";
 
-
   //get request for report
   $.getJSON(base_url + "imageforensicsv3/getreport?hash=" + hash, function (data) {
     if (data.status === "completed") {
@@ -85,6 +85,7 @@ function display_forensic(hash) {
         document.getElementById("forensic-place").appendChild(div);
       }
       document.getElementById("forensic-content").style.display = "block";
+      document.getElementById("forensic-image").style.display = "block";
     } else {
       display_error(data);
     }
@@ -103,6 +104,8 @@ function send_forensic_video(video_url) {
   document.getElementById("forensic-content").style.display = "none";
   //hide the precedent error message if there was one
   document.getElementById("error-forensic").style.display ="none";
+  //hide the precedent image preview
+  document.getElementById("forensic-image").style.display = "none";
   //create url to send video
   var forensic_url = base_url + "imageforensicsv3/addurl?url=" + encodeURIComponent(video_url);
   //start loader
@@ -110,9 +113,12 @@ function send_forensic_video(video_url) {
 
   $.getJSON(forensic_url, function(data) {
     if (data.status === "downloaded") {
-      document.getElementById("loader-forensic").style.display = "block";
+      document.getElementById("forensic-image").innerHTML = '<img src="' + video_url +
+        '" style="width:40%;height:auto;margin:auto;">';
       request_status(data.hash);
     } else if (data.status === "exist") {
+      document.getElementById("forensic-image").innerHTML = '<img src="' + video_url +
+        '" style="width:40%;height:auto;margin:auto;">';
       display_forensic(data.hash);
     } else {
       display_error(data);
