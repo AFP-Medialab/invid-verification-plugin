@@ -519,8 +519,8 @@ function getLocation(){
             var mapurl = "http://maps.google.com/maps?q=";
             var arr_lat = GPSLatitude.split(",");
             var arr_long = GPSLongitude.split(",");
-            mapurl += arr_lat[0] + "° " + arr_lat[1] + "' " + GPSLatitudeRef + " " +
-                arr_long[0] + "° " + arr_long[1] + "' " + GPSLongitudeRef;
+            mapurl += arr_lat[0] + "° " + arr_lat[1] + "' " + (arr_lat[2] != "0" ? arr_lat[2] + '" ' : "") + GPSLatitudeRef + " " +
+                arr_long[0] + "° " + arr_long[1] + "' " + (arr_long[2] != "0" ? arr_long[2] + '" ' : "") + GPSLongitudeRef;
             openTab(mapurl);
         };
     }
