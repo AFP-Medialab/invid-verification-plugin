@@ -68,7 +68,19 @@ var json_translate_img = {
             "fields": ["GPS Latitude Ref.", "GPS Latitude", "GPS Longitude Ref.", "GPS Longitude", "GPS Time Stamp"],
             "desc": ["", "", "", "", ""]
         },
-        "error": "Image failed loading. Check the URL and try again"
+        "error": "Image failed loading. Check the URL and try again",
+        "key": {
+            "Orientation": ["The 0th row represents the visual top of the image, and the 0th column represents the visual left-hand side",
+                "The 0th row represents the visual top of the image, and the 0th column represents the visual right-hand side",
+                "The 0th row represents the visual bottom of the image, and the 0th column represents the visual right-hand side",
+                "The 0th row represents the visual bottom of the image, and the 0th column represents the visual left-hand side",
+                "The 0th row represents the visual left-hand side of the image, and the 0th column represents the visual top",
+                "The 0th row represents the visual right-hand side of the image, and the 0th column represents the visual top",
+                "The 0th row represents the visual right-hand side of the image, and the 0th column represents the visual bottom",
+                "The 0th row represents the visual left-hand side of the image, and the 0th column represents the visual bottom"],
+            "ResolutionUnit": ["Pas d'unité de mesure absolue. Utilisé pour les images qui peuvent avoir un rapport d'aspect non carré, mais pas de dimensions absolues significatives",
+                 "Unité de mesure en pouces", "Unité de mesure en centimètres"]
+        }
     },
     "fr": {
         "software": {
@@ -101,7 +113,19 @@ var json_translate_img = {
             "fields": ["Ref. Latitude GPS", "Latitude GPS", "Ref. Longitude GPS", "Longitude GPS", "Horodatage GPS"],
             "desc": ["", "", "", "", ""]
         },
-        "error": "Image impossible à charger. Veuillez verifier l'URL et réessayer"
+        "error": "Image impossible à charger. Veuillez verifier l'URL et réessayer",
+        "key": {
+            "Orientation": ["La ligne 0 représente le haut visuel de l’image et la colonne 0 représente le visuel de gauche",
+                "La ligne 0 représente le sommet visuel de l’image et la colonne 0 représente le visuel de droite",
+                "La ligne 0 représente le bas visuel de l'image et la colonne 0 représente le côté droit de l'image",
+                "La ligne 0 représente le bas visuel de l’image et la colonne 0 représente le visuel gauche de l'image",
+                "La ligne 0 représente le côté gauche visuel de l'image et la colonne 0 représente le sommet visuel",
+                "La ligne 0 représente le côté droit visuel de l’image et la colonne 0 représente le sommet visuel",
+                "La ligne 0 représente le côté droit visuel de l’image et la colonne 0 représente le bas visuel",
+                "La ligne 0 représente le côté gauche visuel de l'image et la colonne 0 représente le bas visuel"],
+            "ResolutionUnit": ["No absolute unit of measurement. Used for images that may have a non-square aspect ratio, but no meaningful absolute dimensions",
+                "Measurement unit is inch", "Measurement unit is centimeter"]
+        }
     }
 };
 
@@ -139,7 +163,10 @@ function imgTable(json_str, lang){
                 var td = document.createElement("td");
                 th.innerHTML = jsonTable['fields'][j];
                 th.title = jsonTable['desc'][j];
-                if (arr_keys[j] === "UserComment" ||
+                if (jsonLang["key"][arr_keys[j]] !== undefined &&
+                    jsonLang["key"][arr_keys[j]][json[arr_keys[j]]] !== undefined) {
+                    td.innerHTML = jsonLang["key"][arr_keys[j]][json[arr_keys[j]]];
+                } else if (arr_keys[j] === "UserComment" ||
                     arr_keys[j] === "MakerNote") {
                     td.innerHTML = translateASCII(json[arr_keys[j]]);
                 } else {
@@ -492,8 +519,8 @@ function getLocation(){
             var mapurl = "http://maps.google.com/maps?q=";
             var arr_lat = GPSLatitude.split(",");
             var arr_long = GPSLongitude.split(",");
-            mapurl += arr_lat[0] + "° " + arr_lat[1] + "' " + GPSLatitudeRef + " " +
-                arr_long[0] + "° " + arr_long[1] + "' " + GPSLongitudeRef;
+            mapurl += arr_lat[0] + "° " + arr_lat[1] + "' " + (arr_lat[2] != "0" ? arr_lat[2] + '" ' : "") + GPSLatitudeRef + " " +
+                arr_long[0] + "° " + arr_long[1] + "' " + (arr_long[2] != "0" ? arr_long[2] + '" ' : "") + GPSLongitudeRef;
             openTab(mapurl);
         };
     }
