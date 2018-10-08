@@ -75,15 +75,20 @@ function display_forensic(hash) {
     if (data.status === "completed") {
       //display all datas with images in cards
       var datas = ["dqReport", "dwNoiseReport", "elaReport", "blockingReport"];
+      //display 3 images by row
+      var row = document.createElement("div");
+      row.setAttribute("class", "row");
       for (var i = 0; i < datas.length; ++i) {
-        var div = document.createElement("div");
-        div.id = datas[i];
+        var column = document.createElement("div");
+        column.setAttribute("class", "column");
+        column.id = datas[i];
         var img = document.createElement("img");
         img.src = data[datas[i]]["map"];
-        img.style = "width: 33%; height: auto;";
-        div.appendChild(img);
-        document.getElementById("forensic-place").appendChild(div);
+        img.style = "width: 100%; height: auto;";
+        column.appendChild(img);
+        row.appendChild(column);
       }
+      document.getElementById("forensic-place").appendChild(row);
       document.getElementById("forensic-content").style.display = "block";
       document.getElementById("forensic-image").style.display = "block";
     } else {
