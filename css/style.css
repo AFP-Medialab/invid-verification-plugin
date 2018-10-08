@@ -344,6 +344,21 @@ input:checked + .slider:before {
   word-break: break-all;
 }
 
+.column{
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+  box-sizing: border-box;
+
+}
+
+.row::after{
+  content: "";
+  clear: both;
+  display: table;
+  box-sizing: border-box;
+}
+
 /* Table */
 table { 
     border: 1px solid #000;
