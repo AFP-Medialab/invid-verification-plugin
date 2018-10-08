@@ -27,6 +27,16 @@ var json_lang_trans = {
 };
 
 /**
+* @func create card that flips, image on front and description on back
+* @img to put on front
+* @desc to put on back, describes img
+* @return var containing div with card, to appendchild where needed
+*/
+function create_card(img, desc) {
+  return null;
+}
+
+/**
 * @func request loop to get status until process done
 * @hash used to retrieve the video reports
 */
