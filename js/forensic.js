@@ -28,12 +28,51 @@ var json_lang_trans = {
 
 /**
 * @func create card that flips, image on front and description on back
+* @title text at the top front of the card
 * @img to put on front
 * @desc to put on back, describes img
 * @return var containing div with card, to appendchild where needed
 */
-function create_card(img, desc) {
-  return null;
+function create_card(title, img, desc) {
+  //create all elements for card
+  var scene = document.createElement("div");
+  scene.setAttribute("class", "scene");
+  var card = document.createElement("div");
+  card.setAttribute("class", "card");
+  var front = document.createElement("div");
+  front.setAttribute("class", "card__face card__face--front");
+  var back = document.createElement("div");
+  back.setAttribute("class", "card__face card__face--back");
+  var title = document.createElement("h3");
+  title.innerHTML = title;
+  var img_front = document.createElement("img");
+  img_front.setAttribute("class", "img__front");
+  img_front.src = img;
+  var descrip_img = document.createElement("div");
+  descrip_img.setAttribute("class", "descrip__img");
+  descrip_img.innerHTML = desc;
+  var info = document.createElement("div");
+  info.setAttribute("class", "cards__info");
+  info.innerHTML = "back";
+
+  //create js for card (on click flip)
+  img_front.addEventListener('click', function() {
+      card.classList.toggle('is-flipped');
+    });
+  info.addEventListener('click', function() {
+      card.classList.toggle('is-flipped');
+    });
+
+  //appendchild to create the card
+  back.appendChild(descrip_img);
+  back.appendChild(info);
+  front.appendChild(title);
+  front.appendChild(img_front);
+  card.appendChild(front);
+  card.appendChild(back);
+  scene.appendChild(card);
+
+  return scene;
 }
 
 /**
@@ -92,10 +131,8 @@ function display_forensic(hash) {
         var column = document.createElement("div");
         column.setAttribute("class", "column");
         column.id = datas[i];
-        var img = document.createElement("img");
-        img.src = data[datas[i]]["map"];
-        img.style = "width: 100%; height: auto;";
-        column.appendChild(img);
+        var card = create_card(datas[i], data[datas[i]]["map"], "oui");
+        column.appendChild(card);
         row.appendChild(column);
       }
       document.getElementById("forensic-place").appendChild(row);
