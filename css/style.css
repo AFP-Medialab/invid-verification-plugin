@@ -344,6 +344,65 @@ input:checked + .slider:before {
   word-break: break-all;
 }
 
+/* Flip Card */
+.scene {
+  width: 245px;
+  height: 250px;
+  margin: 40px 0;
+  perspective: 600px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card__face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: black;
+  text-align: center;
+  font-size: 20px;
+  backface-visibility: hidden;
+  border-radius: 5px;
+}
+
+.img__front {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.card__face--front {
+  background: #edece8;
+}
+
+.card__face--back {
+  background: #edece8;
+  transform: rotateY(180deg);
+}
+
+.descrip__img {
+  overflow-y: auto;
+  max-height: 90%;
+}
+
+.card__info {
+  float: right;
+  cursor: pointer;
+  margin: 3px 0 0 0;
+  font-size: 12px;
+}
+
+/* Row Column for Image */
 .column{
   float: left;
   width: 33.33%;
