@@ -43,8 +43,8 @@ function create_card(title, img, desc) {
   front.setAttribute("class", "card__face card__face--front");
   var back = document.createElement("div");
   back.setAttribute("class", "card__face card__face--back");
-  var title = document.createElement("h3");
-  title.innerHTML = title;
+  var title_card = document.createElement("h2");
+  title_card.innerHTML = title;
   var img_front = document.createElement("img");
   img_front.setAttribute("class", "img__front");
   img_front.src = img;
@@ -52,7 +52,7 @@ function create_card(title, img, desc) {
   descrip_img.setAttribute("class", "descrip__img");
   descrip_img.innerHTML = desc;
   var info = document.createElement("div");
-  info.setAttribute("class", "cards__info");
+  info.setAttribute("class", "card__info");
   info.innerHTML = "back";
 
   //create js for card (on click flip)
@@ -66,7 +66,7 @@ function create_card(title, img, desc) {
   //appendchild to create the card
   back.appendChild(descrip_img);
   back.appendChild(info);
-  front.appendChild(title);
+  front.appendChild(title_card);
   front.appendChild(img_front);
   card.appendChild(front);
   card.appendChild(back);
