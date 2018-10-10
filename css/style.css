@@ -377,7 +377,7 @@ input:checked + .slider:before {
 }
 
 .img__front {
-  width: 100%;
+  width: 90%;
   height: auto;
   cursor: pointer;
 }
