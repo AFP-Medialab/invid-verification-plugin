@@ -76,6 +76,100 @@ function create_card(title, img, desc) {
 }
 
 /**
+* @func used for card slider only, to add onclick effect for radio button
+* @title used to get back images id
+* @nb used to get the image id we want to show
+* @length number of image in the card
+*/
+function change_image(title, nb, length) {
+  console.log(title + " " + nb + " " + length)
+  for (var j = 0; j < length; ++j) {
+    var img = document.getElementById("img_" + title + "_" + j);
+    if (j === nb)
+      img.style.display = "";
+    else
+      img.style.display = "none";
+  }
+}
+
+/**
+* @func create card that flips, image on front and description on back
+* @title text at the top front of the card, must be unique (used as identifier)
+* @img list of images to put in front (ordered)
+* @desc to put on back, describes img
+* @return var containing div with card slider, to appendchild where needed
+*/
+function create_card_slider(title, imgs, desc) {
+  //create all elements for card
+  var scene = document.createElement("div");
+  scene.setAttribute("class", "scene");
+  var card = document.createElement("div");
+  card.setAttribute("class", "card");
+  var front = document.createElement("div");
+  front.setAttribute("class", "card__face card__face--front");
+  var back = document.createElement("div");
+  back.setAttribute("class", "card__face card__face--back");
+  var title_card = document.createElement("h2");
+  title_card.innerHTML = title;
+  var descrip_img = document.createElement("div");
+  descrip_img.setAttribute("class", "descrip__img");
+  descrip_img.innerHTML = desc;
+  var info = document.createElement("div");
+  info.setAttribute("class", "card__info");
+  info.innerHTML = "back";
+
+  //create all imgs
+  var imgs_front = document.createElement("div");
+  for (var i = 0; i < imgs.length; ++i) {
+    var img_front = document.createElement("img");
+    img_front.setAttribute("class", "img__front");
+    img_front.src = imgs[i];
+    img_front.id = "img_" + title + "_" + i;
+    if (i == 0)
+      img_front.style.display = "";
+    else
+      img_front.style.display = "none";
+
+    //add js to flip card on click
+    img_front.addEventListener('click', function() {
+        card.classList.toggle('is-flipped');
+      });
+    imgs_front.appendChild(img_front);
+  }
+
+  //create radio buttons to select images
+  var div_radio = document.createElement("div");
+  for (var k = 0; k < imgs.length; ++k) {
+    var but = document.createElement("input");
+    but.type = "radio";
+    but.id = title + "_" + k;
+    if (k == 0)
+      but.checked = true;
+    but.name = title;
+    but.addEventListener('click', function () { change_image(title, k, imgs.length); });
+    div_radio.appendChild(but);
+  }
+
+  //create js for card (on click flip)
+  info.addEventListener('click', function() {
+      card.classList.toggle('is-flipped');
+    });
+
+  //appendchild to create the card
+  back.appendChild(descrip_img);
+  back.appendChild(info);
+  front.appendChild(title_card);
+  front.appendChild(imgs_front);
+  front.appendChild(div_radio);
+  card.appendChild(front);
+  card.appendChild(back);
+  scene.appendChild(card);
+
+  return scene;
+}
+
+
+/**
 * @func request loop to get status until process done
 * @hash used to retrieve the video reports
 */
@@ -135,6 +229,13 @@ function display_forensic(hash) {
         column.appendChild(card);
         row.appendChild(column);
       }
+      //ghostreport display
+      var column = document.createElement("div");
+      column.setAttribute("class", "column");
+      column.id = "ghostReport";
+      var card = create_card_slider("ghostReport", data["ghostReport"]["maps"], "ghost");
+      column.appendChild(card);
+      row.appendChild(column);
       document.getElementById("forensic-place").appendChild(row);
       document.getElementById("forensic-content").style.display = "block";
       document.getElementById("forensic-image").style.display = "block";
