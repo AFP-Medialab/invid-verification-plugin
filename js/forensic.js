@@ -219,7 +219,8 @@ function display_forensic(hash) {
   $.getJSON(base_url + "imageforensicsv3/getreport?hash=" + hash, function (data) {
     if (data.status === "completed") {
       //display all datas with images in cards
-      var datas = ["dqReport", "dwNoiseReport", "elaReport", "blockingReport"];
+      var datas = ["dqReport", "dwNoiseReport", "elaReport", "blockingReport", "medianNoiseReport", "gridsReport",
+        "gridsInversedReport", "dctReport"];
       //display 3 images by row
       var row = document.createElement("div");
       row.setAttribute("class", "row");
