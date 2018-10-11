@@ -82,7 +82,6 @@ function create_card(title, img, desc) {
 * @length number of image in the card
 */
 function change_image(title, nb, length) {
-  console.log(title + " " + nb + " " + length)
   for (var j = 0; j < length; ++j) {
     var img = document.getElementById("img_" + title + "_" + j);
     if (j === nb)
@@ -140,14 +139,17 @@ function create_card_slider(title, imgs, desc) {
   //create radio buttons to select images
   var div_radio = document.createElement("div");
   for (var k = 0; k < imgs.length; ++k) {
-    var but = document.createElement("input");
-    but.type = "radio";
-    but.id = title + "_" + k;
-    if (k == 0)
-      but.checked = true;
-    but.name = title;
-    but.addEventListener('click', function () { change_image(title, k, imgs.length); });
-    div_radio.appendChild(but);
+    (function () {
+      var id = k;
+      var but = document.createElement("input");
+      but.type = "radio";
+      but.id = title + "_" + id;
+      if (id == 0)
+        but.checked = true;
+      but.name = title;
+      but.addEventListener('click', function () { change_image(title, id, imgs.length); });
+      div_radio.appendChild(but);
+    }());
   }
 
   //create js for card (on click flip)
