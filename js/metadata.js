@@ -36,99 +36,6 @@ function translateASCII(arr) {
     return res;
 }
 
-var json_translate_img = {
-    "en": {
-        "software": {
-            "title": "Software infos",
-            "fields": ["Make", "Model", "Orientation", "X Resolution", "Y Resolution", "Resolution Unit", "Host Computer", "Software", "Modify Date",
-                "YCbCr Positioning", "Copyright"],
-            "desc": ["", "", "", "", "", "", "The computer and/or operating system in use at the time of image creation", "", "Timestamp for when you might alter the image or it's metadata",
-                "Specifies the positioning of subsampled chrominance components relative to luminance samples. Field value 1 (centered) must be specified for compatibility with industry standards such as PostScript Level 2 and QuickTime. Field value 2 (cosited) must be specified for compatibility with most digital video standards, such as CCIR Recommendation 601-1",
-                ""]
-        },
-        "general": {
-            "title": "General EXIF infos",
-            "fields": ["Artist", "Document Name", "Page Name", "Exposure Time", "F-Number", "Exposure Program", "Exif Version", "Date Time Original",
-                "Date Time Digitized", "Components Configuration", "Compressed Bits Per Pixel", "Exposure Bias", "Max Aperture Value", "Metering Mode",
-                "Flash", "Focal Length", "User Comment", "Image Description", "Maker Note", "Subject Distance", "Flashpix Version", "Color Space", "X Dimension", "Y Dimension", "File Source"],
-            "desc": ["Person who created the image", "", "", "The length of time when the film or digital sensor inside the camera is exposed to light",
-                "The ratio of the system's focal length to the diameter of the entrance pupil",
-                "The program used by the camera to set exposure when the picture is taken",
-                "", "The date and time when the original image data was generated",
-                "The date and time when the image was stored as digital data",
-                "Provided for cases when compressed data uses components other than Y, Cb, and Cr and to enable support of other sequences",
-                "", "Adjustment to either underexpose or overexpose the image", "The smallest F number of the lens",
-                "", "", "The actual focal length of the lens, in mm", "Keywords or comments on the image",
-                "A string that describes the subject of the image", "Manufacturer specific information", "The distance to the subject, given in meters (0 if unknown and FFFFFFFF if infinite)",
-                "", "Normally sRGB (=1) is used to define the color space based on the PC monitor conditions and environment. If a color space other than sRGB is used, Uncalibrated (=65535) is set",
-                "", "", ""]
-        },
-        "gps": {
-            "title": "GPS Informations",
-            "fields": ["GPS Latitude Ref.", "GPS Latitude", "GPS Longitude Ref.", "GPS Longitude", "GPS Time Stamp"],
-            "desc": ["", "", "", "", ""]
-        },
-        "error": "Image failed loading. Check the URL and try again",
-        "key": {
-            "Orientation": ["The 0th row represents the visual top of the image, and the 0th column represents the visual left-hand side",
-                "The 0th row represents the visual top of the image, and the 0th column represents the visual right-hand side",
-                "The 0th row represents the visual bottom of the image, and the 0th column represents the visual right-hand side",
-                "The 0th row represents the visual bottom of the image, and the 0th column represents the visual left-hand side",
-                "The 0th row represents the visual left-hand side of the image, and the 0th column represents the visual top",
-                "The 0th row represents the visual right-hand side of the image, and the 0th column represents the visual top",
-                "The 0th row represents the visual right-hand side of the image, and the 0th column represents the visual bottom",
-                "The 0th row represents the visual left-hand side of the image, and the 0th column represents the visual bottom"],
-            "ResolutionUnit": ["Pas d'unité de mesure absolue. Utilisé pour les images qui peuvent avoir un rapport d'aspect non carré, mais pas de dimensions absolues significatives",
-                 "Unité de mesure en pouces", "Unité de mesure en centimètres"]
-        }
-    },
-    "fr": {
-        "software": {
-            "title": "Informations logicielles",
-            "fields": ["Marque", "Modèle", "Orientation", "Résolution X", "Résolution Y", "Unité de résolution", "Ordinateur hôte", "Logiciel", "Date modifcation",
-                 "Positionnement YCbCr", "Droits d'auteurs"],
-            "desc": ["", "", "", "", "", "", "L'ordinateur et/ou système opérateur utilisé au moment où la photo à été créée", "", "Horodatage de la possibilité de modification de l'image ou de ses métadonnées",
-                "Spécifie le positionnement des composants de chrominance sous-échantillonnés par rapport aux échantillons de luminance. La valeur de champ 1 (center) doit être spécifiée pour la compatibilité avec les normes de l'industrie telles que PostScript Level 2 et QuickTime. La valeur de champ 2 (cosited) doit être spécifiée pour la compatibilité avec la plupart des normes vidéo numériques, telles que la Recommandation 601-1 du CCIR",
-                ""]
-        },
-        "general": {
-            "title": "Informations EXIF",
-            "fields": ["Artiste", "Nom du document", "Nom de la page", "Temps d'exposition", "Nombre F", "Programme d'exposition", "Version Exif", "Horodatage d'origine",
-                 "Horodatage numérisée", "Configuration des composants", "Bits compressés par pixel", "Biais d'exposition", "Valeur d'ouverture maximale", "Mode de mesure",
-                 "Flash", "Longueur focale", "Commentaire utilisateur", "Description de l'image", "Note de la marque", "Distance du sujet", "Version Flashpix", "Espace colorimétrique", "Dimension X", "Dimension Y", "Source du fichier"],
-            "desc": ["Personne qui a créé l'image", "", "", "La durée pendant laquelle le film ou le capteur numérique à l'intérieur de l'appareil photo est exposé à la lumière",
-                "Le rapport entre la distance focale du système et le diamètre de la pupille d'entrée",
-                "Le programme utilisé par l'appareil photo pour définir l'exposition lorsque la photo est prise",
-                "", "La date et l'heure auxquelles les données de l'image d'origine ont été générées",
-                "La date et l'heure à laquelle l'image a été stockée sous forme de données numériques",
-                "Fourni pour les cas où des données compressées utilisent des composants autres que Y, Cb et Cr et pour permettre la prise en charge d'autres séquences",
-                "", "Réglage pour sous-exposer ou surexposer l'image", "Le plus petit nombre F de l'objectif",
-                "", "", "La distance focale réelle de l'objectif, en mm", "Mots-clés ou commentaires sur l'image",
-                "Un texte décrivant le sujet de l'image", "Note du fabricant", "La distance jusqu'au sujet de la photo, en mètre (0 si inconnu et FFFFFFFF si infini)",
-                "", "Normalement, sRGB (= 1) est utilisé pour définir l’espace colorimétrique en fonction des conditions et de l’environnement du moniteur. Si un espace colorimétrique autre que sRGB est utilisé, le paramètre 'Uncalibrated' (= 65535) est défini",
-                "", "", ""]
-        },
-        "gps": {
-            "title": "Informations GPS",
-            "fields": ["Ref. Latitude GPS", "Latitude GPS", "Ref. Longitude GPS", "Longitude GPS", "Horodatage GPS"],
-            "desc": ["", "", "", "", ""]
-        },
-        "error": "Image impossible à charger. Veuillez verifier l'URL et réessayer",
-        "key": {
-            "Orientation": ["La ligne 0 représente le haut visuel de l’image et la colonne 0 représente le visuel de gauche",
-                "La ligne 0 représente le sommet visuel de l’image et la colonne 0 représente le visuel de droite",
-                "La ligne 0 représente le bas visuel de l'image et la colonne 0 représente le côté droit de l'image",
-                "La ligne 0 représente le bas visuel de l’image et la colonne 0 représente le visuel gauche de l'image",
-                "La ligne 0 représente le côté gauche visuel de l'image et la colonne 0 représente le sommet visuel",
-                "La ligne 0 représente le côté droit visuel de l’image et la colonne 0 représente le sommet visuel",
-                "La ligne 0 représente le côté droit visuel de l’image et la colonne 0 représente le bas visuel",
-                "La ligne 0 représente le côté gauche visuel de l'image et la colonne 0 représente le bas visuel"],
-            "ResolutionUnit": ["No absolute unit of measurement. Used for images that may have a non-square aspect ratio, but no meaningful absolute dimensions",
-                "Measurement unit is inch", "Measurement unit is centimeter"]
-        }
-    }
-};
-
 var jsonLastImg = "{}";
 
 /*Create table for image metadata*/
@@ -146,13 +53,14 @@ function imgTable(json_str, lang){
     var gps_keys = ["GPSLatitudeRef", "GPSLatitude", "GPSLongitudeRef", "GPSLongitude", "GPSTimeStamp"];
     var all_keys = [soft_keys, gene_keys, gps_keys];
     var json = JSON.parse(json_str);
-    var jsonLang = json_translate_img[lang];
+    var jsonLang = json_lang_translate[lang];
 
     var meta_place = document.getElementById("place-metadata");
 
     for (var i = 0; i < topics.length; ++i) {
         var arr_keys = all_keys[i];
-        var jsonTable = jsonLang[topics[i]];
+        var fields = list_from_json(jsonLang, "metadata_img_" + topics[i] + "_fields_");
+        var desc = list_from_json(jsonLang, "metadata_img_" + topics[i] + "_desc_");
         var table = document.createElement("table");
         table.id = "imgTable_" + topics[i];
 
@@ -161,11 +69,10 @@ function imgTable(json_str, lang){
                 var tr = document.createElement("tr");
                 var th = document.createElement("th");
                 var td = document.createElement("td");
-                th.innerHTML = jsonTable['fields'][j];
-                th.title = jsonTable['desc'][j];
-                if (jsonLang["key"][arr_keys[j]] !== undefined &&
-                    jsonLang["key"][arr_keys[j]][json[arr_keys[j]]] !== undefined) {
-                    td.innerHTML = jsonLang["key"][arr_keys[j]][json[arr_keys[j]]];
+                th.innerHTML = fields[j];
+                th.title = desc[j];
+                if (jsonLang["metadata_img_key_" + arr_keys[j] + "_" + json[arr_keys[j]]] !== undefined) {
+                    td.innerHTML = jsonLang["metadata_img_key_" + arr_keys[j] + "_" + json[arr_keys[j]]];
                 } else if (arr_keys[j] === "UserComment" ||
                     arr_keys[j] === "MakerNote") {
                     td.innerHTML = translateASCII(json[arr_keys[j]]);
@@ -178,21 +85,13 @@ function imgTable(json_str, lang){
             }
         }
         if (table.hasChildNodes()) {
-            makeTitle(jsonTable["title"], meta_place);
+            makeTitle(jsonLang["metadata_img_" + topics[i] + "_title"], meta_place);
             meta_place.appendChild(table);
         }
     }
     if(json_str == "{}") {
         table = document.createElement("div");
-        switch (lang){
-            case "fr":
-                table.innerHTML = "Aucune métadonnée EXIF n'a été trouvée. <strong>Note:<strong> Le Format EXIF s'applique uniquement aux images .jpg et .tiff";
-                break;
-            case "en":
-            default:
-                table.innerHTML = "No EXIF Metadata was found. <strong>Note:</strong> The EXIF standard applies only to .jpg and .tiff images";
-                break;
-        }
+        table.innerHTML = jsonLang["metadata_img_error_exif"];
         meta_place.appendChild(table);
     }
 }
@@ -226,98 +125,6 @@ var jsonTitleTableMetadata = {
             "track_width","track_height", "timescale", "duration", "codec", "language", "nb_samples", "size", "bitrate"],
         audio: ["id", "references", "created", "modified", "movie_duration", "layer", "alternate_group", "volume",
             "track_width","track_height", "timescale", "duration", "codec", "language", "nb_samples", "size", "bitrate"]  
-    },
-    en: {
-        metadata: {
-            title: "Video Metadata",
-            name: ["Moov", "Duration", "Duration of fragment", "Fragmented", "Fragment time", "Progressive", "IOD", "Brands", "Created time", "Modified time"],
-            desc: ["", "Number, providing the duration of the movie (unfragmented part) in timescale units",
-            "Number, corresponding to the timescale as given in the movie header",
-            "boolean, indicating if the file is already fragmented",
-            "Number, giving the duration of the fragmented part of the file, in timescale units",
-            "boolean, indicating if the file can be played progressively",
-            "boolean, indicating if the the file contains an MPEG-4 Initial Object Descriptor",
-            "Array of 4CC codes corresponding to the file brands as given in the ftyp box",
-            "Date object, indicating the creation date of the file as given in the movie header",
-            "Date object, indicating the last modification date of the file as given in the movie header"]
-        },
-        track: {
-            title: "Video Track",
-            name: ["Identifier", "References", "Created time", "Modified time", "Movie duration", "Layer", "Alternate group", "Volume", "Width", "Height", "Timescale",
-            "Duration", "Codec", "Language", "Samples", "Size", "Bitrate"],
-            desc: ["Number, giving track identifier", "", "Date object, indicating the creation date of the file as given in the track header",
-            "Date object, indicating the last modification date of the file as given in the track header", "",
-            "Number, layer information as indicated in the track header",
-            "Number, identifier of the alternate group the track belongs to",
-            "", "Number, width of the track as indicated in the track header", "Number, height of the track as indicated in the track header",
-            "Number, indicating the track timescale, as given in the track header", "Number, providing the duration of the (unfragmented part of) track, in timescale units",
-            "String, giving the MIME codecs parameter for this track (e.g. \"avc1.42c00d\" or \"mp4a.40.2\"), to be used to create SourceBuffer objects with Media Source Extensions",
-            "String, giving the 3-letter language code",
-            "Number, giving the number of track samples (ie. frames)",
-            "", "Number, providing the bitrate of the track in bits per second"]
-        },
-        audio: {
-            title: "Audio track",
-            name: ["Identifier", "References", "Created time", "Modified time", "Movie duration", "Layer", "Alternate group",
-            "Volume", "Width", "Height", "Timescale", "Duration", "Codec", "Language", "Samples", "Size", "Bitrate"],
-            desc: ["Number, giving track identifier", "", "Date object, indicating the creation date of the file as given in the track header",
-            "Date object, indicating the last modification date of the file as given in the track header", "",
-            "Number, layer information as indicated in the track header",
-            "Number, identifier of the alternate group the track belongs to",
-            "", "Number, width of the track as indicated in the track header", "Number, height of the track as indicated in the track header",
-            "Number, indicating the track timescale, as given in the track header", "Number, providing the duration of the (unfragmented part of) track, in timescale units",
-            "String, giving the MIME codecs parameter for this track (e.g. \"avc1.42c00d\" or \"mp4a.40.2\"), to be used to create SourceBuffer objects with Media Source Extensions",
-            "String, giving the 3-letter language code",
-            "Number, giving the number of track samples (ie. frames)",
-            "", "Number, providing the bitrate of the track in bits per second"]
-        },
-        "error": "Video failed loading. Check the URL and try again"
-    },
-    fr: {
-        metadata: {
-            title: "Métadonnées de la video",
-            name: ["Moov", "Durée", "Unité de temps", "Fragmenté", "Durée d'un fragment", "Progressive", "IOD", "Type", "Date de création", "Date de modification"],
-            desc: ["", "Nombre, donnant la durée du film (partie défragmentée) en unité de temps",
-            "Nombre, correspondant è l'unité de temps donnée dans l'entête du film",
-            "Booléen, indiquant si le film est déjà fragmenté",
-            "Number, donnant la durée de la partie fragmentée du film, en unité de temps",
-            "Booléen, indiquant si le fichier peut être lu progressivement",
-            "Booléen, indiquant si le fichier contient un MPEG-4 Initial Object Descriptor",
-            "Tableau de code 4CC correspondant au type de fichier comme donné dans la boite ftyp",
-            "Date, indiquant la date de création du fichier comme donné dans l'entête du film",
-            "Date, indiquant la date de dernière modification du fichier comme donnée dans l'entête du film"]
-        },
-        track: {
-            title: "Piste vidéo",
-            name: ["Identifiant", "Réferences", "Date de création", "Date de modification", "Durée du film", "Couches", "Groupes alternatifs", "Volume", "Largeur", "Hauteur", "Unité de temps",
-            "Durée", "Codec", "Langage", "Echantillon", "Taille", "Taux de bit"],
-            desc: ["Nombre, Identifiant de la piste", "", "Date, indiquant la date de création du fichier comme donnée dans l'entête de la piste",
-            "Date, indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste", "",
-            "Nombre, information de couche indiqué dans l'entête de piste",
-            "Nombre, identifiant du groupe alternatif auquel la piste appartient",
-            "", "Nombre, largeur de la piste comme indiqué dans l'entête de piste", "Nombre, hauteur de la piste comme indiqué dans l'entête de piste",
-            "Nombre, indiquant l'unité de temps de la piste comme donné dans l'entête de la piste", "Nombre, donnant la duréee de la (partie défragmentée de la) piste, en unité de temps",
-            "Chaîne de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
-            "Chaîne de charactère, donnant le code de langage à 3 lettres",
-            "Nombre, donnant le nombre d'échantillons de piste (c-à-d images)",
-            "", "Nombre, taux de bits par second de la piste"]
-        },
-        audio: {
-            title: "Piste audio",
-            name: ["Identifiant", "Réferences", "Date de création", "Date de modification", "Durée du film", "Couches", "Groupes alternatifs", "Volume", "Largeur", "Hauteur", "Unité de temps",
-            "Durée", "Codec", "Langage", "Echantillon", "Taille", "Taux de bit"],
-            desc: ["Nombre, Identifiant de la piste", "", "Date, indiquant la date de création du fichier comme donnée dans l'entête de la piste",
-            "Date, indiquant la date de dernière modification du fichier comme donnée dans l'entête de la piste", "",
-            "Nombre, information de couche indiqué dans l'entête de piste",
-            "Nombre, identifiant du groupe alternatif auquel la piste appartient",
-            "", "Nombre, largeur de la piste comme indiqué dans l'entête de piste", "Nombre, hauteur de la piste comme indiqué dans l'entête de piste",
-            "Nombre, indiquant l'unité de temps de la piste comme donné dans l'entête de la piste", "Nombre, donnant la duréee de la (partie défragmentée de la) piste, en unité de temps",
-            "Chaine de charactère, donnant les paramètres codecs MIME pour cette piste (ex. \"avc1.42c00d\" ou \"mp4a.40.2\"), pour être utilisé pour créer un objet SourceBuffer avec Media Source Extensions",
-            "Chaine de charactère, donnant le code de langage à 3 lettres",
-            "Nombre, donnant le nombre d'échantillon de piste (c-à-d. images)",
-            "", "Nombre, taux de bits par seconde de la piste"]
-        },
-        "error": "Vidéo impossible à charger. Veuillez verifier l'URL et réessayer"
     }
 }
 
@@ -332,7 +139,7 @@ function getMp4(vid) {
     var mp4box = new MP4Box();
     mp4box.onError = function(e) {
         cleanElement("error-metadata");
-        document.getElementById("error-metadata").innerHTML = jsonTitleTableMetadata[global_language]["error"];
+        document.getElementById("error-metadata").innerHTML = json_lang_translate[global_language]["metadata_table_error"];
         document.getElementById("place-metadata").style.display = "none";
         document.getElementById("error-metadata").style.display = "block";
     };
@@ -413,7 +220,7 @@ function submit_metadata(){
         /* If error display error message */
         img.onerror = function() {
             cleanElement("error-metadata");
-            document.getElementById("error-metadata").innerHTML = json_translate_img[global_language]["error"];
+            document.getElementById("error-metadata").innerHTML = json_lang_translate[global_language]["metadata_img_error"];
             document.getElementById("place-metadata").style.display = "none";
             document.getElementById("error-metadata").style.display = "block";
         };
@@ -500,7 +307,7 @@ function getTableValue(thValue){
 }
 
 function getLocation(){
-    var jsonGpsImg = json_translate_img[global_language]["gps"]["fields"];
+    var jsonGpsImg = list_from_json(json_lang_translate[global_language], "metadata_img_gps_fields_");
     var GPSLatitudeRef = getTableValue(jsonGpsImg[0]);
     var GPSLatitude = getTableValue(jsonGpsImg[1]);
     var GPSLongitudeRef = getTableValue(jsonGpsImg[2]);
@@ -543,7 +350,7 @@ function updateTitleTableMetadata(tableId, titles, descs) {
 function updateTableLanguageMetadata(lang) {
     if (document.getElementById("error-metadata").style.display !== "none") { // if error
         cleanElement("error-metadata");
-        document.getElementById("error-metadata").innerHTML = json_translate_img[lang]["error"];
+        document.getElementById("error-metadata").innerHTML = json_lang_translate[lang]["metadata_img_error"];
         document.getElementById("place-metadata").style.display = "none";
         document.getElementById("error-metadata").style.display = "block";
         return;
