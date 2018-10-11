@@ -386,122 +386,6 @@ function triggerMap(){
     }
 }
 
-var jsonTitleTableApi = {
-    youtube: {
-        en: {
-            video: {
-                title: "Video:",
-                name1: ["Video title", "Video description"],
-                name2: ["Video view count", "Like count", "Dislike count", "Duration", "Licensed content", "Description mentioned locations", "Recording location description", "Upload time"]
-            },
-            channel:{
-                title: "Channel:",
-                name: ["Channel description", "Channel created time", "Channel view count", "Channel page", "Channel location"]
-            },
-            comment: {
-                title: "Comments",
-                name: ["Video comment count", "Number verification comments"]
-            }
-        },
-        fr:{
-            video: {
-                title: "Video:",
-                name1: ["Titre de la vidéo", "Description de la vidéo"],
-                name2: ["Nombre de vues", "Nombre de \"j'aime\"", "Nombre de \"je n'aime pas\"", "Durée", "Contenu sous license", "Lieux dans la description", "Lieu de l'enregistrement", "Date de mise en ligne"]
-            },
-            channel: {
-                title: "Chaîne:",
-                name: ["Description de la chaîne", "Date de la création de la chaîne", "Nombre de vues de la chaine", "Page de la chaîne", "Localisation de la chaîne"]
-            },
-            comment: {
-                title: "Commentaires sur la vidéo:",
-                name: ["Nombre de commentaires", "Nbre de com. pour vérification"]
-            }
-        }
-    },
-    facebook: {
-        en: {
-            video: {
-                title: "Video:",
-                name: ["Video id", "Video title", "Duration", "Content category", "Content tags", "Video description", "Like count", "Updated time", "Created time"]
-            },
-            page: {
-                title: "Details:",
-                name: ["Page", "Description mentioned locations", "Privacy", "Embeddable", "Facebook type"]
-            },
-            comment: {
-                title: "Comments",
-                name: ["Video comment count", "Number verification comments"]
-            }
-        },
-        fr: {
-            video: {
-                title: "Video:",
-                name: ["Identifiant de la vidéo", "Titre de la vidéo", "Durée", "Catégorie du contenu", "Tag du contenu", "Description de la vidéo", "Nombre de \"j'aime\"", "Date de mise en ligne", "Date de création"]
-            },
-            page: {
-                title: "Détails:",
-                name: ["Page", "Lieux dans la description", "Confidentialité", "Incorporé YouTube", "Type Facebook"]
-            },
-            comment: {
-                title: "Commentaires sur la vidéo",
-                name: ["Nbre de commentaires", "Nbre de commentaires vérifiés"]
-            }
-        }
-    },
-    twitter: {
-        en: {
-            video: {
-                title:"Video",
-                name: ["Identifiant", "Content", "Origin", "Likes count", "Retweets count", "Hashtags", "Urls included", "Mentionned by", "Language", "Thumbnail", "Size", "Duration", "Locations mentioned", " Embedded YouTube", "Created", "Video"]
-            },
-            user: {
-                title: "user",
-                name: ["Name", "Screen name", "Location", "Profile", "Description", "Protected user", "Verified user", "Followers", "Following", "Lists", "Tweets liked", "Tweets count", "Created", "User language", "Locations mentioned", "Date de création", "Vidéo"]
-            }/*,
-            comment: {
-                title: "Replies",
-                name: ["Retweets count"]
-            }*/
-        },
-        fr: {
-            video: {
-                title:"Vidéo",
-                name: ["Identifiant", "Contenu", "Origine", "Nombre de \"J'aime\"", "Nombre de retweets", "Hashtags", "Urls incluses", "Mentionné par", "Langue", "Imagette", "Taille", "Durée", "Lieux mentionnés", "Incorporé de YouTube", "Date de création", "Vidéo"]
-            },
-            user: {
-                title: "Utilisateur",
-                name: ["Nom", "Pseudonyme", "Localisation", "Profil", "Description", "Utilisateur protégé", "Utilisateur vérifié", "Nombre d'abonnés", "Nombre d'abonnements", "Listes", "Tweets \"aimés\"", "Nombre de tweets", "Date de création", "Langue de l'utilisateur", "Lieux mentionnés"]
-            }/*,
-            comment: {
-                title: "Réponse",
-                name: ["Nombre de réponse"]
-            }*/
-        }
-    }
-}
-
-var table_error_message = {
-    "en": {
-        "removed_video": "This video has been previously processed by the CAA service but it is no longer available on the video platform. All metadata associated with that video have been deleted",
-        "no_video": "The metadata associated with this video could not be extracted. The video is either posted by Facebook User or a Group, and due to Facebook API limitations it  cannot be processed, or it might no longer be available on Facebook",
-        "no_video_id": "A video ID cannot be extracted by the submitted URL. Please check the URL",
-        "empty_url": "The submitted URL parameter is empty. Please provide a valid video URL",
-        "facebook_group": "The provided Video is posted by a Facebook Group. Due to Facebook API restrictions no information can be retrieved for videos posted by Facebook Groups",
-        "facebook_photo": "The provided URL is not supported. It is a photo URL",
-        "default" : "There were an error while trying to process this video. Please check the link and try again."
-    },
-    "fr": {
-        "removed_video": "Cette vidéo a été précédemment traitée par le service CAA mais elle n'est maintenant plus accessible via la plateforme vidéo. Toutes les meta données de cette vidéo ont été effacées",
-        "no_video": "Les métadonnées associées à cette vidéo n'ont pas pu être extraites. La vidéo est publiée par l'utilisateur ou le groupe Facebook et, en raison des limitations de l'API Facebook, elle ne peut pas être traitée ou peut ne plus être disponible sur la plateforme vidéo.",
-        "no_video_id": "Un identifiant vidéo ne peut pas être extrait de l'URL donnée. Veuillez vérifier cette URL.",
-        "empty_url": "L'URL donnée en paramètre est vide. Veuillez utilisez une URL valide",
-        "facebook_group": "La vidéo fournie vient d'un Groupe Facebook. En raison des restrictions de l'API Facebook, aucune information ne peut être récupérée pour les vidéos postées par les Groupes Facebook.",
-        "facebook_photo": "L'URL fournie n'est pas prise en charge. C'est une URL de photo",
-        "default" : "Une erreur est survenue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer."
-    }
-};
-
 var analysisType = "";
 
 /* Parse the YouTube json */
@@ -937,7 +821,7 @@ function video_api_analysis(video_url, isProcess){
                 console.error("parse_response : " + url);
                 console.error(textStatus + ", " + error);
                 error_type = "default";
-                request_fail(table_error_message[global_language]["default"]);
+                request_fail(json_lang_translate[global_language]["table_error_default"]);
             });
         }
         else {
@@ -960,12 +844,12 @@ function video_api_analysis(video_url, isProcess){
     $.getJSON(analysis_url, function(data) {
         document.getElementById("api-content").style.display = "block";
         /* Error Gestion */
-        if (table_error_message[global_language][data["status"]] !== undefined)
+        if (json_lang_translate[global_language]["table_error_" + data["status"]] !== undefined)
         {
             console.error("error return : " + analysis_url);
             console.error(data["message"]);
             error_type = data["status"];
-            request_fail(table_error_message[global_language][data["status"]]);
+            request_fail(json_lang_translate[global_language]["table_error_" + data["status"]]);
             return;
         }
         $.getJSON(analysis_url, function(data) {
@@ -1000,7 +884,7 @@ function video_api_analysis(video_url, isProcess){
                 console.error("start response : " + url);
                 console.error(textStatus + ", " + error);
                 error_type = "default";
-                request_fail(table_error_message[global_language]["default"]);
+                request_fail(json_lang_translate[global_language]["table_error_default"]);
             })
             /* Twitter Part response */
             var url_twitter = data["twitter_shares"];
@@ -1034,13 +918,13 @@ function video_api_analysis(video_url, isProcess){
             console.error("get urls : " + analysis_url);
             console.error(textStatus + ", " + error);
             error_type = "default";
-            request_fail(table_error_message[global_language]["default"]);
+            request_fail(json_lang_translate[global_language]["table_error_default"]);
         });
     }).fail(function( jqxhr, textStatus, error ) {
         console.error("start analysis : " + analysis_url);
         console.error(textStatus + ", " + error);
         error_type = "default";
-        request_fail(table_error_message[global_language]["default"]);
+        request_fail(json_lang_translate[global_language]["table_error_default"]);
     });
 }
 
@@ -1199,7 +1083,7 @@ var tw_json = "";
 
 function updateTableLanguageAnalysis(lang) {
     if (document.getElementById("error-content").style.display !== "none") {
-        request_fail(table_error_message[global_language][error_type]);
+        request_fail(json_lang_translate[global_language]["table_error_" + error_type]);
     }
     if (!document.getElementById("place-table").hasChildNodes())
         return;
