@@ -63,6 +63,11 @@ function create_card(title, img, desc) {
       card.classList.toggle('is-flipped');
     });
 
+  //to resize the scene when img is loaded
+  img_front.onload = function () {
+    scene.style.height = (this.height + 70) + "px";
+  };
+
   //appendchild to create the card
   back.appendChild(descrip_img);
   back.appendChild(info);
@@ -124,8 +129,13 @@ function create_card_slider(title, imgs, desc) {
     img_front.setAttribute("class", "img__front");
     img_front.src = imgs[i];
     img_front.id = "img_" + title + "_" + i;
-    if (i == 0)
+    if (i == 0) {
       img_front.style.display = "";
+      //to resize scene on imgload
+      img_front.onload = function () {
+        scene.style.height = (this.height + 90) + "px";
+      };
+    }
     else
       img_front.style.display = "none";
 
@@ -169,7 +179,6 @@ function create_card_slider(title, imgs, desc) {
 
   return scene;
 }
-
 
 /**
 * @func request loop to get status until process done
@@ -219,8 +228,8 @@ function display_forensic(hash) {
   $.getJSON(base_url + "imageforensicsv3/getreport?hash=" + hash, function (data) {
     if (data.status === "completed") {
       //display all datas with images in cards
-      var datas = ["dqReport", "dwNoiseReport", "elaReport", "blockingReport", "medianNoiseReport", "gridsReport",
-        "gridsInversedReport", "dctReport"];
+      var datas = ["dqReport", "elaReport", "blockingReport", "gridsReport",
+        "gridsInversedReport", "dctReport", "dwNoiseReport", "medianNoiseReport"];
       //display 3 images by row
       var row = document.createElement("div");
       row.setAttribute("class", "row");
