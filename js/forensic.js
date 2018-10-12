@@ -1,6 +1,14 @@
 //@base_url where to send all get or post requests
 var base_url = "http://reveal-mklab.iti.gr/";
 
+//@datas order of analysis type to display, depending on image width or height
+var datas;
+var datas_height = ["dqReport", "elaReport", "medianNoiseReport", "dctReport", "gridsReport",
+        "gridsInversedReport", "dwNoiseReport", "blockingReport"];
+
+var datas_width = ["dqReport", "elaReport", "blockingReport", "gridsReport",
+        "gridsInversedReport", "dctReport", "dwNoiseReport", "medianNoiseReport"];
+
 var json_lang_trans = {
   "en": {
     "error": {
@@ -228,8 +236,6 @@ function display_forensic(hash) {
   $.getJSON(base_url + "imageforensicsv3/getreport?hash=" + hash, function (data) {
     if (data.status === "completed") {
       //display all datas with images in cards
-      var datas = ["dqReport", "elaReport", "medianNoiseReport", "dctReport", "gridsReport",
-        "gridsInversedReport", "dwNoiseReport", "blockingReport"];
       //display 3 images by row
       var row = document.createElement("div");
       row.setAttribute("class", "row");
@@ -262,9 +268,9 @@ function display_forensic(hash) {
 
 /**
 * @func send get request to forensic server to process an image
-* @video_url the url of the video to process
+* @image_url the url of the image to process
 */
-function send_forensic_video(video_url) {
+function send_forensic_video(image_url) {
   //hide precedent result keyframes
   document.getElementById("forensic-content").style.display = "none";
   //hide the precedent error message if there was one
@@ -272,18 +278,23 @@ function send_forensic_video(video_url) {
   //hide the precedent image preview
   document.getElementById("forensic-image").style.display = "none";
   //create url to send video
-  var forensic_url = base_url + "imageforensicsv3/addurl?url=" + encodeURIComponent(video_url);
+  var forensic_url = base_url + "imageforensicsv3/addurl?url=" + encodeURIComponent(image_url);
   //start loader
   document.getElementById("loader-forensic").style.display = "block";
 
+  document.getElementById("forensic-image").innerHTML = '<img src="' + image_url +
+        '" style="width:40%;height:auto;margin:auto;">';
+  document.getElementById("forensic-image").childNodes[0].onload = function() {
+    if (this.height > this.width)
+      datas = datas_height;
+    else
+      datas = datas_width;
+  };
+
   $.getJSON(forensic_url, function(data) {
     if (data.status === "downloaded") {
-      document.getElementById("forensic-image").innerHTML = '<img src="' + video_url +
-        '" style="width:40%;height:auto;margin:auto;">';
       request_status(data.hash);
     } else if (data.status === "exist") {
-      document.getElementById("forensic-image").innerHTML = '<img src="' + video_url +
-        '" style="width:40%;height:auto;margin:auto;">';
       display_forensic(data.hash);
     } else {
       display_error(data);
