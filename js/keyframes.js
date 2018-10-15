@@ -2,7 +2,7 @@
 var user_key = "2gzvbfUVUdATyf4ujcnZ8eurEEy8xA2n";
 
 //@base_url where to send all get or post requests
-var base_url = "http://multimedia3.iti.gr:8080/";
+var base_url = "http://multimedia2.iti.gr/video_analysis/";
 
 //variables to stop or continue video status getting when two videos are POST to base_url
 //@is_analysing true if process of getting get request for a video is on, otherwise false
@@ -218,15 +218,15 @@ function display_result(data, video_id) {
   //add the download to download .zip file buttons
   //thumbnails button
   var thumbnails = document.getElementById("thumbnails-download");
-  thumbnails.href = "http://multimedia2.iti.gr:8080/thumbnails/" + video_id;
+  thumbnails.href = "http://multimedia2.iti.gr/video_analysis/thumbnails/" + video_id;
 
   //shots button
   var shots = document.getElementById("shots-download");
-  shots.href = "http://multimedia2.iti.gr:8080/keyframes/" + video_id + "/Shots";
+  shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Shots";
 
   //subshots button
   var shots = document.getElementById("subshots-download");
-  shots.href = "http://multimedia2.iti.gr:8080/keyframes/" + video_id + "/Subshots";
+  shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
 }
 
 /**
