@@ -1,5 +1,5 @@
-//@base_url where to send all get or post requests
-var base_url = "http://reveal-mklab.iti.gr/";
+//@base_url_forensic where to send all get or post requests
+var base_url_forensic = "http://reveal-mklab.iti.gr/";
 
 //@datas order of analysis type to display, depending on image width or height
 var datas;
@@ -193,7 +193,7 @@ function create_card_slider(title, imgs, desc) {
 * @hash used to retrieve the video reports
 */
 function request_status(hash) {
-  $.getJSON(base_url + "imageforensicsv3/generatereport?hash=" + hash, function (data) {
+  $.getJSON(base_url_forensic + "imageforensicsv3/generatereport?hash=" + hash, function (data) {
     if (data.status === "processing") {
       setTimeout(function () {
         request_status(hash);
@@ -204,8 +204,9 @@ function request_status(hash) {
       display_error(data);
     }
   }).fail(function(jqxhr, textStatus, error) {
-          console.error("start response : " + base_url + "imageforensicsv3/generatereport?hash=" + hash);
+          console.error("start response : " + base_url_forensic + "imageforensicsv3/generatereport?hash=" + hash);
           console.error(textStatus + ", " + error);
+          display_error(error);
         });
 }
 
@@ -233,7 +234,7 @@ function display_forensic(hash) {
   document.getElementById("loader-forensic").style.display = "none";
 
   //get request for report
-  $.getJSON(base_url + "imageforensicsv3/getreport?hash=" + hash, function (data) {
+  $.getJSON(base_url_forensic + "imageforensicsv3/getreport?hash=" + hash, function (data) {
     if (data.status === "completed") {
       //display all datas with images in cards
       //display 3 images by row
@@ -261,8 +262,9 @@ function display_forensic(hash) {
       display_error(data);
     }
   }).fail(function(jqxhr, textStatus, error) {
-          console.error("start response : " + base_url + "imageforensicsv3/getreport?hash=" + hash);
+          console.error("start response : " + base_url_forensic + "imageforensicsv3/getreport?hash=" + hash);
           console.error(textStatus + ", " + error);
+          display_error(error);
         });
 }
 
@@ -278,7 +280,7 @@ function send_forensic_video(image_url) {
   //hide the precedent image preview
   document.getElementById("forensic-image").style.display = "none";
   //create url to send video
-  var forensic_url = base_url + "imageforensicsv3/addurl?url=" + encodeURIComponent(image_url);
+  var forensic_url = base_url_forensic + "imageforensicsv3/addurl?url=" + encodeURIComponent(image_url);
   //start loader
   document.getElementById("loader-forensic").style.display = "block";
 
@@ -302,6 +304,7 @@ function send_forensic_video(image_url) {
   }).fail(function(jqxhr, textStatus, error) {
           console.error("start response : " + forensic_url);
           console.error(textStatus + ", " + error);
+          display_error(error);
         });
 }
 

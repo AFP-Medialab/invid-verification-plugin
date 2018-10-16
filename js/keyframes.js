@@ -1,10 +1,10 @@
 //@user_key for keyframes api
 var user_key = "2gzvbfUVUdATyf4ujcnZ8eurEEy8xA2n";
 
-//@base_url where to send all get or post requests
-var base_url = "http://multimedia2.iti.gr/video_analysis/";
+//@base_url_keyframes where to send all get or post requests
+var base_url_keyframes = "http://multimedia2.iti.gr/video_analysis/";
 
-//variables to stop or continue video status getting when two videos are POST to base_url
+//variables to stop or continue video status getting when two videos are POST to base_url_keyframes
 //@is_analysing true if process of getting get request for a video is on, otherwise false
 var is_analysing = false;
 //@ask_analyse true if {{is_analysing is true and another video has been submitted}}, otherwise false
@@ -80,7 +80,7 @@ function error_message(status) {
 /**
 * @func update the wait message of the html page
 * @data the json containing the status, type of process and percentage of work done
-* @video_id the id given from base_url json answer
+* @video_id the id given from base_url_keyframes json answer
 */
 function update_wait(data, video_id) {
   var wait_field = document.getElementById("keyframes-wait");
@@ -121,12 +121,12 @@ function parse_response(data, url, video_id) {
   is_analysing = true;
   //send get requests every 2s to verify status of video process
   if (data["status"].endsWith("COMPLETED")) {
-    $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
+    $.getJSON(base_url_keyframes + "result/" + video_id + "_json", function(data) {
       update_wait(data, video_id)
       display_result(data, video_id);
       is_analysing = false;
     }).fail(function(jqxhr, textStatus, error) {
-      console.error("start response : " + base_url + "result/" + video_id);
+      console.error("start response : " + base_url_keyframes + "result/" + video_id);
       console.error(textStatus + ", " + error);
     });
   } else if (data["status"].endsWith("QUEUE") || data["status"].endsWith("STARTED")) {
@@ -243,7 +243,7 @@ function send_keyframe_video(video_url) {
   //hide the precedent error message if there was one
   document.getElementById("error-keyframes").setAttribute("style", "display: none");
   //create url to send video
-  var post_url = base_url + "segmentation";
+  var post_url = base_url_keyframes + "segmentation";
 
   //display wait message status
   document.getElementById("keyframes-wait").setAttribute("style", "display: block");
@@ -253,7 +253,7 @@ function send_keyframe_video(video_url) {
   $.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key, "overwrite": 0}), function (data) {
     var video_id = data["video_id"];
     //verify if video not already done process
-    $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
+    $.getJSON(base_url_keyframes + "result/" + video_id + "_json", function(data) {
       //if yes stop process if one and display already computed results
       if (is_analysing) {
         ask_analyse = true;
@@ -264,12 +264,12 @@ function send_keyframe_video(video_url) {
     }).fail(function(jqxhr, textStatus, error) {
       //else it will throw 404 error Not Found, then ask for video status
       if (error == "Not Found") {
-        $.getJSON(base_url + "status/" + video_id, function(data) {
+        $.getJSON(base_url_keyframes + "status/" + video_id, function(data) {
           if (is_analysing) {
             ask_analyse = true;
           }
           setTimeout(function() {
-            parse_response(data, base_url + "status/", video_id);
+            parse_response(data, base_url_keyframes + "status/", video_id);
           }, 1100);
         }).fail(function(jqxhr, textStatus, error) {
           console.error("start response : " + post_url);
@@ -291,7 +291,7 @@ function send_keyframe_video(video_url) {
                       ask_analyse = true;
                     }
                     setTimeout(function() {
-                      parse_response(json_res, base_url + "status/", json_res.video_id);
+                      parse_response(json_res, base_url_keyframes + "status/", json_res.video_id);
                     }, 1100);
                   }
               });
