@@ -21,7 +21,7 @@ var  json_table_lang = {
       "PROCESS_INTERRUPTED" : "Video analysis interrupted due to unknown cause. Please re-submit the video.",
       "ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE" : "Video analysis quitted due to corrupted video file.",
       "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "Video analysis quitted due to unsupported file extension.",
-      "CONFLICT" : "The video is already being processed by this user."
+      "Service Unavailable" : "The service is currently unavailable. Try again later"
     },
     "fr": {
       "VIDEO_DOWNLOAD_FAILED" : "Le téléchargement de la vidéo à échoué. Veuillez essayer avec une autre vidéo.",
@@ -31,7 +31,7 @@ var  json_table_lang = {
       "PROCESS_INTERRUPTED" : "L'analyse de la vidéo à été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo.",
       "ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE" : "L'analyse de la vidéo s'est arrêté dû à des fichiers vidéos corrompus.",
       "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté.",
-      "CONFLICT" : "La vidéo est déjà en analyse par cet utilisateur."
+      "Service Unavailable" : "Le service est actuellement indisponible. Veuillez réessayez plus tard"
     }
   },
   "wait" : {
@@ -151,7 +151,6 @@ function parse_response(data, url, video_id) {
 * @video_id the given identifier for the video given through json answered
 */
 function display_result(data, video_id) {
-  console.log(data);
   //display or hide elements we need
   document.getElementById("keyframes-content").style.display = "block";
   var key_cont = document.getElementById("keyframes-place");
@@ -244,17 +243,14 @@ function send_keyframe_video(video_url) {
   //hide the precedent error message if there was one
   document.getElementById("error-keyframes").setAttribute("style", "display: none");
   //create url to send video
-  var annotation_check = document.getElementById("annotation_checkbox").checked;
   var post_url = base_url + "segmentation";
-  if (annotation_check)
-    post_url += "-annotation";
 
   //display wait message status
   document.getElementById("keyframes-wait").setAttribute("style", "display: block");
-  //hide loader display
-  document.getElementById("loader-keyframes").style.display = "none";
+  //show loader display
+  document.getElementById("loader-keyframes").style.display = "block";
   //send video and wait for response
-  $.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key}), function (data) {
+  $.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key, "overwrite": 0}), function (data) {
     var video_id = data["video_id"];
     //verify if video not already done process
     $.getJSON(base_url + "result/" + video_id + "_json", function(data) {
@@ -288,8 +284,15 @@ function send_keyframe_video(video_url) {
                   if (error !== "Conflict") {
                     console.error("start response : " + post_url);
                     console.error(textStatus + ", " + error);
+                    error_message(error);
                   } else {
-                    error_message("CONFLICT");
+                    var json_res = jqxhr.responseJSON;
+                    if (is_analysing) {
+                      ask_analyse = true;
+                    }
+                    setTimeout(function() {
+                      parse_response(json_res, base_url + "status/", json_res.video_id);
+                    }, 1100);
                   }
               });
 }
