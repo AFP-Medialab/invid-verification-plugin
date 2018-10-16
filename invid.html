@@ -134,10 +134,14 @@
 				<input type="submit" value="Submit" class="button" />
 			</form>
 			<div id="loader" class="loader"></div>
+<<<<<<< HEAD
 			<br>
 			<br>
 			<div id="place-debunked">
 			</div>
+=======
+			<div id="place-debunked"></div>
+>>>>>>> keyframes-dev
 			<div id="api-content">
 				<div id="place-table"></div>
 				<br>
@@ -214,12 +218,71 @@
 			<div id="fb-content" style="display: none;"></div>
 			<br>
 			<div id="error-content" style="display: none; color: red;"></div>
-			
+		</div>
+
+		<div id="keyframes" class="form-action hide">
+			<h1 lang="en">Video fragmentation and reverse image search</h1>
+			<h1 lang="fr" hidden="hidden">Fragmentation vidéo et recherche inversée d'image</h1>
+			<form id="keyframes_form">
+				<ul>
+					<input type="text" name="keyframes_url" data-text='{"en": "Insert the video URL", "fr": "Adresse de la vidéo"}'
+					placeholder="Video URL">
+					<br>
+					<br>
+					<input type="submit" value="Submit" class="button">
+					<br>
+					<br>
+					<div id="keyframes-wait" style="display: none;"></div>
+					<br>
+					<br>
+					<div id="loader-keyframes" class="loader"></div>
+				</ul>
+			</form>
+			<div id="error-keyframes" style="display: none; color: red;"></div>
+			<div id="keyframes-content">
+				<h3 lang="en">Video keyframes</h3>
+				<h3 lang="fr" hidden="hidden">Images clés de la vidéo</h3>
+				<br>
+				<div id="keyframes-place"></div>
+				<br>
+				<div id="keyframes-place2">
+					<button class="accordion">
+						<span lang="en">Show more keyframes</span>
+						<span lang="fr" hidden="hidden">Afficher plus d'images clés</span>
+					</button>
+					<div id="panel-shots" style="display: none;"></div>
+				</div>
+				<br>
+				<div id="download-content">
+					<button class="accordion">
+						<span lang="en">Download .zip files</span>
+						<span lang="fr" hidden="hidden">Téléchargement des fichiers .zip</span>
+					</button>
+					<div id="panel" style="display: none;">
+						<a id="thumbnails-download">
+							<button class="button">
+								<span lang="en">ZIP of thumbnails</span>
+								<span lang="fr" hidden="hidden">ZIP des imagettes</span>
+							</button>
+						</a>
+						<a id="shots-download">
+							<button class="button">
+								<span lang="en">ZIP of shots</span>
+								<span lang="fr" hidden="hidden">ZIP des photos</span>
+							</button>
+						</a>
+						<a id="subshots-download">
+							<button class="button">
+								<span lang="en">ZIP of subshots</span>
+								<span lang="fr" hidden="hidden">ZIP des sous-photos</span>
+							</button>
+						</a>
+					</div>
+				</div>
+			</div>
 
 		</div>
-		<div id="keyframes" class="form-action hide">
-			<iframe src="http://multimedia3.iti.gr/video_fragmentation/service/start.html" class="ifr" frameborder="0"></iframe>
-		</div>
+
 		<div id="video" class="form-action hide">
 			<h1 lang="en">Youtube thumbnails reverse search</h1>
 			<h1 lang="fr" hidden="hidden">Recherche inversée des imagettes Youtube</h1>
@@ -678,6 +741,9 @@
 
 <!-- For Forensic Analysis-->
 <script type="text/javascript" src="js/forensic.js"></script>
+
+<!-- For Keyframes --> 
+<script type="text/javascript" src="js/keyframes.js"></script>
 
 <!-- For Copyright Management -->
 <script type="text/javascript" src="js/copyright.js"></script>
