@@ -10,44 +10,6 @@ var is_analysing = false;
 //@ask_analyse true if {{is_analysing is true and another video has been submitted}}, otherwise false
 var ask_analyse = false;
 
-//@json_table_lang json format of needed translation for display
-var  json_table_lang = {
-  "error" : {
-    "en": {
-      "VIDEO_DOWNLOAD_FAILED" : "Video download failed. Try with another video.",
-      "VIDEO_DOWNLOAD_TIMEOUT" : "Video download failed. The video download has timed out.",
-      "VIDEO_SEGMENTATION_FAILED" : "Video segmentation analysis failed.",
-      "VIDEO_SEGMENTATION_ANNOTATION_FAILED" : "Video segmentation analysis failed.",
-      "PROCESS_INTERRUPTED" : "Video analysis interrupted due to unknown cause. Please re-submit the video.",
-      "ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE" : "Video analysis quitted due to corrupted video file.",
-      "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "Video analysis quitted due to unsupported file extension.",
-      "Service Unavailable" : "The service is currently unavailable. Try again later"
-    },
-    "fr": {
-      "VIDEO_DOWNLOAD_FAILED" : "Le téléchargement de la vidéo à échoué. Veuillez essayer avec une autre vidéo.",
-      "VIDEO_DOWNLOAD_TIMEOUT" : "Le téléchargement de la vidéo à échoué. La vidéo a mis trop de temps à télécharger.",
-      "VIDEO_SEGMENTATION_FAILED" : "L'analyse de segmentation vidéo à échoué.",
-      "VIDEO_SEGMENTATION_ANNOTATION_FAILED" : "L'analyse de segmentation vidéo à échoué.",
-      "PROCESS_INTERRUPTED" : "L'analyse de la vidéo à été interrompue dû à une cause inconnue. Veuillez ré-envoyer la vidéo.",
-      "ANALYSIS_STOPPED_CORRUPTED_VIDEO_FILE" : "L'analyse de la vidéo s'est arrêté dû à des fichiers vidéos corrompus.",
-      "ANALYSIS_STOPPED_UNSUPPORTED_FILE_EXTENSION" : "L'analyse de la vidéo s'est arrêté dû à un format vidéo non supporté.",
-      "Service Unavailable" : "Le service est actuellement indisponible. Veuillez réessayez plus tard"
-    }
-  },
-  "wait" : {
-    "en" : {
-      "VIDEO_WAITING_IN_QUEUE" : "Video in queue for analysis. The analysis of your video will start immediately after all preceding videos in the queue have been processed.",
-      "VIDEO_DOWNLOAD_STARTED" : "The video is being downloaded before its analysis.",
-      "STARTED" : "Video analysis running. Step "
-    },
-    "fr" : {
-      "VIDEO_WAITING_IN_QUEUE" : "Vidéo en file d'attente pour analyse. L'analyse de votre vidéo commencera immédiatement après que toutes les vidéos précédentes de la file d'attente auront été traitées.",
-      "VIDEO_DOWNLOAD_STARTED" : "La vidéo est en train d'être téléchargé avant analyse.",
-      "STARTED" : "Analyse de la vidéo en cours. Etape "
-    }
-  }
-}
-
 /**
 * @func get the url from the text input and gets back informations needed for display
 */
@@ -70,10 +32,10 @@ function error_message(status) {
   //set error messga eand display error field
   var err_field = document.getElementById("error-keyframes");
   err_field.setAttribute("style", "display: block; color: red");
-  if (json_table_lang["error"][global_language][status] !== undefined) {
-    err_field.innerHTML = json_table_lang["error"][global_language][status];
+  if (json_lang_translate[global_language]["keyframes_error_" + status] !== undefined) {
+    err_field.innerHTML = json_lang_translate[global_language]["keyframes_error_" + status];
   } else {
-    err_field.innerHTML = "Unknown error occured. Please try again later or with another video.";
+    err_field.innerHTML = json_lang_translate[global_language]["keyframes_error_default"];
   }
 }
 
@@ -85,16 +47,16 @@ function error_message(status) {
 function update_wait(data, video_id) {
   var wait_field = document.getElementById("keyframes-wait");
   var loader_key = document.getElementById("loader-keyframes");
-  var json_table_wait = json_table_lang["wait"][global_language];
+  var json_lang = json_lang_translate[global_language];
   loader_key.style.display = "block";
 
   if (data["status"] !== undefined) {
-    if (json_table_wait[data["status"]] !== undefined) {
+    if (json_lang["keyframes_wait_" + data["status"]] !== undefined) {
       wait_field.setAttribute("style", "display: block;");
-      wait_field.innerHTML = json_table_wait[data["status"]];
+      wait_field.innerHTML = json_lang["keyframes_wait_" + data["status"]];
     } else if (data["status"].endsWith("STARTED")) {
       wait_field.setAttribute("style", "display: block;");
-      wait_field.innerHTML = json_table_wait["STARTED"] + data["step"] + " (" + data["process"] + ") " +
+      wait_field.innerHTML = json_lang["keyframes_wait_STARTED"] + data["step"] + " (" + data["process"] + ") " +
         (data["progress"] == "N/A" ? "" : data["progress"]);
     } 
   } else {
@@ -281,10 +243,10 @@ function send_keyframe_video(video_url) {
       }
     });
     }, "json").fail(function(jqxhr, textStatus, error) {
-                  if (error !== "Conflict") {
+                  if (error === "Service Unavailable") {
                     console.error("start response : " + post_url);
                     console.error(textStatus + ", " + error);
-                    error_message(error);
+                    error_message("unavailable");
                   } else {
                     var json_res = jqxhr.responseJSON;
                     if (is_analysing) {
