@@ -9,31 +9,6 @@ var datas_height = ["dqReport", "elaReport", "medianNoiseReport", "dctReport", "
 var datas_width = ["dqReport", "elaReport", "blockingReport", "gridsReport",
         "gridsInversedReport", "dctReport", "dwNoiseReport", "medianNoiseReport"];
 
-var json_lang_trans = {
-  "en": {
-    "error": {
-      "unsupported_file": "The submitted URL is an unsupported image file, e.g. gif image or video",
-      "image_url_error": "The submitted URL is an image file but it could not be downloaded, it may be due to network problem or download restrictions",
-      "url_error": "The submitted URL could not be downloaded, it may be due to network problem, download restrictions or corrupted URL path",
-      "hash_not_found": "An unknown issue occured. Please check the URL and try again",
-      "empty_parameter": "An unknown issue occured. Please check the URL and try again",
-      "missing_image_report": "The image was not submitted. Please check the URL and try again",
-      "analysis_not_triggered": "The analysis has not been triggered for this image. Please check the URL and try again"
-    }
-  },
-  "fr": {
-    "error": {
-      "unsupported_file": "L'URL soumise est un fichier image non pris en charge, par exemple une image gif ou une vidéo",
-      "image_url_error": "L'URL soumise est un fichier image, mais il n'a pas pu être téléchargé. Cela peut être dû à un problème de réseau ou à des restrictions de téléchargement",
-      "url_error": "L'URL soumise n'a pas pu être téléchargée, cela peut être dû à un problème de réseau, aux restrictions de téléchargement ou a un chemin corrompu de l'URL",
-      "hash_not_found": "Un problème inconnu s'est produit. Veuillez vérifier l'URL et réessayer",
-      "empty_parameter": "Un problème inconnu s'est produit. Veuillez vérifier l'URL et réessayer",
-      "missing_image_report": "L'image n'a pas été soumise. Veuillez vérifier l'URL et réessayer",
-      "analysis_not_triggered": "L'analyse n'a pas été déclenchée pour cette image. Veuillez vérifier l'URL et réessayer"
-    }
-  }
-};
-
 /**
 * @func create card that flips, image on front and description on back
 * @title text at the top front of the card
@@ -61,7 +36,7 @@ function create_card(title, img, desc) {
   descrip_img.innerHTML = desc;
   var info = document.createElement("div");
   info.setAttribute("class", "card__info");
-  info.innerHTML = "back";
+  info.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
 
   //create js for card (on click flip)
   img_front.addEventListener('click', function() {
@@ -128,7 +103,7 @@ function create_card_slider(title, imgs, desc) {
   descrip_img.innerHTML = desc;
   var info = document.createElement("div");
   info.setAttribute("class", "card__info");
-  info.innerHTML = "back";
+  info.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
 
   //create all imgs
   var imgs_front = document.createElement("div");
@@ -219,8 +194,8 @@ function display_error(data) {
   document.getElementById("forensic-image").style.display = "none";
   document.getElementById("loader-forensic").style.display = "none";
 
-  var error_msg = json_lang_trans[global_language]["error"][data.status] != undefined ?
-    json_lang_trans[global_language]["error"][data.status] : json_lang_trans[global_language]["error"]["empty_parameter"];
+  var error_msg = json_lang_translate[global_language]["forensic_error_" + data.status] != undefined ?
+    json_lang_translate[global_language]["forensic_error_" + data.status] : json_lang_translate[global_language]["forensic_error_empty_parameter"];
   document.getElementById("error-forensic").innerHTML = error_msg;
   document.getElementById("error-forensic").style.display = "block";
 }
@@ -244,7 +219,8 @@ function display_forensic(hash) {
         var column = document.createElement("div");
         column.setAttribute("class", "column");
         column.id = datas[i];
-        var card = create_card(datas[i], data[datas[i]]["map"], "oui");
+        var card = create_card(json_lang_translate[global_language]["forensic_title_" + datas[i]], data[datas[i]]["map"],
+          json_lang_translate[global_language]["forensic_card_" + datas[i]]);
         column.appendChild(card);
         row.appendChild(column);
       }
@@ -252,7 +228,8 @@ function display_forensic(hash) {
       var column = document.createElement("div");
       column.setAttribute("class", "column");
       column.id = "ghostReport";
-      var card = create_card_slider("ghostReport", data["ghostReport"]["maps"], "ghost");
+      var card = create_card_slider(json_lang_translate[global_language]["forensic_title_ghostReport"], data["ghostReport"]["maps"],
+        json_lang_translate[global_language]["forensic_card_ghostReport"]);
       column.appendChild(card);
       row.appendChild(column);
       document.getElementById("forensic-place").appendChild(row);
