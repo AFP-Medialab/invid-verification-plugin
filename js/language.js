@@ -53,6 +53,8 @@ $("[name='language']").on("change", function(event) {
 		updateTableLanguageAnalysis(language);
 		/* update metadata table */
 		updateTableLanguageMetadata(language);
+		/* update forensic table */
+		updateTableLanguageForensic(language);
 		setCookieLang(language);
 	}
 });
