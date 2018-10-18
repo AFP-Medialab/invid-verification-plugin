@@ -286,6 +286,42 @@ function send_forensic_video(image_url) {
 }
 
 /**
+* @func update language of forensic result table
+* @lang the language to translate to
+*/
+function updateTableLanguageForensic(lang) {
+  //check is something is displayed, if not do nothing
+  if (document.getElementById("forensic-content").style.display === "block") {
+    //if datas undefined content display fail
+    if (datas === undefined)
+      return
+    for (var k = 0; k < datas.length; ++k) {
+      //get the card element
+      var el = document.getElementById(datas[k])
+                        .childNodes[0]
+                        .childNodes[0];
+      //title from card__face--front
+      el.childNodes[0].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_title_" + datas[k]];
+      //text from card__face--back
+      el.childNodes[1].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_card_" + datas[k]];
+      //info from card__face--back
+      el.childNodes[1].childNodes[1].innerHTML = json_lang_translate[lang]["forensic_card_info"];
+    }
+    //do the translation for ghostReport
+    //get the card element
+    var el = document.getElementById("ghostReport")
+                      .childNodes[0]
+                      .childNodes[0];
+    //title from card__face--front
+    el.childNodes[0].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_title_ghostReport"];
+    //text from card__face--back
+    el.childNodes[1].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_card_ghostReport"];
+    //info from card__face--back
+    el.childNodes[1].childNodes[1].innerHTML = json_lang_translate[lang]["forensic_card_info"];
+  }
+}
+
+/**
 * @func get the url from the text input and gets back informations needed for display
 */
 function submit_form() {
