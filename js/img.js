@@ -76,7 +76,7 @@ function rebuild(img_url){
     elem.setAttribute("id", "test");
     elem.setAttribute("src", img_url);
     elem.setAttribute("data-zoom-image", img_url)
-    elem.style = "width: 80%; height: auto;";
+    elem.style = "max-width: 80%;";
     document.getElementById("place-inner").appendChild(elem);
     refreshTest();
    
@@ -84,7 +84,7 @@ function rebuild(img_url){
     elem2.setAttribute("id", "test2");
     elem2.setAttribute("src", img_url);
     elem2.setAttribute("data-zoom-image", img_url)
-    elem2.style = "width: 80%; height: auto;";
+    elem2.style = "max-width: 80%;";
     document.getElementById("place-lens").appendChild(elem2);
     refreshTest2(); 
 
