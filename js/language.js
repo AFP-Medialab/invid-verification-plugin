@@ -4,6 +4,18 @@ var cookieLang = getCookieLang()
 if (cookieLang != "") {
 	$(document).ready(updateLanguageText(cookieLang));
 }
+
+//add all possible languages
+var lang_div = document.getElementById("select-lang");
+var keys = Object.keys(json_lang_translate);
+for (var i = 0; i < keys.length; ++i) {
+	var new_opt = document.createElement("option");
+	new_opt.value = keys[i];
+	new_opt.text = json_lang_translate[keys[i]]["name"];
+	lang_div.add(new_opt);
+}
+
+//select current used language
 $("#select-lang option[value='" + global_language + "']").attr("selected", "selected");
 
 function updateLanguageText(language) {
