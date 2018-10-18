@@ -405,7 +405,13 @@ input:checked + .slider:before {
 
 .descrip__img {
   overflow-y: auto;
-  max-height: 90%;
+  max-height: 85%;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 1px;
+  word-break: normal;
+  font-size: 15px;
+  line-height: 18px;
 }
 
 .card__info {
@@ -413,6 +419,7 @@ input:checked + .slider:before {
   cursor: pointer;
   margin: 3px 0 0 0;
   font-size: 12px;
+  padding-right: 5px;
 }
 
 /* Row Column for Image */
