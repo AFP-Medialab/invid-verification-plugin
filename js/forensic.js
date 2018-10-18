@@ -3,11 +3,11 @@ var base_url_forensic = "http://reveal-mklab.iti.gr/";
 
 //@datas order of analysis type to display, depending on image width or height
 var datas;
-var datas_height = ["dqReport", "elaReport", "medianNoiseReport", "dctReport", "gridsReport",
+var datas_height = ["dqReport", "elaReport", "medianNoiseReport", "gridsReport",
         "gridsInversedReport", "dwNoiseReport", "blockingReport"];
 
 var datas_width = ["dqReport", "elaReport", "blockingReport", "gridsReport",
-        "gridsInversedReport", "dctReport", "dwNoiseReport", "medianNoiseReport"];
+        "gridsInversedReport", "medianNoiseReport", "dwNoiseReport"];
 
 /**
 * @func create card that flips, image on front and description on back
