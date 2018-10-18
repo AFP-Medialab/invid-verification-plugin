@@ -4,15 +4,7 @@ var cookieLang = getCookieLang()
 if (cookieLang != "") {
 	$(document).ready(updateLanguageText(cookieLang));
 }
-$("[name='language'][value='" + global_language + "'").attr("checked", "checked");
-
-$(".language-selector").hover(
-	function displayLanguage() {
-		$(this).children("form").removeAttr("hidden");
-	},
-	function hideLanguage() {
-		$(this).children("form").attr("hidden", "hidden");
-	});
+$("#select-lang option[value='" + global_language + "']").attr("selected", "selected");
 
 function updateLanguageText(language) {
 	/* update text in html */
@@ -43,6 +35,7 @@ $("[name='language']").on("change", function(event) {
 	var language = $(this).val();
 	if (language != global_language)
 	{
+		/* update HTML text */
 		updateLanguageText(language);
 		/* update Analysis table */
 		updateTableLanguageAnalysis(language);
