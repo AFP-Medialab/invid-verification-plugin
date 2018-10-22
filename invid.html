@@ -12,7 +12,7 @@
 	<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
 	<link rel="stylesheet" type="text/css" href="css/copyright.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="croppie.css">
+	<link rel="stylesheet" href="css/croppie.css">
 	
 	<!-- Google Analytics -->
 	<link rel="stylesheet" type="text/css" href="css/cookieconsent.min.css" />
@@ -386,7 +386,10 @@
 							<span lang="en">Flip</span>
 							<span lang="fr" hidden="hidden">Miroir</span>
 							<input type="radio" id="bicubic" name="filter"/>
-							Bicubic
+							<span>Bicubic</span>
+							<input type="radio" id="crop" name="filter">
+							<span lang="en">Crop</span>
+							<span lang="fr" hidden="hidden">Rogner</span>
 							<div id="scale_input" style="display: none;">
 								<br>
 								<input id="scale" type="range" min="25" max="400" value="100" step="1"/>
@@ -412,12 +415,14 @@
 				</div>
 				<br>
 				<!-- Rounded switch -->
-				<h3 lang="en">Lens zoom / Inner zoom</h3>
-				<h3 lang="fr" hidden="hidden">Loupe / Zoom</h3>
-				<label class="switch">
-					<input type="checkbox" id="toogle">
-					<div class="slider round"></div>
-				</label>
+				<div id="rounded-switch" style="">
+					<h3 lang="en">Lens zoom / Inner zoom</h3>
+					<h3 lang="fr" hidden="hidden">Loupe / Zoom</h3>
+					<label class="switch">
+						<input type="checkbox" id="toogle">
+						<div class="slider round"></div>
+					</label>
+				</div>
 				<br>
 				<br>
 				<br>
@@ -427,6 +432,9 @@
 					</div>
 					<div id="place-lens">
 						<img id="test2" src="" data-zoom-image="">
+					</div>
+					<div id="place-crop" style="width: 500px; height: 500px; margin: auto; display: none;">
+						<div id="cropper"></div>
 					</div>
 				</div>
 				<br>
@@ -717,10 +725,10 @@
 <!-- For Image Magnifier -->
 <script src="js/jquery.min.js"></script>
 <script src='js/jquery.elevatezoom.js'></script>
+<script src="js/croppie.js"></script>
 <script type="text/javascript" src="js/Filter.js"></script>
 <script src='js/Zoom.js'></script>
 <script type="text/javascript" src="js/img.js"></script>
-<script src="croppie.js"></script>
 
 <script type="text/javascript" src="js/util.js"></script>
 
