@@ -257,7 +257,6 @@ function apply_filter(){
     else if (document.getElementById("crop").checked) {
         (async function() {
             new_url = await $("#cropper").croppie('result', { type: 'base64', size: 'canvas'});
-            console.log(new_url);
             histo.addHistory(new_url);
             rebuild(histo.getHistory());
         })();
