@@ -86,10 +86,20 @@ function rebuild(img_url){
     elem2.setAttribute("data-zoom-image", img_url)
     elem2.style = "max-width: 80%;";
     document.getElementById("place-lens").appendChild(elem2);
-    refreshTest2(); 
+    refreshTest2();
 
-    
+    //init or update croppie
+    $("#cropper").croppie('destroy', '');
+    var basic = $("#cropper").croppie({
+        viewport: { width: 200, height: 200 },
+        enableExif: true,
+        enableResize: true
+    });
+    basic.croppie('bind', {
+        url: document.getElementById("test").src
+    });
 }
+
 /*Check if url is valid*/
 function ValidURL(str) {
     var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -108,6 +118,15 @@ function submit_img(){
         document.getElementById("none").checked = true;
         var e = document.getElementById("scale_input");
         e.style.display = "none";
+        document.getElementById("rounded-switch").style.display = "";
+        if (document.getElementById("toogle").checked) {
+            document.getElementById("place-inner").style.display = "";
+            document.getElementById("place-lens").style.display = "none";
+        } else {
+            document.getElementById("place-inner").style.display = "none";
+            document.getElementById("place-lens").style.display = "";
+        }
+        document.getElementById("place-crop").style.display = "none";
         document.getElementById("copy_url_img_magnifier").style.display = (histo.local_path) ? "" : "none";
         if (!ValidURL(img_url)) {
             document.getElementById("lst_search_btn").setAttribute("style", "display: none");
@@ -117,16 +136,6 @@ function submit_img(){
             document.getElementById("lst_search_btn").setAttribute("style", "display: inline");
             document.getElementById("magnifier-content").style.display = "";
         }
-        var basic = $("#cropper").croppie({
-            viewport: {
-                width: 200,
-                height: 200
-            },
-            enableResize: true
-        });
-        basic.croppie('bind', {
-            url: document.getElementById("test2").src
-        });
     }
 }
 
@@ -203,6 +212,17 @@ document.getElementById("crop").onclick = function() {
     document.getElementById("place-inner").style.display = "none";
     document.getElementById("place-lens").style.display = "none";
     document.getElementById("place-crop").style.display = "";
+
+    //init or update croppie
+    $("#cropper").croppie('destroy', '');
+    var basic = $("#cropper").croppie({
+        viewport: { width: 200, height: 200 },
+        enableExif: true,
+        enableResize: true
+    });
+    basic.croppie('bind', {
+        url: document.getElementById("test").src
+    });
 }
 
 /*Undo or redo filter*/
@@ -236,7 +256,7 @@ function apply_filter(){
         new_url = Filters.filterImage(img, "flip", scale);
     else if (document.getElementById("crop").checked) {
         (async function() {
-            new_url = await $("#cropper").croppie('result', { type: 'html', size: 'canvas'});
+            new_url = await $("#cropper").croppie('result', { type: 'base64', size: 'canvas'});
             console.log(new_url);
             histo.addHistory(new_url);
             rebuild(histo.getHistory());
@@ -318,10 +338,11 @@ document.getElementById("download_img_magnifier").addEventListener("click", func
     this.href = histo.getHistory();
     var url_start = histo.history[0];
     var image_name = url_start.substring(url_start.lastIndexOf("/") + 1);
-    index = image_name.indexOf("?");
+    var index = image_name.indexOf("?");
     if (index != -1)
         image_name = image_name.substring(0, index);
-    this.download = image_name;
+    //download as base extension
+    this.download = image_name.substring(0, image_name.lastIndexOf("."));
 });
 
 /* Hide reverse button */
