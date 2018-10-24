@@ -75,7 +75,7 @@ function rebuild(img_url){
     var elem = document.createElement("img");
     elem.setAttribute("id", "test");
     elem.setAttribute("src", img_url);
-    elem.setAttribute("data-zoom-image", img_url)
+    elem.setAttribute("data-zoom-image", img_url);
     elem.style = "max-width: 80%;";
     document.getElementById("place-inner").appendChild(elem);
     refreshTest();
@@ -83,7 +83,7 @@ function rebuild(img_url){
     var elem2 = document.createElement("img");
     elem2.setAttribute("id", "test2");
     elem2.setAttribute("src", img_url);
-    elem2.setAttribute("data-zoom-image", img_url)
+    elem2.setAttribute("data-zoom-image", img_url);
     elem2.style = "max-width: 80%;";
     document.getElementById("place-lens").appendChild(elem2);
     refreshTest2();
