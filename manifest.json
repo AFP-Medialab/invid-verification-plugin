@@ -1,6 +1,6 @@
 {
 "name" :"Fake video news debunker by InVID",
-"version" :"0.65",
+"version" :"0.66",
 "manifest_version": 2,
 "description" :"InVID extension",
 "permissions": [
