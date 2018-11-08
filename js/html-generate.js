@@ -1,5 +1,9 @@
 //js to generate tuto and about page from translation on spreadsheet
 
+/**
+* @func update the content of about tab in function of language
+* @lang actual language to display
+*/
 function update_about(lang) {
   //clean about tab
   var about_tab = document.getElementById("about");
@@ -45,6 +49,8 @@ function update_about(lang) {
       updateTableLanguageForensic(language);
       /* update about tab */
       update_about(language);
+      /* update tuto tab */
+      update_tuto(language);
       setCookieLang(language);
     }
   });
@@ -73,4 +79,77 @@ function update_about(lang) {
   imgs.appendChild(img3);
 
   about_tab.appendChild(imgs);
+}
+
+/**
+* @func update the content of tuto tab in function of language
+* @lang actual language to display
+*/
+function update_tuto(lang) {
+  //clean about tab
+  var tuto_tab = document.getElementById("tutorial");
+  tuto_tab.innerHTML = "";
+
+  //get all translations for about tab
+  var arr_trans = list_from_json(json_lang_translate[lang], "tuto_");
+
+  //place them along with images and buttons, etc
+  var h = document.createElement("h1");
+  h.innerHTML = json_lang_translate[lang]["tuto_title"];
+  tuto_tab.appendChild(h);
+
+  var h = document.createElement("h2");
+  h.innerHTML = json_lang_translate[lang]["tuto_h_1"];
+  tuto_tab.appendChild(h);
+
+  var img = document.createElement("img");
+  img.src = "img/VideoURLmenu.png";
+  tuto_tab.appendChild(img);
+
+  for (var i = 0; i < 3; ++i) {
+    var p = document.createElement("p");
+    p.innerHTML = arr_trans[i];
+    tuto_tab.appendChild(p);
+  }
+
+  var img = document.createElement("img");
+  img.src = "img/InstagramDemo.png";
+  img.width = "100%";
+  tuto_tab.appendChild(img);
+
+  var h = document.createElement("h2");
+  h.innerHTML = json_lang_translate[lang]["tuto_h_2"];
+  tuto_tab.appendChild(h);
+
+  var div = document.createElement("div");
+  div.style = "text-align: center";
+  var iframe = document.createElement("iframe");
+  iframe.width = "640";
+  iframe.height = "385";
+  iframe.src = "https://www.youtube.com/embed/nmgbFODPiBY";
+  iframe.frameborder = "0"
+  div.appendChild(iframe);
+  tuto_tab.appendChild(div);
+
+  for (var i = 3; i < 8; ++i) {
+    var p = document.createElement("p");
+    p.innerHTML = arr_trans[i];
+    tuto_tab.appendChild(p);
+  }
+
+  var div = document.createElement("div");
+  div.style = "text-align: center";
+  var iframe = document.createElement("iframe");
+  iframe.width = "640";
+  iframe.height = "385";
+  iframe.src = "https://www.youtube.com/embed/8S59OMBvT8w";
+  iframe.frameborder = "0"
+  div.appendChild(iframe);
+  tuto_tab.appendChild(div);
+
+  for (var i = 8; i < 12; ++i) {
+    var p = document.createElement("p");
+    p.innerHTML = arr_trans[i];
+    tuto_tab.appendChild(p);
+  }
 }
