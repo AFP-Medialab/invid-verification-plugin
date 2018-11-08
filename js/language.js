@@ -7,6 +7,7 @@ if (cookieLang != "") {
 
 //init tabs needed
 update_about(global_language);
+update_tuto(global_language);
 
 function updateLanguageText(language) {
 	/* update text in html */
