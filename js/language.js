@@ -5,9 +5,6 @@ if (cookieLang != "") {
 	$(document).ready(updateLanguageText(cookieLang));
 }
 
-//select current used language
-$("#select-lang option[value='" + global_language + "']").attr("selected", "selected");
-
 //init tabs needed
 update_about(global_language);
 
