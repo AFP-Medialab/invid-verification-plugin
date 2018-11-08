@@ -5,18 +5,11 @@ if (cookieLang != "") {
 	$(document).ready(updateLanguageText(cookieLang));
 }
 
-//add all possible languages
-var lang_div = document.getElementById("select-lang");
-var keys = Object.keys(json_lang_translate);
-for (var i = 0; i < keys.length; ++i) {
-	var new_opt = document.createElement("option");
-	new_opt.value = keys[i];
-	new_opt.text = json_lang_translate[keys[i]]["name"];
-	lang_div.add(new_opt);
-}
-
 //select current used language
 $("#select-lang option[value='" + global_language + "']").attr("selected", "selected");
+
+//init tabs needed
+update_about(global_language);
 
 function updateLanguageText(language) {
 	/* update text in html */
@@ -42,22 +35,6 @@ function updateLanguageText(language) {
 	
 	global_language = language;
 }
-
-$("[name='language']").on("change", function(event) {
-	var language = $(this).val();
-	if (language != global_language)
-	{
-		/* update HTML text */
-		updateLanguageText(language);
-		/* update Analysis table */
-		updateTableLanguageAnalysis(language);
-		/* update metadata table */
-		updateTableLanguageMetadata(language);
-		/* update forensic table */
-		updateTableLanguageForensic(language);
-		setCookieLang(language);
-	}
-});
 
 function setCookieLang(lang) {
 	var date = new Date();
