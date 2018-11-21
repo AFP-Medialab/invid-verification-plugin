@@ -1,6 +1,38 @@
 //js to generate tuto and about page from translation on spreadsheet
 
 /**
+* @func update the content of the navbar in function of language
+* @lang actual lang to display
+*/
+function update_navbar(lang) {
+  //clean navabar text
+  cleanId("navbar_analysis");
+  cleanId("navbar_keyframes");
+  cleanId("navbar_thumbnails");
+  cleanId("navbar_twitter");
+  cleanId("navbar_magnifier");
+  cleanId("navbar_metadata");
+  cleanId("navbar_rights");
+  cleanId("navbar_forensic");
+  cleanId("navbar_about");
+  cleanId("navbar_survey");
+  cleanId("navbar_tuto");
+
+  //add translation to each tool
+  document.getElementById("navbar_analysis").innerHTML = addSpan(json_lang_translate[global_language]["navbar_analysis"]);
+  document.getElementById("navbar_keyframes").innerHTML = addSpan(json_lang_translate[global_language]["navbar_keyframes"]);
+  document.getElementById("navbar_thumbnails").innerHTML = addSpan(json_lang_translate[global_language]["navbar_thumbnails"]);
+  document.getElementById("navbar_twitter").innerHTML = addSpan(json_lang_translate[global_language]["navbar_twitter"]);
+  document.getElementById("navbar_magnifier").innerHTML = addSpan(json_lang_translate[global_language]["navbar_magnifier"]);
+  document.getElementById("navbar_metadata").innerHTML = addSpan(json_lang_translate[global_language]["navbar_metadata"]);
+  document.getElementById("navbar_rights").innerHTML = addSpan(json_lang_translate[global_language]["navbar_rights"]);
+  document.getElementById("navbar_forensic").innerHTML = addSpan(json_lang_translate[global_language]["navbar_forensic"]);
+  document.getElementById("navbar_about").innerHTML = addSpan(json_lang_translate[global_language]["navbar_about"]);
+  document.getElementById("navbar_survey").innerHTML = addSpan(json_lang_translate[global_language]["navbar_survey"]);
+  document.getElementById("navbar_tuto").innerHTML = addSpan(json_lang_translate[global_language]["navbar_tuto"]);
+}
+
+/**
 * @func update the content of about tab in function of language
 * @lang actual language to display
 */
@@ -41,6 +73,8 @@ function update_about(lang) {
     {
       /* update HTML text */
       updateLanguageText(language);
+      /* update navbar */
+      update_navbar(language);
       /* update Analysis table */
       updateTableLanguageAnalysis(language);
       /* update metadata table */

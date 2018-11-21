@@ -5,7 +5,8 @@ if (cookieLang != "") {
 	$(document).ready(updateLanguageText(cookieLang));
 }
 
-//init tabs needed
+//init translations
+update_navbar(global_language);
 update_about(global_language);
 update_tuto(global_language);
 
