@@ -236,7 +236,7 @@ document.getElementById("redo").onclick = function() {
 
 document.getElementById("scale").onchange = function(){
     var num = document.getElementById("scale").value;
-    $("#show_scale").html("Scale :" + num + "%");
+    $("#show_scale").html(": " + num + "%");
 }
 
 /*get selected filter and apply it*/

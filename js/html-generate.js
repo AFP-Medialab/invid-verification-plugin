@@ -79,11 +79,11 @@ function update_keyframes(lang) {
   document.getElementById("keyframes_title").innerHTML = "<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>";
   document.getElementById("keyframes_input").placeholder = json_lang_translate[lang]["keyframes_input"];
   document.getElementById("keyframes_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["keyframes_content_title"] + "</h3>";
-  document.getElementById("keyframes_content_acco").innerHTML = addSpan(json_lang_translate[lang]["keyframes_content_acco"]);
-  document.getElementById("keyframes_download").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download"]);
-  document.getElementById("keyframes_download_thumb").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download_thumb"]);
-  document.getElementById("keyframes_download_shots").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download_shots"]);
-  document.getElementById("keyframes_download_subshots").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download_subshots"]);
+  document.getElementById("keyframes_content_acco").innerHTML = json_lang_translate[lang]["keyframes_content_acco"];
+  document.getElementById("keyframes_download").innerHTML = json_lang_translate[lang]["keyframes_download"];
+  document.getElementById("keyframes_download_thumb").innerHTML = json_lang_translate[lang]["keyframes_download_thumb"];
+  document.getElementById("keyframes_download_shots").innerHTML = json_lang_translate[lang]["keyframes_download_shots"];
+  document.getElementById("keyframes_download_subshots").innerHTML = json_lang_translate[lang]["keyframes_download_subshots"];
 }
 
 /**
@@ -112,8 +112,35 @@ function update_twitter(lang) {
   document.getElementById("within").placeholder = json_lang_translate[lang]["twitter_within"];
   document.getElementById("from-date").placeholder = json_lang_translate[lang]["twitter_from-date"];
   document.getElementById("to-date").placeholder = json_lang_translate[lang]["twitter_to-date"];
-  document.getElementById("twitter_local_time").innerHTML = addSpan(json_lang_translate[lang]["twitter_local_time"]);
-  document.getElementById("twitter_gmt").innerHTML = addSpan(json_lang_translate[lang]["twitter_gmt"]);
+  document.getElementById("twitter_local_time").innerHTML = json_lang_translate[lang]["twitter_local_time"];
+  document.getElementById("twitter_gmt").innerHTML = json_lang_translate[lang]["twitter_gmt"];
+}
+
+/**
+* @func update the translations of magnifier tab in function of language
+* @lang actual lang to display
+*/
+function update_magnifier(lang) {
+  //add translations to item needed
+  document.getElementById("magnifier_title").innerHTML = "<h1>" + json_lang_translate[lang]["magnifier_title"] + "</h1>";
+  document.getElementById("urlbox").placeholder = json_lang_translate[lang]["twitter_urlbox"];
+  document.getElementById("local_file").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
+  document.getElementById("magnifier_accor").innerHTML = json_lang_translate[lang]["magnifier_accor"];
+  document.getElementById("magnifier_radio_1").innerHTML = json_lang_translate[lang]["magnifier_radio_1"];
+  document.getElementById("magnifier_radio_2").innerHTML = json_lang_translate[lang]["magnifier_radio_2"];
+  document.getElementById("magnifier_radio_3").innerHTML = json_lang_translate[lang]["magnifier_radio_3"];
+  document.getElementById("magnifier_radio_4").innerHTML = json_lang_translate[lang]["magnifier_radio_4"];
+  document.getElementById("magnifier_radio_5").innerHTML = json_lang_translate[lang]["magnifier_radio_5"];
+  document.getElementById("magnifier_scale").innerHTML = json_lang_translate[lang]["magnifier_scale"];
+  document.getElementById("button_undo").innerHTML = json_lang_translate[lang]["button_undo"];
+  document.getElementById("button_redo").innerHTML = json_lang_translate[lang]["button_redo"];
+  document.getElementById("magnifier_switch").innerHTML = "<h3>" + json_lang_translate[lang]["magnifier_switch"] + "</h3>";
+  document.getElementById("button_downloads").innerHTML = json_lang_translate[lang]["button_download"];
+  document.getElementById("img_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_google"]);
+  document.getElementById("baidu_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_baidu"]);
+  document.getElementById("yandex_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_yandex"]);
+  document.getElementById("tineye_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_tineye"]);
+  document.getElementById("img_verif_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_forensic"]);
 }
 
 /**
@@ -171,6 +198,8 @@ function update_about(lang) {
       update_thumbnails(language);
       /* update Twitter Search tab */
       update_twitter(language);
+      /* update magnifier tab */
+      update_magnifier(language);
       /* update metadata table */
       updateTableLanguageMetadata(language);
       /* update forensic table */

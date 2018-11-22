@@ -291,9 +291,9 @@
 					<br>
 					<br>
 					<input type="radio" id="local_time" name="time" checked/>
-					<div id="twitter_local_time"></div>
+					<span id="twitter_local_time"></span>
 					<input type="radio" id="gmt" name="time" translate="no" />
-					<div id="twitter_gmt"></div>
+					<span id="twitter_gmt"></span>
 					<br> 
 					<br>
 					<input type="submit" value="Submit" class="button" />
@@ -302,19 +302,15 @@
 		</div>
 
 		<div id="magnifier" class="form-action hide">
-			<h1 lang="en">Image Magnifier</h1>
-			<h1 lang="fr" hidden="hidden">Inspecteur d'image</h1>
+			<div id="magnifier_title"></div>
 			<form id="img_form">
 				<ul>
-					<input type="text" id="urlbox" name="url" data-text='{"en": "Image URL", "fr":"Adresse de l&apos;image"}' placeholder="Image URL" style="" />
+					<input type="text" id="urlbox" name="url" style="" />
 					<div class="image-upload">
 						<br>
 						<label for="file-input">
 							<img src="img/file.png"/> 
-							<div>
-								<span lang="en">Local file</span>
-								<span lang="fr" hidden="hidden">Fichier local</span>
-							</div>
+							<div id="local_file"></div>
 						</label>
 						<input id="file-input" type="file"/>
 					</div>
@@ -327,8 +323,7 @@
 			<div id="magnifier-content" style="display: none;">
 				<br>
 				<button class="accordion">
-					<span lang="en">More filters</span>
-					<span lang="fr" hidden="hidden">Plus de filtres</span>
+					<div id="magnifier_accor"></div>
 				</button>
 				<div class="panel">
 					<br>
@@ -336,26 +331,22 @@
 						<ul>
 							<br>
 							<input type="radio" id="none" name="filter" checked/>
-							<span lang="en">None</span>
-							<span lang="fr" hidden="hidden">Aucun</span> 
+							<span id="magnifier_radio_1"></span>
 							<input type="radio" id="sharp" name="filter"/>
-							<span lang="en"> Sharp</span>
-							<span lang="fr" hidden="hidden">Contraste</span>
+							<span id="magnifier_radio_2"></span>
 							<input type="radio" id="flip" name="filter">
-							<span lang="en">Flip</span>
-							<span lang="fr" hidden="hidden">Miroir</span>
+							<span id="magnifier_radio_3"></span>
 							<input type="radio" id="bicubic" name="filter"/>
-							<span>Bicubic</span>
+							<span id="magnifier_radio_4"></span>
 							<input type="radio" id="crop" name="filter">
-							<span lang="en">Crop</span>
-							<span lang="fr" hidden="hidden">Rogner</span>
+							<span id="magnifier_radio_5"></span>
 							<div id="scale_input" style="display: none;">
 								<br>
 								<input id="scale" type="range" min="25" max="400" value="100" step="1"/>
-								<div id="show_scale">
-									<span lang="en">Scale</span>
-									<span lang="fr" hidden="hidden">Taille</span> : 100%
-								</div>
+								<div id="magnifier_scale"></div>
+								<span id="show_scale">
+									 : 100%
+								</span>
 							</div>
 							<br>		
 							<br>
@@ -364,19 +355,16 @@
 						</ul>
 					</form>
 					<button id="undo" class="button">
-						<span lang="en">Undo</span>
-						<span lang="fr" hidden="hidden">Annuler</span>
+						<div id="button_undo"></div>
 					</button>
 					<button id="redo" class="button">
-						<span lang="en">Redo</span>
-						<span lang="fr" hidden="hidden">Refaire</span>
+						<div id="button_redo"></div>
 					</button>
 				</div>
 				<br>
 				<!-- Rounded switch -->
 				<div id="rounded-switch" style="">
-					<h3 lang="en">Lens zoom / Inner zoom</h3>
-					<h3 lang="fr" hidden="hidden">Loupe / Zoom</h3>
+					<div id="magnifier_switch"></div>
 					<label class="switch">
 						<input type="checkbox" id="toogle">
 						<div class="slider round"></div>
@@ -401,21 +389,20 @@
 				<br>
 				<div style="display: inline;">
 					<a class="button" id="download_img_magnifier" href="" download="picture.png" style="color: white; text-decoration: none">
-						<span lang="en">Download</span>
-						<span lang="fr" hidden="hidden">Télécharger</span>
+						<div id="button_downloads"></div>
 					</a>
 
 					<div id="lst_search_btn" style="display: inline;">
-						<button id="img_rev_search_btn" class="button">Google Image</button>
-						<button id="baidu_rev_search_btn" class="button">Baidu Image</button>
-						<button id="yandex_rev_search_btn" class="button">Yandex Image</button>
+						<button id="img_rev_search_btn" class="button"></button>
+						<button id="baidu_rev_search_btn" class="button"></button>
+						<button id="yandex_rev_search_btn" class="button"></button>
 						<div style="display: inline-block;">
-							<button id="tineye_rev_search_btn" class="button">Tineye Image</button>
+							<button id="tineye_rev_search_btn" class="button"></button>
 							<!--<p class="new_element" style="font-size: 12px; margin-left: 15px;">
 								new
 							</p> -->
 						</div>
-						<button id="img_verif_btn" class="button">Forensic</button>
+						<button id="img_verif_btn" class="button"></button>
 					</div>
 					<button id="copy_url_img_magnifier" class="button" translate="no">
 						Google Image
