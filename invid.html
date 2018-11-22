@@ -187,12 +187,10 @@
 		</div>
 
 		<div id="keyframes" class="form-action hide">
-			<h1 lang="en">Video fragmentation and reverse image search</h1>
-			<h1 lang="fr" hidden="hidden">Fragmentation vidéo et recherche inversée d'image</h1>
+			<div id="keyframes_title"></div>
 			<form id="keyframes_form">
 				<ul>
-					<input type="text" name="keyframes_url" data-text='{"en": "Insert the video URL", "fr": "Adresse de la vidéo"}'
-					placeholder="Video URL">
+					<input type="text" name="keyframes_url" id="keyframes_input">
 					<br>
 					<br>
 					<input type="submit" value="Submit" class="button">
@@ -206,41 +204,35 @@
 			</form>
 			<div id="error-keyframes" style="display: none; color: red;"></div>
 			<div id="keyframes-content">
-				<h3 lang="en">Video keyframes</h3>
-				<h3 lang="fr" hidden="hidden">Images clés de la vidéo</h3>
+				<div id="keyframes_content_title"></div>
 				<br>
 				<div id="keyframes-place"></div>
 				<br>
 				<div id="keyframes-place2">
 					<button class="accordion">
-						<span lang="en">Show more keyframes</span>
-						<span lang="fr" hidden="hidden">Afficher plus d'images clés</span>
+						<div id="keyframes_content_acco"></div>
 					</button>
 					<div id="panel-shots" style="display: none;"></div>
 				</div>
 				<br>
 				<div id="download-content">
 					<button class="accordion">
-						<span lang="en">Download .zip files</span>
-						<span lang="fr" hidden="hidden">Téléchargement des fichiers .zip</span>
+						<div id="keyframes_download"></div>
 					</button>
 					<div id="panel" style="display: none;">
 						<a id="thumbnails-download">
 							<button class="button">
-								<span lang="en">ZIP of thumbnails</span>
-								<span lang="fr" hidden="hidden">ZIP des imagettes</span>
+								<div id="keyframes_download_thumb"></div>
 							</button>
 						</a>
 						<a id="shots-download">
 							<button class="button">
-								<span lang="en">ZIP of shots</span>
-								<span lang="fr" hidden="hidden">ZIP des photos</span>
+								<div id="keyframes_download_shots"></div>
 							</button>
 						</a>
 						<a id="subshots-download">
 							<button class="button">
-								<span lang="en">ZIP of subshots</span>
-								<span lang="fr" hidden="hidden">ZIP des sous-photos</span>
+								<div id="keyframes_download_subshots"></div>
 							</button>
 						</a>
 					</div>
@@ -250,11 +242,10 @@
 		</div>
 
 		<div id="video" class="form-action hide">
-			<h1 lang="en">Youtube thumbnails reverse search</h1>
-			<h1 lang="fr" hidden="hidden">Recherche inversée des imagettes Youtube</h1>
+			<div id="youtube_title"></div>
 			<form id="video_form">
 				<ul>
-					<input type="text" name="video_url" data-text='{"en": "Youtube video URL", "fr": "Adresse de la vidéo Youtube"}' placeholder="Youtube video URL" />
+					<input type="text" name="video_url" id="youtube_input"/>
 					<br>
 					<div id="engine">
 						<input type="radio" id="google_engine" name="engine" checked translate="no" /> Google 
@@ -276,34 +267,33 @@
 		</div>
 
 		<div id="twitter" class="form-action hide">
-			<h1 lang="en">Twitter advanced search</h1>
-			<h1 lang="fr" hidden="hidden">Recherche avancée Twitter</h1>
+			<div id="twitter_title"></div>
 			<form id="twitter_form">
 				<ul>
-					<input type="text" id="termbox" name="term" data-text='{"en": "Keyword or #", "fr": "Mot clé ou #"}' placeholder="Keyword or #" />
+					<input type="text" id="termbox" name="term"/>
 					<br>
-					<input type="text" id="tw-account" name="account" data-text='{"en": "From (Twitter account name)", "fr": "De (Nom de compte Twitter)"}' placeholder="From (Twitter account name)">
+					<input type="text" id="tw-account" name="account">
 					<br>
-					<input type="text" id="filter" name="filter_tw" data-text='{"en": "Filter (e.g. safe, media, retweets, native_video, periscope, vine, images, twimg or links)", "fr": "Filtre (ex. safe, media, retweets, native_video, periscope, vine, images, twimg or links)"}' placeholder="Filter (e.g. safe, media, retweets, native_video, periscope, vine, images, twimg or links)">
+					<input type="text" id="filter" name="filter_tw">
 					<br>
-					<input type="text" id="lang" name="lang" data-text='{"en": "Language (e.g. en, fr, de, es, ru, ja, zh...)", "fr": "Langue (ex: en, fr, de, es ru, ja, zh...)"}' placeholder="Language (ex. en, fr, de, es, ru, ja, zh...)">
+					<input type="text" id="lang" name="lang">
 					<br>
-					<input type="text" id="geocode" name="geocode" data-text='{"en": "Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)", "fr": "Geocode (ex: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)"}' placeholder="Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)">
+					<input type="text" id="geocode" name="geocode">
 					<br>
-					<input type="text" id="near" name="near" data-text='{"en": "Near (city name)", "fr": "Proche de : (nom de ville)"}' placeholder="Near (city name)" style="width:25%;">
-					<input type="text" id="within" name="within" data-text='{"en": "Within (e.g. 15mi or 15km)", "fr": "Dans (ex: 15mi ou 15km)"}' placeholder="Within (e.g. 15mi or 15km)" style="width:24%;">
+					<input type="text" id="near" name="near" style="width:25%;">
+					<input type="text" id="within" name="within" style="width:24%;">
 					<br>
 					<div id="fromto-content">
-						<input type="text" id="from-date" data-text='{"en": "Since", "fr": "Depuis"}' placeholder="Since">
+						<input type="text" id="from-date">
 						<br>
-						<input type="text" id="to-date" data-text='{"en": "Until", "fr": "Jusqu&apos;à"}' placeholder="Until"> 
+						<input type="text" id="to-date"> 
 					</div>
 					<br>
 					<br>
 					<input type="radio" id="local_time" name="time" checked/>
-					<span lang="en">Local time</span>
-					<span lang="fr" hidden="hidden">Heure locale</span>
-					<input type="radio" id="gmt" name="time" translate="no" /> GMT 
+					<div id="twitter_local_time"></div>
+					<input type="radio" id="gmt" name="time" translate="no" />
+					<div id="twitter_gmt"></div>
 					<br> 
 					<br>
 					<input type="submit" value="Submit" class="button" />

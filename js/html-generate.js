@@ -45,10 +45,10 @@ function update_api(lang) {
   document.getElementById("api_map").innerHTML = addSpan(json_lang_translate[lang]["api_map"]);
   document.getElementById("pac-input").placeholder = json_lang_translate[lang]["api_searchbox"];
   document.getElementById("pac-button").innerHTML = json_lang_translate[lang]["button_submit"];
-  document.getElementById("google_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_google"]);
-  document.getElementById("yandex_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_yandex"]);
-  document.getElementById("tineye_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_tineye"]);
-  document.getElementById("twitter_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_twitter"]);
+  document.getElementById("google_search_btn").innerHTML = json_lang_translate[lang]["button_reverse_google"];
+  document.getElementById("yandex_search_btn").innerHTML = json_lang_translate[lang]["button_reverse_yandex"];
+  document.getElementById("tineye_search_btn").innerHTML = json_lang_translate[lang]["button_reverse_tineye"];
+  document.getElementById("twitter_search_btn").innerHTML = json_lang_translate[lang]["button_reverse_twitter"];
 }
 
 /**
@@ -59,6 +59,7 @@ function update_submit(lang) {
   //find all button class
   var butts = document.getElementsByClassName("button");
 
+  //foreach submit button add corresponding translation
   Array.prototype.forEach.call(butts, function(el) {
     if (el.type == "submit") {
       if (el.id != "apply_button")
@@ -67,6 +68,52 @@ function update_submit(lang) {
         el.value = json_lang_translate[lang]["button_apply"];
     }
   });
+}
+
+/**
+* @func update the translations of keyframes tab in function of language
+* @lang actual lang to display
+*/
+function update_keyframes(lang) {
+  //add translations to item needed
+  document.getElementById("keyframes_title").innerHTML = "<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>";
+  document.getElementById("keyframes_input").placeholder = json_lang_translate[lang]["keyframes_input"];
+  document.getElementById("keyframes_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["keyframes_content_title"] + "</h3>";
+  document.getElementById("keyframes_content_acco").innerHTML = addSpan(json_lang_translate[lang]["keyframes_content_acco"]);
+  document.getElementById("keyframes_download").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download"]);
+  document.getElementById("keyframes_download_thumb").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download_thumb"]);
+  document.getElementById("keyframes_download_shots").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download_shots"]);
+  document.getElementById("keyframes_download_subshots").innerHTML = addSpan(json_lang_translate[lang]["keyframes_download_subshots"]);
+}
+
+/**
+* @func update the translations of YouTube thumbnails tab in function of language
+* @lang actual lang to display
+*/
+function update_thumbnails(lang) {
+  //add translations to item needed
+  document.getElementById("youtube_title").innerHTML = "<h1>" + json_lang_translate[lang]["youtube_title"] + "</h1>";
+  document.getElementById("youtube_input").placeholder = json_lang_translate[lang]["youtube_input"];
+}
+
+/**
+* @func update the translations of twitter search tab in function of language
+* @lang actual lang to display
+*/
+function update_twitter(lang) {
+  //add translations to item needed
+  document.getElementById("twitter_title").innerHTML = "<h1>" + json_lang_translate[lang]["twitter_title"] + "</h1>";
+  document.getElementById("termbox").placeholder = json_lang_translate[lang]["twitter_termbox"];
+  document.getElementById("tw-account").placeholder = json_lang_translate[lang]["twitter_tw-account"];
+  document.getElementById("filter").placeholder = json_lang_translate[lang]["twitter_filter"];
+  document.getElementById("lang").placeholder = json_lang_translate[lang]["twitter_lang"];
+  document.getElementById("geocode").placeholder = json_lang_translate[lang]["twitter_geocode"];
+  document.getElementById("near").placeholder = json_lang_translate[lang]["twitter_near"];
+  document.getElementById("within").placeholder = json_lang_translate[lang]["twitter_within"];
+  document.getElementById("from-date").placeholder = json_lang_translate[lang]["twitter_from-date"];
+  document.getElementById("to-date").placeholder = json_lang_translate[lang]["twitter_to-date"];
+  document.getElementById("twitter_local_time").innerHTML = addSpan(json_lang_translate[lang]["twitter_local_time"]);
+  document.getElementById("twitter_gmt").innerHTML = addSpan(json_lang_translate[lang]["twitter_gmt"]);
 }
 
 /**
@@ -118,6 +165,12 @@ function update_about(lang) {
       update_api(language);
       /* update Analysis table */
       updateTableLanguageAnalysis(language);
+      /* update keyframes tab */
+      update_keyframes(language);
+      /* update YouTube thumbnails tab */
+      update_thumbnails(language);
+      /* update Twitter Search tab */
+      update_twitter(language);
       /* update metadata table */
       updateTableLanguageMetadata(language);
       /* update forensic table */

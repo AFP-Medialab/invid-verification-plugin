@@ -9,6 +9,9 @@ if (cookieLang != "") {
 update_navbar(global_language);
 update_submit(global_language);
 update_api(global_language);
+update_keyframes(global_language);
+update_thumbnails(global_language);
+update_twitter(global_language);
 update_about(global_language);
 update_tuto(global_language);
 
