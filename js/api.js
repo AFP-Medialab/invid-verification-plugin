@@ -108,7 +108,7 @@ function displayButtons(verif_number, locations, not_yt){
 
 function hideButtons() {
     var buttons_id = [ "verif-content", "maps-content", "google_search_btn", "yandex_search_btn",
-        "twitter-shares-content", "twitter_search_btn", "tineye_search_btn"
+        /*"twitter-shares-content",*/ "twitter_search_btn", "tineye_search_btn"
     ]
     for (id of buttons_id) {
         document.getElementById(id).setAttribute("style", "display: none");
@@ -938,7 +938,7 @@ function submit_form(){
 	var url = $("[name=video_url2]").val();
     var reprocessChecked = document.getElementById("api_reprocess").checked;
     document.getElementById("error-content").style.display = "none";
-    document.getElementById("error-content-share").style.display = "none";
+    //document.getElementById("error-content-share").style.display = "none";
     hideButtons();
 	if (url != "") {
         cleanElement("place-table");
