@@ -19,17 +19,54 @@ function update_navbar(lang) {
   cleanId("navbar_tuto");
 
   //add translation to each tool
-  document.getElementById("navbar_analysis").innerHTML = addSpan(json_lang_translate[global_language]["navbar_analysis"]);
-  document.getElementById("navbar_keyframes").innerHTML = addSpan(json_lang_translate[global_language]["navbar_keyframes"]);
-  document.getElementById("navbar_thumbnails").innerHTML = addSpan(json_lang_translate[global_language]["navbar_thumbnails"]);
-  document.getElementById("navbar_twitter").innerHTML = addSpan(json_lang_translate[global_language]["navbar_twitter"]);
-  document.getElementById("navbar_magnifier").innerHTML = addSpan(json_lang_translate[global_language]["navbar_magnifier"]);
-  document.getElementById("navbar_metadata").innerHTML = addSpan(json_lang_translate[global_language]["navbar_metadata"]);
-  document.getElementById("navbar_rights").innerHTML = addSpan(json_lang_translate[global_language]["navbar_rights"]);
-  document.getElementById("navbar_forensic").innerHTML = addSpan(json_lang_translate[global_language]["navbar_forensic"]);
-  document.getElementById("navbar_about").innerHTML = addSpan(json_lang_translate[global_language]["navbar_about"]);
-  document.getElementById("navbar_survey").innerHTML = addSpan(json_lang_translate[global_language]["navbar_survey"]);
-  document.getElementById("navbar_tuto").innerHTML = addSpan(json_lang_translate[global_language]["navbar_tuto"]);
+  document.getElementById("navbar_analysis").innerHTML = addSpan(json_lang_translate[lang]["navbar_analysis"]);
+  document.getElementById("navbar_keyframes").innerHTML = addSpan(json_lang_translate[lang]["navbar_keyframes"]);
+  document.getElementById("navbar_thumbnails").innerHTML = addSpan(json_lang_translate[lang]["navbar_thumbnails"]);
+  document.getElementById("navbar_twitter").innerHTML = addSpan(json_lang_translate[lang]["navbar_twitter"]);
+  document.getElementById("navbar_magnifier").innerHTML = addSpan(json_lang_translate[lang]["navbar_magnifier"]);
+  document.getElementById("navbar_metadata").innerHTML = addSpan(json_lang_translate[lang]["navbar_metadata"]);
+  document.getElementById("navbar_rights").innerHTML = addSpan(json_lang_translate[lang]["navbar_rights"]);
+  document.getElementById("navbar_forensic").innerHTML = addSpan(json_lang_translate[lang]["navbar_forensic"]);
+  document.getElementById("navbar_about").innerHTML = addSpan(json_lang_translate[lang]["navbar_about"]);
+  document.getElementById("navbar_survey").innerHTML = addSpan(json_lang_translate[lang]["navbar_survey"]);
+  document.getElementById("navbar_tuto").innerHTML = addSpan(json_lang_translate[lang]["navbar_tuto"]);
+}
+
+/**
+* @func update the content of the api tab in function of language
+* @lang actual lang to display
+*/
+function update_api(lang) {
+  //add translation to items needed from api tab
+  document.getElementById("api_title").innerHTML = "<h1>" + json_lang_translate[lang]["api_title"] + "</h1>";
+  document.getElementById("apibox").placeholder = json_lang_translate[lang]["api_input"];
+  document.getElementById("api_repro").innerHTML = json_lang_translate[lang]["api_repro"];
+  document.getElementById("api_comments").innerHTML = addSpan(json_lang_translate[lang]["api_comments"]);
+  document.getElementById("api_map").innerHTML = addSpan(json_lang_translate[lang]["api_map"]);
+  document.getElementById("pac-input").placeholder = json_lang_translate[lang]["api_searchbox"];
+  document.getElementById("pac-button").innerHTML = json_lang_translate[lang]["button_submit"];
+  document.getElementById("google_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_google"]);
+  document.getElementById("yandex_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_yandex"]);
+  document.getElementById("tineye_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_tineye"]);
+  document.getElementById("twitter_search_btn").innerHTML = addSpan(json_lang_translate[lang]["button_reverse_twitter"]);
+}
+
+/**
+* @func update the translations of submit buttons in function of language
+* @lang actual lang to display
+*/
+function update_submit(lang) {
+  //find all button class
+  var butts = document.getElementsByClassName("button");
+
+  Array.prototype.forEach.call(butts, function(el) {
+    if (el.type == "submit") {
+      if (el.id != "apply_button")
+        el.value = json_lang_translate[lang]["button_submit"];
+      else
+        el.value = json_lang_translate[lang]["button_apply"];
+    }
+  });
 }
 
 /**
@@ -75,6 +112,10 @@ function update_about(lang) {
       updateLanguageText(language);
       /* update navbar */
       update_navbar(language);
+      /* update buttons */
+      update_submit(language);
+      /* update Analysis tab*/
+      update_api(language);
       /* update Analysis table */
       updateTableLanguageAnalysis(language);
       /* update metadata table */
