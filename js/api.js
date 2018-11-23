@@ -749,7 +749,7 @@ function request_fail(msg) {
     document.getElementById("api-content").style.display = "none";
     //document.getElementById("place-debunked").style.display = "none";
     document.getElementById("loader").style.display = "none";
-    document.getElementById("loader_tw").style.display = "none";
+    //document.getElementById("loader_tw").style.display = "none";
     var errorElement = document.getElementById("error-content");
     errorElement.innerHTML = msg;
     errorElement.style.display = "block";
