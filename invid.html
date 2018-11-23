@@ -389,7 +389,7 @@
 				<br>
 				<div style="display: inline;">
 					<a class="button" id="download_img_magnifier" href="" download="picture.png" style="color: white; text-decoration: none">
-						<div id="button_downloads"></div>
+						<span id="button_downloads"></span>
 					</a>
 
 					<div id="lst_search_btn" style="display: inline;">
@@ -412,29 +412,23 @@
 		</div>
 
 		<div id="metadata" class="form-action hide">
-			<h1 lang="en">Metadata</h1>
-			<h1 lang="fr" hidden="hidden">Métadonnées</h1>
+			<div id="metadata_content_title"></div>
 			<form id="metadata_form">
 				<ul>
-					<input type="text" id="url-metadata" name="url" data-text='{"en": "Image URL in jpg/jpeg or video URL in mp4/m4v format", "fr": "Adresse de l&apos;image au format jpg/jpeg ou video au format mp4/m4v"}' placeholder="Image URL in jpg/jpeg or video URL in mp4/m4v format" style="" />
+					<input type="text" id="url-metadata" name="url" style="" />
 					<div class="image-upload">
 						<br>
 						<label for="local-metadata">
 							<img src="img/file.png"/> 
-							<div>
-								<span lang="en">Local file</span>
-								<span lang="fr" hidden="hidden">Fichier local</span>
-							</div>
+							<div id="metadata_localfile"></div>
 						</label>
 						<input id="local-metadata" type="file"/>
 					</div>
 					<br>
 					<input type="radio" id="img-meta-radio" name="file_type" checked/>
-					<span lang="en">Image</span>
-					<span lang="fr" hidden="hidden">Image</span>
+					<span id="metadata_radio_image"></span>
 					<input type="radio" id="video-meta-radio" name="file_type"/>
-					<span lang="en">Video</span>
-					<span lang="fr" hidden="hidden">Vidéo</span>
+					<span id="metadata_radio_video"></span>
 					<br>
 					<br>
 					<input type="submit" value="Submit" class="button" />
@@ -448,12 +442,10 @@
 
 
 		<div id="copyright-tab" class="form-action hide">
-			<h1 lang="en">Check Video Copyright Status </h1>
-			<h1 lang="fr" hidden="hidden">Vérifier le copyright de la vidéo</h1>
+			<div id="copyright_title"></div>
 			<form id="copyright-form">
 				<div>
-					<input type="text" id="copyright-video_url" name="copyright-video_url" data-text='{"en": "Paste a Youtube, Twitter of Facebook video URL", "fr": "Copier une l&apos;url de la video Youtube, Twitter ou Facebook"}'
-								 placeholder="Paste a Youtube, Twitter of Facebook video URL"/>
+					<input type="text" id="copyright-video_url" name="copyright-video_url"/>
 					<br>
 					<br>
 				</div>
@@ -465,17 +457,14 @@
 			</div>
 			<div id="copyright-error"></div>
 			<br><br>
-			<div class="copyright-footer">Developed by the GRIHO Research Group © 2018 Universitat de Lleida<br>Contact: <a href="mailto:invid@udl.cat">invid@udl.cat</a>
-			</div>
+			<div class="copyright-footer" id="copyright_footer"></div>
 		</div>
 
 		<div id="forensic" class="form-action hide">
-			<h1 lang="en">Image forensic analysis</h1>
-			<h1 lang="fr" hidden="hidden">Analyse forensic d'image</h1>
+			<div id="forensic_title"></div>
 			<form id="forensic_form">
 				<ul>
-					<input type="text" name="forensic_url" data-text='{"en": "Insert the image URL", "fr": "Insérez l&#39URL d&#39une image"}'
-					placeholder="Video URL">
+					<input type="text" name="forensic_url" id="forensic_input">
 					<br>
 					<br>
 					<br>
@@ -493,8 +482,7 @@
 			</form>
 			<div id="error-forensic"></div>
 			<div id="forensic-content">
-				<h3 lang="en">Forensic analysis</h3>
-				<h3 lang="fr" hidden="hidden">Analyse forensic</h3>
+				<div id="forensic_content_title"></div>
 				<div id="forensic-place"></div>
 				<br>
 				<br>
@@ -506,8 +494,6 @@
 
 		<div id="survey" class="form-action hide">
 			<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBmt3LKN76GRIM6i5GzX94F_VEnTF5VHMwDoOWgITBq0ntuA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">
-				<span lang="en">Loading...</span>
-				<span lang="fr" hidden="hidden">Chargement en cours...</span>
 			</iframe>
 		</div>
 

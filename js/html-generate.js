@@ -123,7 +123,7 @@ function update_twitter(lang) {
 function update_magnifier(lang) {
   //add translations to item needed
   document.getElementById("magnifier_title").innerHTML = "<h1>" + json_lang_translate[lang]["magnifier_title"] + "</h1>";
-  document.getElementById("urlbox").placeholder = json_lang_translate[lang]["twitter_urlbox"];
+  document.getElementById("urlbox").placeholder = json_lang_translate[lang]["magnifier_urlbox"];
   document.getElementById("local_file").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
   document.getElementById("magnifier_accor").innerHTML = json_lang_translate[lang]["magnifier_accor"];
   document.getElementById("magnifier_radio_1").innerHTML = json_lang_translate[lang]["magnifier_radio_1"];
@@ -141,6 +141,41 @@ function update_magnifier(lang) {
   document.getElementById("yandex_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_yandex"]);
   document.getElementById("tineye_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_tineye"]);
   document.getElementById("img_verif_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_forensic"]);
+}
+
+/**
+* @func update the translations of metadata tab in function of language
+* @lang actual lang to display
+*/
+function update_metadata(lang) {
+  //add translations to item needed
+  document.getElementById("metadata_content_title").innerHTML = "<h1>" + json_lang_translate[lang]["metadata_content_title"] + "</h1>";
+  document.getElementById("url-metadata").placeholder = json_lang_translate[lang]["metadata_content_input"];
+  document.getElementById("metadata_localfile").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
+  document.getElementById("metadata_radio_image").innerHTML = json_lang_translate[lang]["metadata_radio_image"];
+  document.getElementById("metadata_radio_video").innerHTML = json_lang_translate[lang]["metadata_radio_video"];
+}
+
+/**
+* @func update the translations of copyright tab in function of language
+* @lang actual lang to display
+*/
+function update_copyright(lang) {
+  //add translations to item needed
+  document.getElementById("copyright_title").innerHTML = "<h1>" + json_lang_translate[lang]["copyright_title"] + "</h1>";
+  document.getElementById("copyright-video_url").placeholder = json_lang_translate[lang]["copyright_input"];
+  document.getElementById("copyright_footer").innerHTML = json_lang_translate[lang]["copyright_footer"];
+}
+
+/**
+* @func update the translations of forensic tab in function of language
+* @lang actual lang to display
+*/
+function update_forensic(lang) {
+  //add translations to item needed
+  document.getElementById("forensic_title").innerHTML = "<h1>" + json_lang_translate[lang]["forensic_title"] + "</h1>";
+  document.getElementById("forensic_input").placeholder = json_lang_translate[lang]["forensic_input"];
+  document.getElementById("forensic_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["forensic_content_title"] + "</h3>";
 }
 
 /**
@@ -200,8 +235,14 @@ function update_about(lang) {
       update_twitter(language);
       /* update magnifier tab */
       update_magnifier(language);
+      /* update metadata tab */
+      update_metadata(language);
       /* update metadata table */
       updateTableLanguageMetadata(language);
+      /* update copyright tab */
+      update_copyright(language);
+      /* update forensic tab */
+      update_forensic(language);
       /* update forensic table */
       updateTableLanguageForensic(language);
       /* update about tab */
