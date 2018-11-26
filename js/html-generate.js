@@ -78,6 +78,7 @@ function update_keyframes(lang) {
   //add translations to item needed
   document.getElementById("keyframes_title").innerHTML = "<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>";
   document.getElementById("keyframes_input").placeholder = json_lang_translate[lang]["keyframes_input"];
+  document.getElementById("keyframes_localfile").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
   document.getElementById("keyframes_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["keyframes_content_title"] + "</h3>";
   document.getElementById("keyframes_content_acco").innerHTML = json_lang_translate[lang]["keyframes_content_acco"];
   document.getElementById("keyframes_download").innerHTML = json_lang_translate[lang]["keyframes_download"];
@@ -175,6 +176,7 @@ function update_forensic(lang) {
   //add translations to item needed
   document.getElementById("forensic_title").innerHTML = "<h1>" + json_lang_translate[lang]["forensic_title"] + "</h1>";
   document.getElementById("forensic_input").placeholder = json_lang_translate[lang]["forensic_input"];
+  document.getElementById("forensic_localfile").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
   document.getElementById("forensic_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["forensic_content_title"] + "</h3>";
 }
 
