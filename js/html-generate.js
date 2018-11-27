@@ -49,6 +49,7 @@ function update_api(lang) {
   document.getElementById("yandex_search_btn").innerHTML = json_lang_translate[lang]["button_reverse_yandex"];
   document.getElementById("tineye_search_btn").innerHTML = json_lang_translate[lang]["button_reverse_tineye"];
   document.getElementById("twitter_search_btn").innerHTML = json_lang_translate[lang]["button_reverse_twitter"];
+  document.getElementById("footer_analysis").innerHTML = json_lang_translate[lang]["footer_analysis"];
 }
 
 /**
@@ -86,6 +87,7 @@ function update_keyframes(lang) {
   document.getElementById("keyframes_download_thumb").innerHTML = json_lang_translate[lang]["keyframes_download_thumb"];
   document.getElementById("keyframes_download_shots").innerHTML = json_lang_translate[lang]["keyframes_download_shots"];
   document.getElementById("keyframes_download_subshots").innerHTML = json_lang_translate[lang]["keyframes_download_subshots"];
+  document.getElementById("footer_keyframes").innerHTML = json_lang_translate[lang]["footer_keyframes"];
 }
 
 /**
@@ -96,6 +98,7 @@ function update_thumbnails(lang) {
   //add translations to item needed
   document.getElementById("youtube_title").innerHTML = "<h1>" + json_lang_translate[lang]["youtube_title"] + "</h1>";
   document.getElementById("youtube_input").placeholder = json_lang_translate[lang]["youtube_input"];
+  document.getElementById("footer_thumbnails").innerHTML = json_lang_translate[lang]["footer_thumbnails"];
 }
 
 /**
@@ -116,6 +119,7 @@ function update_twitter(lang) {
   document.getElementById("to-date").placeholder = json_lang_translate[lang]["twitter_to-date"];
   document.getElementById("twitter_local_time").innerHTML = json_lang_translate[lang]["twitter_local_time"];
   document.getElementById("twitter_gmt").innerHTML = json_lang_translate[lang]["twitter_gmt"];
+  document.getElementById("footer_twitter").innerHTML = json_lang_translate[lang]["footer_twitter"];
 }
 
 /**
@@ -143,6 +147,7 @@ function update_magnifier(lang) {
   document.getElementById("yandex_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_yandex"]);
   document.getElementById("tineye_rev_search_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_tineye"]);
   document.getElementById("img_verif_btn").innerHTML = addSpan(json_lang_translate[lang]["magnifier_forensic"]);
+  document.getElementById("footer_magnifier").innerHTML = json_lang_translate[lang]["footer_magnifier"];
 }
 
 /**
@@ -156,6 +161,7 @@ function update_metadata(lang) {
   document.getElementById("metadata_localfile").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
   document.getElementById("metadata_radio_image").innerHTML = json_lang_translate[lang]["metadata_radio_image"];
   document.getElementById("metadata_radio_video").innerHTML = json_lang_translate[lang]["metadata_radio_video"];
+  document.getElementById("footer_metadata").innerHTML = json_lang_translate[lang]["footer_metadata"];
 }
 
 /**
@@ -166,7 +172,7 @@ function update_copyright(lang) {
   //add translations to item needed
   document.getElementById("copyright_title").innerHTML = "<h1>" + json_lang_translate[lang]["copyright_title"] + "</h1>";
   document.getElementById("copyright-video_url").placeholder = json_lang_translate[lang]["copyright_input"];
-  document.getElementById("copyright_footer").innerHTML = json_lang_translate[lang]["copyright_footer"];
+  document.getElementById("footer_rights").innerHTML = json_lang_translate[lang]["footer_rights"];
 }
 
 /**
@@ -180,6 +186,7 @@ function update_forensic(lang) {
   document.getElementById("forensic_localfile").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
   document.getElementById("forensic_iframe_back").innerHTML = addSpan(json_lang_translate[lang]["forensic_card_info"]);
   document.getElementById("forensic_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["forensic_content_title"] + "</h3>";
+  document.getElementById("footer_forensic").innerHTML = json_lang_translate[lang]["footer_forensic"];
 }
 
 /**
@@ -281,6 +288,9 @@ function update_about(lang) {
   imgs.appendChild(img3);
 
   about_tab.appendChild(imgs);
+
+  //add translations
+  document.getElementById("footer_about").innerHTML = json_lang_translate[lang]["footer_about"];
 }
 
 /**
@@ -354,4 +364,7 @@ function update_tuto(lang) {
     p.innerHTML = arr_trans[i];
     tuto_tab.appendChild(p);
   }
+
+  //add translations
+  document.getElementById("footer_tutorial").innerHTML = json_lang_translate[lang]["footer_tutorial"];
 }
