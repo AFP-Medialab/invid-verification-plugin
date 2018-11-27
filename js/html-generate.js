@@ -81,6 +81,7 @@ function update_keyframes(lang) {
   document.getElementById("keyframes_localfile").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
   document.getElementById("keyframes_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["keyframes_content_title"] + "</h3>";
   document.getElementById("keyframes_content_acco").innerHTML = json_lang_translate[lang]["keyframes_content_acco"];
+  document.getElementById("keyframes_iframe_back").innerHTML = addSpan(json_lang_translate[lang]["forensic_card_info"]);
   document.getElementById("keyframes_download").innerHTML = json_lang_translate[lang]["keyframes_download"];
   document.getElementById("keyframes_download_thumb").innerHTML = json_lang_translate[lang]["keyframes_download_thumb"];
   document.getElementById("keyframes_download_shots").innerHTML = json_lang_translate[lang]["keyframes_download_shots"];
@@ -177,6 +178,7 @@ function update_forensic(lang) {
   document.getElementById("forensic_title").innerHTML = "<h1>" + json_lang_translate[lang]["forensic_title"] + "</h1>";
   document.getElementById("forensic_input").placeholder = json_lang_translate[lang]["forensic_input"];
   document.getElementById("forensic_localfile").innerHTML = addSpan(json_lang_translate[lang]["button_localfile"]);
+  document.getElementById("forensic_iframe_back").innerHTML = addSpan(json_lang_translate[lang]["forensic_card_info"]);
   document.getElementById("forensic_content_title").innerHTML = "<h3>" + json_lang_translate[lang]["forensic_content_title"] + "</h3>";
 }
 
