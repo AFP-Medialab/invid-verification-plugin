@@ -56,28 +56,27 @@ function csv_to_array(csv) {
 */
 function translate_csv(path) {
   var rawFile = new XMLHttpRequest();
-  rawFile.open("GET", path, false);
-  rawFile.onload = function () {
+  rawFile.onreadystatechange = function () {
     if (rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status == 0)) {
       var allText = rawFile.responseText;
       lang_array_csv = csv_to_array(allText);
     }
-  }
-  var localFile = new XMLHttpRequest();
-  localFile.open("GET", "InVIDTraductions.tsv", false);
-  localFile.onload = function () {
-    if (rawFile.readyState === 4) {
-      if (rawFile.status === 200 || rawFile.status == 0) {
-        var allText = localFile.responseText;
-        lang_array_csv = csv_to_array(allText);
+    else {
+      var localFile = new XMLHttpRequest();
+      localFile.onreadystatechange = function () {
+        if (localFile.readyState === 4) {
+          if (localFile.status === 200 || localFile.status == 0) {
+            var allText = localFile.responseText;
+            lang_array_csv = csv_to_array(allText);
+          }
+        }
       }
+      localFile.open("GET", "InVIDTraductions.tsv", false);
+      localFile.send(null);
     }
   }
-  try {
-    rawFile.send(null);
-  } catch(e) {
-    localFile.send(null);
-  }
+  rawFile.open("GET", path, false);
+  rawFile.send(null);
 }
 
 //call to create global variable containing json representation of translations
