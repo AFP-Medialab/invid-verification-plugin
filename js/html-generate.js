@@ -289,6 +289,44 @@ function update_about(lang) {
 
   about_tab.appendChild(imgs);
 
+  var input = document.createElement("input");
+  input.setAttribute("type", "checkbox");
+  input.setAttribute("name", "human_rights");
+  input.setAttribute("id", "checkbox_rights");
+  //if cookie, check box
+  var arr = (document.cookie).split(';');
+  for (var cookie of arr) {
+    var both = cookie.split('=');
+    if (both[0] == " rights") {
+      if (both[1] == "1") {
+        input.checked = true;
+        document.getElementById("download-content").style.display = "";
+      }
+      else {
+        document.getElementById("download-content").style.display = "none";
+      }
+    }
+  }
+
+  input.addEventListener("change", function () {
+    if (this.checked) {
+      document.cookie = "rights=1;";
+      document.getElementById("download-content").style.display = "";
+    }
+    else {
+      document.cookie = "rights=0;";
+      document.getElementById("download-content").style.display = "none";
+    }
+  });
+
+
+  var label = document.createElement("label");
+  label.setAttribute("for", "checkbox_rights");
+  label.innerHTML = json_lang_translate[lang]["about_human_rights"];
+
+  about_tab.appendChild(input);
+  about_tab.appendChild(label);
+
   var div_trans = document.createElement("div");
   div_trans.id = "footer_about";
   div_trans.setAttribute("class", "footer");

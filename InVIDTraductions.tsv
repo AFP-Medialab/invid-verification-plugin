@@ -1,5 +1,4 @@
 	en	fr
-version	0.1	0.1
 name	English	Français
 navbar_analysis	Analysis	Analyse
 navbar_keyframes	Keyframes	Images Clés
@@ -418,6 +417,7 @@ about_4	<strong>Disclaimer:</strong> this software is provided "as is", without 
 about_5	<strong>Privacy:</strong> this plugin does not gather any personal data. We implemented Google analytics only to get feedback and statistics about the tool usage, in order to improve the next releases.	<strong>Sécurité:</strong> cette extension n'utilise pas vos données personnelles. Les données récupérées via Google Analytics sont anonymisées et ne servent qu'à obtenir des statistiques d'usage sur l'utilisation de l'extension, dans le but d'améliorer les prochaines versions.
 about_6	InVID is a Horizon 2020 innovation action funded by the European Union under grant agreement 687786. For more information, visit our <a href="http://www.invid-project.eu/" target="_blank">InVID website</a> or follow us on <a href="https://twitter.com/InVID_EU" target="_blank">Twitter</a>.	InVID est un projet financé par le programme Horizon 2020 de l'Union Européenne, sous l'accord de subvention 687786. Pour plus d'information sur le projet, visitez le <a href="http://www.invid-project.eu/" target="_blank"> site InVID</a> ou suivez-nous sur <a href="https://twitter.com/InVID_EU" target="_blank">Twitter</a>.
 about_7	The initial versions (0.1-0.6) of this plugin have been developed by <a href="https://www.afp.com/en/medialab/" target="_blank">AFP Medialab</a> (Denis TEYSSOU, Jean-Michel LEUNG, Nathan GOYAT, Bertrand GOUPIL, Axel VIGNY). The underlying services are provided by <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI, CERTH).	Les premières versions (0.1-0.6) de cette extension ont été développées par le <a href="https://www.afp.com/medialab/" target="_blank">Medialab de l'AFP</a> (Denis TEYSSOU, Jean-Michel LEUNG, Nathan GOYAT, Bertrand GOUPIL, Axel VIGNY). Les services sous-jacents sont fournis par <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI, CERTH).
+about_human_rights	For Human Rights	Pour les Droits de l'Homme
 tuto_title	Tutorial	Tutoriel
 tuto_h_1	Access menu	Menu Popup
 tuto_h_2	Plugin main features	Principales fonctionnalités de l'extension
