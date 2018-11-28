@@ -107,7 +107,7 @@ document.getElementById("invid-logo").onclick = function(){
 
 function checkParam(){
   var url = String(document.URL);
-  if (url.includes("?img=") || url.includes("?video=")){
+  if (url.includes("?img=") || url.includes("?video=") || url.includes("?imgforen=")){
     var SHOW_CLASS = 'show',
     HIDE_CLASS = 'hide',
     ACTIVE_CLASS = 'active';
@@ -129,6 +129,16 @@ function checkParam(){
       $tab.addClass( ACTIVE_CLASS );
 
       callMagnifier(url.split("?img=")[1]);
+    } else if (url.includes("?imgforen=")) {
+      $('#forensic')
+      .removeClass( HIDE_CLASS )
+      .addClass( SHOW_CLASS )
+      .hide()
+      .fadeIn( 550 );
+      $tab = $("#forensic_tab")
+      $tab.addClass( ACTIVE_CLASS );
+
+      callForensic(url.split("?imgforen=")[1]);
     } else {
       $('#api')
       .removeClass( HIDE_CLASS )

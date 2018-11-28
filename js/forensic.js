@@ -322,6 +322,13 @@ function updateTableLanguageForensic(lang) {
 }
 
 /**
+* @func used when we want to call forensic from url
+*/
+function callForensic(url) {
+  document.getElementById("forensic_input").value = url;
+}
+
+/**
 * @func get the url from the text input and gets back informations needed for display
 */
 function submit_form() {
