@@ -289,8 +289,11 @@ function update_about(lang) {
 
   about_tab.appendChild(imgs);
 
-  //add translations
-  document.getElementById("footer_about").innerHTML = json_lang_translate[lang]["footer_about"];
+  var div_trans = document.createElement("div");
+  div_trans.id = "footer_about";
+  div_trans.setAttribute("class", "footer");
+  div_trans.innerHTML = json_lang_translate[lang]["footer_about"];
+  about_tab.appendChild(div_trans);
 }
 
 /**
@@ -365,6 +368,9 @@ function update_tuto(lang) {
     tuto_tab.appendChild(p);
   }
 
-  //add translations
-  document.getElementById("footer_tutorial").innerHTML = json_lang_translate[lang]["footer_tutorial"];
+  var div_trans = document.createElement("div");
+  div_trans.id = "footer_tutorial";
+  div_trans.setAttribute("class", "footer");
+  div_trans.innerHTML = json_lang_translate[lang]["footer_tutorial"];
+  tuto_tab.appendChild(div_trans);
 }
