@@ -357,7 +357,7 @@ input:checked + .slider:before {
   display: none;
   margin: 15px auto 15px;
   padding: 10px 50px 10px;
-  width: 800px;
+  width: 1000px;
   border: 1px solid #ccc;
   border-radius: 4px;
   background: #edece8;
@@ -435,8 +435,9 @@ input:checked + .slider:before {
 /* Row Column for Image */
 .column{
   float: left;
-  width: 33.33%;
-  padding: 5px;
+  width: 25%;
+  padding-left: 15px;
+  padding-right: 15px;
   box-sizing: border-box;
 
 }
