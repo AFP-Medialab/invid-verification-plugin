@@ -8,6 +8,7 @@ var datas_height = ["dqReport", "elaReport", "medianNoiseReport", "gridsReport",
 
 var datas_width = ["dqReport", "elaReport", "dwNoiseReport", "blockingReport", "gridsReport",
         "gridsInversedReport", "medianNoiseReport"];
+datas = datas_width;
 
 /**
 * @func create card that flips, image on front and description on back
