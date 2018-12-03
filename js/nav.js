@@ -19,6 +19,8 @@
         return "magnifier";
       case "metadata":
         return "metadata";
+      case "copyright-tab":
+        return "copyright";
       case "forensic":
         return "forensic";
       case "about":
