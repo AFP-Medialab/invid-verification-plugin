@@ -354,10 +354,10 @@ function updateTableLanguageForensic(lang) {
                         .childNodes[0];
       //title from card__face--front
       el.childNodes[0].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_title_" + datas[k]];
+      el.childNodes[0].childNodes[2].innerHTML = json_lang_translate[lang]["forensic_card_info"];
       //text from card__face--back
       el.childNodes[1].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_card_" + datas[k]];
-      //info from card__face--back
-      el.childNodes[1].childNodes[1].innerHTML = json_lang_translate[lang]["forensic_card_info"];
+      el.childNodes[1].childNodes[1].innerHTML = json_lang_translate[lang]["forensic_card_back"];
     }
     //do the translation for ghostReport
     //get the card element
@@ -366,9 +366,9 @@ function updateTableLanguageForensic(lang) {
                       .childNodes[0];
     //title from card__face--front
     el.childNodes[0].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_title_ghostReport"];
+    el.childNodes[0].childNodes[3].innerHTML = json_lang_translate[lang]["forensic_card_info"];
     //text from card__face--back
     el.childNodes[1].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_card_ghostReport"];
-    //info from card__face--back
     el.childNodes[1].childNodes[1].innerHTML = json_lang_translate[lang]["forensic_card_info"];
   }
 }
