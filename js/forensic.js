@@ -37,19 +37,37 @@ function create_card(title, img, desc) {
   descrip_img.innerHTML = desc;
   var info = document.createElement("div");
   info.setAttribute("class", "card__info");
-  info.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
+  info.innerHTML = json_lang_translate[global_language]["forensic_card_back"];
+  var toggle = document.createElement("div");
+  toggle.setAttribute("class", "card__info");
+  toggle.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
+  var modal = document.createElement("div");
+  modal.setAttribute("class", "modal");
+  var close = document.createElement("span");
+  close.setAttribute("class", "close-modal");
+  close.innerHTML = "&times;";
+  var img_modal = document.createElement("img");
+  img_modal.setAttribute("class", "modal-content");
+  img_modal.src = img;
 
   //create js for card (on click flip)
   img_front.addEventListener('click', function() {
-      card.classList.toggle('is-flipped');
+      modal.style.display = "block";
+      img_modal.src = this.src;
     });
   info.addEventListener('click', function() {
       card.classList.toggle('is-flipped');
     });
+  toggle.addEventListener('click', function() {
+      card.classList.toggle('is-flipped');
+    });
+  close.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
 
   //to resize the scene when img is loaded
   img_front.onload = function () {
-    scene.style.height = (this.height + 70) + "px";
+    scene.style.height = (this.height + 90) + "px";
   };
 
   //appendchild to create the card
@@ -57,10 +75,16 @@ function create_card(title, img, desc) {
   back.appendChild(info);
   front.appendChild(title_card);
   front.appendChild(img_front);
+  front.appendChild(toggle);
   card.appendChild(front);
   card.appendChild(back);
+  modal.appendChild(close);
+  modal.appendChild(img_modal);
   scene.appendChild(card);
 
+  //apend for modal
+  document.getElementById("forensic-modal").appendChild(modal);
+  
   return scene;
 }
 
@@ -104,7 +128,10 @@ function create_card_slider(title, imgs, desc) {
   descrip_img.innerHTML = desc;
   var info = document.createElement("div");
   info.setAttribute("class", "card__info");
-  info.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
+  info.innerHTML = json_lang_translate[global_language]["forensic_card_back"];
+  var toggle = document.createElement("div");
+  toggle.setAttribute("class", "card__info");
+  toggle.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
 
   //create all imgs
   var imgs_front = document.createElement("div");
@@ -113,22 +140,44 @@ function create_card_slider(title, imgs, desc) {
     img_front.setAttribute("class", "img__front");
     img_front.src = imgs[i];
     img_front.id = "img_" + title + "_" + i;
+    var modal = document.createElement("div");
+    modal.setAttribute("class", "modal");
+    var close = document.createElement("span");
+    close.setAttribute("class", "close-modal");
+    close.innerHTML = "&times;";
+    var img_modal = document.createElement("img");
+    img_modal.setAttribute("class", "modal-content");
+    img_modal.src = img_front.src;
     if (i == 0) {
       img_front.style.display = "";
       //to resize scene on imgload
       img_front.onload = function () {
-        scene.style.height = (this.height + 90) + "px";
+        scene.style.height = (this.height + 110) + "px";
       };
     }
-    else
+    else {
       img_front.style.display = "none";
+    }
 
     //add js to flip card on click
     img_front.addEventListener('click', function() {
-        card.classList.toggle('is-flipped');
-      });
+      modal.style.display = "block";
+      img_modal.src = this.src;
+    });
+    close.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
     imgs_front.appendChild(img_front);
+
+    //apend for modal
+    modal.appendChild(close);
+    modal.appendChild(img_modal);
+    document.getElementById("forensic-modal").appendChild(modal);
   }
+
+  toggle.addEventListener('click', function() {
+      card.classList.toggle('is-flipped');
+    });
 
   //create radio buttons to select images
   var div_radio = document.createElement("div");
@@ -157,6 +206,7 @@ function create_card_slider(title, imgs, desc) {
   front.appendChild(title_card);
   front.appendChild(imgs_front);
   front.appendChild(div_radio);
+  front.appendChild(toggle);
   card.appendChild(front);
   card.appendChild(back);
   scene.appendChild(card);
@@ -207,6 +257,7 @@ function display_error(data) {
 */
 function display_forensic(hash) {
   cleanElement("forensic-place");
+  cleanElement("forensic-modal");
   document.getElementById("loader-forensic").style.display = "none";
 
   //get request for report
