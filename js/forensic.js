@@ -369,7 +369,7 @@ function updateTableLanguageForensic(lang) {
     el.childNodes[0].childNodes[3].innerHTML = json_lang_translate[lang]["forensic_card_info"];
     //text from card__face--back
     el.childNodes[1].childNodes[0].innerHTML = json_lang_translate[lang]["forensic_card_ghostReport"];
-    el.childNodes[1].childNodes[1].innerHTML = json_lang_translate[lang]["forensic_card_info"];
+    el.childNodes[1].childNodes[1].innerHTML = json_lang_translate[lang]["forensic_card_back"];
   }
 }
 
