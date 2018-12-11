@@ -260,6 +260,7 @@ function apply_filter(){
             histo.addHistory(new_url);
             rebuild(histo.getHistory());
         })();
+        document.getElementById("none").click();
         return;
     }
     histo.addHistory(new_url);
