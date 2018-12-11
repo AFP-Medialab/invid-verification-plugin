@@ -365,10 +365,9 @@ function update_tuto(lang) {
     tuto_tab.appendChild(p);
   }
 
-  var img = document.createElement("img");
-  img.src = "img/InstagramDemo.png";
-  img.width = "100%";
-  tuto_tab.appendChild(img);
+  var img2 = document.createElement("img");
+  img2.src = "img/InstagramDemo.png";
+  tuto_tab.appendChild(img2);
 
   var h = document.createElement("h2");
   h.innerHTML = json_lang_translate[lang]["tuto_h_2"];
