@@ -1045,7 +1045,8 @@ var loaded_tw = false;
 
 /* display timeline (correct display none bug timeline js) */
 function loadTimeline(){
-    cleanElement("place-timeline");
+    return;
+    /*cleanElement("place-timeline");
     var div = document.getElementById("place-timeline");
     var loader = document.createElement("div");
     loader.setAttribute("id", "loader_tw");
@@ -1054,21 +1055,21 @@ function loadTimeline(){
     tl.setAttribute("id", "timeline-embed");
     tl.setAttribute("style", "width: 100%; height: 600px");
     if (loaded_tw) {
-        loader.setAttribute("style", "display: none;");
+        loader.setAttribute("style", "display: none;");*/
         /* timeline disable */
-        document.getElementById("twitter-shares-content").setAttribute("style", "display: none");
+        /*document.getElementById("twitter-shares-content").setAttribute("style", "display: none");*/
         /*
         if (tw_json.events.length)
             document.getElementById("twitter-shares-content").setAttribute("style", "");
         else
             document.getElementById("twitter-shares-content").setAttribute("style", "display: none");*/
-    } else {
+    /*} else {
         loader.setAttribute("style", "display: block;");
         tl.setAttribute("style", "width: 100%; height: 600px; display: none;");
     }
     div.appendChild(loader);
     div.appendChild(tl);
-    timeline = new TL.Timeline('timeline-embed', tw_json);
+    timeline = new TL.Timeline('timeline-embed', tw_json);*/
 }
 
 /* Use for contextual menu */

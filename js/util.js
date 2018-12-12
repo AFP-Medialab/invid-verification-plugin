@@ -155,6 +155,8 @@ function addSpan(html) {
 /* Clean element by id */
 function cleanElement(id){
     var div = document.getElementById(id);
+    if (!div)
+    	return;
     /* Clear content*/
     while(div.hasChildNodes()){
         div.removeChild(div.firstChild);

@@ -269,13 +269,13 @@ form.addEventListener("submit", function(e) {
 });
 
 //add button function for iframe
-var but_iframe = document.getElementById("forensic_localfile");
-var but_back = document.getElementById("forensic_iframe_back");
+var but_iframe = document.getElementById("keyframes_localfile");
+var but_back = document.getElementById("keyframes_iframe_back");
 but_iframe.onclick = function() {
-  document.getElementById("forensic_iframe").style.display = "";
-  document.getElementById("forensic_base").style.display = "none";
+  document.getElementById("keyframes_iframe").style.display = "";
+  document.getElementById("keyframes_base").style.display = "none";
 }
 but_back.onclick = function() {
-  document.getElementById("forensic_iframe").style.display = "none";
-  document.getElementById("forensic_base").style.display = "";
+  document.getElementById("keyframes_iframe").style.display = "none";
+  document.getElementById("keyframes_base").style.display = "";
 }

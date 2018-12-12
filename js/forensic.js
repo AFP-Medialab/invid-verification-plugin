@@ -10,6 +10,9 @@ var datas_width = ["dqReport", "elaReport", "dwNoiseReport", "blockingReport", "
         "gridsInversedReport", "medianNoiseReport"];
 datas = datas_width;
 
+//@last_hash last hash from image sent
+var last_hash = "";
+
 /**
 * @func create card that flips, image on front and description on back
 * @title text at the top front of the card
@@ -260,6 +263,9 @@ function display_forensic(hash) {
   cleanElement("forensic-modal");
   document.getElementById("loader-forensic").style.display = "none";
 
+  //set last_hash
+  last_hash = hash;
+
   //get request for report
   $.getJSON(base_url_forensic + "imageforensicsv3/getreport?hash=" + hash, function (data) {
     if (data.status === "completed") {
@@ -401,13 +407,17 @@ form.addEventListener("submit", function(e) {
 });
 
 //add button function for iframe
-var but_iframe = document.getElementById("keyframes_localfile");
-var but_back = document.getElementById("keyframes_iframe_back");
+var but_iframe = document.getElementById("forensic_localfile");
+var but_back = document.getElementById("forensic_iframe_back");
 but_iframe.onclick = function() {
-  document.getElementById("keyframes_iframe").style.display = "";
-  document.getElementById("keyframes_base").style.display = "none";
+  document.getElementById("forensic_iframe").style.display = "";
+  document.getElementById("forensic_base").style.display = "none";
 }
 but_back.onclick = function() {
-  document.getElementById("keyframes_iframe").style.display = "none";
-  document.getElementById("keyframes_base").style.display = "";
+  document.getElementById("forensic_iframe").style.display = "none";
+  document.getElementById("forensic_base").style.display = "";
+  if (last_hash != "") {
+    display_forensic(last_hash);
+  }
+  last_hash = "";
 }
