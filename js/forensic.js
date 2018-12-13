@@ -43,7 +43,9 @@ function create_card(title, img, desc) {
   info.innerHTML = json_lang_translate[global_language]["forensic_card_back"];
   var toggle = document.createElement("div");
   toggle.setAttribute("class", "card__info");
-  toggle.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
+  var img_tog = document.createElement('img');
+  img_tog.src = "img/info2.svg";
+  toggle.appendChild(img_tog);
   var modal = document.createElement("div");
   modal.setAttribute("class", "modal");
   var close = document.createElement("span");
@@ -134,7 +136,9 @@ function create_card_slider(title, imgs, desc) {
   info.innerHTML = json_lang_translate[global_language]["forensic_card_back"];
   var toggle = document.createElement("div");
   toggle.setAttribute("class", "card__info");
-  toggle.innerHTML = json_lang_translate[global_language]["forensic_card_info"];
+  var img_tog = document.createElement("img");
+  img_tog.src = "img/info2.svg";
+  toggle.appendChild(img_tog);
 
   //create all imgs
   var imgs_front = document.createElement("div");
