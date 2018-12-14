@@ -84,8 +84,6 @@ function update_keyframes(lang) {
   document.getElementById("keyframes_content_acco").innerHTML = json_lang_translate[lang]["keyframes_content_acco"];
   document.getElementById("keyframes_iframe_back").innerHTML = addSpan(json_lang_translate[lang]["forensic_card_back"]);
   document.getElementById("keyframes_download").innerHTML = json_lang_translate[lang]["keyframes_download"];
-  document.getElementById("keyframes_download_thumb").innerHTML = json_lang_translate[lang]["keyframes_download_thumb"];
-  document.getElementById("keyframes_download_shots").innerHTML = json_lang_translate[lang]["keyframes_download_shots"];
   document.getElementById("keyframes_download_subshots").innerHTML = json_lang_translate[lang]["keyframes_download_subshots"];
   document.getElementById("footer_keyframes").innerHTML = json_lang_translate[lang]["footer_keyframes"];
 }
