@@ -488,6 +488,8 @@ input:checked + .slider:before {
   width: 25%;
   padding-left: 15px;
   padding-right: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   box-sizing: border-box;
 
 }

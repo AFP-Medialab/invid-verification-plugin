@@ -319,6 +319,7 @@ table_error_facebook_group	The provided Video is posted by a Facebook Group. Due
 table_error_facebook_photo	The provided URL is not supported. It is a photo URL	L'URL fournie n'est pas prise en charge. C'est une URL de photo
 table_error_default	There was an error while trying to process this video. Please check the link and try again	Une erreur est survenue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer
 keyframes_title	Video fragmentation and reverse image search	Fragmentation vidéo et recherche inversée d'image
+keyframes_tip	With the contextual menu (right click) you can query multiple reverse image search engines or use the magnifier and forensic tools on each keyframe.	Avec le menu contextuel (click droit) vous pouvez utiliser plusieurs moteurs de recherches d'images ou utiliser la loupe ou l'outil forensic sur chaque image clé.
 keyframes_input	Insert the video URL	Adresse de la vidéo
 keyframes_content_title	Video keyframes	Images clés de la vidéo
 keyframes_content_acco	Show more keyframes	Afficher plus d'images clés
