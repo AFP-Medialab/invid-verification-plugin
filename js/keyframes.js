@@ -130,21 +130,21 @@ function display_result(data, video_id) {
   var row = document.createElement("div");
   row.setAttribute("class", "row");
 
-  for (sc in data.scenes) {
-    for (kf in data.scenes[sc].keyframes) {
-      var column = document.createElement("div");
-      column.setAttribute("class", "column");
-      var a = document.createElement("a");
-      a.href = "#magnifier";
-      a.class = "mouse-preview";
-      var img = document.createElement("img");
-      img.src = data.scenes[sc].keyframes[kf].url + "?dl=0";
-      img.style = "width: 100%; height: auto;";
+  for (sc in data.subshots) {
+    var column = document.createElement("div");
+    column.setAttribute("class", "column");
+    var a = document.createElement("a");
+    a.class = "mouse-preview";
+    var img = document.createElement("img");
+    img.src = data.subshots[sc].keyframes[1].url + "?dl=0";
+    img.style = "width: 100%; height: auto; cursor: pointer;";
+    img.onclick = function () {
+      reverseImgSearch('google', this.src);
+    };
 
-      a.appendChild(img);
-      column.appendChild(a);
-      row.appendChild(column);
-    }
+    a.appendChild(img);
+    column.appendChild(a);
+    row.appendChild(column);
     key_cont.appendChild(row);
   }
 
@@ -152,29 +152,27 @@ function display_result(data, video_id) {
   var row2 = document.createElement("div");
   row2.setAttribute("class", "row");
 
-  for (sc in data.scenes) {
-    for (sh in data.scenes[sc].shots) {
-      for (kf in data.scenes[sc].shots[sh].keyframes) {
+  for (sc in data.subshots) {
+    for (kf in data.subshots[sc].keyframes) {
+      if (kf != 1) {
         var column2 = document.createElement("div");
         column2.setAttribute("class", "column");
         var a = document.createElement("a");
-        a.href = "#magnifier";
         a.class = "mouse-preview";
         var img = document.createElement("img");
-        img.src = data.scenes[sc].shots[sh].keyframes[kf].url;
-        img.style = "width: 100%; height: auto;"
+        img.src = data.subshots[sc].keyframes[kf].url + "?dl=0";
+        img.style = "width: 100%; height: auto; cursor: pointer;"
+        img.onclick = function () {
+          reverseImgSearch('google', this.src);
+        };
 
         a.appendChild(img);
         column2.appendChild(a);
         row2.appendChild(column2);
+        panel_shot.appendChild(row2);
       }
-      panel_shot.appendChild(row2);
     }
   }
-
-  //call to @api.js function (l.140)
-  activeThumbnail("keyframes-place");
-  activeThumbnail("keyframes-place2");
 
   //add the download to download .zip file buttons
   //subshots button
@@ -197,7 +195,7 @@ function send_keyframe_video(video_url) {
   //hide the precedent error message if there was one
   document.getElementById("error-keyframes").setAttribute("style", "display: none");
   //create url to send video
-  var post_url = base_url_keyframes + "segmentation";
+  var post_url = base_url_keyframes + "subshot";
 
   //display wait message status
   document.getElementById("keyframes-wait").setAttribute("style", "display: block");
