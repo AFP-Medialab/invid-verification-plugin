@@ -1,5 +1,5 @@
 /* @url_csv link to download google spreadsheet as csv or to the csv file directly */
-var url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/dev/InVIDTraductions.tsv"
+var url_csv = "https://afp-medialab.github.io/InVID-Translations/InVIDTraductions.tsv"
 
 /* @lang_array_csv variable containing csv as array, used to save result from translate_csv */
 var lang_array_csv = [];
