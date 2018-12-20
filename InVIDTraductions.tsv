@@ -291,6 +291,7 @@ metadata_img_gps_desc_2
 metadata_img_gps_desc_3			
 metadata_img_gps_desc_4			
 metadata_img_gps_desc_5			
+metadata_gps_button	View GPS location	Afficher localisation GPS	Ver ubicación GPS
 metadata_img_error	Image failed loading. Check the URL and try again	Image impossible à charger. Veuillez verifier l'URL et réessayer	Fallo en la carga de la imagen. Compruebe la URL e inténtelo de nuevo
 metadata_img_key_Orientation_1	The 0th row represents the visual top of the image, and the 0th column represents the visual left-hand side	La ligne 0 représente le haut visuel de l’image et la colonne 0 représente le visuel de gauche	La fila 0 representa la parte superior visual de la imagen, y la columna 0 representa el lado izquierdo visual.
 metadata_img_key_Orientation_2	The 0th row represents the visual top of the image, and the 0th column represents the visual right-hand side	La ligne 0 représente le sommet visuel de l’image et la colonne 0 représente le visuel de droite	La fila 0 representa la parte superior visual de la imagen, y la columna 0 representa el lado derecho visual.
