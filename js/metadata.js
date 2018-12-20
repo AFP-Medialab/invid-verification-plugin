@@ -318,9 +318,7 @@ function getLocation(){
         div.appendChild(br);
         var btn = document.createElement("button");
         btn.setAttribute("class","button");
-        btn.innerHTML = '<span lang="en" ' + (global_language == 'en' ? '' : 'hidden="hidden"') +
-            '>View GPS location</span><span lang="fr" ' + (global_language == 'fr' ? '' : 'hidden="hidden"') +
-            '>Afficher localisation GPS</span>';
+        btn.innerHTML = json_lang_translate[global_language]['metadata_gps_button'];
         div.appendChild(btn);
         btn.onclick = function() {
             var mapurl = "http://maps.google.com/maps?q=";
