@@ -324,9 +324,9 @@ keyframes_input	Insert the video URL	Adresse de la vidéo	Enlace del video
 keyframes_content_title	Video keyframes	Images clés de la vidéo	Imágenes claves del video
 keyframes_content_acco	Show more keyframes	Afficher plus d'images clés	Mostrar más imágenes claves
 keyframes_download	Download .zip files	Téléchargement des fichiers .zip	Descarga de ficheros zip
-keyframes_download_thumb	ZIP of thumbnails	ZIP des imagettes	Zip de imágenes claves
-keyframes_download_shots	ZIP of shots	ZIP des photos	Zip de imágenes claves
-keyframes_download_subshots	ZIP of subshots	ZIP des sous-photos	Zip de imágenes claves
+keyframes_download_thumb	ZIP of thumbnails	ZIP des images clés	Zip de imágenes claves
+keyframes_download_shots	ZIP of shots	ZIP des images clés	Zip de imágenes claves
+keyframes_download_subshots	ZIP of subshots	ZIP des images clés	Zip de imágenes claves
 keyframes_error_VIDEO_DOWNLOAD_FAILED	Video download failed. Try with another video	Le téléchargement de la vidéo à échoué. Veuillez essayer avec une autre vidéo	La descarga de video falló. Inténtalo con otro vídeo
 keyframes_error_VIDEO_DOWNLOAD_TIMEOUT	Video download failed. The video download has timed out	Le téléchargement de la vidéo à échoué. La vidéo a mis trop de temps à télécharger	La descarga de video falló. El tiempo de descarga del video se ha agotado.
 keyframes_error_VIDEO_SEGMENTATION_FAILED	Video segmentation analysis failed	L'analyse de segmentation vidéo à échoué	Fallo en el análisis de segmentación de vídeo
