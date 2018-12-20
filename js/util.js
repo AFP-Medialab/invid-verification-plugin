@@ -144,14 +144,34 @@ function updateTitleTable(tableId, titles) {
 	}
 }
 
+/**
+* @func create span of html given
+* @html given html (string)
+*/
+function addSpan(html) {
+	return "<span>" + html + "</span>";
+}
+
 /* Clean element by id */
 function cleanElement(id){
     var div = document.getElementById(id);
+    if (!div)
+    	return;
     /* Clear content*/
     while(div.hasChildNodes()){
         div.removeChild(div.firstChild);
     }
 }
+
+/**
+* @func clean whole element of given id
+* @id given id
+*/
+function cleanId(id) {
+	var div = document.getElementById(id);
+	div.innerHTML = "";
+}
+
 /* Add a link to the dom element */
 /* If content is null, url is used */
 function appendLink(dom, url, content) {

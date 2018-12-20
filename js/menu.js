@@ -83,7 +83,7 @@ imageReverseSearch = function(word){
 imageForensic = function(word){
 	var url = getUrlImg(word);
 	if (url != ""){
-		chrome.tabs.create({url:"http://reveal-mklab.iti.gr/reveal/?image=" + url});
+		chrome.tabs.create({url:"invid.html?imgforen=" + url});
 		//Google analytics
 		ga("send", "event", "ContextualMenu - Forensic", "click", url);
 	}

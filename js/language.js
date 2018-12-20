@@ -4,15 +4,20 @@ var cookieLang = getCookieLang()
 if (cookieLang != "") {
 	$(document).ready(updateLanguageText(cookieLang));
 }
-$("[name='language'][value='" + global_language + "'").attr("checked", "checked");
 
-$(".language-selector").hover(
-	function displayLanguage() {
-		$(this).children("form").removeAttr("hidden");
-	},
-	function hideLanguage() {
-		$(this).children("form").attr("hidden", "hidden");
-	});
+//init translations
+update_navbar(global_language);
+update_submit(global_language);
+update_api(global_language);
+update_keyframes(global_language);
+update_thumbnails(global_language);
+update_twitter(global_language);
+update_magnifier(global_language);
+update_metadata(global_language);
+update_copyright(global_language);
+update_forensic(global_language);
+update_about(global_language);
+update_tuto(global_language);
 
 function updateLanguageText(language) {
 	/* update text in html */
@@ -39,24 +44,11 @@ function updateLanguageText(language) {
 	global_language = language;
 }
 
-$("[name='language']").on("change", function(event) {
-	var language = $(this).val();
-	if (language != global_language)
-	{
-		updateLanguageText(language);
-		/* update Analysis table */
-		updateTableLanguageAnalysis(language);
-		/* update metadata table */
-		updateTableLanguageMetadata(language);
-		setCookieLang(language);
-	}
-});
-
 function setCookieLang(lang) {
 	var date = new Date();
 	date.setTime(date.getTime() + (365 * 24 * 60 * 60 *1000));
 	var expires = "expires=" + date.toUTCString();
-	document.cookie = "language=" + lang + ";" + expires + ";path=/";
+	document.cookie = "language=" + lang + ";" + expires + ";path=/;";
 }
 
 function getCookieLang() {

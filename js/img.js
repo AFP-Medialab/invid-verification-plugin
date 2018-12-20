@@ -75,21 +75,31 @@ function rebuild(img_url){
     var elem = document.createElement("img");
     elem.setAttribute("id", "test");
     elem.setAttribute("src", img_url);
-    elem.setAttribute("data-zoom-image", img_url)
-    elem.style = "width: 80%; height: auto;";
+    elem.setAttribute("data-zoom-image", img_url);
+    elem.style = "max-width: 80%;";
     document.getElementById("place-inner").appendChild(elem);
     refreshTest();
    
     var elem2 = document.createElement("img");
     elem2.setAttribute("id", "test2");
     elem2.setAttribute("src", img_url);
-    elem2.setAttribute("data-zoom-image", img_url)
-    elem2.style = "width: 80%; height: auto;";
+    elem2.setAttribute("data-zoom-image", img_url);
+    elem2.style = "max-width: 80%;";
     document.getElementById("place-lens").appendChild(elem2);
-    refreshTest2(); 
+    refreshTest2();
 
-    
+    //init or update croppie
+    $("#cropper").croppie('destroy', '');
+    var basic = $("#cropper").croppie({
+        viewport: { width: 200, height: 200 },
+        enableExif: true,
+        enableResize: true
+    });
+    basic.croppie('bind', {
+        url: document.getElementById("test").src
+    });
 }
+
 /*Check if url is valid*/
 function ValidURL(str) {
     var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -108,6 +118,15 @@ function submit_img(){
         document.getElementById("none").checked = true;
         var e = document.getElementById("scale_input");
         e.style.display = "none";
+        document.getElementById("rounded-switch").style.display = "";
+        if (document.getElementById("toogle").checked) {
+            document.getElementById("place-inner").style.display = "";
+            document.getElementById("place-lens").style.display = "none";
+        } else {
+            document.getElementById("place-inner").style.display = "none";
+            document.getElementById("place-lens").style.display = "";
+        }
+        document.getElementById("place-crop").style.display = "none";
         document.getElementById("copy_url_img_magnifier").style.display = (histo.local_path) ? "" : "none";
         if (!ValidURL(img_url)) {
             document.getElementById("lst_search_btn").setAttribute("style", "display: none");
@@ -130,25 +149,81 @@ form.addEventListener("submit", function(e){
 
 /*Display or hide scale element*/
 document.getElementById("none").onclick = function() {
-    var e = document.getElementById("scale_input");
-    e.style.display = "none";
+    document.getElementById("scale_input").style.display = "none";
+    //hide image display depending on function used
+    document.getElementById("rounded-switch").style.display = "";
+    if (document.getElementById("toogle").checked) {
+        document.getElementById("place-inner").style.display = "";
+        document.getElementById("place-lens").style.display = "none";
+    } else {
+        document.getElementById("place-inner").style.display = "none";
+        document.getElementById("place-lens").style.display = "";
+    }
+    document.getElementById("place-crop").style.display = "none";
 };
 
 document.getElementById("sharp").onclick = function() {
-    var e = document.getElementById("scale_input");
-    e.style.display = "none";
+    document.getElementById("scale_input").style.display = "none";
+    //hide image display depending on function used
+    document.getElementById("rounded-switch").style.display = "";
+    if (document.getElementById("toogle").checked) {
+        document.getElementById("place-inner").style.display = "";
+        document.getElementById("place-lens").style.display = "none";
+    } else {
+        document.getElementById("place-inner").style.display = "none";
+        document.getElementById("place-lens").style.display = "";
+    }
+    document.getElementById("place-crop").style.display = "none";
 };
 
 document.getElementById("flip").onclick = function() {
-    var e = document.getElementById("scale_input");
-    e.style.display = "none";
+    document.getElementById("scale_input").style.display = "none";
+    //hide image display depending on function used
+    document.getElementById("rounded-switch").style.display = "";
+    if (document.getElementById("toogle").checked) {
+        document.getElementById("place-inner").style.display = "";
+        document.getElementById("place-lens").style.display = "none";
+    } else {
+        document.getElementById("place-inner").style.display = "none";
+        document.getElementById("place-lens").style.display = "";
+    }
+    document.getElementById("place-crop").style.display = "none";
 }
 
 
 document.getElementById("bicubic").onclick = function() {
-    var e = document.getElementById("scale_input");
-    e.setAttribute("style", "");
+    document.getElementById("scale_input").style.display = "";
+    //hide image display depending on function used
+    document.getElementById("rounded-switch").style.display = "";
+    if (document.getElementById("toogle").checked) {
+        document.getElementById("place-inner").style.display = "";
+        document.getElementById("place-lens").style.display = "none";
+    } else {
+        document.getElementById("place-inner").style.display = "none";
+        document.getElementById("place-lens").style.display = "";
+    }
+    document.getElementById("place-crop").style.display = "none";
 };
+
+document.getElementById("crop").onclick = function() {
+    document.getElementById("scale_input").style.display = "none";
+    //hide image display depending on function used
+    document.getElementById("rounded-switch").style.display = "none";
+    document.getElementById("place-inner").style.display = "none";
+    document.getElementById("place-lens").style.display = "none";
+    document.getElementById("place-crop").style.display = "";
+
+    //init or update croppie
+    $("#cropper").croppie('destroy', '');
+    var basic = $("#cropper").croppie({
+        viewport: { width: 200, height: 200 },
+        enableExif: true,
+        enableResize: true
+    });
+    basic.croppie('bind', {
+        url: document.getElementById("test").src
+    });
+}
 
 /*Undo or redo filter*/
 document.getElementById("undo").onclick = function() {
@@ -161,7 +236,7 @@ document.getElementById("redo").onclick = function() {
 
 document.getElementById("scale").onchange = function(){
     var num = document.getElementById("scale").value;
-    $("#show_scale").html("Scale :" + num + "%");
+    $("#show_scale").html(": " + num + "%");
 }
 
 /*get selected filter and apply it*/
@@ -179,6 +254,15 @@ function apply_filter(){
         new_url = Filters.filterImage(img, "bicubic", scale);
     else if (document.getElementById("flip").checked)
         new_url = Filters.filterImage(img, "flip", scale);
+    else if (document.getElementById("crop").checked) {
+        (async function() {
+            new_url = await $("#cropper").croppie('result', { type: 'base64', size: 'canvas'});
+            histo.addHistory(new_url);
+            rebuild(histo.getHistory());
+        })();
+        document.getElementById("none").click();
+        return;
+    }
     histo.addHistory(new_url);
     rebuild(histo.getHistory());
 };
@@ -254,10 +338,11 @@ document.getElementById("download_img_magnifier").addEventListener("click", func
     this.href = histo.getHistory();
     var url_start = histo.history[0];
     var image_name = url_start.substring(url_start.lastIndexOf("/") + 1);
-    index = image_name.indexOf("?");
+    var index = image_name.indexOf("?");
     if (index != -1)
         image_name = image_name.substring(0, index);
-    this.download = image_name;
+    //download as base extension
+    this.download = image_name.substring(0, image_name.lastIndexOf("."));
 });
 
 /* Hide reverse button */

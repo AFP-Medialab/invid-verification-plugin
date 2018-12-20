@@ -41,7 +41,7 @@ $(document).ready(function() {
             });
         },
         error: function (response, status, error) {
-          displayErrorMessage(status + ": " + response.responseJSON.message);
+          displayErrorMessage(status + ": " + ((response.responseJSON != undefined) ? response.responseJSON.message : "servor not responding. Try again later."));
         }
       });
     } else {

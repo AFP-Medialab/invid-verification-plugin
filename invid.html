@@ -12,6 +12,7 @@
 	<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
 	<link rel="stylesheet" type="text/css" href="css/copyright.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/croppie.css">
 	
 	<!-- Google Analytics -->
 	<link rel="stylesheet" type="text/css" href="css/cookieconsent.min.css" />
@@ -28,67 +29,56 @@
 			<a href="#api" title="Video contextual verification" class="active">
 				<img src="img/video_logo.svg" class="icon">
 				<br>
-				<span lang="en">Analysis</span>
-				<span lang="fr" hidden="hidden">Analyse</span>
+				<div id="navbar_analysis"></div>
 			</a>
 		</li>
 		<li>
 			<a href="#keyframes" title="Keyframes extractor">
 				<img src="img/keyframes.svg" class="icon">
 				<br>
-				<span lang="en">Keyframes</span>
-				<span lang="fr" hidden="hidden">Images clés</span>
+				<div id="navbar_keyframes"></div>
 			</a>
 		</li>
 		<li>
 			<a href="#video" title="Youtube thumbnails reverse search">
 				<img src="img/youtube.svg" class="icon">
 				<br>
-				<span lang="en">Thumbnails</span>
-				<span lang="fr" hidden="hidden">Imagettes</span>
+				<div id="navbar_thumbnails"></div>
 			</a>
 		</li>
 		<li>
 			<a href="#twitter" title="Twitter advanced search">
 				<img src="img/twitter.svg" class="icon">
 				<br>
-				<span lang="en">TW. search</span>
-				<span lang="fr" hidden="hidden">Recherche TW.</span>
+				<div id="navbar_twitter"></div>
 			</a>
 		</li>
 		<li id="magnifier_tab">
 			<a href="#magnifier" title="Image magnifier">
 				<img src="img/magnifier.svg" class="icon">
 				<br>
-				<span lang="en">Magnifier</span>
-				<span lang="fr" hidden="hidden">Loupe</span>
+				<div id="navbar_magnifier"></div>
 			</a>
 		</li>
 		<li>
 			<a href="#metadata" title="Metadata">
 				<img src="img/metadata.svg" class="icon">
 				<br>
-				<span lang="en">Metadata</span>
-				<span lang="fr" hidden="hidden">Metadonnées</span>
+				<div id="navbar_metadata"></div>
 			</a>
 		</li>
 		<li>
 			<a href="#copyright-tab" title="Video Copyright">
 				<img src="img/copyright.svg" class="icon">
 				<br>
-				<span lang="en"><p class="new_element">
-					<span>new</span></p>Video Rights 							
-					
-				</span>
-				<span lang="fr" hidden="hidden"><p class="new_element">
-					<span>nouveau</span></p>Droits Video
-				</span>
-				</a></li>
-		<li>
+				<div id="navbar_rights"></div>
+			</a>
+		</li>
+		<li id="forensic_tab">
 			<a href="#forensic" title="Image Verification Assistant">
 				<img src="img/forensic_logo.svg" class="icon">
 				<br>
-				<span translate="no">Forensic</span>
+				<div id="navbar_forensic"></div>
 			</a>
 		</li>
 		<div class="navsep"></div>
@@ -96,24 +86,21 @@
 			<a href="#about" title="About">
 				<img src="img/info2.svg" class="icon">
 				<br>
-				<span lang="en">About</span>
-				<span lang="fr" hidden="hidden">A propos</span>
+				<div id="navbar_about"></div>
 			</a>
 		</li>
 		<li>
 			<a href="#survey" title="Survey">
 				<img src="img/survey.svg" class="icon">
 				<br>
-				<span lang="en">Survey</span>
-				<span lang="fr" hidden="hidden">Questionnaire</span>
+				<div id="navbar_survey"></div>
 			</a>
 		</li>
 		<li>
 			<a href="#tutorial" title="Tutorial">
 				<img src="img/tutorial1.svg" class="icon">
 				<br>
-				<span lang="en">Tutorial</span>
-				<span lang="fr" hidden="hidden">Tutoriel</span>
+				<div id="navbar_tuto"></div>
 			</a>
 		</li>
 	</ul>
@@ -121,13 +108,12 @@
 	<div id ="body-content">
 		<!--/#login.form-action-->
 		<div id="api" class="form-action show">
-			<h1 lang="en">Video contextual verification</h1>
-			<h1 lang="fr" hidden="hidden">Vérification du contexte de la vidéo</h1>
+			<div id="api_title"></div>
 			<form id="video_form2">
 				<div>
-					<input type="text" id="apibox" name="video_url2" placeholder="Copy and paste a Youtube or Facebook url" data-text='{"en": "Copy and paste a Youtube, Facebook or Twitter url", "fr":"Copier et coller une adresse Youtube, Facebook ou Twitter"}'/>
+					<input type="text" id="apibox" name="video_url2"/>
 					<br>
-					<input type="checkbox" id="api_reprocess" name="api_reprocess"/> <label for="api_reprocess"> Reprocess </label>
+					<input type="checkbox" id="api_reprocess" name="api_reprocess"/> <label for="api_reprocess" id="api_repro"></label>
 					<br>
 					<br>
 				</div>
@@ -143,8 +129,7 @@
 				<br>
 				<div id="verif-content">
 					<button class="accordion">
-						<span lang="en">Verification comments</span>
-						<span lang="fr" hidden="hidden">Vérification</span>
+						<div id="api_comments"></div>
 					</button>
 					<div class="panel">
 						<div id="place-comments"></div>
@@ -155,15 +140,12 @@
 				<br>
 				<div id="maps-content">
 					<button class="accordion">
-						<span lang="en">Map</span>
-						<span lang="fr" hidden="hidden">Carte</span>
+						<div id="api_map"></div>
 					</button>
 					<div class="panel">
 						<h3 translate="no"> Google Map </h3>
-						<input id="pac-input" class="controls" type="text" placeholder="Search Box" data-text='{"en": "Search box", "fr":"Rechercher"}'>
+						<input id="pac-input" class="controls" type="text">
 						<button id="pac-button" class="btn-map">
-							<span lang="en">Submit</span>
-							<span lang="fr" hidden="hidden">Soumettre</span>
 						</button>
 						<div id="map" style="width:800px;height:400px;"></div>
 					</div>
@@ -175,27 +157,15 @@
 				<br>
 				<div id="place-preview"></div>
 				<br>
-				<button id="google_search_btn" class="button">
-					<span lang="en">Google Image reverse search</span>
-					<span lang="fr" hidden="hidden">Recherche inversée Google image</span>
-				</button>
-				<button id="yandex_search_btn" class="button">
-					<span lang="en">Yandex Image reverse search</span>
-					<span lang="fr" hidden="hidden">Recherche inversée Yandex image</span>
-				</button>
+				<button id="google_search_btn" class="button"></button>
+				<button id="yandex_search_btn" class="button"></button>
 				<div style="display: inline-block;">
-					<button id="tineye_search_btn" class="button">
-						<span lang="en">Tineye Image reverse search</span>
-						<span lang="fr" hidden="hidden">Recherche inversée Tineye</span>
-					</button>
+					<button id="tineye_search_btn" class="button"></button>
 				</div>
-				<button id="twitter_search_btn" class="button">
-					<span lang="en">Twitter video search</span>
-					<span lang="fr" hidden="hidden">Recherche sur Twitter</span>
-				</button>
+				<button id="twitter_search_btn" class="button"></button>
 				<br>
 				<br>
-				<div id="twitter-shares-content">
+				<!--<div id="twitter-shares-content">
 					<button class="accordion">
 						<span lang="en">Twitter timeline</span>
 						<span lang="fr" hidden="hidden">Chronologie Twitter</span>
@@ -208,24 +178,77 @@
 				<div id="error-content-share" style="display: none; color: red;"></div>
 				
 				
-				<!--<iframe id="twitter_overlay" allowTransparency="true" scrolling="no" frameborder="0" >
+				<iframe id="twitter_overlay" allowTransparency="true" scrolling="no" frameborder="0" >
 				</iframe>-->
 			</div>
 			<div id="fb-content" style="display: none;"></div>
 			<br>
 			<div id="error-content" style="display: none; color: red;"></div>
-			
+			<div id="footer_analysis" class="footer"></div>
+		</div>
 
-		</div>
 		<div id="keyframes" class="form-action hide">
-			<iframe src="http://multimedia3.iti.gr/video_fragmentation/service/start.html" class="ifr" frameborder="0"></iframe>
+			<div id="keyframes_base">
+				<div id="keyframes_title"></div>
+				<form id="keyframes_form">
+					<ul>
+						<input type="text" name="keyframes_url" id="keyframes_input">
+						<br>
+						<br>
+						<button id="keyframes_localfile" class="button"></button>
+						<input type="submit" value="Submit" class="button">
+						<br>
+						<br>
+						<div id="keyframes-wait" style="display: none;"></div>
+						<br>
+						<br>
+						<div id="loader-keyframes" class="loader"></div>
+					</ul>
+				</form>
+				<div id="error-keyframes" style="display: none; color: red;"></div>
+				<div id="keyframes-content">
+					<div id="keyframes_content_title"></div>
+					<br>
+					<div style="border-color: grey; border-radius: 10px;border-style: solid; border-width: 2px; padding-top: 10px; padding-bottom: 10px;">
+						<img src="img/iconmonstr-light-bulb-18.svg">
+						<div id="keyframes_tip" style="font-weight: bold;"></div>
+					</div>
+					<br>
+					<div id="keyframes-place"></div>
+					<br>
+					<div id="keyframes-place2">
+						<button class="accordion">
+							<div id="keyframes_content_acco"></div>
+						</button>
+						<div id="panel-shots" style="display: none;"></div>
+					</div>
+					<br>
+					<div id="download-content" style="display: none;">
+						<a id="subshots-download">
+							<button class="button">
+								<div id="keyframes_download_subshots"></div>
+							</button>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div id="keyframes_iframe" style="display: none;">
+				<div>
+					<button id="keyframes_iframe_back" class="button"></button>
+				</div>
+				<div>
+					<iframe src="http://multimedia2.iti.gr/video_fragmentation/service/start.html" width="85%" height="750px" 
+					frameborder="0"></iframe>
+				</div>
+			</div>
+			<div id="footer_keyframes" class="footer"></div>
 		</div>
+
 		<div id="video" class="form-action hide">
-			<h1 lang="en">Youtube thumbnails reverse search</h1>
-			<h1 lang="fr" hidden="hidden">Recherche inversée des imagettes Youtube</h1>
+			<div id="youtube_title"></div>
 			<form id="video_form">
 				<ul>
-					<input type="text" name="video_url" data-text='{"en": "Youtube video URL", "fr": "Adresse de la vidéo Youtube"}' placeholder="Youtube video URL" />
+					<input type="text" name="video_url" id="youtube_input"/>
 					<br>
 					<div id="engine">
 						<input type="radio" id="google_engine" name="engine" checked translate="no" /> Google 
@@ -244,58 +267,55 @@
 				</ul>
 			</form>
 			<div id="place-video-thumbnails"></div>
+			<div id="footer_thumbnails" class="footer"></div>
 		</div>
 
 		<div id="twitter" class="form-action hide">
-			<h1 lang="en">Twitter advanced search</h1>
-			<h1 lang="fr" hidden="hidden">Recherche avancée Twitter</h1>
+			<div id="twitter_title"></div>
 			<form id="twitter_form">
 				<ul>
-					<input type="text" id="termbox" name="term" data-text='{"en": "Keyword or #", "fr": "Mot clé ou #"}' placeholder="Keyword or #" />
+					<input type="text" id="termbox" name="term"/>
 					<br>
-					<input type="text" id="tw-account" name="account" data-text='{"en": "From (Twitter account name)", "fr": "De (Nom de compte Twitter)"}' placeholder="From (Twitter account name)">
+					<input type="text" id="tw-account" name="account">
 					<br>
-					<input type="text" id="filter" name="filter_tw" data-text='{"en": "Filter (e.g. safe, media, retweets, native_video, periscope, vine, images, twimg or links)", "fr": "Filtre (ex. safe, media, retweets, native_video, periscope, vine, images, twimg or links)"}' placeholder="Filter (e.g. safe, media, retweets, native_video, periscope, vine, images, twimg or links)">
+					<input type="text" id="filter" name="filter_tw">
 					<br>
-					<input type="text" id="lang" name="lang" data-text='{"en": "Language (e.g. en, fr, de, es, ru, ja, zh...)", "fr": "Langue (ex: en, fr, de, es ru, ja, zh...)"}' placeholder="Language (ex. en, fr, de, es, ru, ja, zh...)">
+					<input type="text" id="lang" name="lang">
 					<br>
-					<input type="text" id="geocode" name="geocode" data-text='{"en": "Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)", "fr": "Geocode (ex: -22.912214,-43.230182,1km ou -22.912214,-43.230182,1mi)"}' placeholder="Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182,1mi)">
+					<input type="text" id="geocode" name="geocode">
 					<br>
-					<input type="text" id="near" name="near" data-text='{"en": "Near (city name)", "fr": "Proche de : (nom de ville)"}' placeholder="Near (city name)" style="width:25%;">
-					<input type="text" id="within" name="within" data-text='{"en": "Within (e.g. 15mi or 15km)", "fr": "Dans (ex: 15mi ou 15km)"}' placeholder="Within (e.g. 15mi or 15km)" style="width:24%;">
+					<input type="text" id="near" name="near" style="width:25%;">
+					<input type="text" id="within" name="within" style="width:24%;">
 					<br>
 					<div id="fromto-content">
-						<input type="text" id="from-date" data-text='{"en": "Since", "fr": "Depuis"}' placeholder="Since">
+						<input type="text" id="from-date">
 						<br>
-						<input type="text" id="to-date" data-text='{"en": "Until", "fr": "Jusqu&apos;à"}' placeholder="Until"> 
+						<input type="text" id="to-date"> 
 					</div>
 					<br>
 					<br>
 					<input type="radio" id="local_time" name="time" checked/>
-					<span lang="en">Local time</span>
-					<span lang="fr" hidden="hidden">Heure locale</span>
-					<input type="radio" id="gmt" name="time" translate="no" /> GMT 
+					<span id="twitter_local_time"></span>
+					<input type="radio" id="gmt" name="time" translate="no" />
+					<span id="twitter_gmt"></span>
 					<br> 
 					<br>
 					<input type="submit" value="Submit" class="button" />
 				</ul>
 			</form>
+			<div id="footer_twitter" class="footer"></div>
 		</div>
 
 		<div id="magnifier" class="form-action hide">
-			<h1 lang="en">Image Magnifier</h1>
-			<h1 lang="fr" hidden="hidden">Inspecteur d'image</h1>
+			<div id="magnifier_title"></div>
 			<form id="img_form">
 				<ul>
-					<input type="text" id="urlbox" name="url" data-text='{"en": "Image URL", "fr":"Adresse de l&apos;image"}' placeholder="Image URL" style="" />
+					<input type="text" id="urlbox" name="url" style="" />
 					<div class="image-upload">
 						<br>
 						<label for="file-input">
 							<img src="img/file.png"/> 
-							<div>
-								<span lang="en">Local file</span>
-								<span lang="fr" hidden="hidden">Fichier local</span>
-							</div>
+							<div id="local_file"></div>
 						</label>
 						<input id="file-input" type="file"/>
 					</div>
@@ -308,8 +328,7 @@
 			<div id="magnifier-content" style="display: none;">
 				<br>
 				<button class="accordion">
-					<span lang="en">More filters</span>
-					<span lang="fr" hidden="hidden">Plus de filtres</span>
+					<div id="magnifier_accor"></div>
 				</button>
 				<div class="panel">
 					<br>
@@ -317,47 +336,45 @@
 						<ul>
 							<br>
 							<input type="radio" id="none" name="filter" checked/>
-							<span lang="en">None</span>
-							<span lang="fr" hidden="hidden">Aucun</span> 
+							<span id="magnifier_radio_1"></span>
 							<input type="radio" id="sharp" name="filter"/>
-							<span lang="en"> Sharp</span>
-							<span lang="fr" hidden="hidden">Contraste</span>
+							<span id="magnifier_radio_2"></span>
 							<input type="radio" id="flip" name="filter">
-							<span lang="en">Flip</span>
-							<span lang="fr" hidden="hidden">Miroir</span>
+							<span id="magnifier_radio_3"></span>
 							<input type="radio" id="bicubic" name="filter"/>
-							Bicubic
+							<span id="magnifier_radio_4"></span>
+							<input type="radio" id="crop" name="filter">
+							<span id="magnifier_radio_5"></span>
 							<div id="scale_input" style="display: none;">
 								<br>
 								<input id="scale" type="range" min="25" max="400" value="100" step="1"/>
-								<div id="show_scale">
-									<span lang="en">Scale</span>
-									<span lang="fr" hidden="hidden">Taille</span> : 100%
-								</div>
+								<div id="magnifier_scale"></div>
+								<span id="show_scale">
+									 : 100%
+								</span>
 							</div>
 							<br>		
 							<br>
-							<input type="submit" value="Apply" class="button" />
+							<input type="submit" id="apply_button" value="Apply" class="button" />
 							<br>
 						</ul>
 					</form>
 					<button id="undo" class="button">
-						<span lang="en">Undo</span>
-						<span lang="fr" hidden="hidden">Annuler</span>
+						<div id="button_undo"></div>
 					</button>
 					<button id="redo" class="button">
-						<span lang="en">Redo</span>
-						<span lang="fr" hidden="hidden">Refaire</span>
+						<div id="button_redo"></div>
 					</button>
 				</div>
 				<br>
 				<!-- Rounded switch -->
-				<h3 lang="en">Lens zoom / Inner zoom</h3>
-				<h3 lang="fr" hidden="hidden">Loupe / Zoom</h3>
-				<label class="switch">
-					<input type="checkbox" id="toogle">
-					<div class="slider round"></div>
-				</label>
+				<div id="rounded-switch" style="">
+					<div id="magnifier_switch"></div>
+					<label class="switch">
+						<input type="checkbox" id="toogle">
+						<div class="slider round"></div>
+					</label>
+				</div>
 				<br>
 				<br>
 				<br>
@@ -368,59 +385,56 @@
 					<div id="place-lens">
 						<img id="test2" src="" data-zoom-image="">
 					</div>
+					<div id="place-crop" style="width: 500px; height: 500px; margin: auto; display: none;">
+						<div id="cropper"></div>
+					</div>
 				</div>
 				<br>
 				<br>
 				<br>
 				<div style="display: inline;">
 					<a class="button" id="download_img_magnifier" href="" download="picture.png" style="color: white; text-decoration: none">
-						<span lang="en">Download</span>
-						<span lang="fr" hidden="hidden">Télécharger</span>
+						<span id="button_downloads"></span>
 					</a>
 
 					<div id="lst_search_btn" style="display: inline;">
-						<button id="img_rev_search_btn" class="button">Google Image</button>
-						<button id="baidu_rev_search_btn" class="button">Baidu Image</button>
-						<button id="yandex_rev_search_btn" class="button">Yandex Image</button>
+						<button id="img_rev_search_btn" class="button"></button>
+						<button id="baidu_rev_search_btn" class="button"></button>
+						<button id="yandex_rev_search_btn" class="button"></button>
 						<div style="display: inline-block;">
-							<button id="tineye_rev_search_btn" class="button">Tineye Image</button>
+							<button id="tineye_rev_search_btn" class="button"></button>
 							<!--<p class="new_element" style="font-size: 12px; margin-left: 15px;">
 								new
 							</p> -->
 						</div>
-						<button id="img_verif_btn" class="button">Forensic</button>
+						<button id="img_verif_btn" class="button"></button>
 					</div>
 					<button id="copy_url_img_magnifier" class="button" translate="no">
 						Google Image
 					</button>
 				</div>
 			</div> 
+			<div id="footer_magnifier" class="footer"></div>
 		</div>
 
 		<div id="metadata" class="form-action hide">
-			<h1 lang="en">Metadata</h1>
-			<h1 lang="fr" hidden="hidden">Métadonnées</h1>
+			<div id="metadata_content_title"></div>
 			<form id="metadata_form">
 				<ul>
-					<input type="text" id="url-metadata" name="url" data-text='{"en": "Image URL in jpg/jpeg or video URL in mp4/m4v format", "fr": "Adresse de l&apos;image au format jpg/jpeg ou video au format mp4/m4v"}' placeholder="Image URL in jpg/jpeg or video URL in mp4/m4v format" style="" />
+					<input type="text" id="url-metadata" name="url" style="" />
 					<div class="image-upload">
 						<br>
 						<label for="local-metadata">
 							<img src="img/file.png"/> 
-							<div>
-								<span lang="en">Local file</span>
-								<span lang="fr" hidden="hidden">Fichier local</span>
-							</div>
+							<div id="metadata_localfile"></div>
 						</label>
 						<input id="local-metadata" type="file"/>
 					</div>
 					<br>
 					<input type="radio" id="img-meta-radio" name="file_type" checked/>
-					<span lang="en">Image</span>
-					<span lang="fr" hidden="hidden">Image</span>
+					<span id="metadata_radio_image"></span>
 					<input type="radio" id="video-meta-radio" name="file_type"/>
-					<span lang="en">Video</span>
-					<span lang="fr" hidden="hidden">Vidéo</span>
+					<span id="metadata_radio_video"></span>
 					<br>
 					<br>
 					<input type="submit" value="Submit" class="button" />
@@ -429,17 +443,16 @@
 			</form>
 			<div id="preview-metadata"></div>
 			<div id="place-metadata"></div>
-			<div id="error-metadata"></div>
+			<div id="error-metadata" style="display: none;"></div>
+			<div id="footer_metadata" class="footer"></div>
 		</div>
 
 
 		<div id="copyright-tab" class="form-action hide">
-			<h1 lang="en">Check Video Copyright Status </h1>
-			<h1 lang="fr" hidden="hidden">Vérifier le copyright de la vidéo</h1>
+			<div id="copyright_title"></div>
 			<form id="copyright-form">
 				<div>
-					<input type="text" id="copyright-video_url" name="copyright-video_url" data-text='{"en": "Paste a Youtube, Twitter of Facebook video URL", "fr": "Copier une l&apos;url de la video Youtube, Twitter ou Facebook"}'
-								 placeholder="Paste a Youtube, Twitter of Facebook video URL"/>
+					<input type="text" id="copyright-video_url" name="copyright-video_url"/>
 					<br>
 					<br>
 				</div>
@@ -451,199 +464,92 @@
 			</div>
 			<div id="copyright-error"></div>
 			<br><br>
-			<div class="copyright-footer">Developed by the GRIHO Research Group © 2018 Universitat de Lleida<br>
-				Contact: <a href="mailto:invid@udl.cat">invid@udl.cat</a>
-			</div>
+			<div class="copyright-footer footer" id="footer_rights"></div>
 		</div>
 
 		<div id="forensic" class="form-action hide">
-			<iframe src="http://reveal-mklab.iti.gr/reveal/index.html" class="ifr" frameborder="0"></iframe>
+			<div id="forensic_base">
+				<div id="forensic_title"></div>
+				<form id="forensic_form">
+					<ul>
+						<input type="text" name="forensic_url" id="forensic_input">
+						<br>
+						<br>
+						<br>
+						<button id="forensic_localfile" class="button"></button>
+						<input type="submit" value="Submit" class="button">
+						<br>
+						<br>
+						<div id="forensic-wait" style="display: none;"></div>
+						<br>
+						<br>
+						<div id="forensic-image" style="display: none;"></div>
+						<div id="loader-forensic" class="loader" style="display: none;"></div>
+						<br>
+						<br>
+					</ul>
+				</form>
+				<div id="error-forensic"></div>
+				<div id="forensic-content">
+					<div id="forensic_content_title"></div>
+					<div id="forensic-place"></div>
+					<br>
+					<br>
+				</div>
+				<div id="forensic-modal"></div>
+			</div>
+			<div id="forensic_iframe" style="display: none;">
+				<div>
+					<button id="forensic_iframe_back" class="button"></button>
+				</div>
+				<div>
+					<iframe src="http://reveal-mklab.iti.gr/reveal/" width="85%" height="750px" frameborder="0"></iframe>
+				</div>
+			</div>
+			<div id="footer_forensic" class="footer"></div>
 		</div>
 
 		<div id="about" class="form-action hide">
-			<h1 lang="en">InVID toolkit </h1>
-			<h1 lang="fr" hidden="hidden">Outils InVID</h1>
-			<div class="language-selector">
-				<span lang="en">Choose language</span>
-				<span lang="fr" hidden="hidden">Choisir la langue</span>
-				<form hidden="hidden">
-					<ul>
-						<input type="radio" name="language" value="en">En
-						<input type="radio" name="language" value="fr">Fr
-					</ul>
-				</form>
-			</div>
-			<p lang="en">
-				This toolkit is provided in open source (under an <a href="license.html" target="_blank">MIT Licence</a>) by the InVID european project to help journalists to verify content on social networks (please note that external InVID services used via this interface, such as those presented under the Analysis and Keyframes tabs, are not open-sourced).</p>
-			<p lang="fr" hidden="hidden">
-				Cet outil est publié en open source (sous une <a href="license.html" target="_blank">Licence MIT</a>) par le projet européen InVID pour aider les journalistes à vérifier les images et les vidéos, notamment sur les réseaux sociaux (note: certains des services externes d'InVID utilisés par cette interface, comme ceux présentés dans les onglets Analyse et Images clés, ne sont pas diffusés en licence open source).</p>
-			<p lang="en">
-				It has been designed as a verification “Swiss army knife” helping journalists to save time and be more efficient in their fact-checking tasks. This is a beta version and we will update it regularly thanks to your feedback.</p>
-			<p lang="fr" hidden="hidden">
-				Il a été conçu comme un "couteau suisse" de vérification pour permettre les journalistes à gagner du temps et être plus efficaces dans leur travail de vérification. C'est une version en développement et elle sera mise à jour régulièrement grâce à vos retours.</p>
-			<p lang="en">
-				For any feedback (bugs, enhancement, suggestions) please email us at <a href="mailto:invid-verification-plugin@iti.gr">invid-verification-plugin@iti.gr</a>, or leave us a direct message through the feedback widget at the bottom left. If you use our plugin regularly, thanks to give us your feedback through the permanent survey in the top right menu
-				: <img src="img/survey_img_en.png" class="icon" style="vertical-align: text-top;">
-			</p>
-			<p lang="fr" hidden="hidden">
-				Pour tout retour (problèmes, améliorations, suggestions), merci de nous envoyer un mail à <a href="mailto:invid-verification-plugin@iti.gr">invid-verification-plugin@iti.gr</a>, ou de nous laisser un message via le bouton "feedback" en bas à gauche. Si vous utilisez notre extension régulièrement, merci de nous envoyer vos retours en remplissant le questionnaire présent dans le menu en haut à droite :  <img src="img/survey_img_fr.png" class="icon" style="vertical-align: text-top;">
-			</p>
-			<p lang="en">
-				<strong>Disclaimer:</strong>
-				 this software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.</p>
-			<p lang="fr" hidden="hidden">
-			 <strong>Avertissement:</strong>
-			 ce logiciel est fourni tel quel, sans aucune garantie explicite ou implicite, y compris mais non limité à sa qualité marchande, sa robustesse et toute garantie d'absence de contrefaçon. En aucun cas, les auteurs ou détenteurs du copyright ne sont responsables pour toute réclamation, dommages ou autre responsabilité, en lien avec ce logiciel ou son utilisation.
-			</p>
-			<p lang="en">
-				<strong>Privacy:</strong> this plugin does not gather any personal data. We implemented Google analytics only to get feedback and statistics about the tool usage, in order to improve the next releases.
-			</p>
-			<p lang="fr" hidden="hidden">
-				<strong>Sécurité:</strong> cette extension n'utilise pas vos données personnelles. Les données récupérées via Google Analytics sont anonymisées et ne servent qu'à obtenir des statistiques d'usage sur l'utilisation de l'extension, dans le but d'améliorer les prochaines versions.
-			</p>		
-			<p lang="en">
-				InVID is a Horizon 2020 innovation action funded by the European Union under grant agreement 687786. For more information, visit our <a href="http://www.invid-project.eu/" target="_blank">InVID website</a> or follow us on <a href="https://twitter.com/InVID_EU" target="_blank">Twitter</a>.
-			</p>
-			<p lang="fr" hidden="hidden">
-				InVID est un projet financé par le programme Horizon 2020 de l'Union Européenne, sous l'accord de subvention 687786. Pour plus d'information sur le projet, visitez le <a href="http://www.invid-project.eu/" target="_blank"> site InVID</a> ou suivez-nous sur <a href="https://twitter.com/InVID_EU" target="_blank">Twitter</a>.
-			</p>
-			<p lang="en">
-				The initial versions (0.1-0.6) of this plugin have been developed by <a href="https://www.afp.com/en/medialab/" target="_blank">AFP Medialab</a> (Denis TEYSSOU, Jean-Michel LEUNG, Nathan GOYAT, Bertrand GOUPIL, Axel VIGNY). The underlying services are provided by <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI, CERTH).
-			</p>
-			<p lang="fr" hidden="hidden">
-				Les premières versions (0.1-0.6) de cette extension ont été développées par le <a href="https://www.afp.com/medialab/" target="_blank">Medialab de l'AFP</a> (Denis TEYSSOU, Jean-Michel LEUNG, Nathan GOYAT, Bertrand GOUPIL, Axel VIGNY). Les services sous-jacents sont fournis par <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI, CERTH).
-			</p> 
-			<p><img src="img/Logo-AFP-384.png" height="83"><img src="img/iti.jpg" height="70"><img src="img/logo_EUh2020_horizontal.png" height="83" width="462" alt="Europe"></p>
+			<div id="footer_about" class="footer"></div>
 		</div>
 
 		<div id="survey" class="form-action hide">
 			<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBmt3LKN76GRIM6i5GzX94F_VEnTF5VHMwDoOWgITBq0ntuA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">
-				<span lang="en">Loading...</span>
-				<span lang="fr" hidden="hidden">Chargement en cours...</span>
 			</iframe>
 		</div>
 
 		<div id="tutorial" class="form-action hide">
-			<h1 lang="en">Tutorial</h1>
-			<h1 lang="fr" hidden="hidden">Tutoriel</h1>
-			<h2 lang="en">Access menu</h2>
-			<h2 lang="fr" hidden="hidden">Menu Popup</h2>
-			<img src="img/VideoURLmenu.png">
-			<p lang="en">
-				This launcher (introduced in v0.60) to access the InVID plugin aims to help journalists (and users) to retrieve videos and images urls within the code of a web page:
-			</p>
-			<p lang="fr" hidden="hidden">
-				Ce menu intermédiaire (introduit dans la v0.60) pour accéder à l'outil InVID vise à aider les journalistes (et utilisateurs) à récupérer les liens des images et vidéos à l'intérieur du code d'une page web:
-			</p>
-				<ul lang="en">
-					<li>
-						<strong>Open InVID</strong> launches the plugin
-					</li>
-					<li> <strong>Video Urls</strong> displays the url of a video present on a web page</li>
-					<li><strong>Image Urls</strong> displays the url of an image present on a web page</li>
-				</ul>
-				<ul lang="fr" hidden="hidden">
-					<li>
-						<strong>Open InVID</strong> ouvre l'extension InVID
-					</li>
-					<li>
-						<strong>Video Urls</strong> affiche les urls des vidéos présentes dans la page web,
-					</li>
-					<li>
-						<strong>Image Urls</strong> affiche les urls des images présentes dans la page web.
-					</li>
-				</ul>
-			<p lang="en">
-				Here, below, is an example of a video url retrieval on Instagram.
-			</p>
-			<p lang="fr" hidden="hidden"></p>
-				En dessous se trouve un exemple de la récupération d'urls vidéo sur Instagram.
-			</p>
-			<img src="img/InstagramDemo.png" style="width: 100%">
-			<br>
-			<h2 lang="en">Plugin main features</h2>
-			<h2 lang="fr" hidden="hidden">Principales fonctionnalités de l'extension</h2>
-			<div style="text-align: center">
-				<iframe width="640" height="385"
-				src="https://www.youtube.com/embed/nmgbFODPiBY"
-				frameborder="0"></iframe> 
-			</div>
-			<p lang="en">
-				The first <strong>Analysis tab</strong> allows you to query the InVID context aggregation and analysis service developed by the <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> (ITI). In a nutshell, this service is an enhanced metadata viewer for Youtube, Facebook and Twitter videos that allows you to retrieve contextual information, location (if detected), most interesting comments, apply reverse image search and check for tweets on the video (on Youtube). Be aware that the service may take some time if the video processed has a lot of comments. A new feature (a reprocess button) allows you to refresh the analysis.
-			</p>
-			<p lang="fr" hidden="hidden">
-				Le premier onglet <strong>Analyse</strong>  vous permet d'effectuer des requêtes sur le service aggregation et analyse d'InVID développé par <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute</a> En simplifié, ce service est un visonneur de métadonnées amélioré pour les vidéo Youtube , Facebook et Twitter, qui vous permet de récupérer les informations contextuelles, localisations (si détecté), la plupart des commentaires intéressants, d'appliquer la recherche d'image inversée et de vérifier les tweets correspondants à la vidéo (pour Youtube). Soyez conscient que le service peut prendre du temps si la vidéo possède beaucoup de commentaires. Une nouvelle fonction (le bouton reprocess) vous permet de rafraichir l'analyse.
-			</p>
-			<p lang="en">
-				The second <strong>Keyframe tab</strong> is an iframe opening the website of <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute (ITI) </a> on video fragmentation. It allows you to copy a video url (from Youtube, Twitter, Facebook, Daily Motion or Dropbox) or to upload a video file (in mp4, webm, avi, mov, wmv, ogv, mpg, flv, and mkv format) in order to segment it in keyframes which then can be searched with a right click on Google, Yandex, Tineye and Baidu images. Our service extracts more keyframes and therefore gives the opportunity to enhance the video reverse image search. Those are the real keyframes of the video, not the thumbnails served by Youtube or Facebook.
-			</p>
-			<p lang="fr" hidden="hidden">
-				Le second onglet <strong>Images clés</strong> est une iframe contenant le site de <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute (ITI) </a> sur la fragmentation vidéo. Il vous permet en copiant une adresse vidéo (Youtube, Twitter, Facebook, Daily Motion, Instagram or Dropbox) ou en téléchargeant un fichier vidéo (mp4, webm, avi, mov, wmv, ogv, mpg, fly, ou mkv) de le fragmenter en images clés qui peuvent être ensuite recherchées avec un clic droit sur Google, Yandex, Tineye ou Baidu image. Notre service peut extraire davantage d'images clés et donc vous donne l'opportunité d'élargir votre recherche inversée d'image. Ces images viennent de la vidéo elle-même, non des imagettes fournies par la plateforme vidéo.
-			</p>
-			<p lang="en">
-				The <strong>Thumbnails tab</strong> allows you to quickly trigger a reverse image search on Google, Bing, Tineye or Yandex Images with the four thumbnails extracted from a Youtube video. Up to four tabs (according to the number of thumbnails available) are opened automatically in your browser with the results of the reverse search while the four thumbnails are also displayed in the plugin page. This tab is somewhat redundant with what can be done with the <strong>Analysis tab</strong> but it is very fast and efficient if you just need to look whether a Youtube video has already been published previously. Please note that the Chinese search engine Baidu is not implemented here because it is filtering out Youtube content.
-			</p>
-			<p lang="fr" hidden="hidden">
-				L'onglet <strong>Imagettes</strong>  vous permet de faire rapidement une recherche d'image inversée sur Google, Bing, Yandex ou Tineye avec les quatre imagettes fournies par Youtube sur ces vidéos. Jusqu'à quatre onglets (selon le nombre de imagettes disponibles) sont ouverts automatiquement dans votre navigateur avec les résultats de la recherche inversée pendant que les imagettes sont également affichées dans l'extension. Cet onglet est quelque peu redondant avec ce qui peut être fait dans l'onglet Analyse mais il est plus rapide et efficace si vous avez juste besoin de regarder si une vidéo de Youtube a déjà été publiée précédemment. Noter que la recherche avec le moteur Baidu n'est pas configurée dans cet onglet car ce moteur chinois filtre le contenu de Youtube.
-			</p>
-			<p lang="en">
-				The <strong>Search tab</strong> allows to enhance a Twitter advanced search for keywords or hashtag using the since and until operators, either separately or together to query within a time interval, up to the minute. It translates automatically the calendar date, hour and minutes into an unix timestamp to facilitate the query, e.g. of first eyewitness pictures or videos within a time range just after a breaking news event. We have also added other features from Twitter advanced such geocode, near, from, language and various filter operators.
-			</p>
-			<p lang="fr" hidden="hidden">
-				L'onglet <strong>Recherche Tw</strong> vous permet d'améliorer votre recherche avancée sur Twitter par mot clé ou hashtag en utilisant les opérateurs depuis et jusqu'à, de manière séparée ou ensemble, pour effectuer des requêtes precises jusqu'à un intervalle d'une minute. Il traduit automatiquement les dates calendaires, heures et minutes en unités de temps Unix pour faciliter l'écriture de la requête, par exemple recherche les premiers témoignages photos ou vidéos lors d'un évènement important. Nous avons également ajouté d'autres filtres, comme les coordonnées de géolocalisation, la provenance, le compte Twitter, la langue...
-			</p>
-			<p lang="en">
-				The <strong>Magnifier lens tab</strong> allows you to display an image through its url and to zoom or apply a magnifying lens on the image, or/and to enhance it through a bicubic algorithm to help you discover implicit knowledge such as written words, signs, banners ... You can either enter the image url, upload an image from your local drive with the local file button. Once the image is displayed from an url, you can also perform a Google, Yandex, Tineye and Baidu reverse image search on it or use the Image forensic service designed by ITI and DW in the <a href="https://revealproject.eu/" target="_blank">Reveal european project</a>. If you are using a local image or you have modified any image (sharp, flip, bicubic), you can either download your modified image or, if using the flip function, use the Google images button which opens a new tab where you can directly copy and paste the image into the Google images searchbox (watch the video below). This Magnifier lens feature also supports links of stored images in Dropbox and Google drive.
-			</p>
-			<p lang="fr" hidden="hidden">
-				L'onglet <strong>Loupe</strong> vous permet d'afficher une image partir de son url et de zoomer ou d'utiliser une loupe sur l'image pour aider à découvrir des éléments dans l'image comme du texte, des signes, pancartes... Vous pouvez aussi agrandir l'image grâce à un algorithme bicubic. Pour utiliser cette fonctionnalité, vous pouvez soit entrer l'adresse de l'image, soit charger une image depuis votre ordinateur grâce au bouton fichier local. Quand l'image est fournie depuis une adresse en ligne, vous pouvez également effectuer une recherche d'image inversée avec Google, Yandex, Tineye ou Baidu sur l'image ou utiliser le service Forensic créé par ITI et DW dans le <a href="https://revealproject.eu/" target="_blank">projet européen Reveal</a>. Si vous utilisez une image locale, ou si vous avez utilisé un filtre, vous pouvez soit télécharger l'image résultante, ou dans le cas du Miroir utiliser le bouton Google image qui s'ouvre dans un nouvel onglet de votre navigateur (voir la vidéo en dessous). Cette fonctionnalité de Loupe supporte également les liens d'images stockées sous Dropbox et Google Drive.
-			</p>
-			<div style="text-align: center">
-				<iframe width="640" height="385"
-				src="https://www.youtube.com/embed/8S59OMBvT8w"
-				frameborder="0"></iframe> 
-			</div>	
-			<p lang="en">
-				The <strong>Metadata tab</strong> allows you to check the Exif metadata of a picture in jpeg format or metadata of a vidéo in mp4/m4v format, either through a link either through a local file. If geocoordinates are available in the picture metadata, a geolocalise button is provided automatically pointing to this location on Google map.
-			</p>
-			<p lang="fr" hidden="hidden">
-				L'onglet <strong>Métadonnées</strong> vous permet de vérifier les métadonnées Exif d'une image au format Jpeg ou les métadonnées d'une vidéo au format mp4/m4v, soit par l'adresse en ligne (url) soit en la chargeant depuis un fichier local. Si des coordonées sont trouvées dans les métadonnées de l'image, un bouton de géolocalisation apparait renvoyant vers la carte Google Map correspondante.
-			</p>
-			<p lang="en">
-			The <strong>Video Rights</strong> tab provides access to the InVID Rights Management application. This service gets a link to a YouTube, Facebook or Twitter video and retrieves metadata about its rights, unless access is restricted by the content uploader or the social network. First of all it provides the user with a summary of the reuse conditions, as defined by the social network the video is published in. If other reuses are intended, it is recommended to contact the content uploader. This can be done directly or under the guidance of the <a href="https://rights.invid.udl.cat/" target="_blank">InVID Rights Management Tool</a>. The latter facilitates contacting the uploader, confirming authorship, or managing the negotiation of the reuse conditions. Alternatively, the Video Rights tab includes information about copyright exceptions if it is not possible to get consent from the author, as the use by the press exception or fair use/fair dealing.
-			</p>
-			<p lang="fr" hidden="hidden">
-			L'onglet <strong>Droits Vidéo</strong> donne accès à l'application de gestion des droits d'InVID. Ce service permet, à partir du lien d'une vidéo de Youtube, Facebook ou Twitter de récupérer les métadonnées sur ses droits d'utilisation en fonction de la licence, à moins que l'accès ne soit restreint par le réseau social ou le contributeur. Le service fournit d'abord un résumé des conditions de ré-utilisation de la vidéo, tel que défini par le réseau social. Si d'autres utilisations sont envisagées, il est recommandé de contacter la personne qui a mis le contenu sur le réseau social. Ce contact peut être fait directement ou bien via <a href="https://rights.invid.udl.cat/" target="_blank">l'outil InVID de gestion de droits</a>. Ce dernier facilite le contact avec le contributeur, la confirmation de la propriété du contenu, ou la gestion de la négociation pour les conditions de réutilisation. Cette fonctionnalité inclut en outre des informations sur les exceptions au copyright, au cas où il ne serait pas possible d'obtenir le consentement de l'auteur, comme l'utilisation dans un contexte journalistique ou l'utilisation loyale ("fair use").
-			</p>
-			<p lang="en">
-				The <strong>Forensic tab</strong> is an iframe opening the still images forensic service developed by <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute (ITI)</a> in a previous european project on social media verification, <a href="https://revealproject.eu/" target="_blank">Reveal</a>. Eight different filters will help you to detect digital image tampering.
-			</p>
-			<p lang="fr" hidden="hidden">
-				L'onglet <strong>Forensic</strong> est une iframe contenant le service d'imagerie forensic développé par <a href="http://mklab.iti.gr/" target="_blank">Thessaloniki Information Technologies Institute (ITI)</a> dans un projet européen précedent sur la vérification des réseaux sociaux, <a href="https://revealproject.eu/" target="_blank">Reveal</a>. Huit filtres vous aideront à détecter des manipulations de l'image numérique.
-			</p>
-			<p lang="en">
-				The <strong>Contextual menu</strong> (through a right click on an image or a video url) allows you to trigger this plugin on a still image or on a youtube video link. On an image, a right click will propose you either to open the picture in the Image magnifier to examine it more closely, or to launch reverse image search engines with the image. On a video link, a right click will propose you under the InVID menu to trigger either InVID video analysis or the Youtube thumbnail reverse search (for a Youtube video).
-			</p>
-			<p lang="fr" hidden="hidden">
-				Le <strong>Menu contextuel</strong> (appui sur le clic droit de la souris sur une image, une video ou une adresse vers une image ou video) vous permet d'envoyer directement une image ou une video sur l'extension. Avec une image, vous pourrez ouvrir l'image dans le magnifier ou de lancer une recherche d'image inversée. Sur une vidéo, vous pourrez envoyer la vidéo dans les onglets <strong>Analyse</strong> ou <strong>Youtube imagettes</strong> si elle correspond aux critères de l'onglet souhaité.
-			</p>
+			<div id="footer_tutorial" class="footer"></div>
 		</div>
 	</div>
 </body>
 <!-- For Image Magnifier -->
 <script src="js/jquery.min.js"></script>
 <script src='js/jquery.elevatezoom.js'></script>
+<script src="js/croppie.js"></script>
 <script type="text/javascript" src="js/Filter.js"></script>
 <script src='js/Zoom.js'></script>
 <script type="text/javascript" src="js/img.js"></script>
 
 <script type="text/javascript" src="js/util.js"></script>
 
+<!-- For csv translation -->
+<script type="text/javascript" src="js/translate-csv.js"></script>
+
+<!-- For tabs initialization -->
+<script type="text/javascript" src="js/html-generate.js"></script>
+
 <!-- For language -->
 <script type="text/javascript" src="js/language.js"></script>
 
 <!-- For Api (Analysis) --> 
 <script type="text/javascript" src="js/api.js"></script>
+
+<!-- For Forensic Analysis-->
+<script type="text/javascript" src="js/forensic.js"></script>
+
+<!-- For Keyframes --> 
+<script type="text/javascript" src="js/keyframes.js"></script>
 
 <!-- For Copyright Management -->
 <script type="text/javascript" src="js/copyright.js"></script>
