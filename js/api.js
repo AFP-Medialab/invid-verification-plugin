@@ -8,8 +8,9 @@ var yandex_reverse_search_urls = [];
 var error_type = "";
 
 /* Detect http link and make hyperlink */
-function urlify(text) {
-    if (text){
+function urlify(text)
+{
+    if (text) {
         var urlRegex = /(https?:\/\/[^\s]+)/g;
         return text.replace(urlRegex, function(url) {
             return '<a href="' + url + '" target="_blank">' + url + '</a>';
@@ -18,17 +19,17 @@ function urlify(text) {
     return "";
 }
 
-/*Create a title in the div argument*/
-function makeTitle(title, div){
+/* Create a title in the div argument */
+function makeTitle(title, div)
+{
     h3 = document.createElement("h3");
     h3.innerHTML = title;
     div.appendChild(h3);
 }
 
-/*Create table: 
-left column: name
-right column: key value from json file*/
-function make_table(json, key_lst, name_lst){
+/*Create table: left column: name, column: key value from json file */
+function make_table(json, key_lst, name_lst)
+{
     var table = document.createElement("table");
     for (var index in key_lst){
         var tr = document.createElement("tr");
@@ -58,7 +59,8 @@ function updateTable(json, key_lst, table)
     }
 }
 
-function createTimeRow(title, time) {
+function createTimeRow(title, time) 
+{
     var regex = /(.*), (.*) \(?UTC\)?/;
     var row = makeRowTable(title, time);
     if (regex.test(time)) {
@@ -72,7 +74,8 @@ function createTimeRow(title, time) {
     return row;
 }
 
-function updateTimeRow(table, nb, val) {
+function updateTimeRow(table, nb, val) 
+{
     var row = table.getElementsByTagName("tr")[nb];
     if (row.lastElementChild.innerHTML == "") {
         $(row).replaceWith(createTimeRow(row.firstElementChild.innerHTML, val));
@@ -80,7 +83,8 @@ function updateTimeRow(table, nb, val) {
 }
 
 /* Diplay buttons "verification comments" and "maps"*/
-function displayButtons(verif_number, locations, not_yt){
+function displayButtons(verif_number, locations, not_yt)
+{
     var verif = document.getElementById("verif-content");
     var maps = document.getElementById("maps-content");
     var google = document.getElementById("google_search_btn");
@@ -106,7 +110,8 @@ function displayButtons(verif_number, locations, not_yt){
     tineye.setAttribute("style", "");
 }
 
-function hideButtons() {
+function hideButtons() 
+{
     var buttons_id = [ "verif-content", "maps-content", "google_search_btn", "yandex_search_btn",
         /*"twitter-shares-content",*/ "twitter_search_btn", "tineye_search_btn"
     ]
@@ -116,7 +121,8 @@ function hideButtons() {
 }
 
 /* Place verification comments */
-function placeComments(analysis_json){
+function placeComments(analysis_json)
+{
     cleanElement("place-comments");
     var div = document.getElementById("place-comments");
     var video_comments = analysis_json.video_comments;
@@ -140,31 +146,25 @@ function placeComments(analysis_json){
 
 /* Thumbnails clickable */
 /* Send to magnifier tab */
-function activeThumbnail(thumbnails_id){
-    // constants
-    var SHOW_CLASS = 'show',
-    HIDE_CLASS = 'hide',
-    ACTIVE_CLASS = 'active';
-
+function activeThumbnail( thumbnails_id )
+{
     /* Change to magnifier tab */
-    $( '#'+ thumbnails_id ).on( 'click', 'a', function(e){
+    $( '#'+ thumbnails_id ).on( 'click', 'a', function(e) {
         e.preventDefault();
-        var $tab = $( this ),
-        href = $tab.attr( 'href' );
 
-        $( '.active' ).removeClass( ACTIVE_CLASS );
+		var $tab = $( this );
+		var href = $tab.attr( 'href' );
+
+        $('.active').removeClass( ACTIVE_CLASS );
         $( '#magnifier_tab' ).addClass( ACTIVE_CLASS );
 
-        $( '.show' )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-        .removeClass( SHOW_CLASS )
-        .addClass( HIDE_CLASS )
-        .hide();
+		$("#left_menu div a").each(function(){
+			$(this).removeClass( ACTIVE_CLASS );
+		});
+		$("#magnifier_tab").addClass( ACTIVE_CLASS );
 
-        $(href)
-        .removeClass( HIDE_CLASS )
-        .addClass( SHOW_CLASS )
-        .hide()
-        .fadeIn( 550 );
+        $('.show').removeClass( SHOW_CLASS ).addClass( HIDE_CLASS ).hide();
+        $(href).removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
 
         var url_img = $tab.children()[0].src;
         callMagnifier(url_img);
@@ -172,7 +172,8 @@ function activeThumbnail(thumbnails_id){
 }
 
 /* Create Carousel html*/
-function buildCarousel(carousel_id, thumbnails_id){
+function buildCarousel(carousel_id, thumbnails_id)
+{
     var div = document.getElementById(carousel_id);
     div.style.display = "block";
     var jssor1 = document.createElement("div");
@@ -225,27 +226,25 @@ function buildCarousel(carousel_id, thumbnails_id){
 }
 
 /* Display or hide real size Thumbnail image */
-function activePreview(){
-    $(".mouse-preview").on(
-    {
-        mouseenter: function() 
-        {
+function activePreview()
+{
+    $(".mouse-preview").on( {
+        mouseenter: function() {
             var id = $(this).attr("name");
             var img = document.getElementById(id);
             img.style.display = "";
         },
-        mouseleave: function()
-        {
+        mouseleave: function() {
             var id = $(this).attr("name");
             var img = document.getElementById(id);
             img.style.display = "none";
         }
     });
-
 }
 
 /* place Thumbnails in the carousel */
-function placeImages(carousel_id, thumbnails_id, preview_id, img_list){
+function placeImages(carousel_id, thumbnails_id, preview_id, img_list)
+{
     cleanElement(carousel_id);
     cleanElement(preview_id);
     buildCarousel(carousel_id, thumbnails_id);
@@ -279,95 +278,89 @@ function placeImages(carousel_id, thumbnails_id, preview_id, img_list){
     activePreview();
     /* Active carousel */
     jssor_1_slider_init();
-
 }
 
 /* Create the google maps and and search Box*/
-function createGoogleMaps(){
+function createGoogleMaps()
+{
     var mapOptions = {
         center: new google.maps.LatLng(0, 0),
         zoom: 10,
         mapTypeId: google.maps.MapTypeId.HYBRID
     }
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    var map = new google.maps.Map( document.getElementById("map"), mapOptions );
 
     /* get Current Location if possible */
-     if (navigator.geolocation) {
-     navigator.geolocation.getCurrentPosition(function (position) {
-         initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-         map.setCenter(initialLocation);
-     });
- }
+	if( navigator.geolocation ) {
+		navigator.geolocation.getCurrentPosition(function (position) {
+			initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			map.setCenter(initialLocation);
+		});
+	}
 
-// Create the search box and link it to the UI element.
-  var input = document.getElementById('pac-input');
-  var searchBox = new google.maps.places.SearchBox(input);
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+	// Create the search box and link it to the UI element.
+	var input = document.getElementById('pac-input');
+	var searchBox = new google.maps.places.SearchBox(input);
+	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-  var submit = document.getElementById("pac-button");
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(submit);
-  submit.addEventListener("click", function(){
-      if(searchBox){
-         searchBox.focus();
-        google.maps.event.trigger(input, 'keydown', { keyCode: 13 });
-    }
-  })
+	var submit = document.getElementById("pac-button");
+	map.controls[google.maps.ControlPosition.TOP_LEFT].push(submit);
+	submit.addEventListener("click", function() {
+		if(searchBox) {
+			searchBox.focus();
+			google.maps.event.trigger(input, 'keydown', { keyCode: 13 });
+		}
+	});
 
-  // Bias the SearchBox results towards current map's viewport.
-  map.addListener('bounds_changed', function() {
-    searchBox.setBounds(map.getBounds());
-  });
+	// Bias the SearchBox results towards current map's viewport.
+	map.addListener('bounds_changed', function() {
+		searchBox.setBounds(map.getBounds());
+	});
 
-  var markers = [];
-  // Listen for the event fired when the user selects a prediction and retrieve
-  // more details for that place.
-  searchBox.addListener('places_changed', function() {
-    var places = searchBox.getPlaces();
-
-    if (places.length == 0) {
-      return;
-    }
-
-    // Clear out the old markers.
-    markers.forEach(function(marker) {
-      marker.setMap(null);
-    });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-      var icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
-
-      // Create a marker for each place.
-      markers.push(new google.maps.Marker({
-        map: map,
-        icon: icon,
-        title: place.name,
-        position: place.geometry.location
-      }));
-
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-    map.fitBounds(bounds);
-  });
+	var markers = [];
+	// Listen for the event fired when the user selects a prediction and retrieve
+	// more details for that place.
+	searchBox.addListener('places_changed', function() {
+		var places = searchBox.getPlaces();
+		if (places.length == 0) return;
+		// Clear out the old markers.
+		markers.forEach( function(marker) {
+			marker.setMap(null);
+		});
+		markers = [];
+		// For each place, get the icon, name and location.
+		var bounds = new google.maps.LatLngBounds();
+		places.forEach( function(place) {
+			var icon = {
+				url: place.icon,
+				size: new google.maps.Size(71, 71),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(17, 34),
+				scaledSize: new google.maps.Size(25, 25)
+			};
+			// Create a marker for each place.
+			markers.push(new google.maps.Marker({
+				map: map,
+				icon: icon,
+				title: place.name,
+				position: place.geometry.location
+			}));
+			if( place.geometry.viewport ) {
+				// Only geocodes have viewport.
+				bounds.union(place.geometry.viewport);
+			} else {
+				bounds.extend(place.geometry.location);
+			}
+		});
+		map.fitBounds(bounds);
+	});
 
 }
 
 /* change SearchBox value and submit it to the google map */
-function updateMap(places){
-    if (places != []){
+function updateMap( places )
+{
+    if( places != [] ) {
         var searchBox = document.getElementById("pac-input");
         if(searchBox){
             searchBox.value =places;
@@ -378,9 +371,10 @@ function updateMap(places){
 }
 
 /* update the map with current search box value (correct display none bug)*/
-function triggerMap(){
+function triggerMap()
+{
     var searchBox = document.getElementById("pac-input");
-    if(searchBox){
+    if( searchBox ) {
         searchBox.focus();
         google.maps.event.trigger(searchBox, 'keydown', { keyCode: 13 });
     }
@@ -389,7 +383,8 @@ function triggerMap(){
 var analysisType = "";
 
 /* Parse the YouTube json */
-function parseYTJson(json){
+function parseYTJson(json)
+{
     /* bool value */
     var hasPlaceComments;
     var hasUpdateMap;
@@ -403,7 +398,8 @@ function parseYTJson(json){
     var key_list_comment = ["video_comment_count", "num_verification_comments"];
     var jsonName = json_lang_translate[global_language]; //jsonTitleTableApi["youtube"][global_language];
 
-    function start(json) {
+    function start(json) 
+	{
     	/* isDebunked field */
     	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
@@ -444,44 +440,45 @@ function parseYTJson(json){
         hasDisplayButtons = false;
     }
 
-    function update(json) {
+    function update(json) 
+	{
     	/* isDebunked field */
-    	/*if (json["isDebunked"] !== "") {
+    	/* if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
         else
         	document.getElementById("place-debunked").style.display = "none";*/
         var tables = document.getElementById("place-table").getElementsByTagName("table");
-        /*Video table*/
+        /* Video table */
         updateTable(json, key_list_video_a, tables[0]);
         updateTable(json, key_list_video_b, tables[1]);
         var index = key_list_video_b.length;
         updateTimeRow(tables[1], index++, json["video_upload_time"]);
-        /*Channel table*/
+        /* Channel table */
         updateTable(json, key_list_channel, tables[2]);
         /* Comments*/
         updateTable(json, key_list_comment, tables[3]);
     }
 
-    if (!document.getElementById("place-table").hasChildNodes())
+    if( !document.getElementById("place-table").hasChildNodes() ) {
         start(json);
-    else
+    } else {
         update(json);
+	}
 
     /* Place verification comments */
-    if (!hasPlaceComments && json.processing_status == "done")
-    {
+    if( ! hasPlaceComments && json.processing_status == "done" ) {
         placeComments(json);
         hasPlaceComments = true;
     }
     /* Update map*/
-    if (!hasUpdateMap && json.video_description_mentioned_locations) {
+    if( !hasUpdateMap && json.video_description_mentioned_locations ) {
         updateMap(json.video_description_mentioned_locations);
         hasUpdateMap = true;
     }
 
-    if (!hasPlaceImages && json.video_thumbnails) {
+    if( ! hasPlaceImages && json.video_thumbnails ) {
         /* Place thumbnails */
         placeImages("place-carousel", "place-thumbnails", "place-preview", json.video_thumbnails);
         hasPlaceImages = true;
@@ -491,21 +488,20 @@ function parseYTJson(json){
         yandex_reverse_search_urls = json.reverse_image_thumbnails_search_url_yandex;
     }
     /* Update Twitter search button */
-    if (json.twitter_search_url && twitter_url == "")
-    {
+    if (json.twitter_search_url && twitter_url == "") {
         twitter_url = json.twitter_search_url;
         document.getElementById("twitter_search_btn").setAttribute("style", "");
     }
     /* Display buttons*/
-    if (!hasDisplayButtons && (json.processing_status == "done" || (json.num_verification_comments && json.video_description_mentioned_locations))) {
+    if( ! hasDisplayButtons && (json.processing_status == "done" || (json.num_verification_comments && json.video_description_mentioned_locations) ) ) {
         displayButtons(json.num_verification_comments, json.video_description_mentioned_locations, false);
         hasDisplayButtons = true;
     }
 }
 
-
-/*Parse the Facebook Json*/
-function parseFBJson(json){
+/* Parse the Facebook Json */
+function parseFBJson(json)
+{
     /* booleans values */
     var hasPlaceImages;
     var hasPlaceComments;
@@ -518,14 +514,16 @@ function parseFBJson(json){
     var key_list_count = ["total_comment_count", "num_verification_comments"];
     var arrayTitle = json_lang_translate[global_language];//jsonTitleTableApi["facebook"][global_language];
 
-    function start(json) {
+    function start(json) 
+	{
     	/* isDebunked field */
-    	/*if (json["isDebunked"] !== "") {
+    	/* if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
-        else
-        	document.getElementById("place-debunked").style.display = "none";*/
+        else {
+        	document.getElementById("place-debunked").style.display = "none";
+		} */
         /* Video Infos*/
         var div = document.getElementById("place-table")
         /*Video table*/
@@ -553,14 +551,16 @@ function parseFBJson(json){
         yandex_reverse_search_urls = [];
     }
 
-    function update(json) {
+    function update(json)
+	{
     	/* isDebunked field */
     	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
-        else
-        	document.getElementById("place-debunked").style.display = "none";*/
+        else {
+        	document.getElementById("place-debunked").style.display = "none";
+		} */
         var tables = document.getElementById("place-table").getElementsByTagName("table");
         /*Video table*/
         updateTable(json, key_list_video, tables[0]);
@@ -573,18 +573,19 @@ function parseFBJson(json){
         updateTable(json, key_list_count, tables[2]);
     }
 
-    if (!document.getElementById("place-table").hasChildNodes())
+    if (!document.getElementById("place-table").hasChildNodes()) {
         start(json);
-    else
+    } else {
         update(json);
+	}
 
     /* Place thumbnails */
-    if (!hasPlaceImages && json.video_thumbnails) {
+    if( ! hasPlaceImages && json.video_thumbnails ) {
         placeImages("place-carousel", "place-thumbnails", "place-preview", json.video_thumbnails);
         hasPlaceImages = true;
     }
     /* Place verification comments */
-    if (!hasPlaceComments && json.processing_status == "done") {
+    if( ! hasPlaceComments && json.processing_status == "done" ) {
         placeComments(json);
         hasPlaceComments = true;
     }
@@ -592,21 +593,21 @@ function parseFBJson(json){
     video_thumbnails_lst = json.video_thumbnails;
     google_reverse_search_urls = json.reverse_image_thumbnails_search_url_google;
     yandex_reverse_search_urls = json.reverse_image_thumbnails_search_url_yandex;
-    /*Display buttons*/
-    if (!hasDisplayButtons && (json.processing_status == 'done' || (json.num_verification_comments && json.video_description_mentioned_locations))) {
+    /* Display buttons */
+    if( ! hasDisplayButtons && ( json.processing_status == 'done' || (json.num_verification_comments && json.video_description_mentioned_locations) ) ) {
         displayButtons(json.num_verification_comments, json.video_description_mentioned_locations, true);
         hasDisplayButtons = true;
     }
-
     /* Update map*/
-    if (!hasUpdateMap && json.video_description_mentioned_locations) {
+    if( ! hasUpdateMap && json.video_description_mentioned_locations ) {
         updateMap(json.video_description_mentioned_locations);
         hasUpdateMap = true;
     }
 }
 
-/*Parse the Twitter Json*/
-function parseTWJson(json){
+/* Parse the Twitter Json */
+function parseTWJson(json)
+{
     /* booleans values */
     var hasPlaceImages;
     // var hasPlaceComments; when verified comments added by iti
@@ -620,7 +621,8 @@ function parseTWJson(json){
     /*var key_list_comment = ["retweet_count"];*/
     var arrayTitle = json_lang_translate[global_language];//jsonTitleTableApi["twitter"][global_language];
 
-    function chooseVideoUrl(urls) {
+    function chooseVideoUrl(urls)
+	{
         var max = 0;
         var res = urls[0];
         for (var url of urls) {
@@ -637,17 +639,18 @@ function parseTWJson(json){
         return res;
     }
 
-    function start(json) {
+    function start(json) 
+	{
     	/* isDebunked field */
-    	/*if (json["isDebunked"] !== "") {
+    	/* if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
-        else
+        else {
         	document.getElementById("place-debunked").style.display = "none";*/
         /* Video Infos*/
         var div = document.getElementById("place-table")
-        /*Video table*/
+        /* Video table */
         makeTitle(arrayTitle["twitter_video_title"], div);
         var table = make_table(json, key_list_video, list_from_json(arrayTitle, "twitter_video_name_"));
         var index = key_list_video.length;
@@ -657,15 +660,14 @@ function parseTWJson(json){
         var row = makeRowTable(list_from_json(arrayTitle, "twitter_video_name_")[index++], urlify(chooseVideoUrl(urls)));
         table.appendChild(row);
         div.appendChild(table);
-        
-        /*Page table*/
+        /* Page table */
         makeTitle(arrayTitle["twitter_user_title"], div);
         table = make_table(json, key_list_user, list_from_json(arrayTitle, "twitter_user_name_"));
         div.appendChild(table);
         /* Comments */
-        /*makeTitle("Retweets:", div);
+        /* makeTitle("Retweets:", div);
         table = make_table(json, key_list_comment, name_list_comment); when verified comments added by iti
-        div.appendChild(table);*/
+        div.appendChild(table); */
         hasPlaceImages = false;
         google_reverse_search_urls = [];
         yandex_reverse_search_urls = [];
@@ -675,52 +677,54 @@ function parseTWJson(json){
         hasUpdateMapDesc = false;
     }
 
-    function update(json) {
+    function update(json) 
+	{
     	/* isDebunked field */
     	/*if (json["isDebunked"] !== "") {
     		document.getElementById("place-debunked").style.display = "block";
         	document.getElementById("place-debunked").innerHTML = json["isDebunked"];
     	}
-        else
-        	document.getElementById("place-debunked").style.display = "none";*/
+        else {
+        	document.getElementById("place-debunked").style.display = "none"; 
+		} */
         var tables = document.getElementById("place-table").getElementsByTagName("table");
-        /*Video table*/
+        /* Video table */
         updateTable(json, key_list_video, tables[0]);
         var index = key_list_video.length;
         updateTimeRow(tables[0], index++, json["created_at"]);
-        /*Page table*/
+        /* Page table */
         updateTable(json, key_list_user, tables[1]);
         /* Comments */
-        //updateTable(json, key_list_comment, tables[2]); when verified comments added by iti
+        // updateTable(json, key_list_comment, tables[2]); when verified comments added by iti
     }
 
-    if (!document.getElementById("place-table").hasChildNodes())
+	if( ! document.getElementById("place-table").hasChildNodes() ) {
         start(json);
-    else
+    } else {
         update(json);
-
+	}
     /* Place thumbnails */
     if (!hasPlaceImages && json.media_url) {
         placeImages("place-carousel", "place-thumbnails", "place-preview", [json.media_url]);
         hasPlaceImages = true;
     }
-
     /* Update reverse search buttons */
     video_thumbnails_lst = json.media_url;
     google_reverse_search_urls = json.reverse_image_thumbnails_search_url_google;
     yandex_reverse_search_urls = json.reverse_image_thumbnails_search_url_yandex;
 
     /* Display buttons */
-    if (!hasDisplayButtons && (json.processing_status == 'done' || (json.tweet_text_mentioned_locations.length && json.user_description_mentioned_locations.length))) {
+    if( ! hasDisplayButtons && ( json.processing_status == 'done' || (json.tweet_text_mentioned_locations.length && json.user_description_mentioned_locations.length) ) ) {
         var tmp = [];
-        if (json.user_description_mentioned_locations.length || json.tweet_text_mentioned_locations.length)
-            tmp.push("");
-        displayButtons(0/*json.num_verification_comments when added by iti*/, tmp, true);
+        if (json.user_description_mentioned_locations.length || json.tweet_text_mentioned_locations.length) {
+			tmp.push("");
+		}
+        displayButtons(0 /*json.num_verification_comments when added by iti*/, tmp, true);
         hasDisplayButtons = true;
     }
 
     /* Update map*/
-    if ((!hasUpdateMapText && json.tweet_text_mentioned_locations.length) || (!hasUpdateMapDesc && json.user_description_mentioned_locations.length)) {
+    if( ( ! hasUpdateMapText && json.tweet_text_mentioned_locations.length ) || ( ! hasUpdateMapDesc && json.user_description_mentioned_locations.length ) ) {
         var tmp = [];
         if (json.tweet_text_mentioned_locations) {
             tmp = tmp.concat(json.tweet_text_mentioned_locations);
@@ -733,19 +737,16 @@ function parseTWJson(json){
         updateMap(tmp);
         hasUpdateMap = true;
     }
-
     // when verified comments added by iti
     // /* Place verification comments */
     // if (!hasPlaceComments && json.processing_status == "done") {
     //     placeComments(json);
     //     hasPlaceComments = true;
     // }
-
-    
 }
 
-
-function request_fail(msg) {
+function request_fail(msg) 
+{
     document.getElementById("api-content").style.display = "none";
     //document.getElementById("place-debunked").style.display = "none";
     document.getElementById("loader").style.display = "none";
@@ -758,16 +759,17 @@ function request_fail(msg) {
 var analysisUrls = {};
 
 /* Send requests for video analysis*/
-function video_api_analysis(video_url, isProcess){
+function video_api_analysis(video_url, isProcess)
+{
     cleanElement("fb-content");
     document.getElementById("fb-content").style.display = "none";
-    //Video verification V2
-    //var analysis_url = "http://caa.iti.gr/verify_videoV2?url=" + video_url;
+    // Video verification V2
+    // var analysis_url = "http://caa.iti.gr/verify_videoV2?url=" + video_url;
 
     //encode video to avoid & problem arguments
     video_url = video_url.replace("&", "%26");
 
-    //Video verification V3
+    // Video verification V3
     var analysis_url = "http://caa.iti.gr/verify_videoV3?url=" + video_url + "&twtimeline=0";
     if (isProcess)
         analysis_url += "&reprocess=1"
@@ -777,9 +779,8 @@ function video_api_analysis(video_url, isProcess){
     //document.getElementById("place-debunked").style.display = "none";
     document.getElementById("place-carousel").style.display = "none";
     var response_done = false;
-
     /* return the error message for the error which occur */
-    /*function get_error_message(err) {
+    /* function get_error_message(err) {
         switch (err) {
             case "ERROR3":
             case "ERROR4":
@@ -805,14 +806,13 @@ function video_api_analysis(video_url, isProcess){
                 else if (global_language == "fr")
                     return "Une erreur est apparue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer.";
         }
-    }*/
-
+    } */
     /* Get response every 2 second until process done */
-    function parse_response(data, url, callback) {
-        if (analysisUrls.response != url)
-            return;
+    function parse_response(data, url, callback)
+	{
+        if (analysisUrls.response != url) return;
         callback(data);
-        if (data["processing_status"] !== "done" && !response_done) {
+        if( data["processing_status"] !== "done" && ! response_done ) {
             $.getJSON(url, function(data) {
                 setTimeout(function() {
                     parse_response(data, url, callback)
@@ -830,7 +830,8 @@ function video_api_analysis(video_url, isProcess){
         }
     }
 
-    function share_fail(msg) {
+    function share_fail(msg) 
+	{
         document.getElementById("loader_tw").style.display = "none";
         document.getElementById("verif-content").style.display = "none";
         document.getElementById("twitter-shares-content").style.display = "none";
@@ -841,7 +842,8 @@ function video_api_analysis(video_url, isProcess){
 
     /* Start Analysis */
     analysisUrls.submit = analysis_url;
-    $.getJSON(analysis_url, function(data) {
+    $.getJSON(analysis_url, function(data) 
+	{
         document.getElementById("api-content").style.display = "block";
         /* Error Gestion */
         if (json_lang_translate[global_language]["table_error_" + data["status"]] !== undefined)
@@ -875,7 +877,7 @@ function video_api_analysis(video_url, isProcess){
                 analysisType = "twitter";
             }
             if (url) {
-                url = url.replace("&", "%26");	//encode & character to avoid error of arguments
+                url = url.replace("&", "%26");	// encode & character to avoid error of arguments
             }
             analysisUrls.response = url;
             $.getJSON(url, function(data) {
@@ -889,7 +891,7 @@ function video_api_analysis(video_url, isProcess){
             /* Twitter Part response */
             var url_twitter = data["twitter_shares"];
             analysisUrls.tweets = url_twitter;
-            /*$.getJSON(url_twitter, function parse_tw(data) {
+            /* $.getJSON(url_twitter, function parse_tw(data) {
                 if (analysisUrls.tweets != url_twitter)
                     return;
                 tw_json = makeJSON(data);
@@ -913,7 +915,7 @@ function video_api_analysis(video_url, isProcess){
                 console.error("start share : " + url_twitter);
                 console.error(textStatus + ", " + error);
                 share_fail(table_error_message[global_language]["default"]);
-            });*/
+            }); */
         }).fail(function(jqxhr, textStatus, error) {
             console.error("get urls : " + analysis_url);
             console.error(textStatus + ", " + error);
@@ -928,10 +930,9 @@ function video_api_analysis(video_url, isProcess){
     });
 }
 
-
-
-/*Get the video url and start youtube or facebook analysis*/
-function submit_form(){
+/* Get the video url and start youtube or facebook analysis */
+function submit_form()
+{
     //var youtube_url = "https://www.youtube.com/watch?v=";
     var facebook_url = "https://www.facebook.com";
     var twitter_url = "https://twitter.com"
@@ -986,7 +987,8 @@ document.getElementById("twitter_search_btn").onclick = function() {
 };
 
 /* Twitter timeline */
-function convertDate(date){
+function convertDate(date)
+{
     var new_date = new Object();
     lst = String(date).split(" ");
     var new_month = "";
@@ -1015,7 +1017,8 @@ function convertDate(date){
 }
 
 /* parse the json from twitter api and make json for the timeline */
-function makeJSON(data){
+function makeJSON(data)
+{
     var json = "";
     var obj = new Object();
     obj.title = new Object();
@@ -1044,7 +1047,8 @@ function makeJSON(data){
 var loaded_tw = false;
 
 /* display timeline (correct display none bug timeline js) */
-function loadTimeline(){
+function loadTimeline()
+{
     return;
     /*cleanElement("place-timeline");
     var div = document.getElementById("place-timeline");
@@ -1072,17 +1076,19 @@ function loadTimeline(){
     timeline = new TL.Timeline('timeline-embed', tw_json);*/
 }
 
-/* Use for contextual menu */
-function callApi(url){
+/* Used for contextual menu */
+function callApi(url)
+{
     document.getElementById("apibox").value = url;
     submit_form();
 }
+
 var video_thumbnails_lst = [];
 var twitter_url = "https://twitter.com/search";
 var tw_json = "";
 
-
-function updateTableLanguageAnalysis(lang) {
+function updateTableLanguageAnalysis(lang) 
+{
     if (document.getElementById("error-content").style.display !== "none") {
         request_fail(json_lang_translate[global_language]["table_error_" + error_type]);
     }
@@ -1111,7 +1117,7 @@ function updateTableLanguageAnalysis(lang) {
             partNames = [jsonName["twitter_video_title"], jsonName["twitter_user_title"]/*, jsonName["twitter_comment_title"]*/]
             titles = titles.concat(list_from_json(jsonName, "twitter_video_name_"));
             titles = titles.concat(list_from_json(jsonName, "twitter_user_name_"));
-            //titles = titles.concat(jsonName["comment"]["name"]);
+            // titles = titles.concat(jsonName["comment"]["name"]);
             break;
         default:
             return;

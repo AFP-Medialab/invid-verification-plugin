@@ -1,6 +1,7 @@
 /* Open the list of image provided with the good engine in new tabs */
 /* The value for type are the fields of the urls object */
-function reverseImgSearch(type, imgUrls) {
+function reverseImgSearch(type, imgUrls) 
+{
 	var urls = {
 		baidu: {
 			search: "https://image.baidu.com/n/pc_search?queryImageUrl="
@@ -20,36 +21,38 @@ function reverseImgSearch(type, imgUrls) {
 			end: "&rpt=imageview"
 		}
 	}
-	if (typeof imgUrls === "string")
-		imgUrls = [imgUrls];
+	if (typeof imgUrls === "string") imgUrls = [imgUrls];
 	var begin = urls[type].search;
-	var end = (urls[type].end !== undefined) ? urls[type].end : "";
+	var end = ( urls[type].end !== undefined ? urls[type].end : "" );
 	var tabs = []
-	for (var image_url of imgUrls)
+	for( var image_url of imgUrls ) {
 		tabs.push(begin + image_url + end);
-	openTab(tabs);
+	}
+	openTab( tabs );
 }
 
 /* open a tab with compatibility between different browser */
 /* If backgroud is true, open tab whitout redirected the user to it */
-function openTab(urls, backgroud) {
-	if (typeof urls === "string")
-		urls = [urls];
+function openTab(urls, backgroud) 
+{
+	if (typeof urls === "string") urls = [urls];
 	for (var query of urls) {
-		if (window.chrome !== undefined && chrome.tabs !== undefined)
+		if (window.chrome !== undefined && chrome.tabs !== undefined) {
 			chrome.tabs.create({url: query});
-		else if (window.safari !== undefined && safari.self.tab !== undefined) {
+		} else if (window.safari !== undefined && safari.self.tab !== undefined) {
 			safari.self.tab.dispatchMessage("openTabs", urls, backgroud);
 			break;
 		}
-		else
+		else {
 			window.open(query);
+		}
 	}
 }
 
 /* Format the youtube url to https://www.youtube.com/watch?v=ID */
 /* If the url is invalid or the id is not present return "" */
-function getYtUrl(url) {
+function getYtUrl(url) 
+{
 	const yt_result = "https://www.youtube.com/watch?v=";
 	var urlObject = null;
 	try {
@@ -59,12 +62,12 @@ function getYtUrl(url) {
 		return "";
 	}
 	var id = getYtIdFromURLObject(urlObject);
-	if (id == "")
-		return "";
+	if (id == "") return "";
 	return yt_result + id;
 }
 
-function getYtIdFromURLObject(urlObject) {
+function getYtIdFromURLObject(urlObject) 
+{
 	var id = "";
 	switch (urlObject.hostname) { 
 		case "www.youtube.com":
@@ -99,7 +102,8 @@ function getYtIdFromURLObject(urlObject) {
 	return id;
 }
 
-function getYtIdFromUrlString(url) {
+function getYtIdFromUrlString(url) 
+{
 	var id = "";
 	var start_url = "https://www.youtube.com";
 	var start_url_short = "https://youtu.be";
@@ -116,7 +120,8 @@ function getYtIdFromUrlString(url) {
 	return id;
 }
 
-function isYtUrl(url) {
+function isYtUrl(url) 
+{
 	var start_url = "https://www.youtube.com/";
 	var start_url_short = "https://youtu.be/";
 	return url.startsWith(start_url) || url.startsWith(start_url_short);
@@ -136,8 +141,13 @@ function get_real_url_img(url)
 	return url;
 }
 
-/* Update the title of a table */
-function updateTitleTable(tableId, titles) {
+/**
+* @func update the titles of a table (th)
+* @tableId id of table
+* @titles titles to set
+*/
+function updateTitleTable(tableId, titles) 
+{
 	var listTitle = $("#" + tableId).find("th");
 	for (var i = 0; i < listTitle.length; i++) {
 		listTitle[i].innerHTML = titles[i];
@@ -148,43 +158,84 @@ function updateTitleTable(tableId, titles) {
 * @func create span of html given
 * @html given html (string)
 */
-function addSpan(html) {
+function addSpan(html) 
+{
 	return "<span>" + html + "</span>";
 }
 
-/* Clean element by id */
-function cleanElement(id){
+
+/**
+* @func clean element by id 
+* @id given id
+*/
+function cleanElement(id)
+{
     var div = document.getElementById(id);
-    if (!div)
-    	return;
-    /* Clear content*/
+    if( ! div ) return;
     while(div.hasChildNodes()){
         div.removeChild(div.firstChild);
     }
 }
 
 /**
-* @func clean whole element of given id
+* @func clean whole element of given existing id
 * @id given id
 */
-function cleanId(id) {
+function cleanId(id) 
+{
+	setInnerHtml( id, "" );
+}
+
+/**
+* @func fill a div with some html, if the id correspond to a valid div
+* @id div id
+* @html div content
+*/
+function setInnerHtml( id, html ) 
+{
 	var div = document.getElementById(id);
-	div.innerHTML = "";
+	if( ! div ) return;
+	div.innerHTML = html;
+}
+
+/**
+* @func set the placeholder of a div with a content, if the id correspond to a valid div
+* @id div id
+* @placeholder div placeholder
+*/
+function setPlaceholder( id, placeholder ) 
+{
+	var div = document.getElementById(id);
+	if( ! div ) return;
+	div.placeholder = placeholder;
+}
+
+/**
+* @func set the title of an element with a text, if the id correspond to a valid div
+* @id div id
+* @title div title
+*/
+function setTitle( id, title ) 
+{
+	var div = document.getElementById(id);
+	if( ! div ) return;
+	div.title = title;
 }
 
 /* Add a link to the dom element */
 /* If content is null, url is used */
-function appendLink(dom, url, content) {
+function appendLink(dom, url, content) 
+{
 	var a = document.createElement("a");
 	a.setAttribute("href", url);
-	if (!content)
-		content = url;
+	if ( ! content ) content = url;
 	a.innerHTML = content;
 	dom.appendChild(a);
 }
 
 /* Simulate Ctrl+C */
-function copyText(text) {
+function copyText(text) 
+{
     var textarea = document.createElement("textarea");
     textarea.innerHTML = text;
     textarea.style.rows = "1";
@@ -196,15 +247,17 @@ function copyText(text) {
 }
 
 /* Get source content of a page synchronously */
-function get_page(url) {
+function get_page(url) 
+{
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", url, false);
 	xhr.send(null);
 	return xhr.responseText;
 };
 
-/* Create a row for a html5 table*/
-function makeRowTable(header, content) {
+/* Create a row for a html5 table */
+function makeRowTable(header, content) 
+{
 	var tr = document.createElement("tr");
 	var th = document.createElement("th");
 	var td = document.createElement("td");
@@ -215,7 +268,9 @@ function makeRowTable(header, content) {
 	return tr;
 }
 
-function getXml(url) {
+/* Get and url returning an xml content */
+function getXml(url) 
+{
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", url, false);
 	xhr.send(null);

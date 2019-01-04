@@ -1,21 +1,30 @@
-function refreshTest(){
+/**
+* Script used to lauchn magnification of an image
+*/
 
-  $('#test').elevateZoom({
-    scrollZoom : true,
-    zoomType: "inner",
-    cursor: "crosshair",
-    zoomWindowFadeIn: 500,
-    zoomWindowFadeOut: 750
-  }); 
+/**
+* @func callback added to div of id test
+*/
+function refreshTest() 
+{
+	$('#test').elevateZoom({
+		scrollZoom : true,
+		zoomType: "inner",
+		cursor: "crosshair",
+		zoomWindowFadeIn: 500,
+		zoomWindowFadeOut: 750
+	}); 
 }
 
-function refreshTest2(){
-
-  $("#test2").elevateZoom({
-   scrollZoom : true,
-   zoomType : "lens",
-   lensShape	 : "round",
-   lensSize : 200
- });
-
+/**
+* @func callback added to div of id test2
+*/
+function refreshTest2()
+{
+	$("#test2").elevateZoom({
+		scrollZoom : true,
+		zoomType : "lens",
+		lensShape : "round",
+		lensSize : 200
+	});
 }

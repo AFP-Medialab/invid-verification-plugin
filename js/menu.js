@@ -1,5 +1,8 @@
-/* Set here your own Tracking ID */
-var trackingID = 'UA-XXXXXXXX-Y';
+/* 
+* Set here your own Tracking ID 
+* See config.js !
+*/
+var trackingID = config_google_analytics_key;
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -7,7 +10,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','js/analytic-local.js','ga');
 
 ga('create', trackingID, 'auto');
-ga('set', 'checkProtocolTask', function(){}); // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
+// Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
+ga('set', 'checkProtocolTask', function(){});
 ga('set', 'page', '/invid.html#analysis');
 ga('set', 'anonymizeIp', true);
 
@@ -24,7 +28,8 @@ function get_images(url){
 }
 
 karmadecaySearch = function(word){
-	var search_url = "http://karmadecay.com/search?kdtoolver=b1&q="; // from User JavaScript @https://static.karmadecay.com/js/karma-decay.user.js
+	// from User JavaScript @https://static.karmadecay.com/js/karma-decay.user.js
+	var search_url = "http://karmadecay.com/search?kdtoolver=b1&q=";
 	var url = getUrlImg(word);
 	if (url != "") {
 		chrome.tabs.create({ url: search_url + url});
@@ -41,7 +46,7 @@ thumbnailsSearch = function(word){
 		for (index in lst){
 			chrome.tabs.create({url:lst[index]});
 		}
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - ThumbnailYouTube", "click", url);
 	}
 };
@@ -56,7 +61,7 @@ analysisVideo = function(word){
 	var url = word.linkUrl;
 	if (url != "") {
 		chrome.tabs.create({url:"invid.html?video=" + url});
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - AnalysisVideo", "click", url);
 	}
 };
@@ -65,7 +70,7 @@ imageMagnifier = function(word){
 	var url = getUrlImg(word);
 	if (url != "") {
 		chrome.tabs.create({url:"invid.html?img=" + url});
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - Magnifier", "click", url);
 	}
 };
@@ -75,7 +80,7 @@ imageReverseSearch = function(word){
 	var url = getUrlImg(word);
 	if (url != ""){
 		chrome.tabs.create({url:search_url + url});
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - Google", "click", url);
 	}
 };
@@ -84,7 +89,7 @@ imageForensic = function(word){
 	var url = getUrlImg(word);
 	if (url != ""){
 		chrome.tabs.create({url:"invid.html?imgforen=" + url});
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - Forensic", "click", url);
 	}
 };
@@ -94,7 +99,7 @@ imageReverseSearchBaidu = function(word){
 	var url = getUrlImg(word);
 	if (url != ""){
 		chrome.tabs.create({url:search_url + url + "&fm=index&uptype=urlsearch"});
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - Baidu", "click", url);
 	}
 };
@@ -104,7 +109,7 @@ imageReverseSearchYandex = function(word){
 	var url = getUrlImg(word);
 	if (url != ""){
 		chrome.tabs.create({url:search_url + url + "&rpt=imageview"});
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - Yandex", "click", url);
 	}
 };
@@ -114,7 +119,7 @@ imageReverseSearchTineye = function(word){
 	var url = getUrlImg(word);
 	if (url != "") {
 		chrome.tabs.create({url:search_url + url});	
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - Tineye", "click", url);
 	}
 };
@@ -124,7 +129,7 @@ imageReverseSearchBing = function(word){
 	var url = getUrlImg(word);
 	if (url != "") {
 		chrome.tabs.create({url:search_url + url + "&view=detailv2&iss=sbi"});
-		//Google analytics
+		// Google analytics
 		ga("send", "event", "ContextualMenu - Bing", "click", url);
 	}
 };
@@ -155,7 +160,7 @@ chrome.contextMenus.create({
  title: "Image Magnifier",
  contexts:["image", "link"],  
  onclick: imageMagnifier,
-// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]// ,	// "*://*/*.png*"]																			// "*://*/*.png*"]
+// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//,	// "*://*/*.png*"]																			// "*://*/*.png*"]
 });
 
 chrome.contextMenus.create({
@@ -168,32 +173,28 @@ chrome.contextMenus.create({
  title: "Image Reverse Search - Google",
  contexts:["image", "link"],
  onclick: imageReverseSearch,
-//targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]// ,
-																			// "*://*/*.png*"]
+//targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, // "*://*/*.png*"]
 });
 
 chrome.contextMenus.create({
  title: "Image Reverse Search - Baidu",
  contexts:["image", "link"],  
  onclick: imageReverseSearchBaidu,
-// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]// ,
-																			// "*://*/*.png"]
+// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, // "*://*/*.png"]
 });
 
 chrome.contextMenus.create({
  title: "Image Reverse Search - Yandex",
  contexts:["image", "link"],
  onclick: imageReverseSearchYandex,
-//targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]// ,
-																			// "*://*/*.png"]
+//targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, // "*://*/*.png"]
 });
 
 chrome.contextMenus.create({
  title: "Image Reverse Search - Tineye",
  contexts:["image", "link"],
  onclick: imageReverseSearchTineye,
-// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]// ,
-																			// "*://*/*.png"]
+// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, // "*://*/*.png"]
 });
 
 chrome.contextMenus.create({
@@ -207,5 +208,3 @@ chrome.contextMenus.create({
 	contexts:["image"],
 	onclick: karmadecaySearch,
 });
-
-
