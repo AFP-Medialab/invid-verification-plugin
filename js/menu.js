@@ -2,7 +2,7 @@
 * Set here your own Tracking ID 
 * See config.js !
 */
-var trackingID = config_google_analytics_key;
+var trackingID = "UA-XXXXXXXX-Y";
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
