@@ -8,18 +8,22 @@ html, body{
     height: 100%;
 }
 
-/*InVID logo*/
-#invid-logo {
-  text-align: center;
-  position: fixed;
-  padding: 0px 20px 20px;
+a{
+	outline:none;
+}
+
+#invid-logo img{
+  margin:15px 5px 0 5px;
   cursor: pointer;
-  font-family: 'Roboto Mono', monospace;
+}
+#we-verify-logo img{
+  margin:5px 5px 0 5px;
 }
 
 .icon {
-  height: 32px;
-  width: 32px;
+  height: 48px;
+  width: 48px;
+  margin-bottom:5px;
 }
 
 /* Navigation bar Separator*/
@@ -50,7 +54,8 @@ ul.navbar {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #edece8;
+    /* background-color: #edece8; */
+    background-color: #ffffff;
     text-align: center;
     font-family: 'Roboto Mono', monospace;
 }
@@ -58,24 +63,31 @@ ul.navbar {
 /* Float the list items side by side */
 ul.navbar li {
     display: inline-block;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 /* Style the links inside the list items */
 ul.navbar li a {
     display: inline-block;
-    color: #000000;
+	color:#333;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-size: 11px;
+    font-size: 14px;
+	opacity:0.5;
+	-moz-opacity:0.5;
 }
 
 /* Change background color of links on hover */
-ul.navbar li a:hover {background-color: #ddd;}
+ul.navbar li a:hover {
+	opacity:1.0;
+	-moz-opacity:1.0;
+}
 
 /* Hide the list item that contains the link that should open and close the topnav on small screens */
-ul.navbar li.icon {display: none;}
+ul.navbar li.icon {
+	display: none;
+}
 
 .show {
   display: block;
@@ -85,8 +97,10 @@ ul.navbar li.icon {display: none;}
   display: none;
 }
 
+ul.navbar li a.active,
 .active {
-    background-color: #ffffff;
+	opacity:1.0;
+	-moz-opacity:1.0;
 }
 
 /* Body */
@@ -96,9 +110,11 @@ ul.navbar li.icon {display: none;}
 }
 
 #body-content h1 {
-    color: #333;
+    color: #000;
     font-weight: normal;
     font-size: 26px;
+	padding-top:20px;
+	padding-bottom:10px;
 }
 
 #body-content h2 {
@@ -113,7 +129,7 @@ ul.navbar li.icon {display: none;}
 
 /* Form */
 form {
-  padding-right: 20px !important;
+  /* padding-right: 20px !important; */
 }
 
 #half_input {
@@ -121,11 +137,13 @@ form {
 }
 
 form input[type=text],
-form input[type=password] {
-  width: 50%;
+form input[type=email],
+form input[type=password],
+form textarea {
+  width: 80%;
   height: 40px;
   margin-bottom: 10px;
-  padding-left: 15px; 
+  padding-left: 15px;
   background-color: #edece8;
   border: none;
   color: #000000;
@@ -425,8 +443,10 @@ input:checked + .slider:before {
 }
 
 .card {
-  width: 100%;
+  /* width: 100%; */
+  width: 90%;
   height: 100%;
+  min-height:255px;
   transition: transform 1s;
   transform-style: preserve-3d;
   position: relative;
@@ -488,9 +508,8 @@ input:checked + .slider:before {
   width: 25%;
   padding-left: 15px;
   padding-right: 15px;
-  padding-top: 15px;
-  padding-bottom: 15px;
   box-sizing: border-box;
+  margin-bottom:12px;
 
 }
 
@@ -544,10 +563,11 @@ thead:last-child tr:last-child th:first-child, tbody:last-child tr:last-child td
 }
 
 /* About content */
-#about, #tutorial{
+#about, #tutorial, #classroom{
   margin: 50px auto 15px;
   padding: 0px 50px 40px;
-  width: 700px;
+  width: 100%;
+  max-width:800px;
   border: 1px solid #ccc;
   border-radius: 4px;
   background: #FFF;
@@ -566,7 +586,7 @@ thead:last-child tr:last-child th:first-child, tbody:last-child tr:last-child td
   z-index: 1;
   width: 150px;
   height: 150px;
-  margin: 0 0 0 -75px;
+  margin: 20px 0 0 -60px;
   border: 16px solid #f3f3f3;
   border-radius: 50%;
   border-top: 16px solid #3498db;
@@ -655,6 +675,8 @@ p.comment {
 .image-upload > input
 {
     display: none;
+	width:100%;
+	text-align:center;
 }
 
 .image-upload label img {
@@ -719,4 +741,159 @@ p.comment {
   font-weight: bold;
   vertical-align: text-bottom;
   text-align: center;
+}
+
+/* Home menu */
+.home-menu {
+	margin-top:80px;
+}
+.third-parties-menu{
+}
+.left-menu {
+	margin-top:20px;
+}
+.home-menu div a,
+.left-menu div a,
+.third-parties-menu div a {
+	text-decoration:none;
+	color:#000;
+	display:block;
+	border:1px solid transparent;
+	padding:10px 0;
+	margin-bottom:20px;
+}
+.left-menu div a{
+	margin-bottom:5px;
+	padding:5px 0;
+	border:0;
+	opacity:0.4;
+	-moz-opacity:0.4;
+}
+.left-menu div a.active{
+	opacity:1.0;
+	-moz-opacity:1.0;
+}
+.home-menu div a:hover,
+.third-parties-menu div a:hover {
+	text-decoration:none;
+	border:1px solid #ddd;
+}
+.left-menu div a:hover{
+	opacity:1.0;
+	-moz-opacity:1.0;
+}
+.home-menu div a figure,
+.left-menu div a figure,
+.third-parties-menu div a figure {
+	text-align:center;
+}
+.home-menu div a figure img,
+.third-parties-menu div a figure img {
+	width:66%;
+	max-width:90px;
+	margin-bottom:5px;
+}
+.left-menu div a figure img{
+	width:60px;
+	margin-bottom:0;
+}
+.home-menu div a figure figcaption,
+.third-parties-menu div a figure figcaption {
+	height:40px;
+}
+.left-menu div a figure figcaption{
+	height:auto;
+}
+.home-menu figure figcaption span.help,
+.third-parties-menu figure figcaption span.help {
+	display:inline-block;
+	background:url(/img/pictos/help.png);
+	background-size:cover;
+	width:24px;
+	height:24px;
+	margin-top:-6px;
+}
+.left-menu figure figcaption span.help{
+	display:none;
+}
+.third-parties{
+	margin-top:80px;
+}
+#third_parties_title{
+	text-align:left;
+	padding-bottom:10px;
+	border-bottom:1px solid #ddd;
+	margin-bottom:10px;
+	font-size:16px;
+	color:#666;
+}
+
+#tutorial img,
+#survey img,
+#classroom img,
+#survey img,
+#about img,
+#tutorial iframe,
+#survey iframe,
+#classroom iframe,
+#survey iframe,
+#about iframe{
+	max-width:100%;
+	margin:10px 0;
+	text-align:left;
+}
+#tutorial img,
+#survey img,
+#classroom img,
+#survey img,
+#about img{
+	max-width:100%;
+	height:auto;
+}
+
+.classroom-video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 65%;
+}
+.classroom-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@media screen and (max-width: 640px) {
+	#invid-logo img,
+	#we-verify-logo img{
+	  margin-top:15px;
+	  max-width:40px;
+	  max-height:40px;
+	}
+	.icon {
+	  height: 28px;
+	  width: 28px;
+	  margin-bottom:5px;
+	}
+	ul.navbar li a {
+		padding:10px 5px;
+		text-align:center;
+	}
+	ul.navbar li a div span{
+		font-size: 11px;
+		letter-spacing:-2px;
+		margin-left:-8px;
+		display:block;
+	}
+	.home-menu {
+		margin-top:40px;
+	}
+	.third-parties-menu{
+		margin-top:40px;
+	}
+	#about, #tutorial, #classroom{
+		padding:0px 20px 20px 10px;
+	}
 }

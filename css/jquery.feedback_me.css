@@ -58,22 +58,26 @@
 .feedback_name {
 	display: block;
 	width: 340px !important;
+	height:32px;
 }
 
 .feedback_email {
 	display: block;
-	width: 340px;
+	width: 340px !important;
+	height:32px;
 }
 
 .feedback_message {
 	display: block;
-	width: 340px;
+	width: 340px !important;
 	resize: none;
+	height:48px;
 }
 
 .feedback_submit {
 	background: #136899 !important;
 	float: right;
+	margin-right:10px;
 }
 
 .feedback_trigger_text { 
