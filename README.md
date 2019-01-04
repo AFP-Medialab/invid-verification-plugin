@@ -14,4 +14,4 @@ This plugin is brought to you by the InVID European project, a Horizon 2020 Inno
 
 ## Third party api keys
 
-This plugin use Google Analytics, Google Map and Slack API (for feedback). This tools required your own keys which can be sed in one config file: js/config.js.
+This plugin use Google Analytics, Google Map and Slack API (for feedback). This tools required your own keys which can be set in one config file: js/config.js. You also need to set production variable to true.
