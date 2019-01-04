@@ -1,590 +1,759 @@
 <!DOCTYPE html>
 <html>
-<title>InVID Toolkit</title>
 <head>
-	<meta charset="UTF-8">
-	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui-timepicker-addon.css">
-	<link rel="stylesheet" type="text/css" href="css/carousel.css">
-	<link rel="stylesheet" type="text/css" href="css/jquery.feedback_me.css">
-	<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
-	<link rel="stylesheet" type="text/css" href="css/copyright.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/croppie.css">
+
+	<title>InVID Toolkit</title>
 	
-	<!-- Google Analytics -->
-	<link rel="stylesheet" type="text/css" href="css/cookieconsent.min.css" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<meta name="copyright" content="AFP Medialab">
+	<meta name="author" content="Denis TEYSSOU, Bertrand GOUPIL, Laurent LACROIX">
+	<meta name="description" content="INVID, In Video Veritas, Tools allowing fake videos and images detection">
+	<meta name="robots" content="index, nofollow">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" >
+	<link rel="stylesheet" href="css/jquery-ui.min.css">
+	<link rel="stylesheet" href="css/jquery-ui-timepicker-addon.css">
+	<link rel="stylesheet" href="css/jquery.feedback_me.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/carousel.css">
+	<link rel="stylesheet" href="css/timeline.min.css">
+	<link rel="stylesheet" href="css/copyright.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/croppie.css">
+	<link rel="stylesheet" href="css/cookieconsent.min.css">
+	<link rel="stylesheet" href="css/style.css">
+    
+	<script src="js/config.js"></script>
     <script src="js/cookieconsent.min.js"></script>
-	<script type="text/javascript" src="js/ga.js"></script>
+	<script src="js/ga.js"></script>
+
 </head>
 <body>
-	<div id="invid-logo" alt="logo" style="text: center; position: fixed; padding: 10px 10px 0px; cursor: pointer;">
-		<img src="img/InVID-logo.svg" height="44" width="72">
-		<div style="font-size: 12px;" translate="no">IN VIDEO VERITAS</div>
-	</div>
-	<ul class="navbar" id="myNavBar">
-		<li id="api_tab">
-			<a href="#api" title="Video contextual verification" class="active">
-				<img src="img/video_logo.svg" class="icon">
-				<br>
-				<div id="navbar_analysis"></div>
-			</a>
-		</li>
-		<li>
-			<a href="#keyframes" title="Keyframes extractor">
-				<img src="img/keyframes.svg" class="icon">
-				<br>
-				<div id="navbar_keyframes"></div>
-			</a>
-		</li>
-		<li>
-			<a href="#video" title="Youtube thumbnails reverse search">
-				<img src="img/youtube.svg" class="icon">
-				<br>
-				<div id="navbar_thumbnails"></div>
-			</a>
-		</li>
-		<li>
-			<a href="#twitter" title="Twitter advanced search">
-				<img src="img/twitter.svg" class="icon">
-				<br>
-				<div id="navbar_twitter"></div>
-			</a>
-		</li>
-		<li id="magnifier_tab">
-			<a href="#magnifier" title="Image magnifier">
-				<img src="img/magnifier.svg" class="icon">
-				<br>
-				<div id="navbar_magnifier"></div>
-			</a>
-		</li>
-		<li>
-			<a href="#metadata" title="Metadata">
-				<img src="img/metadata.svg" class="icon">
-				<br>
-				<div id="navbar_metadata"></div>
-			</a>
-		</li>
-		<li>
-			<a href="#copyright-tab" title="Video Copyright">
-				<img src="img/copyright.svg" class="icon">
-				<br>
-				<div id="navbar_rights"></div>
-			</a>
-		</li>
-		<li id="forensic_tab">
-			<a href="#forensic" title="Image Verification Assistant">
-				<img src="img/forensic_logo.svg" class="icon">
-				<br>
-				<div id="navbar_forensic"></div>
-			</a>
-		</li>
-		<div class="navsep"></div>
-		<li>
-			<a href="#about" title="About">
-				<img src="img/info2.svg" class="icon">
-				<br>
-				<div id="navbar_about"></div>
-			</a>
-		</li>
-		<li>
-			<a href="#survey" title="Survey">
-				<img src="img/survey.svg" class="icon">
-				<br>
-				<div id="navbar_survey"></div>
-			</a>
-		</li>
-		<li>
-			<a href="#tutorial" title="Tutorial">
-				<img src="img/tutorial1.svg" class="icon">
-				<br>
-				<div id="navbar_tuto"></div>
-			</a>
-		</li>
-	</ul>
 
-	<div id ="body-content">
-		<!--/#login.form-action-->
-		<div id="api" class="form-action show">
-			<div id="api_title"></div>
-			<form id="video_form2">
-				<div>
-					<input type="text" id="apibox" name="video_url2"/>
-					<br>
-					<input type="checkbox" id="api_reprocess" name="api_reprocess"/> <label for="api_reprocess" id="api_repro"></label>
-					<br>
-					<br>
-				</div>
-				<input type="submit" value="Submit" class="button" />
-			</form>
-			<div id="loader" class="loader"></div>
-			<br>
-			<br>
-			<div id="place-debunked">
-			</div>
-			<div id="api-content">
-				<div id="place-table"></div>
-				<br>
-				<div id="verif-content">
-					<button class="accordion">
-						<div id="api_comments"></div>
-					</button>
-					<div class="panel">
-						<div id="place-comments"></div>
+<!-- HEADER -->
+
+	<header>
+		<div class="container-fluid">
+			<div class="row" style="border-bottom:1px solid #edece8;">
+	
+				<div class="col-md-2 col-sm-2 col-xs-2 text-left" style="padding-right:0;">
+					<!-- LOGO WE VERIFY -->
+					<div id="invid-logo" alt="Logo InVid">
+						<img src="img/logo-invid.png" style="height:70px;">
 					</div>
 				</div>
 
-				<br>
-				<br>
-				<div id="maps-content">
-					<button class="accordion">
-						<div id="api_map"></div>
-					</button>
-					<div class="panel">
-						<h3 translate="no"> Google Map </h3>
-						<input id="pac-input" class="controls" type="text">
-						<button id="pac-button" class="btn-map">
-						</button>
-						<div id="map" style="width:800px;height:400px;"></div>
-					</div>
-				</div>
-				<br>
-				<hr>
-				<br>
-				<div id="place-carousel"></div>
-				<br>
-				<div id="place-preview"></div>
-				<br>
-				<button id="google_search_btn" class="button"></button>
-				<button id="yandex_search_btn" class="button"></button>
-				<div style="display: inline-block;">
-					<button id="tineye_search_btn" class="button"></button>
-				</div>
-				<button id="twitter_search_btn" class="button"></button>
-				<br>
-				<br>
-				<!--<div id="twitter-shares-content">
-					<button class="accordion">
-						<span lang="en">Twitter timeline</span>
-						<span lang="fr" hidden="hidden">Chronologie Twitter</span>
-					</button>
-					<div id="place-timeline" class="panel">
-						<div id="loader_tw" class="loader"></div>
-						<div id='timeline-embed' style="width: 100%; height: 100%;"></div>
-					</div>
-				</div>
-				<div id="error-content-share" style="display: none; color: red;"></div>
-				
-				
-				<iframe id="twitter_overlay" allowTransparency="true" scrolling="no" frameborder="0" >
-				</iframe>-->
-			</div>
-			<div id="fb-content" style="display: none;"></div>
-			<br>
-			<div id="error-content" style="display: none; color: red;"></div>
-			<div id="footer_analysis" class="footer"></div>
-		</div>
-
-		<div id="keyframes" class="form-action hide">
-			<div id="keyframes_base">
-				<div id="keyframes_title"></div>
-				<form id="keyframes_form">
-					<ul>
-						<input type="text" name="keyframes_url" id="keyframes_input">
-						<br>
-						<br>
-						<button id="keyframes_localfile" class="button"></button>
-						<input type="submit" value="Submit" class="button">
-						<br>
-						<br>
-						<div id="keyframes-wait" style="display: none;"></div>
-						<br>
-						<br>
-						<div id="loader-keyframes" class="loader"></div>
-					</ul>
-				</form>
-				<div id="error-keyframes" style="display: none; color: red;"></div>
-				<div id="keyframes-content">
-					<div id="keyframes_content_title"></div>
-					<br>
-					<div style="border-color: grey; border-radius: 10px;border-style: solid; border-width: 2px; padding-top: 10px; padding-bottom: 10px;">
-						<img src="img/iconmonstr-light-bulb-18.svg">
-						<div id="keyframes_tip" style="font-weight: bold;"></div>
-					</div>
-					<br>
-					<div id="keyframes-place"></div>
-					<br>
-					<div id="keyframes-place2">
-						<button class="accordion">
-							<div id="keyframes_content_acco"></div>
-						</button>
-						<div id="panel-shots" style="display: none;"></div>
-					</div>
-					<br>
-					<div id="download-content" style="display: none;">
-						<a id="subshots-download">
-							<button class="button">
-								<div id="keyframes_download_subshots"></div>
-							</button>
-						</a>
-					</div>
-				</div>
-			</div>
-			<div id="keyframes_iframe" style="display: none;">
-				<div>
-					<button id="keyframes_iframe_back" class="button"></button>
-				</div>
-				<div>
-					<iframe src="http://multimedia2.iti.gr/video_fragmentation/service/start.html" width="85%" height="750px" 
-					frameborder="0"></iframe>
-				</div>
-			</div>
-			<div id="footer_keyframes" class="footer"></div>
-		</div>
-
-		<div id="video" class="form-action hide">
-			<div id="youtube_title"></div>
-			<form id="video_form">
-				<ul>
-					<input type="text" name="video_url" id="youtube_input"/>
-					<br>
-					<div id="engine">
-						<input type="radio" id="google_engine" name="engine" checked translate="no" /> Google 
-						<input type="radio" id="yandex_engine" name="engine" translate="no" /> Yandex 
-						<input type="radio" id="bing_engine" name="engine" translate="no"> Bing 
-						<input type="radio" id="tineye_engine" name="engine" translate="no"> 
-						<div style="display: inline-block;"> Tineye
-							<!--<p class="new_element">
-								<span lang="en">new</span>
-								<span lang="fr" hidden="hidden">nouveau</span>
-							</p>-->
-						</div> 
-					</div> 
-					<br>
-					<input type="submit" value="Submit" class="button" />
-				</ul>
-			</form>
-			<div id="place-video-thumbnails"></div>
-			<div id="footer_thumbnails" class="footer"></div>
-		</div>
-
-		<div id="twitter" class="form-action hide">
-			<div id="twitter_title"></div>
-			<form id="twitter_form">
-				<ul>
-					<input type="text" id="termbox" name="term"/>
-					<br>
-					<input type="text" id="tw-account" name="account">
-					<br>
-					<input type="text" id="filter" name="filter_tw">
-					<br>
-					<input type="text" id="lang" name="lang">
-					<br>
-					<input type="text" id="geocode" name="geocode">
-					<br>
-					<input type="text" id="near" name="near" style="width:25%;">
-					<input type="text" id="within" name="within" style="width:24%;">
-					<br>
-					<div id="fromto-content">
-						<input type="text" id="from-date">
-						<br>
-						<input type="text" id="to-date"> 
-					</div>
-					<br>
-					<br>
-					<input type="radio" id="local_time" name="time" checked/>
-					<span id="twitter_local_time"></span>
-					<input type="radio" id="gmt" name="time" translate="no" />
-					<span id="twitter_gmt"></span>
-					<br> 
-					<br>
-					<input type="submit" value="Submit" class="button" />
-				</ul>
-			</form>
-			<div id="footer_twitter" class="footer"></div>
-		</div>
-
-		<div id="magnifier" class="form-action hide">
-			<div id="magnifier_title"></div>
-			<form id="img_form">
-				<ul>
-					<input type="text" id="urlbox" name="url" style="" />
-					<div class="image-upload">
-						<br>
-						<label for="file-input">
-							<img src="img/file.png"/> 
-							<div id="local_file"></div>
-						</label>
-						<input id="file-input" type="file"/>
-					</div>
-					<br>
-					<input type="submit" value="Submit" class="button" />
-					<br>
-				</ul>
-			</form>
-			<br>
-			<div id="magnifier-content" style="display: none;">
-				<br>
-				<button class="accordion">
-					<div id="magnifier_accor"></div>
-				</button>
-				<div class="panel">
-					<br>
-					<form id="filter_form">
-						<ul>
-							<br>
-							<input type="radio" id="none" name="filter" checked/>
-							<span id="magnifier_radio_1"></span>
-							<input type="radio" id="sharp" name="filter"/>
-							<span id="magnifier_radio_2"></span>
-							<input type="radio" id="flip" name="filter">
-							<span id="magnifier_radio_3"></span>
-							<input type="radio" id="bicubic" name="filter"/>
-							<span id="magnifier_radio_4"></span>
-							<input type="radio" id="crop" name="filter">
-							<span id="magnifier_radio_5"></span>
-							<div id="scale_input" style="display: none;">
+				<div class="col-md-8 col-sm-8 col-xs-8">
+					<!-- TOP MENU -->
+					<ul class="navbar" id="myNavBar">
+						<li id="api_tab">
+							<a href="#tools" title="Tools" class="active">
+								<img src="img/pictos/tools-on.png" class="icon">
 								<br>
-								<input id="scale" type="range" min="25" max="400" value="100" step="1"/>
-								<div id="magnifier_scale"></div>
-								<span id="show_scale">
-									 : 100%
-								</span>
+								<div id="navbar_tools">&nbsp;</div>
+							</a>
+						</li>
+						<li>
+							<a href="#tutorial" title="Tutorial">
+								<img src="img/pictos/tutorial-on.png" class="icon">
+								<br>
+								<div id="navbar_tuto">&nbsp;</div>
+							</a>
+						</li>
+						<li>
+							<a href="#classroom" title="Classroom">
+								<img src="img/pictos/classroom-on.png" class="icon">
+								<br>
+								<div id="navbar_classroom">&nbsp;</div>
+							</a>
+						</li>
+						<li>
+							<a href="#about" title="About">
+								<img src="img/pictos/about-on.png" class="icon">
+								<br>
+								<div id="navbar_about">&nbsp;</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="col-md-2 col-sm-2 col-xs-2 text-right" style="padding-left:0;">
+					<!-- LOGO INVID -->
+					<div id="we-verify-logo" alt="Logo We Verify">
+						<img src="img/logo-we-verify.png" style="height:90px;">
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</header>
+
+<!-- CONTENT -->
+
+	<div id ="body-content" class="container-fluid">
+		<div class="row">
+
+			<div class="col-md-1 col-sm-1 col-xs-2 text-left">
+				<div class="container-fluid">
+					<div id="left_menu" class="row left-menu" style="display:none;"></div>
+				</div>
+			</div>
+
+			<div class="col-md-10 col-sm-10 col-xs-8">
+
+				<!-- 
+				  -- HOME VIEW 
+				  -->
+				<div id="home" class="container-fluid">
+					<div class="row home-menu" id="home_menu">
+
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#api">
+								<figure>
+									<img src="/img/pictos/analysis.png" alt="Analysis">
+									<figcaption>
+										<span id="menu_api_tit">&nbsp;</span>
+										<span id="menu_api_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#keyframes">
+								<figure>
+									<img src="/img/pictos/keyframes.png" alt="Keyframes">
+									<figcaption>
+										<span id="menu_key_tit">&nbsp;</span>
+										<span id="menu_key_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#video">
+								<figure>
+									<img src="/img/pictos/thumbnails.png" alt="Thumbnails">
+									<figcaption>
+										<span id="menu_thu_tit">&nbsp;</span>
+										<span id="menu_thu_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#twitter">
+								<figure>
+									<img src="/img/pictos/twitter-search.png" alt="TwitterSearch">
+									<figcaption>
+										<span id="menu_twi_tit">&nbsp;</span>
+										<span id="menu_twi_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#magnifier" id="magnifier_tab">
+								<figure>
+									<img src="/img/pictos/magnifier.png" alt="Magnifier">
+									<figcaption>
+										<span id="menu_mag_tit">&nbsp;</span>
+										<span id="menu_mag_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#metadata">
+								<figure>
+									<img src="/img/pictos/metadata.png" alt="Metadata">
+									<figcaption>
+										<span id="menu_met_tit">&nbsp;</span>
+										<span id="menu_met_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#copyright-tab">
+								<figure>
+									<img src="/img/pictos/video-rights.png" alt="VideoRights">
+									<figcaption>
+										<span id="menu_vid_tit">&nbsp;</span>
+										<span id="menu_vid_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+						<div class="col-md-2 col-sm-3 col-xs-6">
+							<a href="#forensic">
+								<figure>
+									<img src="/img/pictos/forensic.png" alt="Forensic">
+									<figcaption>
+										<span id="menu_for_tit">&nbsp;</span>
+										<span id="menu_for_dsc" class="help">&nbsp;</span>
+									</figcaption>
+								</figure>
+							</a>
+						</div>
+
+					</div>
+
+					<div class="third-parties">
+						<div id="third_parties_title"></div>
+						<div class="container-fluid">
+							<div class="row third-parties-menu">
+								<div class="col-md-2 col-sm-3 col-xs-6">
+									<a href="https://www.crowdtangle.com/" target="_blank">
+										<figure>
+											<img src="/img/pictos/crowd-tangle.png" alt="CrowdTangle">
+											<figcaption>
+												<span id="menu_cro_tit">&nbsp;</span>
+												<span id="menu_cro_dsc" class="help">&nbsp;</span>
+											</figcaption>
+										</figure>
+									</a>
+								</div>
+								<div class="col-md-2 col-sm-3 col-xs-6">
+									<a href="http://cmla.ens-paris-saclay.fr/" target="_blank">
+										<figure>
+											<img src="/img/pictos/cmla.png" alt="CMLA">
+											<figcaption>
+												<span id="menu_cml_tit">&nbsp;</span>
+												<span id="menu_cml_dsc" class="help">&nbsp;</span>
+											</figcaption>
+										</figure>
+									</a>
+								</div>
 							</div>
-							<br>		
+						</div>
+					</div>
+				</div>
+
+				<!-- 
+				  -- ANALYSIS VIEW 
+				  -->
+				<div id="api" class="form-action hide">
+					<div id="api_title"></div>
+					<form id="video_form2">
+						<div>
+							<input type="text" id="apibox" name="video_url2"/>
 							<br>
-							<input type="submit" id="apply_button" value="Apply" class="button" />
+							<input type="checkbox" id="api_reprocess" name="api_reprocess"/> 
+							<label for="api_reprocess" id="api_repro"></label>
+							<br>
+							<br>
+						</div>
+						<input type="submit" value="Submit" class="button" />
+					</form>
+					<div id="loader" class="loader"></div>
+					<br>
+					<br>
+					<div id="place-debunked">
+					</div>
+					<div id="api-content">
+						<div id="place-table"></div>
+						<br>
+						<div id="verif-content">
+							<button class="accordion">
+								<div id="api_comments"></div>
+							</button>
+							<div class="panel">
+								<div id="place-comments"></div>
+							</div>
+						</div>
+
+						<br>
+						<br>
+						<div id="maps-content">
+							<button class="accordion">
+								<div id="api_map"></div>
+							</button>
+							<div class="panel">
+								<h3 translate="no"> Google Map </h3>
+								<input id="pac-input" class="controls" type="text">
+								<button id="pac-button" class="btn-map">
+								</button>
+								<div id="map" style="width:800px;height:400px;"></div>
+							</div>
+						</div>
+						<br>
+						<hr>
+						<br>
+						<div id="place-carousel" style="margin-left:-50px;"></div>
+						<br>
+						<div id="place-preview"></div>
+						<br>
+						<button id="google_search_btn" class="button"></button>
+						<button id="yandex_search_btn" class="button"></button>
+						<div style="display: inline-block;">
+							<button id="tineye_search_btn" class="button"></button>
+						</div>
+						<button id="twitter_search_btn" class="button"></button>
+						<br>
+						<br>
+						<!--
+						<div id="twitter-shares-content">
+							<button class="accordion">
+								<span lang="en">Twitter timeline</span>
+								<span lang="fr" hidden="hidden">Chronologie Twitter</span>
+							</button>
+							<div id="place-timeline" class="panel">
+								<div id="loader_tw" class="loader"></div>
+								<div id='timeline-embed' style="width: 100%; height: 100%;"></div>
+							</div>
+						</div>
+						<div id="error-content-share" style="display: none; color: red;"></div>
+						<iframe id="twitter_overlay" allowTransparency="true" scrolling="no" frameborder="0" ></iframe>
+						-->
+					</div>
+					<div id="fb-content" style="display: none;"></div>
+					<br>
+					<div id="error-content" style="display: none; color: red;"></div>
+					<div id="footer_analysis" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- KEYFRAMES VIEW 
+				  -->
+				<div id="keyframes" class="form-action hide">
+					<div id="keyframes_base">
+						<div id="keyframes_title"></div>
+						<form id="keyframes_form">
+							<ul>
+								<input type="text" name="keyframes_url" id="keyframes_input">
+								<br>
+								<br>
+								<button id="keyframes_localfile" class="button"></button>
+								<input type="submit" value="Submit" class="button">
+								<br>
+								<br>
+								<div id="keyframes-wait" style="display: none;"></div>
+								<br>
+								<br>
+								<div id="loader-keyframes" class="loader"></div>
+							</ul>
+						</form>
+						<div id="error-keyframes" style="display: none; color: red;"></div>
+						<div id="keyframes-content">
+							<div id="keyframes_content_title"></div>
+							<br>
+							<div id="keyframes-place"></div>
+							<br>
+							<div id="keyframes-place2">
+								<button class="accordion">
+									<div id="keyframes_content_acco"></div>
+								</button>
+								<div id="panel-shots" style="display: none;"></div>
+							</div>
+							<br>
+							<div id="download-content" style="display: none;">
+								<button class="accordion">
+									<div id="keyframes_download"></div>
+								</button>
+								<div id="panel" style="display: none;">
+									<a id="subshots-download">
+										<button class="button">
+											<div id="keyframes_download_subshots"></div>
+										</button>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="keyframes_iframe" style="display: none;">
+						<div>
+							<button id="keyframes_iframe_back" class="button"></button>
+						</div>
+						<div>
+							<iframe src="http://multimedia2.iti.gr/video_fragmentation/service/start.html" width="85%" height="750px" 
+							frameborder="0"></iframe>
+						</div>
+					</div>
+					<div id="footer_keyframes" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- THUMBNAILS VIEW 
+				  -->
+				<div id="video" class="form-action hide">
+					<div id="youtube_title"></div>
+					<form id="video_form">
+						<ul>
+							<input type="text" name="video_url" id="youtube_input"/>
+							<br>
+							<div id="engine">
+								<input type="radio" id="google_engine" name="engine" checked translate="no" /> Google 
+								<input type="radio" id="yandex_engine" name="engine" translate="no" /> Yandex 
+								<input type="radio" id="bing_engine" name="engine" translate="no"> Bing 
+								<input type="radio" id="tineye_engine" name="engine" translate="no"> 
+								<div style="display: inline-block;"> Tineye
+								<!--
+									<p class="new_element">
+										<span lang="en">new</span>
+										<span lang="fr" hidden="hidden">nouveau</span>
+									</p>
+								-->
+								</div> 
+							</div> 
+							<br>
+							<input type="submit" value="Submit" class="button" />
+						</ul>
+					</form>
+					<div id="place-video-thumbnails"></div>
+					<div id="footer_thumbnails" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- TWITTER VIEW 
+				  -->
+				<div id="twitter" class="form-action hide">
+					<div id="twitter_title"></div>
+					<form id="twitter_form">
+						<ul>
+							<input type="text" id="termbox" name="term"/>
+							<br>
+							<input type="text" id="tw-account" name="account">
+							<br>
+							<input type="text" id="filter" name="filter_tw">
+							<br>
+							<input type="text" id="lang" name="lang">
+							<br>
+							<input type="text" id="geocode" name="geocode">
+							<br>
+							<input type="text" id="near" name="near" style="width:25%;">
+							<input type="text" id="within" name="within" style="width:24%;">
+							<br>
+							<div id="fromto-content">
+								<input type="text" id="from-date">
+								<br>
+								<input type="text" id="to-date"> 
+							</div>
+							<br>
+							<br>
+							<input type="radio" id="local_time" name="time" checked/>
+							<span id="twitter_local_time"></span>
+							<input type="radio" id="gmt" name="time" translate="no" />
+							<span id="twitter_gmt"></span>
+							<br> 
+							<br>
+							<input type="submit" value="Submit" class="button" />
+						</ul>
+					</form>
+					<div id="footer_twitter" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- MAGNIFIER VIEW 
+				  -->
+				<div id="magnifier" class="form-action hide">
+					<div id="magnifier_title"></div>
+					<form id="img_form">
+						<ul>
+							<input type="text" id="urlbox" name="url" style="" />
+							<div class="image-upload">
+								<br>
+								<label for="file-input">
+									<img src="img/file.png"/> 
+									<div id="local_file"></div>
+								</label>
+								<input id="file-input" type="file"/>
+							</div>
+							<br>
+							<input type="submit" value="Submit" class="button" />
 							<br>
 						</ul>
 					</form>
-					<button id="undo" class="button">
-						<div id="button_undo"></div>
-					</button>
-					<button id="redo" class="button">
-						<div id="button_redo"></div>
-					</button>
-				</div>
-				<br>
-				<!-- Rounded switch -->
-				<div id="rounded-switch" style="">
-					<div id="magnifier_switch"></div>
-					<label class="switch">
-						<input type="checkbox" id="toogle">
-						<div class="slider round"></div>
-					</label>
-				</div>
-				<br>
-				<br>
-				<br>
-				<div style="position: relative;">
-					<div id="place-inner" style="display: none;">
-						<img id="test" src="" data-zoom-image="">
-					</div>
-					<div id="place-lens">
-						<img id="test2" src="" data-zoom-image="">
-					</div>
-					<div id="place-crop" style="width: 500px; height: 500px; margin: auto; display: none;">
-						<div id="cropper"></div>
-					</div>
-				</div>
-				<br>
-				<br>
-				<br>
-				<div style="display: inline;">
-					<a class="button" id="download_img_magnifier" href="" download="picture.png" style="color: white; text-decoration: none">
-						<span id="button_downloads"></span>
-					</a>
-
-					<div id="lst_search_btn" style="display: inline;">
-						<button id="img_rev_search_btn" class="button"></button>
-						<button id="baidu_rev_search_btn" class="button"></button>
-						<button id="yandex_rev_search_btn" class="button"></button>
-						<div style="display: inline-block;">
-							<button id="tineye_rev_search_btn" class="button"></button>
-							<!--<p class="new_element" style="font-size: 12px; margin-left: 15px;">
-								new
-							</p> -->
+					<br>
+					<div id="magnifier-content" style="display: none;">
+						<br>
+						<button class="accordion">
+							<div id="magnifier_accor"></div>
+						</button>
+						<div class="panel">
+							<br>
+							<form id="filter_form">
+								<ul>
+									<br>
+									<input type="radio" id="none" name="filter" checked/>
+									<span id="magnifier_radio_1"></span>
+									<input type="radio" id="sharp" name="filter"/>
+									<span id="magnifier_radio_2"></span>
+									<input type="radio" id="flip" name="filter">
+									<span id="magnifier_radio_3"></span>
+									<input type="radio" id="bicubic" name="filter"/>
+									<span id="magnifier_radio_4"></span>
+									<input type="radio" id="crop" name="filter">
+									<span id="magnifier_radio_5"></span>
+									<div id="scale_input" style="display: none;">
+										<br>
+										<input id="scale" type="range" min="25" max="400" value="100" step="1"/>
+										<div id="magnifier_scale"></div>
+										<span id="show_scale">
+											 : 100%
+										</span>
+									</div>
+									<br>		
+									<br>
+									<input type="submit" id="apply_button" value="Apply" class="button" />
+									<br>
+								</ul>
+							</form>
+							<button id="undo" class="button">
+								<div id="button_undo"></div>
+							</button>
+							<button id="redo" class="button">
+								<div id="button_redo"></div>
+							</button>
 						</div>
-						<button id="img_verif_btn" class="button"></button>
+						<br>
+						<div id="rounded-switch" style="">
+							<div id="magnifier_switch"></div>
+							<label class="switch">
+								<input type="checkbox" id="toogle">
+								<div class="slider round"></div>
+							</label>
+						</div>
+						<br>
+						<br>
+						<br>
+						<div style="position: relative;">
+							<div id="place-inner" style="display: none;">
+								<img id="test" src="" data-zoom-image="">
+							</div>
+							<div id="place-lens">
+								<img id="test2" src="" data-zoom-image="">
+							</div>
+							<div id="place-crop" style="width: 500px; height: 500px; margin: auto; display: none;">
+								<div id="cropper"></div>
+							</div>
+						</div>
+						<br>
+						<br>
+						<br>
+						<div style="display: inline;">
+							<a class="button" id="download_img_magnifier" href="" download="picture.png" style="color: white; text-decoration: none">
+								<span id="button_downloads"></span>
+							</a>
+
+							<div id="lst_search_btn" style="display: inline;">
+								<button id="img_rev_search_btn" class="button"></button>
+								<button id="baidu_rev_search_btn" class="button"></button>
+								<button id="yandex_rev_search_btn" class="button"></button>
+								<div style="display: inline-block;">
+									<button id="tineye_rev_search_btn" class="button"></button>
+									<!--
+									<p class="new_element" style="font-size: 12px; margin-left: 15px;">new</p> 
+									-->
+								</div>
+								<button id="img_verif_btn" class="button"></button>
+							</div>
+							<button id="copy_url_img_magnifier" class="button" translate="no">
+								Google Image
+							</button>
+						</div>
+					</div> 
+					<div id="footer_magnifier" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- METADATA VIEW 
+				  -->
+				<div id="metadata" class="form-action hide">
+					<div id="metadata_content_title"></div>
+					<form id="metadata_form">
+						<ul>
+							<input type="text" id="url-metadata" name="url" style="" />
+							<div class="image-upload">
+								<br>
+								<label for="local-metadata">
+									<img src="img/file.png"/> 
+									<div id="metadata_localfile"></div>
+								</label>
+								<input id="local-metadata" type="file"/>
+							</div>
+							<br>
+							<input type="radio" id="img-meta-radio" name="file_type" checked/>
+							<span id="metadata_radio_image"></span>
+							<input type="radio" id="video-meta-radio" name="file_type"/>
+							<span id="metadata_radio_video"></span>
+							<br>
+							<br>
+							<input type="submit" value="Submit" class="button" />
+							<br>
+						</ul>
+					</form>
+					<div id="preview-metadata"></div>
+					<div id="place-metadata"></div>
+					<div id="error-metadata" style="display: none;"></div>
+					<div id="footer_metadata" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- COPYRIGHT VIEW 
+				  -->
+				<div id="copyright-tab" class="form-action hide">
+					<div id="copyright_title"></div>
+					<form id="copyright-form">
+						<div>
+							<input type="text" id="copyright-video_url" name="copyright-video_url"/>
+							<br>
+							<br>
+						</div>
+						<input id="copyright-form_submit" type="submit" value="Submit" class="button"/>
+					</form>
+					<div id="copyright-loader" class="loader"></div>
+					<div id="copyright-content">
+						<div id="copyright-summary"></div>
 					</div>
-					<button id="copy_url_img_magnifier" class="button" translate="no">
-						Google Image
-					</button>
+					<div id="copyright-error"></div>
+					<br><br>
+					<div class="copyright-footer footer" id="footer_rights"></div>
 				</div>
-			</div> 
-			<div id="footer_magnifier" class="footer"></div>
-		</div>
 
-		<div id="metadata" class="form-action hide">
-			<div id="metadata_content_title"></div>
-			<form id="metadata_form">
-				<ul>
-					<input type="text" id="url-metadata" name="url" style="" />
-					<div class="image-upload">
-						<br>
-						<label for="local-metadata">
-							<img src="img/file.png"/> 
-							<div id="metadata_localfile"></div>
-						</label>
-						<input id="local-metadata" type="file"/>
+				<!-- 
+				  -- FORENSIC VIEW 
+				  -->
+				<div id="forensic" class="form-action hide">
+					<div id="forensic_base">
+						<div id="forensic_title"></div>
+						<form id="forensic_form">
+							<ul>
+								<input type="text" name="forensic_url" id="forensic_input">
+								<br>
+								<br>
+								<br>
+								<button id="forensic_localfile" class="button"></button>
+								<input type="submit" value="Submit" class="button">
+								<br>
+								<br>
+								<div id="forensic-wait" style="display: none;"></div>
+								<br>
+								<br>
+								<div id="forensic-image" style="display: none;"></div>
+								<div id="loader-forensic" class="loader" style="display: none;"></div>
+								<br>
+								<br>
+							</ul>
+						</form>
+						<div id="error-forensic"></div>
+						<div id="forensic-content">
+							<div id="forensic_content_title"></div>
+							<div id="forensic-place"></div>
+							<br>
+							<br>
+						</div>
+						<div id="forensic-modal"></div>
 					</div>
-					<br>
-					<input type="radio" id="img-meta-radio" name="file_type" checked/>
-					<span id="metadata_radio_image"></span>
-					<input type="radio" id="video-meta-radio" name="file_type"/>
-					<span id="metadata_radio_video"></span>
-					<br>
-					<br>
-					<input type="submit" value="Submit" class="button" />
-					<br>
-				</ul>
-			</form>
-			<div id="preview-metadata"></div>
-			<div id="place-metadata"></div>
-			<div id="error-metadata" style="display: none;"></div>
-			<div id="footer_metadata" class="footer"></div>
-		</div>
-
-
-		<div id="copyright-tab" class="form-action hide">
-			<div id="copyright_title"></div>
-			<form id="copyright-form">
-				<div>
-					<input type="text" id="copyright-video_url" name="copyright-video_url"/>
-					<br>
-					<br>
+					<div id="forensic_iframe" style="display: none;">
+						<div>
+							<button id="forensic_iframe_back" class="button"></button>
+						</div>
+						<div>
+							<iframe src="http://reveal-mklab.iti.gr/reveal/" width="85%" height="750px" frameborder="0"></iframe>
+						</div>
+					</div>
+					<div id="footer_forensic" class="footer"></div>
 				</div>
-				<input id="copyright-form_submit" type="submit" value="Submit" class="button"/>
-			</form>
-			<div id="copyright-loader" class="loader"></div>
-			<div id="copyright-content">
-				<div id="copyright-summary"></div>
+
+				<!-- 
+				  -- TUTORIAL VIEW 
+				  -->
+				<div id="tutorial" class="form-action hide">
+					<div id="footer_tutorial" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- CLASSROOM VIEW 
+				  -->
+				<div id="classroom" class="form-action hide">
+					<div id="footer_classroom" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- ABOUT VIEW 
+				  -->
+				<div id="about" class="form-action hide">
+					<div id="footer_about" class="footer"></div>
+				</div>
+
+				<!-- 
+				  -- SURVEY VIEW 
+				  -->
+				<div id="survey" class="form-action hide">
+					<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBmt3LKN76GRIM6i5GzX94F_VEnTF5VHMwDoOWgITBq0ntuA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">
+					</iframe>
+				</div>
+
 			</div>
-			<div id="copyright-error"></div>
-			<br><br>
-			<div class="copyright-footer footer" id="footer_rights"></div>
-		</div>
 
-		<div id="forensic" class="form-action hide">
-			<div id="forensic_base">
-				<div id="forensic_title"></div>
-				<form id="forensic_form">
-					<ul>
-						<input type="text" name="forensic_url" id="forensic_input">
-						<br>
-						<br>
-						<br>
-						<button id="forensic_localfile" class="button"></button>
-						<input type="submit" value="Submit" class="button">
-						<br>
-						<br>
-						<div id="forensic-wait" style="display: none;"></div>
-						<br>
-						<br>
-						<div id="forensic-image" style="display: none;"></div>
-						<div id="loader-forensic" class="loader" style="display: none;"></div>
-						<br>
-						<br>
-					</ul>
-				</form>
-				<div id="error-forensic"></div>
-				<div id="forensic-content">
-					<div id="forensic_content_title"></div>
-					<div id="forensic-place"></div>
-					<br>
-					<br>
-				</div>
-				<div id="forensic-modal"></div>
+			<div class="col-md-1 col-sm-1 col-xs-2">
+				&nbsp;
+				<script type="text/javascript">
+					if( ! production ) {
+						document.write( '<div class="hidden visible-lg">LG</div>' );
+						document.write( '<div class="hidden visible-md">MD</div>' );
+						document.write( '<div class="hidden visible-sm">SM</div>' );
+						document.write( '<div class="hidden visible-xs">XS</div>' );
+					}
+				</script>
 			</div>
-			<div id="forensic_iframe" style="display: none;">
-				<div>
-					<button id="forensic_iframe_back" class="button"></button>
-				</div>
-				<div>
-					<iframe src="http://reveal-mklab.iti.gr/reveal/" width="85%" height="750px" frameborder="0"></iframe>
-				</div>
-			</div>
-			<div id="footer_forensic" class="footer"></div>
-		</div>
 
-		<div id="about" class="form-action hide">
-			<div id="footer_about" class="footer"></div>
-		</div>
-
-		<div id="survey" class="form-action hide">
-			<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBmt3LKN76GRIM6i5GzX94F_VEnTF5VHMwDoOWgITBq0ntuA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">
-			</iframe>
-		</div>
-
-		<div id="tutorial" class="form-action hide">
-			<div id="footer_tutorial" class="footer"></div>
 		</div>
 	</div>
+
+
+<!-- SCRIPTS -->
+
+	<!-- For Image Magnifier -->
+	<script src="js/jquery.min.js"></script>
+	<script src='js/jquery.elevatezoom.js'></script>
+	<script src="js/croppie.js"></script>
+	<script src="js/filter.js"></script>
+	<script src='js/zoom.js'></script>
+	<script src="js/img.js"></script>
+	<!-- Utils -->
+	<script src="js/util.js"></script>
+	<!-- For csv translation -->
+	<script src="js/translate-csv.js"></script>
+	<!-- For tabs initialization -->
+	<script src="js/html-generate.js"></script>
+	<!-- For language -->
+	<script src="js/language.js"></script>
+	<!-- For Api (Analysis) --> 
+	<script src="js/api.js"></script>
+	<!-- For Forensic Analysis-->
+	<script src="js/forensic.js"></script>
+	<!-- For Keyframes --> 
+	<script src="js/keyframes.js"></script>
+	<!-- For Copyright Management -->
+	<script src="js/copyright.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<!-- For Navigation bar -->
+	<script src="js/nav.js"></script>
+	<!-- For Timeline js -->
+	<script src="js/timeline.js"></script>
+	<!-- For carousel -->
+	<script src="js/jssor.slider-22.2.16.min.js"></script>
+	<script src="js/carousel.js"></script>
+	<!-- For Google maps-->
+	<script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=createGoogleMaps"></script>
+	<!-- For Youtube thumbnails reverse search -->
+	<script src="js/video.js"></script>
+	<!-- For Metadata -->
+	<script src="js/exif.js"></script>
+	<script src="js/mp4box.all.js"></script>
+	<script src="js/metadata.js"></script>
+	<!-- For Twitter search -->
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/jquery-ui-timepicker-addon.js"></script>
+	<script src="js/twitter.js"></script> 
+	<!-- For feedback -->
+	<script src="js/jquery.feedback_me.js"></script>
+	<!-- For google analysis -->
+	<script src="js/google_analysis.js"></script>
+	<!-- For Bootstrap -->
+	<!-- <script src="js/bootstrap.min.js"></script> -->
+
 </body>
-<!-- For Image Magnifier -->
-<script src="js/jquery.min.js"></script>
-<script src='js/jquery.elevatezoom.js'></script>
-<script src="js/croppie.js"></script>
-<script type="text/javascript" src="js/Filter.js"></script>
-<script src='js/Zoom.js'></script>
-<script type="text/javascript" src="js/img.js"></script>
-
-<script type="text/javascript" src="js/util.js"></script>
-
-<!-- For csv translation -->
-<script type="text/javascript" src="js/translate-csv.js"></script>
-
-<!-- For tabs initialization -->
-<script type="text/javascript" src="js/html-generate.js"></script>
-
-<!-- For language -->
-<script type="text/javascript" src="js/language.js"></script>
-
-<!-- For Api (Analysis) --> 
-<script type="text/javascript" src="js/api.js"></script>
-
-<!-- For Forensic Analysis-->
-<script type="text/javascript" src="js/forensic.js"></script>
-
-<!-- For Keyframes --> 
-<script type="text/javascript" src="js/keyframes.js"></script>
-
-<!-- For Copyright Management -->
-<script type="text/javascript" src="js/copyright.js"></script>
-<script type="text/javascript" src="js/underscore-min.js"></script>
-
-<!-- For Navigation bar -->
-<script src="js/nav.js"></script>
-
-<!-- For Timeline js -->
-<script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
-
-<!-- For carousel -->
-<script src="js/jssor.slider-22.2.16.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/carousel.js"></script>
-
-<!-- For Google maps-->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=createGoogleMaps"></script>
-
-
-<!-- For Youtube thumbnails reverse search -->
-<script src="js/video.js"></script>
-
-<!-- For Metadata -->
-<script type="text/javascript" src="js/exif.js"></script>
-<script type="text/javascript" src="js/mp4box.all.js"></script>
-<script type="text/javascript" src="js/metadata.js"></script>
-
-<!-- For Twitter search -->
-<script src="js/jquery-ui.min.js"></script>
-<script src="js/jquery-ui-timepicker-addon.js"></script>
-<script src="js/twitter.js"></script> 
-
-<!-- For feedback -->
-<script src="js/jquery.feedback_me.js"></script>
-
-<!-- For google analysis -->
-<script type="text/javascript" src="js/google_analysis.js"></script>
 </html>

@@ -1,0 +1,15 @@
+
+To do mise en production:
+
+	1. Google analytics: trackingID in js/ga.js
+
+	2. var YOUR_WEBHOOK_URL: in js/util.js
+
+	3. Translations: check content of file InVIDTraductions.tsv and url of file in js/translate-csv.js
+
+	4. Contenus de la page tuto, about et tutorial
+
+	5. Google map: add API key in invid.html (gmap javascript inclusion on bottom of page)
+
+	6. Remove resolution indicator in right band
+
