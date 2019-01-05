@@ -1,8 +1,0 @@
-
-To do mise en production:
-
-	1. Edit js/config.js
-
-	2. Set production variable to true
-
-	3. Check other parameters in config.js file
