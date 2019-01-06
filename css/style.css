@@ -306,7 +306,7 @@ input:checked + .slider:before {
   display: none;
   margin: 30px auto 15px;
   padding: 10px 50px 40px;
-  width: 800px;
+  width: 80%;
   border: 1px solid #ccc;
   border-radius: 4px;
   background: #edece8;
