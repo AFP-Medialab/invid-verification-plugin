@@ -8,11 +8,14 @@ var url_csv = config_url_csv;
 /* @lang_array_csv variable containing csv as array, used to save result from translate_csv */
 var lang_array_csv = [];
 
+/* @json_lang_translate variable containing translations in json */
+var json_lang_translate = null;
+
 /**
 * @func returns a list containing all field starting with startswith to ease access of json (example: 'video_desc_1', 'video_desc_2', ...)
 * @json contains the translation spreadsheet as json, without the language variables
 * @startswith the static part of the json having key starting with startswith
-* @return list containing all texts havi
+* @return list containing all wanted texts
 */
 function list_from_json(json, startswith) 
 {
@@ -64,9 +67,12 @@ function translate_csv(path)
 {
 	var rawFile = new XMLHttpRequest();
 	rawFile.onreadystatechange = function () {
-		if( rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status == 0 ) ) {
+		if( rawFile.readyState === 4 && ( rawFile.status === 200 || rawFile.status == 0 ) ) {
 			var allText = rawFile.responseText;
 			lang_array_csv = csv_to_array(allText);
+			json_lang_translate = array_to_json( lang_array_csv );
+			updateLanguageText(global_language);
+			updateAllTranslations( global_language );
 		} else {
 			var localFile = new XMLHttpRequest();
 			localFile.onreadystatechange = function () {
@@ -74,19 +80,16 @@ function translate_csv(path)
 					if( localFile.status === 200 || localFile.status == 0 ) {
 						var allText = localFile.responseText;
 						lang_array_csv = csv_to_array( allText );
+						json_lang_translate = array_to_json( lang_array_csv );
+						updateLanguageText(global_language);
+						updateAllTranslations( global_language );
 					}
 				}
 			}
-			localFile.open( "GET", "InVIDTraductions.tsv", false );
+			localFile.open( "GET", "InVIDTraductions.tsv", true );
 			localFile.send( null );
 		}
 	}
-	rawFile.open( "GET", path, false );
+	rawFile.open( "GET", path, true );
 	rawFile.send( null );
 }
-
-// Call to create global variable containing json representation of translations
-translate_csv( url_csv );
-
-// @json_lang_translate json representation of translations found at url_csv
-var json_lang_translate = array_to_json( lang_array_csv );

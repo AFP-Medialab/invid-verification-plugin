@@ -65,9 +65,13 @@ function manage_top_menu_item( item )
 /**
 * @func Manages tools menu links
 */
-function manage_tools_menu_item( item, toggle ) 
+function manage_tools_menu_item( item, toggle, wanted_tab ) 
 {
-	var tab = $(item);
+	if( wanted_tab ) {
+		var tab = wanted_tab;
+	} else {
+		var tab = $(item);
+	}
 	var href = tab.attr('href');
 
 	ga('set', 'page', "/invid.html#" + id_to_name(href.split("#").pop()));
@@ -187,6 +191,7 @@ document.getElementById("invid-logo").onclick = function(){
 function checkParam()
 {
 	var url = String( document.URL );
+	var item = "";
 	if( url.includes("?img=") || url.includes("?video=") || url.includes("?imgforen=") )
 	{
 		$('.active').removeClass( ACTIVE_CLASS );
@@ -195,20 +200,24 @@ function checkParam()
 		{
 			$('#magnifier').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
 			$("#magnifier_tab").addClass( ACTIVE_CLASS );
-			callMagnifier(url.split("?img=")[1]);
+			item = $("#magnifier_tab");
+			callMagnifier( url.split("?img=")[1] );
 		} 
 		else if( url.includes("?imgforen=") ) 
 		{
 			$('#forensic').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
 			$("#forensic_tab").addClass( ACTIVE_CLASS );
-			callForensic(url.split("?imgforen=")[1]);
+			item = $("#forensic_tab");
+			callForensic (url.split("?imgforen=")[1] );
 		} 
 		else 
 		{
 			$('#api').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
 			$("#api_tab").addClass( ACTIVE_CLASS );
-			callApi(String(url.split("?video=")[1]));
-		} 
+			item = $("#api_tab");
+			callApi( String( url.split("?video=")[1] ) );
+		}
+		manage_tools_menu_item( "", true, item );
 	}
 }
 checkParam();

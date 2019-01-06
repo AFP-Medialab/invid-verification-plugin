@@ -4,11 +4,26 @@
 
 // Determinate current language (en, fr) and init interface texts
 var global_language = "en";
-var cookieLang = getCookieLang()
-if( cookieLang != "" ) {
-	$(document).ready( updateLanguageText( cookieLang ) );
+var cookieLang = getCookieLang();
+if( cookieLang != "" ) global_language = cookieLang;
+
+/**
+* @func update language texts
+* @language wanted language code (fr, en)
+*/
+function updateLanguageText(language) 
+{
+	// hides old language elements and shows current language elements
+	$("[lang='" + global_language + "']").attr("hidden", "hidden");
+	$("[lang='" + language + "']").removeAttr("hidden");
+	// update placeholders of elements
+	for( var input of $("input[placeholder][data-text]") ) {
+		var text = JSON.parse(input.dataset.text);
+		input.placeholder = (text[language]) ? text[language] : text["en"];
+	}
+	// Store new language in global
+	global_language = language;
 }
-updateAllTranslations( global_language );
 
 /**
 * @func init all interface translations 
@@ -31,24 +46,9 @@ function updateAllTranslations( language )
 	update_about(language);
 	update_tuto(language);
 	update_classroom(language);
-}
-
-/**
-* @func update language texts
-* @language wanted language code (fr, en)
-*/
-function updateLanguageText(language) 
-{
-	// hides old language elements and shows current language elements
-	$("[lang='" + global_language + "']").attr("hidden", "hidden");
-	$("[lang='" + language + "']").removeAttr("hidden");
-	// update placeholders of elements
-	for (var input of $("input[placeholder][data-text]")){
-		var text = JSON.parse(input.dataset.text);
-		input.placeholder = (text[language]) ? text[language] : text["en"];
-	}
-	// Store new language in global
-	global_language = language;
+	updateTableLanguageAnalysis(language);
+	updateTableLanguageMetadata(language);
+	updateTableLanguageForensic(language);
 }
 
 /**
@@ -66,7 +66,8 @@ function setCookieLang(lang)
 /**
 * @func return value of the cookie holding current language
 */
-function getCookieLang() {
+function getCookieLang() 
+{
 	var cookieString = decodeURIComponent(document.cookie);
 	var array = cookieString.split(";");
 	for( var cookie of array ) {

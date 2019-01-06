@@ -38,7 +38,8 @@ else
 	var config_google_analytics_key = "UA-XXXXXXXX-Y";
 
 	// URL of tsv file holding translation strings
-	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/redesign/InVIDTraductions.tsv"
+	var config_url_csv = "http://invid.laurent-lacroix.com/InVIDTraductions.tsv";
+	// var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/redesign/InVIDTraductions.tsv"
 }
 
 /**

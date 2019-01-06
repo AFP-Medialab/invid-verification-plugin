@@ -267,9 +267,10 @@ function update_about(lang)
 	sel.name = "language";
 	var keys = Object.keys(json_lang_translate);
 	for (var i = 0; i < keys.length; ++i) {
-	var new_opt = document.createElement("option");
-	if (keys[i] == global_language)
-		new_opt.setAttribute("selected", "selected");
+		var new_opt = document.createElement("option");
+		if (keys[i] == global_language) {
+			new_opt.setAttribute("selected", "selected");
+		}
 		new_opt.value = keys[i];
 		new_opt.text = json_lang_translate[keys[i]]["name"];
 		sel.add(new_opt);
@@ -285,9 +286,6 @@ function update_about(lang)
 		if( language != global_language ) {
 			updateLanguageText(language);
 			updateAllTranslations( language );
-			updateTableLanguageAnalysis(language);
-			updateTableLanguageMetadata(language);
-			updateTableLanguageForensic(language);
 			setCookieLang(language);
 		}
 	});
