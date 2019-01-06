@@ -444,7 +444,7 @@ menu_cml_tit	CMLA	CMLA	CMLA
 menu_cro_dsc	CrowdTangle	CrowdTangle	CrowdTangle
 menu_cml_dsc	Cmla	Cmla	Cmla
 footer_classroom	Provided by the <a href="https://www.afp.com/fr/lagence/medialab">AFP Medialab</a><br>To contact us, use the feedback tool.	Fourni par le <a href="https://www.afp.com/fr/lagence/medialab">Medialab de l'AFP</a><br>Pour nous contacter, utilisez l'outil de feedback.	Proporcionado por <a href="https://www.afp.com/fr/lagence/medialab">AFP Medialab</a><br>Para ponerse en contacto con nosotros, utilice la herramienta de feedback.
-classroom_title	Classroom	Cours	Instrumentos
+classroom_title	Learning ressources	Ressources pédagogiques	Recursos didácticos
 classroom_title_1	First lesson title	Intitulé du premier cours	Título del primer curso
 classroom_video_1	<iframe src="https://www.youtube.com/embed/MOwmMb9GgP4" frameborder="0" class="classroom-video" allowfullscreen></iframe>	<iframe src="https://www.youtube.com/embed/MOwmMb9GgP4" frameborder="0" class="classroom-video" allowfullscreen></iframe>	<iframe src="https://www.youtube.com/embed/MOwmMb9GgP4" frameborder="0" class="classroom-video" allowfullscreen></iframe>
 classroom_title_2	Second lesson title	Intitulé du deuxième cours	Título del segundo curso
