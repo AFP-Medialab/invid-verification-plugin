@@ -1,4 +1,6 @@
-/* ANALYSIS */
+/**
+* Javascript used by ANALYSIS service
+*/
 
 var video_thumbnails_lst = [];
 var twitter_url = "https://twitter.com/search";
@@ -7,7 +9,9 @@ var google_reverse_search_urls = [];
 var yandex_reverse_search_urls = [];
 var error_type = "";
 
-/* Detect http link and make hyperlink */
+/**
+* @func Detect http link and make hyperlink 
+*/
 function urlify(text)
 {
     if (text) {
@@ -19,7 +23,9 @@ function urlify(text)
     return "";
 }
 
-/* Create a title in the div argument */
+/**
+* @func Create a title in the div argument 
+*/
 function makeTitle(title, div)
 {
     h3 = document.createElement("h3");
@@ -27,7 +33,9 @@ function makeTitle(title, div)
     div.appendChild(h3);
 }
 
-/*Create table: left column: name, column: key value from json file */
+/**
+* @func Create table: left column: name, column: key value from json file 
+*/
 function make_table(json, key_lst, name_lst)
 {
     var table = document.createElement("table");
@@ -46,7 +54,9 @@ function make_table(json, key_lst, name_lst)
     return table
 }
 
-/* Update table created by the previous function */
+/**
+* @func Update table created by the previous function 
+*/
 function updateTable(json, key_lst, table)
 {
     var list = table.getElementsByTagName("td");
@@ -59,6 +69,9 @@ function updateTable(json, key_lst, table)
     }
 }
 
+/**
+* @func Create a time row
+*/
 function createTimeRow(title, time) 
 {
     var regex = /(.*), (.*) \(?UTC\)?/;
@@ -74,6 +87,9 @@ function createTimeRow(title, time) 
     return row;
 }
 
+/**
+* @func Update a time row
+*/
 function updateTimeRow(table, nb, val) 
 {
     var row = table.getElementsByTagName("tr")[nb];
@@ -82,7 +98,9 @@ function updateTimeRow(table, nb, val)
     }
 }
 
-/* Diplay buttons "verification comments" and "maps"*/
+/**
+* @func Diplay buttons "verification comments" and "maps"
+*/
 function displayButtons(verif_number, locations, not_yt)
 {
     var verif = document.getElementById("verif-content");
@@ -110,6 +128,9 @@ function displayButtons(verif_number, locations, not_yt)
     tineye.setAttribute("style", "");
 }
 
+/**
+* @func Hide buttons
+*/
 function hideButtons() 
 {
     var buttons_id = [ "verif-content", "maps-content", "google_search_btn", "yandex_search_btn",
@@ -120,7 +141,9 @@ function hideButtons()
     }
 }
 
-/* Place verification comments */
+/**
+* @func Place verification comments 
+*/
 function placeComments(analysis_json)
 {
     cleanElement("place-comments");
@@ -144,34 +167,32 @@ function placeComments(analysis_json)
     }
 }
 
-/* Thumbnails clickable */
-/* Send to magnifier tab */
+/**
+* @func Send a thumbnails clickable to magnifier tab 
+*/
 function activeThumbnail( thumbnails_id )
 {
     /* Change to magnifier tab */
     $( '#'+ thumbnails_id ).on( 'click', 'a', function(e) {
         e.preventDefault();
-
 		var $tab = $( this );
 		var href = $tab.attr( 'href' );
-
         $('.active').removeClass( ACTIVE_CLASS );
         $( '#magnifier_tab' ).addClass( ACTIVE_CLASS );
-
 		$("#left_menu div a").each(function(){
 			$(this).removeClass( ACTIVE_CLASS );
 		});
 		$("#magnifier_tab").addClass( ACTIVE_CLASS );
-
         $('.show').removeClass( SHOW_CLASS ).addClass( HIDE_CLASS ).hide();
         $(href).removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
-
         var url_img = $tab.children()[0].src;
         callMagnifier(url_img);
     });
 }
 
-/* Create Carousel html*/
+/**
+* @func Create Carousel html
+*/
 function buildCarousel(carousel_id, thumbnails_id)
 {
     var div = document.getElementById(carousel_id);
@@ -225,7 +246,9 @@ function buildCarousel(carousel_id, thumbnails_id)
     div.appendChild(jssor1);
 }
 
-/* Display or hide real size Thumbnail image */
+/**
+* @func Display or hide real size Thumbnail image 
+*/
 function activePreview()
 {
     $(".mouse-preview").on( {
@@ -242,7 +265,9 @@ function activePreview()
     });
 }
 
-/* place Thumbnails in the carousel */
+/**
+* @func Place Thumbnails in the carousel 
+*/
 function placeImages(carousel_id, thumbnails_id, preview_id, img_list)
 {
     cleanElement(carousel_id);
@@ -280,7 +305,9 @@ function placeImages(carousel_id, thumbnails_id, preview_id, img_list)
     jssor_1_slider_init();
 }
 
-/* Create the google maps and and search Box*/
+/**
+* @func Create the google maps and and search Box
+*/
 function createGoogleMaps()
 {
     var mapOptions = {
@@ -357,7 +384,9 @@ function createGoogleMaps()
 
 }
 
-/* change SearchBox value and submit it to the google map */
+/**
+* @func Change SearchBox value and submit it to the google map 
+*/
 function updateMap( places )
 {
     if( places != [] ) {
@@ -370,7 +399,9 @@ function updateMap( places )
     }
 }
 
-/* update the map with current search box value (correct display none bug)*/
+/**
+* @func Update the map with current search box value (correct display none bug)
+*/
 function triggerMap()
 {
     var searchBox = document.getElementById("pac-input");
@@ -382,7 +413,9 @@ function triggerMap()
 
 var analysisType = "";
 
-/* Parse the YouTube json */
+/**
+* @func Parse the YouTube json 
+*/
 function parseYTJson(json)
 {
     /* bool value */
@@ -499,7 +532,9 @@ function parseYTJson(json)
     }
 }
 
-/* Parse the Facebook Json */
+/**
+* @func Parse the Facebook Json 
+*/
 function parseFBJson(json)
 {
     /* booleans values */
@@ -605,7 +640,9 @@ function parseFBJson(json)
     }
 }
 
-/* Parse the Twitter Json */
+/**
+* @func Parse the Twitter Json 
+*/
 function parseTWJson(json)
 {
     /* booleans values */
@@ -745,6 +782,9 @@ function parseTWJson(json)
     // }
 }
 
+/**
+* @func request fail callback
+*/
 function request_fail(msg) 
 {
     document.getElementById("api-content").style.display = "none";
@@ -758,7 +798,9 @@ function request_fail(msg)
 
 var analysisUrls = {};
 
-/* Send requests for video analysis*/
+/**
+* @func Send requests for video analysis
+*/
 function video_api_analysis(video_url, isProcess)
 {
     cleanElement("fb-content");
@@ -930,7 +972,9 @@ function video_api_analysis(video_url, isProcess)
     });
 }
 
-/* Get the video url and start youtube or facebook analysis */
+/**
+* @func Get the video url and start youtube or facebook analysis 
+*/
 function submit_form()
 {
     //var youtube_url = "https://www.youtube.com/watch?v=";
@@ -986,7 +1030,9 @@ document.getElementById("twitter_search_btn").onclick = function() {
   openTab(twitter_url);
 };
 
-/* Twitter timeline */
+/**
+* @func Twitter timeline 
+*/
 function convertDate(date)
 {
     var new_date = new Object();
@@ -1016,7 +1062,9 @@ function convertDate(date)
     return new_date;
 }
 
-/* parse the json from twitter api and make json for the timeline */
+/**
+* @func Parse the json from twitter api and make json for the timeline 
+*/
 function makeJSON(data)
 {
     var json = "";
@@ -1046,11 +1094,13 @@ function makeJSON(data)
 
 var loaded_tw = false;
 
-/* display timeline (correct display none bug timeline js) */
+/**
+* @func Display timeline (correct display none bug timeline js) 
+*/
 function loadTimeline()
 {
     return;
-    /*cleanElement("place-timeline");
+    /* cleanElement("place-timeline");
     var div = document.getElementById("place-timeline");
     var loader = document.createElement("div");
     loader.setAttribute("id", "loader_tw");
@@ -1073,10 +1123,12 @@ function loadTimeline()
     }
     div.appendChild(loader);
     div.appendChild(tl);
-    timeline = new TL.Timeline('timeline-embed', tw_json);*/
+    timeline = new TL.Timeline('timeline-embed', tw_json); */
 }
 
-/* Used for contextual menu */
+/**
+* @func Used for contextual menu 
+*/
 function callApi(url)
 {
     document.getElementById("apibox").value = url;
@@ -1087,6 +1139,9 @@ var video_thumbnails_lst = [];
 var twitter_url = "https://twitter.com/search";
 var tw_json = "";
 
+/**
+* @func Update table language analysis
+*/
 function updateTableLanguageAnalysis(lang) 
 {
     if (document.getElementById("error-content").style.display !== "none") {
@@ -1098,7 +1153,7 @@ function updateTableLanguageAnalysis(lang)
     var titles = [];
     switch (analysisType) {
         case "youtube":
-            var jsonName = json_lang_translate[lang];//jsonTitleTableApi["youtube"][lang];
+            var jsonName = json_lang_translate[lang];
             partNames = [jsonName["youtube_video_title"], jsonName["youtube_channel_title"], jsonName["youtube_comment_title"]]
             titles = titles.concat(list_from_json(jsonName, "youtube_video_name1_"));
             titles = titles.concat(list_from_json(jsonName, "youtube_video_name2_"));
@@ -1106,18 +1161,17 @@ function updateTableLanguageAnalysis(lang)
             titles = titles.concat(list_from_json(jsonName, "youtube_comment_name_"));
             break;
         case "facebook":
-            var jsonName = json_lang_translate[lang];//jsonTitleTableApi["facebook"][lang];
+            var jsonName = json_lang_translate[lang];
             partNames = [jsonName["facebook_video_title"], jsonName["facebook_page_title"], jsonName["facebook_comment_title"]]
             titles = titles.concat(list_from_json(jsonName, "facebook_video_name_"));
             titles = titles.concat(list_from_json(jsonName, "facebook_page_name_"));
             titles = titles.concat(list_from_json(jsonName, "facebook_comment_name_"));
             break;
         case "twitter":
-            var jsonName = json_lang_translate[lang];//jsonTitleTableApi["twitter"][lang];
-            partNames = [jsonName["twitter_video_title"], jsonName["twitter_user_title"]/*, jsonName["twitter_comment_title"]*/]
+            var jsonName = json_lang_translate[lang];
+            partNames = [jsonName["twitter_video_title"], jsonName["twitter_user_title"]]
             titles = titles.concat(list_from_json(jsonName, "twitter_video_name_"));
             titles = titles.concat(list_from_json(jsonName, "twitter_user_name_"));
-            // titles = titles.concat(jsonName["comment"]["name"]);
             break;
         default:
             return;
