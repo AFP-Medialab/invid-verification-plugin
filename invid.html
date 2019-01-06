@@ -23,9 +23,9 @@
 	<link rel="stylesheet" href="css/croppie.css">
 	<link rel="stylesheet" href="css/cookieconsent.min.css">
 	<link rel="stylesheet" href="css/style.css">
-    
+
 	<script src="js/config.js"></script>
-    <script src="js/cookieconsent.min.js"></script>
+	<script src="js/cookieconsent.min.js"></script>
 	<script src="js/ga.js"></script>
 
 </head>
@@ -274,7 +274,7 @@
 								<input id="pac-input" class="controls" type="text">
 								<button id="pac-button" class="btn-map">
 								</button>
-								<div id="map" style="width:800px;height:400px;"></div>
+								<div id="map" style="width:100%;height:500px;"></div>
 							</div>
 						</div>
 						<br>
@@ -292,20 +292,6 @@
 						<button id="twitter_search_btn" class="button"></button>
 						<br>
 						<br>
-						<!--
-						<div id="twitter-shares-content">
-							<button class="accordion">
-								<span lang="en">Twitter timeline</span>
-								<span lang="fr" hidden="hidden">Chronologie Twitter</span>
-							</button>
-							<div id="place-timeline" class="panel">
-								<div id="loader_tw" class="loader"></div>
-								<div id='timeline-embed' style="width: 100%; height: 100%;"></div>
-							</div>
-						</div>
-						<div id="error-content-share" style="display: none; color: red;"></div>
-						<iframe id="twitter_overlay" allowTransparency="true" scrolling="no" frameborder="0" ></iframe>
-						-->
 					</div>
 					<div id="fb-content" style="display: none;"></div>
 					<br>
@@ -388,12 +374,6 @@
 								<input type="radio" id="bing_engine" name="engine" translate="no"> Bing 
 								<input type="radio" id="tineye_engine" name="engine" translate="no"> 
 								<div style="display: inline-block;"> Tineye
-								<!--
-									<p class="new_element">
-										<span lang="en">new</span>
-										<span lang="fr" hidden="hidden">nouveau</span>
-									</p>
-								-->
 								</div> 
 							</div> 
 							<br>
@@ -542,9 +522,6 @@
 								<button id="yandex_rev_search_btn" class="button"></button>
 								<div style="display: inline-block;">
 									<button id="tineye_rev_search_btn" class="button"></button>
-									<!--
-									<p class="new_element" style="font-size: 12px; margin-left: 15px;">new</p> 
-									-->
 								</div>
 								<button id="img_verif_btn" class="button"></button>
 							</div>
@@ -687,17 +664,7 @@
 
 			</div>
 
-			<div class="col-md-1 col-sm-1 col-xs-2">
-				&nbsp;
-				<!-- <script type="text/javascript">
-					if( ! production ) {
-						document.write( '<div class="hidden visible-lg">LG</div>' );
-						document.write( '<div class="hidden visible-md">MD</div>' );
-						document.write( '<div class="hidden visible-sm">SM</div>' );
-						document.write( '<div class="hidden visible-xs">XS</div>' );
-					}
-				</script> -->
-			</div>
+			<div class="col-md-1 col-sm-1 col-xs-2">&nbsp;</div>
 
 		</div>
 	</div>
@@ -752,8 +719,7 @@
 	<script src="js/jquery.feedback_me.js"></script>
 	<!-- For google analysis -->
 	<script src="js/google_analysis.js"></script>
-	<!-- For Bootstrap -->
-	<!-- <script src="js/bootstrap.min.js"></script> -->
+	<!-- Init interface -->
 	<script src="js/init.js"></script>
 
 </body>
