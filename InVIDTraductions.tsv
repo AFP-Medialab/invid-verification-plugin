@@ -444,6 +444,9 @@ display	Display	Afficher	Visualización
 remote_resources_title	 Educational Resources	Ressources pédagogiques	Recursos educativos
 user_resources_title	 Your educational content	Votre contenu pédagogique	Tu contenido educativo
 form_to_display_your_own_lessons	Use this form to display your own lessons	Utilisez ce formulaire pour afficher vos propres leçons	Usa este formulario para mostrar tus propias lecciones
+user_resources_intro	This section allows you to broadcast your own lessons stored on Internet	Cette section vous permet de diffuser vos propres cours stockés sur Internet.	Esta sección le permite transmitir sus propios videos de Internet.
+user_resources_intro_local	Select a mp4 video on your computer	Sélectionnez une vidéo au format mp4 sur votre ordinateur	Seleccione un video mp4 en su computadora
+user_resources_intro_remote	Enter the url of a youtube or facebook video:	Indiquez l'url d'une vidéo youtube ou facebook:	O ingresa la url de un video de youtube o facebook:
 menu_cro_tit	CrowdTangle	CrowdTangle	CrowdTangle
 menu_cml_tit	CMLA	CMLA	CMLA
 menu_cro_dsc	Crowd tangle	Crowd tangle	Crowd tangle
