@@ -103,9 +103,8 @@
 
 				<div class="col-md-10 col-sm-10 col-xs-8">
 
-					<!-- 
-					  -- HOME VIEW 
-					  -->
+					<!-- HOME VIEW -->
+
 					<div id="home" class="container-fluid">
 						<div class="row home-menu" id="home_menu">
 
@@ -231,9 +230,8 @@
 						</div>
 					</div>
 
-					<!-- 
-					  -- ANALYSIS VIEW 
-					  -->
+					<!-- ANALYSIS VIEW -->
+
 					<div id="api" class="form-action hide">
 						<div id="api_title"></div>
 						<form id="video_form2">
@@ -300,9 +298,8 @@
 						<div id="footer_analysis" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- KEYFRAMES VIEW 
-					  -->
+					<!-- KEYFRAMES VIEW -->
+
 					<div id="keyframes" class="form-action hide">
 						<div id="keyframes_base">
 							<div id="keyframes_title"></div>
@@ -360,9 +357,8 @@
 						<div id="footer_keyframes" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- THUMBNAILS VIEW 
-					  -->
+					<!-- THUMBNAILS VIEW -->
+
 					<div id="video" class="form-action hide">
 						<div id="youtube_title"></div>
 						<form id="video_form">
@@ -385,9 +381,8 @@
 						<div id="footer_thumbnails" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- TWITTER VIEW 
-					  -->
+					<!-- TWITTER VIEW -->
+
 					<div id="twitter" class="form-action hide">
 						<div id="twitter_title"></div>
 						<form id="twitter_form">
@@ -423,9 +418,8 @@
 						<div id="footer_twitter" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- MAGNIFIER VIEW 
-					  -->
+					<!-- MAGNIFIER VIEW -->
+
 					<div id="magnifier" class="form-action hide">
 						<div id="magnifier_title"></div>
 						<form id="img_form">
@@ -533,9 +527,8 @@
 						<div id="footer_magnifier" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- METADATA VIEW 
-					  -->
+					<!-- METADATA VIEW -->
+
 					<div id="metadata" class="form-action hide">
 						<div id="metadata_content_title"></div>
 						<form id="metadata_form">
@@ -566,9 +559,8 @@
 						<div id="footer_metadata" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- COPYRIGHT VIEW 
-					  -->
+					<!-- COPYRIGHT VIEW -->
+
 					<div id="copyright-tab" class="form-action hide">
 						<div id="copyright_title"></div>
 						<form id="copyright-form">
@@ -588,9 +580,8 @@
 						<div class="copyright-footer footer" id="footer_rights"></div>
 					</div>
 
-					<!-- 
-					  -- FORENSIC VIEW 
-					  -->
+					<!-- FORENSIC VIEW -->
+
 					<div id="forensic" class="form-action hide">
 						<div id="forensic_base">
 							<div id="forensic_title"></div>
@@ -633,30 +624,35 @@
 						<div id="footer_forensic" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- TUTORIAL VIEW 
-					  -->
+					<!-- TUTORIAL VIEW -->
+
 					<div id="tutorial" class="form-action hide">
 						<div id="footer_tutorial" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- CLASSROOM VIEW 
-					  -->
-					<div id="classroom" class="form-action hide">
+					<!-- CLASSROOM VIEW -->
+
+					<div id="classroom" class="form-action hide" style="max-width:1200px">
+						<h1 id="classroom_title"></h1>
+						<div class="remote-resources">
+							<div id="remote_resources_title" class="resources-title"></div>
+							<div id="remote_resources_content" class="resources-content container-fluid">Bla bla bla</div>
+						</div>
+						<div class="user-resources">
+							<div id="user_resources_title" class="resources-title"></div>
+							<div id="user_resources_content" class="resources-content container-fluid" style="display:none;">Bla bla bla</div>
+						</div>
 						<div id="footer_classroom" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- ABOUT VIEW 
-					  -->
+					<!-- ABOUT VIEW -->
+
 					<div id="about" class="form-action hide">
 						<div id="footer_about" class="footer"></div>
 					</div>
 
-					<!-- 
-					  -- SURVEY VIEW 
-					  -->
+					<!-- SURVEY VIEW -->
+
 					<div id="survey" class="form-action hide">
 						<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBmt3LKN76GRIM6i5GzX94F_VEnTF5VHMwDoOWgITBq0ntuA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">
 						</iframe>
@@ -672,20 +668,40 @@
 
 	<footer></footer>
 
+	<!-- Help popup -->
 	<div id="help_modal" class="modal fade" role="dialog" tabindex="-1">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="help-modal-title" id="modal_title"></h4>
+					<h2 class="modal-title" id="help_modal_title"></h2>
 				</div>
 				<div class="modal-body">
-					<p id="modal_description" class="help-modal-description"></p>
-					<p id="modal_content" class="help-modal-content"></p>
-					<iframe id="modal_iframe" style="width:100%;height:400px;"></iframe>
+					<h4 id="help_modal_description" class="modal-description"></h4>
+					<p id="help_modal_text" class="modal-text"></p>
+					<iframe id="help_modal_iframe" class="modal-iframe" frameborder="0" allowfullscreen></iframe>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal" id="modal_close"></button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="help_modal_close"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Lesson popup -->
+	<div id="lesson_modal" class="modal fade" role="dialog" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h2 class="lesson-modal-title" id="lesson_modal_title"></h2>
+				</div>
+				<div class="modal-body">
+					<h4 id="lesson_modal_description" class="modal-description"></h4>
+					<iframe id="lesson_modal_iframe" class="modal-iframe" frameborder="0" allowfullscreen></iframe>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="lesson_modal_close"></button>
 				</div>
 			</div>
 		</div>
