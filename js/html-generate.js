@@ -486,17 +486,16 @@ function update_classroom(lang)
 		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
 	});
 
-	// Stop iframe videos on popup close
-	$("#help_modal").on("hidden.bs.modal", function() {
-		$("#help_modal_iframe").prop("src", "");
-	});
+	// Stop iframe videos on lesson popup close
 	$("#lesson_modal").on("hidden.bs.modal", function() {
 		$("#lesson_modal_iframe").prop("src", "");
 	});
 
-	// form of user lessons
-	content = "To do : form to add your own resources";
-	setInnerHtml( "user_resources_content", content );
+	// inputs of user lessons
+	setInnerHtml( "user_resources_intro", json_lang_translate[global_language]["user_resources_intro"] );
+	setInnerHtml( "user_resources_intro_local", json_lang_translate[global_language]["user_resources_intro_local"] );
+	setInnerHtml( "user_resources_intro_remote", json_lang_translate[global_language]["user_resources_intro_remote"] );
+	$("#user_resources_content button").html(json_lang_translate[global_language]["display"]);
 
 	// Popup of user lessons
 	$("#user_resources_content div.row div button").on( "click", function() {
@@ -504,6 +503,9 @@ function update_classroom(lang)
 		$("#lesson_modal_title").html(json_lang_translate[global_language]["classroom_title"]);
 		// Lesson name
 		$("#lesson_modal_description").hide();
+		// Lesson iframe
+		var frm = $(this).parent().prev().find("input").val();
+		$("#lesson_modal_iframe").prop("src", frm );
 		// Modal close button
 		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
 	});

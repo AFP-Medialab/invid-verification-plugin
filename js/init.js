@@ -94,7 +94,7 @@ $(document).ready( function() {
 			$("#help_modal_text").show();
 		} else {
 			$("#help_modal_text").hide();
-	}
+		}
 
 		// Modal video
 		var video = json_lang_translate[global_language][prefix+"_help_video"];
@@ -109,10 +109,16 @@ $(document).ready( function() {
 		$("#help_modal_close").html(json_lang_translate[global_language]["close"]);
 	});
 
+	// Stop iframe videos on help popup close
+	$("#help_modal").on("hidden.bs.modal", function() {
+		$("#help_modal_iframe").prop("src", "");
+	});
+
 
 	// Accordion of classroom lessons
 	$(".resources-title").on( "click", function() {
-		$(this).next().toggle();
+		$(".resources-content").hide();
+		$(this).next().fadeIn(500);
 	});
 
 
