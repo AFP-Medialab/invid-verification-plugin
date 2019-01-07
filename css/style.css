@@ -880,9 +880,11 @@ p.comment {
 	height:400px;
 }
 
-.remote-resources,
+.remote-resources{
+	margin-top:20px;
+}
 .user-resources{
-	margin-bottom:40px;
+	margin-top:30px;
 }
 .resources-title{
 	background-color:#edece8;
@@ -898,6 +900,9 @@ p.comment {
 	vertical-align:middle;
 	font-size:16px;
 	padding-bottom:20px;
+}
+.remote-resources .resources-content div.row{
+	padding-bottom:20px;
 	margin-bottom:20px;
 	border-bottom:1px solid #edece8;
 }
@@ -911,6 +916,20 @@ p.comment {
 	height:32px;
 	margin-right:16px;
 }
+#user_resources_content p{
+	margin-bottom:3px;
+	margin-top:-5px;
+	font-size:14px;
+}
+#user_resources_content p.bold{
+	font-weight:bold;
+	padding:10px 0;
+}
+#user_resources_content input{
+	width:90%;
+	padding:3px 6px;
+}
+
 .padding-top-5{
 	padding-top:5px;
 }
