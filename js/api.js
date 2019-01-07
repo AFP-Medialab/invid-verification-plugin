@@ -178,11 +178,11 @@ function activeThumbnail( thumbnails_id )
 		var $tab = $( this );
 		var href = $tab.attr( 'href' );
         $('.active').removeClass( ACTIVE_CLASS );
-        $( '#magnifier_tab' ).addClass( ACTIVE_CLASS );
+        $( '#api_tab a' ).addClass( ACTIVE_CLASS );
 		$("#left_menu div a").each(function(){
 			$(this).removeClass( ACTIVE_CLASS );
 		});
-		$("#magnifier_tab").addClass( ACTIVE_CLASS );
+		$("#magnifier_menu_tab").addClass( ACTIVE_CLASS );
         $('.show').removeClass( SHOW_CLASS ).addClass( HIDE_CLASS ).hide();
         $(href).removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
         var url_img = $tab.children()[0].src;
@@ -1151,7 +1151,7 @@ function updateTableLanguageAnalysis(lang)
         return;
     var partNames = [];
     var titles = [];
-    switch (analysisType) {
+    switch( analysisType ) {
         case "youtube":
             var jsonName = json_lang_translate[lang];
             partNames = [jsonName["youtube_video_title"], jsonName["youtube_channel_title"], jsonName["youtube_comment_title"]]

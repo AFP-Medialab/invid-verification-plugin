@@ -1,7 +1,6 @@
-// menu items classes
-var SHOW_CLASS = 'show';
-var HIDE_CLASS = 'hide';
-var ACTIVE_CLASS = 'active';
+/**
+* Javascript used to manage navigation actions
+*/
 
 /**
 * @func Maps google analytics tags from wanted service
@@ -57,6 +56,7 @@ function manage_top_menu_item( item )
 	} else {
 		toggle_left_menu( true, href );
 	}
+	update_tools_menu( global_language );
 
 	$('.show').removeClass( SHOW_CLASS ).addClass( HIDE_CLASS ).hide();
 	$(href).removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
@@ -100,6 +100,8 @@ function manage_tools_menu_item( item, toggle, wanted_tab )
 
 	$('.show').removeClass( SHOW_CLASS ).addClass( HIDE_CLASS ).hide();
 	$(href).removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
+
+	// move_activ_left_menu_item_to_first_position();
 }
 
 /**
@@ -121,6 +123,7 @@ function toggle_left_menu( visible, href )
 		});
 		$("#left_menu").show();
 	} else {
+		$("#left_menu").html("");
 		$("#left_menu").hide();
 	}
 	if( href == "invid.html" || href == "#tools" ) {
@@ -130,60 +133,24 @@ function toggle_left_menu( visible, href )
 	}
 }
 
-$('.navbar').on('click', 'li a', function(e) {
-	e.preventDefault();
-	manage_top_menu_item( this );
-});
-
-$('.home-menu a').on('click', function(e){
-	e.preventDefault();
-	manage_tools_menu_item( this, true );
-});
-
-/* Accordion element */
-var acc = document.getElementsByClassName("accordion");
-for (var i = 0; i < acc.length; i++) {
-    acc[i].onclick = function(){
-        this.classList.toggle("active");
-        var panel = this.nextElementSibling;
-        if (panel.style.display === "block") {
-            panel.style.display = "none";
-        } else {
-            panel.style.display = "block";
-            /* Correct Google maps display none bug */
-            google.maps.event.trigger(map, 'resize');
-            triggerMap();
-            loadTimeline();
-        }
-    }
-}
-
-/* Toogle Button */
-var toogle = document.getElementById("toogle");
-toogle.onclick = function(){
-	if (toogle.checked) {
-		document.getElementById("place-lens").style.display = "none";
-		document.getElementById("place-inner").style.display = "";
-		/* Correct display bug */
-		refreshTest();
+/**
+* @func Move the activ left menu item on first position
+*/
+function move_activ_left_menu_item_to_first_position()
+{
+	var current = null;
+	$("#left_menu div figure a.active").each( function() {
+		current = $(this).parent().parent();
+	});
+	if( current != null ) {
+		var item = current.html();
+		current.remove();
+		var items = $("#left_menu").html();
+		items = '<div class="col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">' + item + '</div>' + items;
+		$("#left_menu").html( items );
 	}
-	else {
-		document.getElementById("place-inner").style.display = "none";
-		document.getElementById("place-lens").style.display = "";
-		/* Correct display bug */
-		refreshTest2();
-	}
+	// To do : re-add callbacks on items !!!
 }
-
-/* InVID Logo */
-document.getElementById("invid-logo").onclick = function(){
-    window.open('invid.html','_self',false);
-}
-
-/* We Verify Logo */
-/* document.getElementById("we-verify-logo").onclick = function(){
-    window.open('invid.html','_self',false);
-} */
 
 /**
 * @func Check tools params 
@@ -199,32 +166,24 @@ function checkParam()
 		if( url.includes("?img=") ) 
 		{
 			$('#magnifier').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
-			$("#magnifier_tab").addClass( ACTIVE_CLASS );
-			item = $("#magnifier_tab");
+			$("#magnifier_menu_tab").addClass( ACTIVE_CLASS );
+			item = $("#magnifier_menu_tab");
 			callMagnifier( url.split("?img=")[1] );
 		} 
 		else if( url.includes("?imgforen=") ) 
 		{
 			$('#forensic').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
-			$("#forensic_tab").addClass( ACTIVE_CLASS );
-			item = $("#forensic_tab");
+			$("#forensic_menu_tab").addClass( ACTIVE_CLASS );
+			item = $("#forensic_menu_tab");
 			callForensic (url.split("?imgforen=")[1] );
 		} 
 		else 
 		{
 			$('#api').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
-			$("#api_tab").addClass( ACTIVE_CLASS );
-			item = $("#api_tab");
+			$("#api_menu_tab").addClass( ACTIVE_CLASS );
+			item = $("#api_menu_tab");
 			callApi( String( url.split("?video=")[1] ) );
 		}
 		manage_tools_menu_item( "", true, item );
 	}
-}
-checkParam();
-
-/* Correct jquery error 'msie undefined' */
-jQuery.browser = { msie: false, version: 0 };
-if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
-	jQuery.browser.msie = true;
-	jQuery.browser.version = RegExp.$1;
 }

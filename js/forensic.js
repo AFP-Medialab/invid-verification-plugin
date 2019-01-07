@@ -48,12 +48,12 @@ function create_card(title, img, desc)
   img_tog.src = "img/info2.svg";
   toggle.appendChild(img_tog);
   var modal = document.createElement("div");
-  modal.setAttribute("class", "modal");
+  modal.setAttribute("class", "forensic-modal-class");
   var close = document.createElement("span");
-  close.setAttribute("class", "close-modal");
+  close.setAttribute("class", "forensic-close-modal-class");
   close.innerHTML = "&times;";
   var img_modal = document.createElement("img");
-  img_modal.setAttribute("class", "modal-content");
+  img_modal.setAttribute("class", "forensic-modal-content-class");
   img_modal.src = img;
 
   // create js for card (on click flip)
