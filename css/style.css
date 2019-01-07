@@ -102,12 +102,12 @@ ul.navbar li a.active,
 }
 
 /* Body */
-#body-content {
+#body_content {
 	text-align: center;
 	height: calc(100% - 98px);
 }
 
-#body-content h1 {
+#body_content h1 {
 	color: #000;
 	font-weight: normal;
 	font-size: 26px;
@@ -115,7 +115,7 @@ ul.navbar li a.active,
 	padding-bottom:10px;
 }
 
-#body-content h2 {
+#body_content h2 {
 	color: #333;
 	font-size: 18px;
 }
@@ -378,7 +378,7 @@ input:checked + .slider:before {
 }
 
 /* Modal */
-.modal {
+.forensic-modal-class {
 	display: none; /* Hidden by default */
 	position: fixed; /* Stay in place */
 	z-index: 1; /* Sit on top */
@@ -387,20 +387,22 @@ input:checked + .slider:before {
 	width: 100%; /* Full width */
 	height: 100%; /* Full height */
 	overflow: auto; /* Enable scroll if needed */
-	background-color: rgb(0,0,0); /* Fallback color */
-	background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+	background-color: rgb(192,192,192); /* Fallback color */
+	background-color: rgba(192,192,192,0.9); /* Black w/ opacity */
 }
 
-.modal-content {
+.forensic-modal-content-class {
 	padding-top: 100px;
 	padding-bottom: 100px;
 	margin: auto;
 	display: block;
 	width: 80%;
 	max-width: 700px;
+	animation-name: zoom;
+	animation-duration: 0.6s;
 }
 
-.close-modal {
+.forensic-close-modal-class {
 	position: absolute;
 	top: 15px;
 	right: 35px;
@@ -410,16 +412,11 @@ input:checked + .slider:before {
 	transition: 0.3s;
 }
 
-.close-modal:hover,
-.close-modal:focus {
+.forensic-close-modal-class:hover,
+.forensic-close-modal-class:focus {
 	color: #bbb;
 	text-decoration: none;
 	cursor: pointer;
-}
-
-.modal-content { 
-	animation-name: zoom;
-	animation-duration: 0.6s;
 }
 
 @keyframes zoom {
@@ -751,13 +748,11 @@ p.comment {
 	text-decoration:none;
 	color:#000;
 	display:block;
-	border:1px solid transparent;
-	padding:10px 0;
-	margin-bottom:20px;
+	padding-top:10px;
 }
 .left-menu div a{
-	margin-bottom:5px;
-	padding:5px 0;
+	margin-bottom:0;
+	padding-top:3px;
 	border:0;
 	opacity:0.4;
 	-moz-opacity:0.4;
@@ -766,48 +761,53 @@ p.comment {
 	opacity:1.0;
 	-moz-opacity:1.0;
 }
-.home-menu div a:hover,
-.third-parties-menu div a:hover {
-	text-decoration:none;
-	border:1px solid #ddd;
-}
-.left-menu div a:hover{
-	opacity:1.0;
-	-moz-opacity:1.0;
-}
-.home-menu div a figure,
-.left-menu div a figure,
-.third-parties-menu div a figure {
+.home-menu div figure,
+.left-menu div figure,
+.third-parties-menu div figure {
 	text-align:center;
+	border:1px solid transparent;
 }
-.home-menu div a figure img,
-.third-parties-menu div a figure img {
+.home-menu div figure img.picto,
+.third-parties-menu div figure img.picto {
 	width:66%;
 	max-width:90px;
 	margin-bottom:5px;
 }
-.left-menu div a figure img{
+.home-menu div figure:hover,
+.third-parties-menu div figure:hover {
+	text-decoration:none;
+	border:1px solid #ddd;
+}
+.left-menu div figure:hover a{
+	opacity:1.0;
+	-moz-opacity:1.0;
+}
+.left-menu div figure img{
 	width:60px;
 	margin-bottom:0;
 }
-.home-menu div a figure figcaption,
-.third-parties-menu div a figure figcaption {
+.home-menu div figure figcaption,
+.third-parties-menu div figure figcaption {
 	height:40px;
+	padding-top:10px;
 }
-.left-menu div a figure figcaption{
+.left-menu div figure figcaption{
 	height:auto;
+	margin-bottom:8px;
 }
-.home-menu figure figcaption span.help,
-.third-parties-menu figure figcaption span.help {
-	display:inline-block;
-	background:url(/img/pictos/help.png);
-	background-size:cover;
+.home-menu div figure figcaption img,
+.third-parties-menu div figure figcaption img{
 	width:24px;
-	height:24px;
-	margin-top:-6px;
+	margin-top:-16px;
+	cursor:pointer;
 }
-.left-menu figure figcaption span.help{
+.left-menu div figure figcaption img{
 	display:none;
+}
+.home-menu figure figcaption span,
+.left-menu figure figcaption span,
+.third-parties-menu figure figcaption span{
+	white-space:nowrap;
 }
 .third-parties{
 	margin-top:80px;
@@ -862,6 +862,15 @@ p.comment {
 	left: 0;
 	width: 100%;
 	height: 100%;
+}
+
+.help-modal-title{
+}
+.help-modal-description{
+	font-weight:bold;
+}
+.help-modal-content{
+	text-align:justify;
 }
 
 @media screen and (max-width: 640px) 
