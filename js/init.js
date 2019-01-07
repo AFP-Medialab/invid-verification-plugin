@@ -11,41 +11,17 @@ $(document).ready( function() {
 	// Init translations
 	translate_csv( url_csv );
 
-	// Popup of home menu on help spans
-	$(".home-menu figcaption img, .third-parties-menu figcaption img").on( "click", function() 
-	{
-		// Modal prefix
-		var prefix = $(this).attr("data-prefix");
-		
-		// Modal title
-		var title = $(this).prev().html();
-		$("#modal_title").html(title);
-		
-		// Modal description
-		var description = $(this).attr("title");
-		$("#modal_description").html(description);
-		
-		// Modal video
-		var video = json_lang_translate[global_language][prefix+"_help_video"]
-		if( video != "" ) {
-			$("#modal_iframe").prop("src", video );
-			$("#modal_iframe").show();
-		} else {
-			$("#modal_iframe").hide();
-		}
 
-		// Modal content
-		var content = json_lang_translate[global_language][prefix+"_help_content"];
-		if( content != "" ) {
-			$("#modal_content").html(content);
-			$("#modal_content").show();
-		} else {
-			$("#modal_content").hide();
-		}
-
-		// Modal close button
-		$("#modal_close").html(json_lang_translate[global_language]["close"]);
+	// Add callback on InVID Logo
+	$("#invid-logo").on( "click", function() {
+		window.open('invid.html','_self',false);
 	});
+
+	// Add callback on We Verify Logo
+	/* $("#we-verify-logo").on( "click", function() {
+		window.open('invid.html','_self',false);
+	}); */
+
 
 	// Add callback on top menu items
 	$('.navbar').on('click', 'li a', function(e) {
@@ -58,6 +34,7 @@ $(document).ready( function() {
 		e.preventDefault();
 		manage_tools_menu_item( this, true );
 	});
+
 
 	// Add callback on accordion element
 	var acc = document.getElementsByClassName("accordion");
@@ -77,6 +54,7 @@ $(document).ready( function() {
 		}
 	}
 
+
 	// Add callback on toogle buttons
 	var toogle = document.getElementById("toogle");
 	toogle.onclick = function(){
@@ -94,22 +72,57 @@ $(document).ready( function() {
 		}
 	}
 
-	// Add callback on InVID Logo
-	document.getElementById("invid-logo").onclick = function(){
-		window.open('invid.html','_self',false);
+
+	// Popup of home menu on help spans
+	$(".home-menu figcaption img, .third-parties-menu figcaption img").on( "click", function() 
+	{
+		// Modal prefix
+		var prefix = $(this).attr("data-prefix");
+
+		// Modal title
+		var title = $(this).prev().html();
+		$("#help_modal_title").html(title);
+		
+		// Modal description
+		var description = $(this).attr("title");
+		$("#help_modal_description").html(description);
+		
+		// Modal content
+		var content = json_lang_translate[global_language][prefix+"_help_content"];
+		if( content != "" ) {
+			$("#help_modal_text").html(content);
+			$("#help_modal_text").show();
+		} else {
+			$("#help_modal_text").hide();
 	}
 
-	// Add callback on We Verify Logo
-	/* document.getElementById("we-verify-logo").onclick = function(){
-		window.open('invid.html','_self',false);
-	} */
+		// Modal video
+		var video = json_lang_translate[global_language][prefix+"_help_video"];
+		if( video != "" ) {
+			$("#help_modal_iframe").prop("src", video );
+			$("#help_modal_iframe").show();
+		} else {
+			$("#help_modal_iframe").hide();
+		}
+
+		// Modal close button
+		$("#help_modal_close").html(json_lang_translate[global_language]["close"]);
+	});
+
+
+	// Accordion of classroom lessons
+	$(".resources-title").on( "click", function() {
+		$(this).next().toggle();
+	});
+
 
 	// Manages params received in url for right button menu accesses
 	checkParam();
 
+
 	// Correct jquery error 'msie undefined'
 	jQuery.browser = { msie: false, version: 0 };
-	if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+	if( navigator.userAgent.match(/MSIE ([0-9]+)\./) ) {
 		jQuery.browser.msie = true;
 		jQuery.browser.version = RegExp.$1;
 	}

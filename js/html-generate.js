@@ -327,8 +327,7 @@ function update_about(lang)
 			if (both[1] == "1") {
 				input.checked = true;
 				document.getElementById("download-content").style.display = "";
-			}
-			else {
+			} else {
 				document.getElementById("download-content").style.display = "none";
 			}
 		}
@@ -346,7 +345,7 @@ function update_about(lang)
 
 	var label = document.createElement("label");
 	label.setAttribute("for", "checkbox_rights");
-	label.innerHTML = json_lang_translate[lang]["about_human_rights"];
+	label.innerHTML = "&nbsp;" + json_lang_translate[lang]["about_human_rights"];
 
 	about_tab.appendChild(input);
 	about_tab.appendChild(label);
@@ -444,37 +443,71 @@ function update_tuto(lang)
 */
 function update_classroom(lang) 
 {
-  // clean classroom tab
-  var classroom_tab = document.getElementById("classroom");
-  classroom_tab.innerHTML = "";
+	// main title
+	setInnerHtml( "classroom_title", json_lang_translate[lang]["classroom_title"] );
 
-  // main title
-  var h = document.createElement("h1");
-  h.innerHTML = json_lang_translate[lang]["classroom_title"];
-  classroom_tab.appendChild(h);
+	// sections titles
+	setInnerHtml( "remote_resources_title", json_lang_translate[lang]["remote_resources_title"] );
+	setInnerHtml( "user_resources_title", json_lang_translate[lang]["user_resources_title"] );
 
-  // adds title and video of 1 to 5 lessons
-  for( var i = 1; i <= 5; i++ ) {
-	  var title = json_lang_translate[lang]["classroom_title_"+i];
-	  var iframe = json_lang_translate[lang]["classroom_video_"+i];
-	  if( title != "" && iframe != "" ) {
-		  var hr =  document.createElement("hr");
-		  classroom_tab.appendChild(hr);
-		  var h2 = document.createElement("h2");
-		  h2.innerHTML = title;
-		  classroom_tab.appendChild(h2);
-		  var div = document.createElement("div");
-		  div.setAttribute("class", "classroom-video-container");
-		  div.innerHTML = iframe;
-		  classroom_tab.appendChild(div);
-		  var br =  document.createElement("br");
-		  classroom_tab.appendChild(br);
-	  }
-  }
+	// adds title and video of 1 to 5 lessons
+	var content = "";
+	var display = json_lang_translate[lang]["display"];
+	var pic = '<img src="/img/pictos/classroom-on.png">';
+	var att = 'data-toggle="modal" data-keyboard="true" data-target="#lesson_modal"';
+	for( var i = 1; i <= 5; i++ ) {
+		var title = json_lang_translate[lang]["classroom_title_"+i];
+		var iframe = json_lang_translate[lang]["classroom_video_"+i];
+		var itm = "";
+		var btn = "";
+		if( title != "" && iframe != "" ) {
+			btn = '<button '+att+' class="btn-primary btn-lg">'+display+'</button>';
+			itm = '<div class="row">';
+			itm+= '	<div class="col-sm-9 col-xs-12 text-left padding-top-10">'+pic+'<span class="lesson-title">'+title+'</span></div>';
+			itm+= '	<div class="col-sm-3 col-xs-12 text-right">'+btn+'</div>';
+			itm+= '	<div class="hidden">'+iframe+'</div>';
+			itm+= '</div>';
+			content+= itm;
+		}
+	}
+	setInnerHtml( "remote_resources_content", content );
 
-  var div_trans = document.createElement("div");
-  div_trans.id = "footer_classroom";
-  div_trans.setAttribute("class", "footer");
-  div_trans.innerHTML = json_lang_translate[lang]["footer_classroom"];
-  classroom_tab.appendChild(div_trans);
+	// Popup of classroom lessons
+	$("#remote_resources_content div.row div button").on( "click", function() {
+		// Title
+		$("#lesson_modal_title").html(json_lang_translate[global_language]["classroom_title"]);
+		// Lesson name
+		var elt = $(this).parent().prev().find("span.lesson-title");
+		$("#lesson_modal_description").html(elt.html());
+		// Lesson iframe
+		var frm = $(this).parent().next().html();
+		$("#lesson_modal_iframe").prop("src", frm );
+		// Modal close button
+		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
+	});
+
+	// Stop iframe videos on popup close
+	$("#help_modal").on("hidden.bs.modal", function() {
+		$("#help_modal_iframe").prop("src", "");
+	});
+	$("#lesson_modal").on("hidden.bs.modal", function() {
+		$("#lesson_modal_iframe").prop("src", "");
+	});
+
+	// form of user lessons
+	content = "To do : form to add your own resources";
+	setInnerHtml( "user_resources_content", content );
+
+	// Popup of user lessons
+	$("#user_resources_content div.row div button").on( "click", function() {
+		// Title
+		$("#lesson_modal_title").html(json_lang_translate[global_language]["classroom_title"]);
+		// Lesson name
+		$("#lesson_modal_description").hide();
+		// Modal close button
+		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
+	});
+
+	// Footer
+	setInnerHtml("footer_classroom", json_lang_translate[lang]["footer_classroom"]);
 }
