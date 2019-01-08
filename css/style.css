@@ -777,10 +777,8 @@ p.comment {
 	max-width:90px;
 	margin-bottom:5px;
 }
-.home-menu div figure:hover,
-.third-parties-menu div figure:hover {
-	text-decoration:none;
-	border:1px solid transparent /*#ddd*/;
+.third-parties-menu div figure:hover{
+	border:1px solid #ddd;
 }
 .home-menu div figure a:hover,
 .third-parties-menu div figure a:hover,
@@ -801,12 +799,12 @@ p.comment {
 	height:auto;
 	margin-bottom:8px;
 }
-.home-menu div figure figcaption img,
-.third-parties-menu div figure figcaption img,
-.left-menu div figure figcaption img{
+.home-menu div figure figcaption img{
 	width:24px;
 	margin-top:-16px;
 	cursor:pointer;
+	opacity:0.75;
+	-moz-opacity:0.75;
 }
 .left-menu div figure figcaption img,
 .third-parties-menu div figure figcaption img{
@@ -820,11 +818,13 @@ p.comment {
 .third-parties{
 	margin-top:80px;
 }
+third-parties-menu div figure:hover{
+}
 #third_parties_title{
 	text-align:left;
 	padding-bottom:10px;
 	border-bottom:1px solid #ddd;
-	margin-bottom:10px;
+	margin-bottom:20px;
 	font-size:16px;
 	color:#666;
 }
@@ -861,9 +861,10 @@ p.comment {
 	position: relative;
 	width: 100%;
 	height: 0;
-	padding-bottom: 65%;
+	padding-bottom: 60%;
+	margin:10px auto;
 }
-.classroom-video {
+.classroom-video-container iframe {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -875,6 +876,7 @@ p.comment {
 }
 .modal-description{
 	font-weight:bold;
+	margin-bottom:20px;
 }
 .modal-text{
 	text-align:justify;
@@ -882,6 +884,9 @@ p.comment {
 .modal-iframe{
 	width:100%;
 	height:400px;
+	margin:10px auto;
+}
+.modal-footer{
 }
 
 .remote-resources{
