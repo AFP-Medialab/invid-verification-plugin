@@ -752,6 +752,10 @@ p.comment {
 	opacity:0.4;
 	-moz-opacity:0.4;
 }
+.third-parties-menu div a{
+	opacity:1.0;
+	-moz-opacity:1.0;
+}
 .left-menu div a{
 	margin-bottom:0;
 	padding-top:3px;
