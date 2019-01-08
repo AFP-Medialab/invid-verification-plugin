@@ -313,3 +313,23 @@ function getXml(url)
 	xhr.send(null);
 	return xhr.responseXML;
 }
+
+/**
+* @func Calculate the height ratio of a 100% width iframe using its original width and height
+*/
+function calculateIFrameHeightRatio( iframe )
+{
+	if( iframe == "" ) return 0;
+	var l = "", r = "", w = 0, h = 0;
+	// Retrieve width
+	l = iframe.split('width="');
+	r = l[1].split('"');
+	w = r[0];
+	// Retrieve height
+	l = iframe.split('height="');
+	r = l[1].split('"');
+	h = r[0];
+	// Calculate ratio
+	if( w == 0 ) return 0;
+	return 100 * h / w;
+}
