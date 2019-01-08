@@ -457,15 +457,15 @@ function update_classroom(lang)
 	var att = 'data-toggle="modal" data-keyboard="true" data-target="#lesson_modal"';
 	for( var i = 1; i <= 5; i++ ) {
 		var title = json_lang_translate[lang]["classroom_title_"+i];
-		var iframe = json_lang_translate[lang]["classroom_video_"+i];
+		var embed = json_lang_translate[lang]["classroom_embed_"+i];
 		var itm = "";
 		var btn = "";
-		if( title != "" && iframe != "" ) {
+		if( embed != "" ) {
 			btn = '<button '+att+' class="btn-primary btn-lg">'+display+'</button>';
 			itm = '<div class="row">';
 			itm+= '	<div class="col-sm-9 col-xs-12 text-left padding-top-10">'+pic+'<span class="lesson-title">'+title+'</span></div>';
 			itm+= '	<div class="col-sm-3 col-xs-12 text-right">'+btn+'</div>';
-			itm+= '	<div class="hidden">'+iframe+'</div>';
+			itm+= '	<div class="hidden">'+i+'</div>';
 			itm+= '</div>';
 			content+= itm;
 		}
@@ -476,19 +476,24 @@ function update_classroom(lang)
 	$("#remote_resources_content div.row div button").on( "click", function() {
 		// Title
 		$("#lesson_modal_title").html(json_lang_translate[global_language]["classroom_title"]);
+		// ID of lesson (1 to 5)
+		var id = $(this).parent().next().html();
 		// Lesson name
-		var elt = $(this).parent().prev().find("span.lesson-title");
-		$("#lesson_modal_description").html(elt.html());
-		// Lesson iframe
-		var frm = $(this).parent().next().html();
-		$("#lesson_modal_iframe").prop("src", frm );
+		$("#lesson_modal_description").html(json_lang_translate[global_language]["classroom_title_"+id]);
+		// Lesson embed
+		var embed = json_lang_translate[global_language]["classroom_embed_"+id];
+		var is_iframe = ( embed.substr(0, 7) == "<iframe" ? true : false );
+		if( is_iframe ) {
+			var ratio = calculateIFrameHeightRatio( embed );
+			$("#lesson_modal_embed").css("padding-bottom", ratio+"%" );
+		}
+		$("#lesson_modal_embed").html(embed);
+		$("#lesson_modal_embed").show();
+		// Lesson iframe (hidden for educational lessons)
+		$("#lesson_modal_iframe").prop("src", "" );
+		$("#lesson_modal_iframe").hide();
 		// Modal close button
 		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
-	});
-
-	// Stop iframe videos on lesson popup close
-	$("#lesson_modal").on("hidden.bs.modal", function() {
-		$("#lesson_modal_iframe").prop("src", "");
 	});
 
 	// inputs of user lessons
@@ -506,8 +511,22 @@ function update_classroom(lang)
 		// Lesson iframe
 		var frm = $(this).parent().prev().find("input").val();
 		$("#lesson_modal_iframe").prop("src", frm );
+		$("#lesson_modal_iframe").show();
+		// Lesson embed (hidden for user lessons)
+		$("#lesson_modal_embed").html("");
+		$("#lesson_modal_embed").hide();
 		// Modal close button
 		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
+	});
+
+	// Stop iframe videos on lesson popup close
+	$("#lesson_modal").on("hidden.bs.modal", function() {
+		$("iframe").each( function() {
+			$(this).prop("src", "");
+			$(this).attr("src", "");
+		});
+		$("#lesson_modal_iframe").prop("src", "");
+		$("#lesson_modal_embed").find("iframe").prop("src", "");
 	});
 
 	// Footer
