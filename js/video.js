@@ -1,22 +1,32 @@
-/* Thumbnails */
+/**
+* Javascript used by thumbnails service 
+*/
 
-function get_images(url){
+/**
+* @func get_images
+*/
+function get_images(url)
+{
 	var video_id = getYtIdFromUrlString(url);
 	var img_url = "http://img.youtube.com/vi/%s/%d.jpg";
 	var img_arr = [];
-	for (count = 0; count < 4; count++){
+	for( count = 0; count < 4; count++ ) {
 		img_arr.push(img_url.replace("%s", video_id).replace("%d", count));
 	}
 	return img_arr;
 }
 
+/* Thumbnails engine changed callback */
 var thumbnail_engine = "google";
-
 $("#video_form").find("[name='engine']").on("change", function(event) {
 	thumbnail_engine = $(this).attr("id").replace("_engine", "");
 })
 
-function clickThumbnails(){
+/**
+* @func click thumbnails callback
+*/
+function clickThumbnails()
+{
 	$(".yt_thumbnail").on( 'click', function(e){
 		e.preventDefault();
 		var url = $( this ).attr('href');
@@ -24,10 +34,14 @@ function clickThumbnails(){
 	});
 }
 
-function add_thumbnails(lst_url){
+/**
+* @func adds thumbnails to display
+*/
+function add_thumbnails(lst_url)
+{
 	cleanElement("place-video-thumbnails");
 	var div = document.getElementById("place-video-thumbnails");
-	for (img_url of lst_url){
+	for( img_url of lst_url ) {
 		var img = document.createElement("img");
 		var a = document.createElement("a");
 		a.setAttribute("href", img_url);
@@ -39,9 +53,13 @@ function add_thumbnails(lst_url){
 	}
 }
 
-function submit_form(){
+/**
+* @func Manages form submit
+*/
+function submit_form()
+{
 	var url = $("[name=video_url]").val();
-	if (url != "" && isYtUrl(url)) {
+	if( url != "" && isYtUrl(url) ) {
 		var lst = get_images(url);
 		add_thumbnails(lst);
 		clickThumbnails();
@@ -49,6 +67,7 @@ function submit_form(){
 	}
 }
 
+/* Video form submit callback */
 var form = document.getElementById("video_form");
 if (form.addEventListener){
 	form.addEventListener("submit", submit_form, false);

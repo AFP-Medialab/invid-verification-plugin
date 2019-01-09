@@ -1,27 +1,39 @@
-//convert date into epoch time
-function convertToEpoch(date){
+/**
+* Javascript used by twitter service
+*/
+
+/**
+* @func Convert date into epoch time
+*/
+function convertToEpoch(date)
+{
 	var epoch = new Date(date);
-	if (document.getElementById('gmt').checked) {
+	if( document.getElementById('gmt').checked ) {
 		epoch = new Date(Date.UTC(
 			epoch.getFullYear(),
 			epoch.getMonth(),
 			epoch.getDate(),
 			epoch.getHours(),
 			epoch.getMinutes()
-			));
+		));
 	}
 	epoch = epoch.getTime()/1000;
 	return epoch;
-
 }
 
-//Replace all occurence of find String by replace String in str String
-function replaceAll(str, find, replace) {
-  return str.replace(new RegExp(find, 'g'), replace);
+/**
+* @func Replace all occurence of find String by replace String in str String
+*/
+function replaceAll(str, find, replace) 
+{
+	return str.replace( new RegExp(find, 'g'), replace );
 }
 
-//Create the url
-function create_url(term, account, filter, lang, geocode, near, within, from_date, to_date){
+/**
+* @func Create the url
+*/
+function create_url(term, account, filter, lang, geocode, near, within, from_date, to_date)
+{
 	var twitter_url = "https://twitter.com/search?f=tweets&q="
 	twitter_url = twitter_url +  replaceAll(term, "#", "%23");
 	if (account != ""){
@@ -50,11 +62,15 @@ function create_url(term, account, filter, lang, geocode, near, within, from_dat
 		var epoch = convertToEpoch(to_date);
 		twitter_url += "%20until%3A" + epoch;
 	}
-	//twitter_url = twitter_url + "&src=typd"
+	// twitter_url = twitter_url + "&src=typd"
 	return twitter_url;
 }
 
-function submit_form(){
+/**
+* @func Submit search form
+*/
+function submit_form()
+{
 	var term = document.getElementById("termbox").value;
 	var account = document.getElementById("tw-account").value;
 	var filter = document.getElementById("filter").value;
@@ -64,26 +80,24 @@ function submit_form(){
 	var within = document.getElementById("within").value;
 	var from_date = document.getElementById("from-date").value;
 	var to_date = document.getElementById("to-date").value;
-	if (!(term==""&&account==""&&filter==""&&lang==""&&geocode==""&&near==""&&from_date==""&&to_date=="")) {
+	if( ! (term=="" && account=="" && filter=="" && lang=="" && geocode=="" && near=="" && from_date=="" && to_date=="") ) {
 		var url = create_url(term, account, filter, lang, geocode, near, within, from_date, to_date);
 		ga('send', 'event', 'Url_provided', 'submit', url);
 		openTab(url);
 	}
 }
 
+/* Add form submit listener */
 var form = document.getElementById("twitter_form");
 if (form.addEventListener){
 	form.addEventListener("submit", submit_form, false);
 }
-
 form.addEventListener("submit", function(e){
 	e.preventDefault();
 });
 
-$(document).ready(function(){
+/* Add dates picker facility */
+$(document).ready( function() {
 	$( "#from-date" ).datetimepicker();
-});
-
-$(document).ready(function(){
 	$( "#to-date" ).datetimepicker();
 });

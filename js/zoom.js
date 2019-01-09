@@ -1,5 +1,5 @@
 /**
-* Script used to lauchn magnification of an image
+* Javascript used to launch magnification of an image
 */
 
 /**

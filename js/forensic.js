@@ -22,76 +22,76 @@ var last_hash = "";
 */
 function create_card(title, img, desc) 
 {
-  //create all elements for card
-  var scene = document.createElement("div");
-  scene.setAttribute("class", "scene");
-  var card = document.createElement("div");
-  card.setAttribute("class", "card");
-  var front = document.createElement("div");
-  front.setAttribute("class", "card__face card__face--front");
-  var back = document.createElement("div");
-  back.setAttribute("class", "card__face card__face--back");
-  var title_card = document.createElement("h2");
-  title_card.innerHTML = title;
-  var img_front = document.createElement("img");
-  img_front.setAttribute("class", "img__front");
-  img_front.src = img;
-  var descrip_img = document.createElement("div");
-  descrip_img.setAttribute("class", "descrip__img");
-  descrip_img.innerHTML = desc;
-  var info = document.createElement("div");
-  info.setAttribute("class", "card__info");
-  info.innerHTML = json_lang_translate[global_language]["forensic_card_back"];
-  var toggle = document.createElement("div");
-  toggle.setAttribute("class", "card__info");
-  var img_tog = document.createElement('img');
-  img_tog.src = "img/info2.svg";
-  toggle.appendChild(img_tog);
-  var modal = document.createElement("div");
-  modal.setAttribute("class", "forensic-modal-class");
-  var close = document.createElement("span");
-  close.setAttribute("class", "forensic-close-modal-class");
-  close.innerHTML = "&times;";
-  var img_modal = document.createElement("img");
-  img_modal.setAttribute("class", "forensic-modal-content-class");
-  img_modal.src = img;
+	//create all elements for card
+	var scene = document.createElement("div");
+	scene.setAttribute("class", "scene");
+	var card = document.createElement("div");
+	card.setAttribute("class", "card");
+	var front = document.createElement("div");
+	front.setAttribute("class", "card__face card__face--front");
+	var back = document.createElement("div");
+	back.setAttribute("class", "card__face card__face--back");
+	var title_card = document.createElement("h2");
+	title_card.innerHTML = title;
+	var img_front = document.createElement("img");
+	img_front.setAttribute("class", "img__front");
+	img_front.src = img;
+	var descrip_img = document.createElement("div");
+	descrip_img.setAttribute("class", "descrip__img");
+	descrip_img.innerHTML = desc;
+	var info = document.createElement("div");
+	info.setAttribute("class", "card__info");
+	info.innerHTML = json_lang_translate[global_language]["forensic_card_back"];
+	var toggle = document.createElement("div");
+	toggle.setAttribute("class", "card__info");
+	var img_tog = document.createElement('img');
+	img_tog.src = "img/info2.svg";
+	toggle.appendChild(img_tog);
+	var modal = document.createElement("div");
+	modal.setAttribute("class", "forensic-modal-class");
+	var close = document.createElement("span");
+	close.setAttribute("class", "forensic-close-modal-class");
+	close.innerHTML = "&times;";
+	var img_modal = document.createElement("img");
+	img_modal.setAttribute("class", "forensic-modal-content-class");
+	img_modal.src = img;
 
-  // create js for card (on click flip)
-  img_front.addEventListener('click', function() {
-      modal.style.display = "block";
-      img_modal.src = this.src;
-    });
-  info.addEventListener('click', function() {
-      card.classList.toggle('is-flipped');
-    });
-  toggle.addEventListener('click', function() {
-      card.classList.toggle('is-flipped');
-    });
-  close.addEventListener('click', function() {
-      modal.style.display = "none";
-    });
+	// create js for card (on click flip)
+	img_front.addEventListener('click', function() {
+		modal.style.display = "block";
+		img_modal.src = this.src;
+	});
+	info.addEventListener('click', function() {
+		card.classList.toggle('is-flipped');
+	});
+	toggle.addEventListener('click', function() {
+		card.classList.toggle('is-flipped');
+	});
+	close.addEventListener('click', function() {
+		modal.style.display = "none";
+	});
 
-  // to resize the scene when img is loaded
-  img_front.onload = function () {
-    scene.style.height = (this.height + 90) + "px";
-  };
+	// to resize the scene when img is loaded
+	img_front.onload = function () {
+		scene.style.height = (this.height + 90) + "px";
+	};
 
-  // appendchild to create the card
-  back.appendChild(descrip_img);
-  back.appendChild(info);
-  front.appendChild(title_card);
-  front.appendChild(img_front);
-  front.appendChild(toggle);
-  card.appendChild(front);
-  card.appendChild(back);
-  modal.appendChild(close);
-  modal.appendChild(img_modal);
-  scene.appendChild(card);
+	// appendchild to create the card
+	back.appendChild(descrip_img);
+	back.appendChild(info);
+	front.appendChild(title_card);
+	front.appendChild(img_front);
+	front.appendChild(toggle);
+	card.appendChild(front);
+	card.appendChild(back);
+	modal.appendChild(close);
+	modal.appendChild(img_modal);
+	scene.appendChild(card);
 
-  // apend for modal
-  document.getElementById("forensic-modal").appendChild(modal);
-  
-  return scene;
+	// apend for modal
+	document.getElementById("forensic-modal").appendChild(modal);
+
+	return scene;
 }
 
 /**
@@ -102,7 +102,7 @@ function create_card(title, img, desc)
 */
 function change_image(title, nb, length) 
 {
-	for (var j = 0; j < length; ++j) {
+	for( var j = 0; j < length; ++j ) {
 		var img = document.getElementById("img_" + title + "_" + j);
 		if (j === nb) {
 			img.style.display = "";
@@ -146,7 +146,7 @@ function create_card_slider(title, imgs, desc)
 
 	//create all imgs
 	var imgs_front = document.createElement("div");
-	for (var i = 0; i < imgs.length; ++i) {
+	for( var i = 0; i < imgs.length; ++i ) {
 		var img_front = document.createElement("img");
 		img_front.setAttribute("class", "img__front");
 		img_front.src = imgs[i];
@@ -160,21 +160,21 @@ function create_card_slider(title, imgs, desc)
 		img_modal.setAttribute("class", "modal-content");
 		img_modal.src = img_front.src;
 		if (i == 0) {
-		  img_front.style.display = "";
-		  // to resize scene on imgload
-		  img_front.onload = function () {
-			scene.style.height = (this.height + 110) + "px";
-		  };
+			img_front.style.display = "";
+			// to resize scene on imgload
+			img_front.onload = function () {
+				scene.style.height = (this.height + 110) + "px";
+			};
 		} else {
-		  img_front.style.display = "none";
+			img_front.style.display = "none";
 		}
 		// add js to flip card on click
 		img_front.addEventListener('click', function() {
-		  modal.style.display = "block";
-		  img_modal.src = this.src;
+			modal.style.display = "block";
+			img_modal.src = this.src;
 		});
 		close.addEventListener('click', function() {
-		  modal.style.display = "none";
+			modal.style.display = "none";
 		});
 		imgs_front.appendChild(img_front);
 		// apend for modal
@@ -189,7 +189,7 @@ function create_card_slider(title, imgs, desc)
 
 	// create radio buttons to select images
 	var div_radio = document.createElement("div");
-	for (var k = 0; k < imgs.length; ++k) {
+	for( var k = 0; k < imgs.length; ++k ) {
 		(function () {
 			var id = k;
 			var but = document.createElement("input");
@@ -198,7 +198,9 @@ function create_card_slider(title, imgs, desc)
 			if (id == 0)
 			but.checked = true;
 			but.name = title;
-			but.addEventListener('click', function () { change_image(title, id, imgs.length); });
+			but.addEventListener('click', function () { 
+				change_image(title, id, imgs.length); 
+			});
 			div_radio.appendChild(but);
 		}());
 	}
@@ -230,13 +232,13 @@ function request_status(hash)
 {
 	$.getJSON(base_url_forensic + "imageforensicsv3/generatereport?hash=" + hash, function (data) {
 		if (data.status === "processing") {
-		  setTimeout(function () {
-			request_status(hash);
+			setTimeout(function () {
+				request_status(hash);
 		  }, 2000);
 		} else if (data.status === "completed") {
-		  display_forensic(hash);
+			display_forensic(hash);
 		} else {
-		  display_error(data);
+			display_error(data);
 		}
 	}).fail(function(jqxhr, textStatus, error) {
 		console.error("start response : " + base_url_forensic + "imageforensicsv3/generatereport?hash=" + hash);
@@ -278,12 +280,12 @@ function display_forensic(hash)
 
 	// get request for report
 	$.getJSON(base_url_forensic + "imageforensicsv3/getreport?hash=" + hash, function (data) {
-		if (data.status === "completed") {
+		if( data.status === "completed" ) {
 			// display all datas with images in cards
 			// display 3 images by row
 			var row = document.createElement("div");
 			row.setAttribute("class", "row");
-			for (var i = 0; i < datas.length; ++i) {
+			for( var i = 0; i < datas.length; ++i ) {
 				var column = document.createElement("div");
 				column.setAttribute("class", "column");
 				column.id = datas[i];
@@ -330,7 +332,7 @@ function send_forensic_video(image_url)
 
 	document.getElementById("forensic-image").innerHTML = '<img src="' + image_url + '" style="width:40%;height:auto;margin:auto;">';
 	document.getElementById("forensic-image").childNodes[0].onload = function() {
-		if (this.height > this.width) {
+		if( this.height > this.width ) {
 			datas = datas_height;
 		} else {
 			datas = datas_width;
@@ -339,11 +341,11 @@ function send_forensic_video(image_url)
 
 	$.getJSON(forensic_url, function(data) {
 		if (data.status === "downloaded") {
-		  request_status(data.hash);
+			request_status(data.hash);
 		} else if (data.status === "exist") {
-		  display_forensic(data.hash);
+			display_forensic(data.hash);
 		} else {
-		  display_error(data);
+			display_error(data);
 		}
 	}).fail(function(jqxhr, textStatus, error) {
 		console.error("start response : " + forensic_url);
@@ -359,10 +361,10 @@ function send_forensic_video(image_url)
 function updateTableLanguageForensic(lang)
 {
 	// check is something is displayed, if not do nothing
-	if (document.getElementById("forensic-content").style.display === "block") {
+	if( document.getElementById("forensic-content").style.display === "block" ) {
 		// if datas undefined content display fail
 		if( datas === undefined ) return;
-		for (var k = 0; k < datas.length; ++k) {
+		for( var k = 0; k < datas.length; ++k ) {
 			// get the card element
 			var el = document.getElementById(datas[k]).childNodes[0].childNodes[0];
 			// title from card__face--front
