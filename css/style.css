@@ -485,11 +485,11 @@ input:checked + .slider:before {
 }
 
 .card__info {
-	float: right;
+	position:absolute;
+	bottom:5px;
+	right:5px;
 	cursor: pointer;
-	margin: 3px 0 0 0;
 	font-size: 12px;
-	padding-right: 5px;
 }
 
 /* Row Column for Image */
