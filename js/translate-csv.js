@@ -40,7 +40,11 @@ function array_to_json(array)
 		var lang = array[0][i].replace( "\r", "" );
 		json[lang] = {};
 		for( var j = 1; j < array.length; ++j ) {
-			json[lang][array[j][0]] = array[j][i].replace( "\r", "" );
+			if( array[j] && array[j][i] && typeof array[j][i] != undefined ) {
+				json[lang][array[j][0]] = array[j][i].replace( "\r", "" );
+			} else {
+				json[lang][array[j][0]] = "";
+			}
 		}
 	}
 	return json;

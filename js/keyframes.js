@@ -241,10 +241,10 @@ function send_keyframe_video(video_url)
 		});
 	}, "json")
 	.fail( function(jqxhr, textStatus, error) {
-		if (error === "Service Unavailable") {
+		if( textStatus == "error" || error === "Service Unavailable" ) {
 			console.error("start response : " + post_url);
 			console.error(textStatus + ", " + error);
-			error_message("unavailable");
+			error_message("Service Unavailable");
 		} else {
 			var json_res = jqxhr.responseJSON;
 			if( is_analysing ) ask_analyse = true;

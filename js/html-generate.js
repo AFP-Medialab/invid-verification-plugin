@@ -8,19 +8,19 @@
 */
 function clearNavbarAndMenuItems() 
 {
-  cleanId("navbar_analysis");
-  cleanId("navbar_tools");
-  cleanId("navbar_classroom");
-  cleanId("navbar_keyframes");
-  cleanId("navbar_thumbnails");
-  cleanId("navbar_twitter");
-  cleanId("navbar_magnifier");
-  cleanId("navbar_metadata");
-  cleanId("navbar_rights");
-  cleanId("navbar_forensic");
-  cleanId("navbar_about");
-  cleanId("navbar_survey");
-  cleanId("navbar_tuto");
+	cleanId("navbar_analysis");
+	cleanId("navbar_tools");
+	cleanId("navbar_classroom");
+	cleanId("navbar_keyframes");
+	cleanId("navbar_thumbnails");
+	cleanId("navbar_twitter");
+	cleanId("navbar_magnifier");
+	cleanId("navbar_metadata");
+	cleanId("navbar_rights");
+	cleanId("navbar_forensic");
+	cleanId("navbar_about");
+	cleanId("navbar_survey");
+	cleanId("navbar_tuto");
 }
 
 /**
@@ -29,14 +29,14 @@ function clearNavbarAndMenuItems()
 */
 function update_navbar(lang) 
 {
-  // clear navbar and menu items
-  clearNavbarAndMenuItems();
-  // add translation to each tool
-  setInnerHtml("navbar_tools",				addSpan(json_lang_translate[lang]["navbar_tools"]));
-  setInnerHtml("navbar_classroom",			addSpan(json_lang_translate[lang]["navbar_classroom"]));
-  setInnerHtml("navbar_about",				addSpan(json_lang_translate[lang]["navbar_about"]));
-  setInnerHtml("navbar_survey",				addSpan(json_lang_translate[lang]["navbar_survey"]));
-  setInnerHtml("navbar_tuto",				addSpan(json_lang_translate[lang]["navbar_tuto"]));
+	// clear navbar and menu items
+	clearNavbarAndMenuItems();
+	// add translation to each tool
+	setInnerHtml("navbar_tools",				addSpan(json_lang_translate[lang]["navbar_tools"]));
+	setInnerHtml("navbar_classroom",			addSpan(json_lang_translate[lang]["navbar_classroom"]));
+	setInnerHtml("navbar_about",				addSpan(json_lang_translate[lang]["navbar_about"]));
+	setInnerHtml("navbar_survey",				addSpan(json_lang_translate[lang]["navbar_survey"]));
+	setInnerHtml("navbar_tuto",					addSpan(json_lang_translate[lang]["navbar_tuto"]));
 }
 
 /**
@@ -45,22 +45,22 @@ function update_navbar(lang)
 */
 function update_tools_menu(lang) 
 {
-  setInnerHtml("menu_api_tit",				json_lang_translate[lang]["navbar_analysis"]);
-  setInnerHtml("menu_key_tit",				json_lang_translate[lang]["navbar_keyframes"]);
-  setInnerHtml("menu_thu_tit",				json_lang_translate[lang]["navbar_thumbnails"]);
-  setInnerHtml("menu_twi_tit",				json_lang_translate[lang]["navbar_twitter"]);
-  setInnerHtml("menu_mag_tit",				json_lang_translate[lang]["navbar_magnifier"]);
-  setInnerHtml("menu_met_tit",				json_lang_translate[lang]["navbar_metadata"]);
-  setInnerHtml("menu_vid_tit",				json_lang_translate[lang]["navbar_rights"]);
-  setInnerHtml("menu_for_tit",				json_lang_translate[lang]["navbar_forensic"]);
-  setTitle("menu_api_dsc",					json_lang_translate[lang]["api_title"]);
-  setTitle("menu_key_dsc",					json_lang_translate[lang]["keyframes_title"]);
-  setTitle("menu_thu_dsc",					json_lang_translate[lang]["youtube_title"]);
-  setTitle("menu_twi_dsc",					json_lang_translate[lang]["twitter_title"]);
-  setTitle("menu_mag_dsc",					json_lang_translate[lang]["magnifier_title"]);
-  setTitle("menu_met_dsc",					json_lang_translate[lang]["metadata_title"]);
-  setTitle("menu_vid_dsc",					json_lang_translate[lang]["copyright_title"]);
-  setTitle("menu_for_dsc",					json_lang_translate[lang]["forensic_title"]);
+	setInnerHtml("menu_api_tit",				json_lang_translate[lang]["navbar_analysis"]);
+	setInnerHtml("menu_key_tit",				json_lang_translate[lang]["navbar_keyframes"]);
+	setInnerHtml("menu_thu_tit",				json_lang_translate[lang]["navbar_thumbnails"]);
+	setInnerHtml("menu_twi_tit",				json_lang_translate[lang]["navbar_twitter"]);
+	setInnerHtml("menu_mag_tit",				json_lang_translate[lang]["navbar_magnifier"]);
+	setInnerHtml("menu_met_tit",				json_lang_translate[lang]["navbar_metadata"]);
+	setInnerHtml("menu_vid_tit",				json_lang_translate[lang]["navbar_rights"]);
+	setInnerHtml("menu_for_tit",				json_lang_translate[lang]["navbar_forensic"]);
+	setTitle("menu_api_dsc",					json_lang_translate[lang]["api_title"]);
+	setTitle("menu_key_dsc",					json_lang_translate[lang]["keyframes_title"]);
+	setTitle("menu_thu_dsc",					json_lang_translate[lang]["youtube_title"]);
+	setTitle("menu_twi_dsc",					json_lang_translate[lang]["twitter_title"]);
+	setTitle("menu_mag_dsc",					json_lang_translate[lang]["magnifier_title"]);
+	setTitle("menu_met_dsc",					json_lang_translate[lang]["metadata_title"]);
+	setTitle("menu_vid_dsc",					json_lang_translate[lang]["copyright_title"]);
+	setTitle("menu_for_dsc",					json_lang_translate[lang]["forensic_title"]);
 }
 
 /**
@@ -69,11 +69,17 @@ function update_tools_menu(lang)
 */
 function update_third_parties_menu(lang) 
 {
-  setInnerHtml("third_parties_title",		json_lang_translate[lang]["third_parties_title"]);
-  setInnerHtml("menu_cro_tit",				json_lang_translate[lang]["menu_cro_tit"]);
-  setInnerHtml("menu_cml_tit",				json_lang_translate[lang]["menu_cml_tit"]);
-  setTitle("menu_cro_dsc",					json_lang_translate[lang]["menu_cro_dsc"]);
-  setTitle("menu_cml_dsc",					json_lang_translate[lang]["menu_cml_dsc"]);
+	setInnerHtml("third_parties_title",			json_lang_translate[lang]["third_parties_title"]);
+	for( var i = 1; i <= 6; i ++ ) {
+		if( json_lang_translate[lang]["other_tools_title_"+i] != "" ) {
+			setInnerHtml("other_tools_title_"+i,	json_lang_translate[lang]["other_tools_title_"+i]);
+			setImageSource("other_tools_image_"+i,	"/img/pictos/"+json_lang_translate[lang]["other_tools_image_"+i]);
+			setLinkHref("other_tools_link_"+i,		json_lang_translate[lang]["other_tools_link_"+i]);
+			document.getElementById("other_tools_"+i).style.display = "block";
+		} else {
+			document.getElementById("other_tools_"+i).style.display = "none";
+		}
+	}
 }
 
 /**
@@ -82,19 +88,19 @@ function update_third_parties_menu(lang)
 */
 function update_api(lang) 
 {
-  // add translation to items needed from api tab
-  setInnerHtml("api_title",					"<h1>" + json_lang_translate[lang]["api_title"] + "</h1>");
-  setInnerHtml("api_repro",					json_lang_translate[lang]["api_repro"]);
-  setInnerHtml("api_comments",				addSpan(json_lang_translate[lang]["api_comments"]));
-  setInnerHtml("api_map",					addSpan(json_lang_translate[lang]["api_map"]));
-  setInnerHtml("pac-button",				json_lang_translate[lang]["button_submit"]);
-  setInnerHtml("google_search_btn",			json_lang_translate[lang]["button_reverse_google"]);
-  setInnerHtml("yandex_search_btn",			json_lang_translate[lang]["button_reverse_yandex"]);
-  setInnerHtml("tineye_search_btn",			json_lang_translate[lang]["button_reverse_tineye"]);
-  setInnerHtml("twitter_search_btn",		json_lang_translate[lang]["button_reverse_twitter"]);
-  setInnerHtml("footer_analysis",			json_lang_translate[lang]["footer_analysis"]);
-  setPlaceholder("apibox",					json_lang_translate[lang]["api_input"]);
-  setPlaceholder("pac-input",				json_lang_translate[lang]["api_searchbox"]);
+	// add translation to items needed from api tab
+	setInnerHtml("api_title",					"<h1>" + json_lang_translate[lang]["api_title"] + "</h1>");
+	setInnerHtml("api_repro",					json_lang_translate[lang]["api_repro"]);
+	setInnerHtml("api_comments",				addSpan(json_lang_translate[lang]["api_comments"]));
+	setInnerHtml("api_map",						addSpan(json_lang_translate[lang]["api_map"]));
+	setInnerHtml("pac-button",					json_lang_translate[lang]["button_submit"]);
+	setInnerHtml("google_search_btn",			json_lang_translate[lang]["button_reverse_google"]);
+	setInnerHtml("yandex_search_btn",			json_lang_translate[lang]["button_reverse_yandex"]);
+	setInnerHtml("tineye_search_btn",			json_lang_translate[lang]["button_reverse_tineye"]);
+	setInnerHtml("twitter_search_btn",			json_lang_translate[lang]["button_reverse_twitter"]);
+	setInnerHtml("footer_analysis",				json_lang_translate[lang]["footer_analysis"]);
+	setPlaceholder("apibox",					json_lang_translate[lang]["api_input"]);
+	setPlaceholder("pac-input",					json_lang_translate[lang]["api_searchbox"]);
 }
 
 /**
@@ -103,16 +109,15 @@ function update_api(lang)
 */
 function update_keyframes(lang) 
 {
-  // add translations to item needed
-  setInnerHtml("keyframes_title",				"<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>");
-  setInnerHtml("keyframes_localfile",			addSpan(json_lang_translate[lang]["button_localfile"]));
-  setInnerHtml("keyframes_content_title",		"<h3>" + json_lang_translate[lang]["keyframes_content_title"] + "</h3>");
-  setInnerHtml("keyframes_content_acco",		json_lang_translate[lang]["keyframes_content_acco"]);
-  setInnerHtml("keyframes_iframe_back",			addSpan(json_lang_translate[lang]["forensic_card_back"]));
-  setInnerHtml("keyframes_download",			json_lang_translate[lang]["keyframes_download"]);
-  setInnerHtml("keyframes_download_subshots",	json_lang_translate[lang]["keyframes_download_subshots"]);
-  setInnerHtml("footer_keyframes",				json_lang_translate[lang]["footer_keyframes"]);
-  setPlaceholder("keyframes_input",				json_lang_translate[lang]["keyframes_input"]);
+	// add translations to item needed
+	setInnerHtml("keyframes_title",				"<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>");
+	setInnerHtml("keyframes_localfile",			addSpan(json_lang_translate[lang]["button_localfile"]));
+	setInnerHtml("keyframes_content_title",		"<h3>" + json_lang_translate[lang]["keyframes_content_title"] + "</h3>");
+	setInnerHtml("keyframes_content_acco",		json_lang_translate[lang]["keyframes_content_acco"]);
+	setInnerHtml("keyframes_iframe_back",		addSpan(json_lang_translate[lang]["forensic_card_back"]));
+	setInnerHtml("keyframes_download_subshots",	json_lang_translate[lang]["keyframes_download"]);
+	setInnerHtml("footer_keyframes",			json_lang_translate[lang]["footer_keyframes"]);
+	setPlaceholder("keyframes_input",			json_lang_translate[lang]["keyframes_input"]);
 }
 
 /**
@@ -121,10 +126,10 @@ function update_keyframes(lang)
 */
 function update_thumbnails(lang) 
 {
-  // add translations to item needed
-  setInnerHtml("youtube_title",				"<h1>" + json_lang_translate[lang]["youtube_title"] + "</h1>");
-  setInnerHtml("footer_thumbnails",			json_lang_translate[lang]["footer_thumbnails"]);
-  setPlaceholder("youtube_input",			json_lang_translate[lang]["youtube_input"]);
+	// add translations to item needed
+	setInnerHtml("youtube_title",				"<h1>" + json_lang_translate[lang]["youtube_title"] + "</h1>");
+	setInnerHtml("footer_thumbnails",			json_lang_translate[lang]["footer_thumbnails"]);
+	setPlaceholder("youtube_input",				json_lang_translate[lang]["youtube_input"]);
 }
 
 /**
@@ -133,20 +138,20 @@ function update_thumbnails(lang)
 */
 function update_twitter(lang) 
 {
-  // add translations to item needed
-  setInnerHtml("twitter_title",				"<h1>" + json_lang_translate[lang]["twitter_title"] + "</h1>");
-  setInnerHtml("twitter_local_time",		json_lang_translate[lang]["twitter_local_time"]);
-  setInnerHtml("twitter_gmt",				json_lang_translate[lang]["twitter_gmt"]);
-  setInnerHtml("footer_twitter",			json_lang_translate[lang]["footer_twitter"]);
-  setPlaceholder("termbox",					json_lang_translate[lang]["twitter_termbox"]);
-  setPlaceholder("tw-account",				json_lang_translate[lang]["twitter_tw-account"]);
-  setPlaceholder("filter",					json_lang_translate[lang]["twitter_filter"]);
-  setPlaceholder("lang",					json_lang_translate[lang]["twitter_lang"]);
-  setPlaceholder("geocode",					json_lang_translate[lang]["twitter_geocode"]);
-  setPlaceholder("near",					json_lang_translate[lang]["twitter_near"]);
-  setPlaceholder("within",					json_lang_translate[lang]["twitter_within"]);
-  setPlaceholder("from-date",				json_lang_translate[lang]["twitter_from-date"]);
-  setPlaceholder("to-date",					json_lang_translate[lang]["twitter_to-date"]);
+	// add translations to item needed
+	setInnerHtml("twitter_title",				"<h1>" + json_lang_translate[lang]["twitter_title"] + "</h1>");
+	setInnerHtml("twitter_local_time",			json_lang_translate[lang]["twitter_local_time"]);
+	setInnerHtml("twitter_gmt",					json_lang_translate[lang]["twitter_gmt"]);
+	setInnerHtml("footer_twitter",				json_lang_translate[lang]["footer_twitter"]);
+	setPlaceholder("termbox",					json_lang_translate[lang]["twitter_termbox"]);
+	setPlaceholder("tw-account",				json_lang_translate[lang]["twitter_tw-account"]);
+	setPlaceholder("filter",					json_lang_translate[lang]["twitter_filter"]);
+	setPlaceholder("lang",						json_lang_translate[lang]["twitter_lang"]);
+	setPlaceholder("geocode",					json_lang_translate[lang]["twitter_geocode"]);
+	setPlaceholder("near",						json_lang_translate[lang]["twitter_near"]);
+	setPlaceholder("within",					json_lang_translate[lang]["twitter_within"]);
+	setPlaceholder("from-date",					json_lang_translate[lang]["twitter_from-date"]);
+	setPlaceholder("to-date",					json_lang_translate[lang]["twitter_to-date"]);
 }
 
 /**
@@ -155,27 +160,27 @@ function update_twitter(lang)
 */
 function update_magnifier(lang) 
 {
-  // add translations to item needed
-  setInnerHtml("magnifier_title",			"<h1>" + json_lang_translate[lang]["magnifier_title"] + "</h1>");
-  setInnerHtml("local_file",				addSpan(json_lang_translate[lang]["button_localfile"]));
-  setInnerHtml("magnifier_accor",			json_lang_translate[lang]["magnifier_accor"]);
-  setInnerHtml("magnifier_radio_1",			json_lang_translate[lang]["magnifier_radio_1"]);
-  setInnerHtml("magnifier_radio_2",			json_lang_translate[lang]["magnifier_radio_2"]);
-  setInnerHtml("magnifier_radio_3",			json_lang_translate[lang]["magnifier_radio_3"]);
-  setInnerHtml("magnifier_radio_4",			json_lang_translate[lang]["magnifier_radio_4"]);
-  setInnerHtml("magnifier_radio_5",			json_lang_translate[lang]["magnifier_radio_5"]);
-  setInnerHtml("magnifier_scale",			json_lang_translate[lang]["magnifier_scale"]);
-  setInnerHtml("button_undo",				json_lang_translate[lang]["button_undo"]);
-  setInnerHtml("button_redo",				json_lang_translate[lang]["button_redo"]);
-  setInnerHtml("magnifier_switch",			"<h3>" + json_lang_translate[lang]["magnifier_switch"] + "</h3>");
-  setInnerHtml("button_downloads",			json_lang_translate[lang]["button_download"]);
-  setInnerHtml("img_rev_search_btn",		addSpan(json_lang_translate[lang]["magnifier_google"]));
-  setInnerHtml("baidu_rev_search_btn",		addSpan(json_lang_translate[lang]["magnifier_baidu"]));
-  setInnerHtml("yandex_rev_search_btn",		addSpan(json_lang_translate[lang]["magnifier_yandex"]));
-  setInnerHtml("tineye_rev_search_btn",		addSpan(json_lang_translate[lang]["magnifier_tineye"]));
-  setInnerHtml("img_verif_btn",				addSpan(json_lang_translate[lang]["magnifier_forensic"]));
-  setInnerHtml("footer_magnifier",			json_lang_translate[lang]["footer_magnifier"]);
-  setPlaceholder("urlbox",					json_lang_translate[lang]["magnifier_urlbox"]);
+	// add translations to item needed
+	setInnerHtml("magnifier_title",				"<h1>" + json_lang_translate[lang]["magnifier_title"] + "</h1>");
+	setInnerHtml("local_file",					addSpan(json_lang_translate[lang]["button_localfile"]));
+	setInnerHtml("magnifier_accor",				json_lang_translate[lang]["magnifier_accor"]);
+	setInnerHtml("magnifier_radio_1",			json_lang_translate[lang]["magnifier_radio_1"]);
+	setInnerHtml("magnifier_radio_2",			json_lang_translate[lang]["magnifier_radio_2"]);
+	setInnerHtml("magnifier_radio_3",			json_lang_translate[lang]["magnifier_radio_3"]);
+	setInnerHtml("magnifier_radio_4",			json_lang_translate[lang]["magnifier_radio_4"]);
+	setInnerHtml("magnifier_radio_5",			json_lang_translate[lang]["magnifier_radio_5"]);
+	setInnerHtml("magnifier_scale",				json_lang_translate[lang]["magnifier_scale"]);
+	setInnerHtml("button_undo",					json_lang_translate[lang]["button_undo"]);
+	setInnerHtml("button_redo",					json_lang_translate[lang]["button_redo"]);
+	setInnerHtml("magnifier_switch",			"<h3>" + json_lang_translate[lang]["magnifier_switch"] + "</h3>");
+	setInnerHtml("button_downloads",			json_lang_translate[lang]["button_download"]);
+	setInnerHtml("img_rev_search_btn",			addSpan(json_lang_translate[lang]["magnifier_google"]));
+	setInnerHtml("baidu_rev_search_btn",		addSpan(json_lang_translate[lang]["magnifier_baidu"]));
+	setInnerHtml("yandex_rev_search_btn",		addSpan(json_lang_translate[lang]["magnifier_yandex"]));
+	setInnerHtml("tineye_rev_search_btn",		addSpan(json_lang_translate[lang]["magnifier_tineye"]));
+	setInnerHtml("img_verif_btn",				addSpan(json_lang_translate[lang]["magnifier_forensic"]));
+	setInnerHtml("footer_magnifier",			json_lang_translate[lang]["footer_magnifier"]);
+	setPlaceholder("urlbox",					json_lang_translate[lang]["magnifier_urlbox"]);
 }
 
 /**
@@ -184,13 +189,13 @@ function update_magnifier(lang)
 */
 function update_metadata(lang) 
 {
-  // add translations to item needed
-  setInnerHtml("metadata_content_title",	"<h1>" + json_lang_translate[lang]["metadata_content_title"] + "</h1>");
-  setInnerHtml("metadata_localfile",		addSpan(json_lang_translate[lang]["button_localfile"]));
-  setInnerHtml("metadata_radio_image",		json_lang_translate[lang]["metadata_radio_image"]);
-  setInnerHtml("metadata_radio_video",		json_lang_translate[lang]["metadata_radio_video"]);
-  setInnerHtml("footer_metadata",			json_lang_translate[lang]["footer_metadata"]);
-  setPlaceholder("url-metadata",			json_lang_translate[lang]["metadata_content_input"]);
+	// add translations to item needed
+	setInnerHtml("metadata_content_title",		"<h1>" + json_lang_translate[lang]["metadata_content_title"] + "</h1>");
+	setInnerHtml("metadata_localfile",			addSpan(json_lang_translate[lang]["button_localfile"]));
+	setInnerHtml("metadata_radio_image",		json_lang_translate[lang]["metadata_radio_image"]);
+	setInnerHtml("metadata_radio_video",		json_lang_translate[lang]["metadata_radio_video"]);
+	setInnerHtml("footer_metadata",				json_lang_translate[lang]["footer_metadata"]);
+	setPlaceholder("url-metadata",				json_lang_translate[lang]["metadata_content_input"]);
 }
 
 /**
@@ -199,10 +204,10 @@ function update_metadata(lang)
 */
 function update_copyright(lang) 
 {
-  // add translations to item needed
-  setInnerHtml("copyright_title",			"<h1>" + json_lang_translate[lang]["copyright_title"] + "</h1>");
-  setInnerHtml("footer_rights",				json_lang_translate[lang]["footer_rights"]);
-  setPlaceholder("copyright-video_url",		json_lang_translate[lang]["copyright_input"]);
+	// add translations to item needed
+	setInnerHtml("copyright_title",				"<h1>" + json_lang_translate[lang]["copyright_title"] + "</h1>");
+	setInnerHtml("footer_rights",				json_lang_translate[lang]["footer_rights"]);
+	setPlaceholder("copyright-video_url",		json_lang_translate[lang]["copyright_input"]);
 }
 
 /**
@@ -211,13 +216,13 @@ function update_copyright(lang)
 */
 function update_forensic(lang) 
 {
-  // add translations to item needed
-  setInnerHtml("forensic_title",			"<h1>" + json_lang_translate[lang]["forensic_title"] + "</h1>");
-  setInnerHtml("forensic_localfile",		addSpan(json_lang_translate[lang]["button_localfile"]));
-  setInnerHtml("forensic_iframe_back",		addSpan(json_lang_translate[lang]["forensic_card_back"]));
-  setInnerHtml("forensic_content_title",	"<h3>" + json_lang_translate[lang]["forensic_content_title"] + "</h3>");
-  setInnerHtml("footer_forensic",			json_lang_translate[lang]["footer_forensic"]);
-  setPlaceholder("forensic_input",			json_lang_translate[lang]["forensic_input"]);
+	// add translations to item needed
+	setInnerHtml("forensic_title",				"<h1>" + json_lang_translate[lang]["forensic_title"] + "</h1>");
+	setInnerHtml("forensic_localfile",			addSpan(json_lang_translate[lang]["button_localfile"]));
+	setInnerHtml("forensic_iframe_back",		addSpan(json_lang_translate[lang]["forensic_card_back"]));
+	setInnerHtml("forensic_content_title",		"<h3>" + json_lang_translate[lang]["forensic_content_title"] + "</h3>");
+	setInnerHtml("footer_forensic",				json_lang_translate[lang]["footer_forensic"]);
+	setPlaceholder("forensic_input",			json_lang_translate[lang]["forensic_input"]);
 }
 
 /**
@@ -297,6 +302,7 @@ function update_about(lang)
 	}
 
 	var imgs = document.createElement("p");
+	imgs.class = 'logos';
 	var img1 = document.createElement("img");
 	img1.src = "img/Logo-AFP-384.png";
 	img1.height = "83";
@@ -309,7 +315,9 @@ function update_about(lang)
 	img3.width = "462";
 	img3.alt = "Europe";
 
+	imgs.appendChild(document.createElement("br"));
 	imgs.appendChild(img1);
+	imgs.appendChild(document.createElement("br"));
 	imgs.appendChild(img2);
 	imgs.appendChild(img3);
 
@@ -321,13 +329,15 @@ function update_about(lang)
 	input.setAttribute("id", "checkbox_rights");
 	// if cookie, check box
 	var arr = (document.cookie).split(';');
-	for (var cookie of arr) {
+	for( var cookie of arr ) {
 		var both = cookie.split('=');
-		if (both[0] == " rights") {
+		if( both[0] == " rights" ) {
 			if (both[1] == "1") {
 				input.checked = true;
+				document.getElementById("panel").style.display = "";
 				document.getElementById("download-content").style.display = "";
 			} else {
+				document.getElementById("panel").style.display = "none";
 				document.getElementById("download-content").style.display = "none";
 			}
 		}
@@ -336,9 +346,11 @@ function update_about(lang)
 	input.addEventListener("change", function () {
 		if (this.checked) {
 			document.cookie = "rights=1;";
+			document.getElementById("panel").style.display = "";
 			document.getElementById("download-content").style.display = "";
 		} else {
 			document.cookie = "rights=0;";
+			document.getElementById("panel").style.display = "none";
 			document.getElementById("download-content").style.display = "none";
 		}
 	});
@@ -484,13 +496,14 @@ function update_classroom(lang)
 		var embed = json_lang_translate[global_language]["classroom_embed_"+id];
 		var is_iframe = ( embed.substr(0, 7) == "<iframe" ? true : false );
 		if( is_iframe ) {
+			embed = embed.replace( '<iframe ', '<iframe frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" ' );
 			var ratio = calculateIFrameHeightRatio( embed );
 			$("#lesson_modal_embed").css("padding-bottom", ratio+"%" );
 		}
 		$("#lesson_modal_embed").html(embed);
 		$("#lesson_modal_embed").show();
 		// Lesson iframe (hidden for educational lessons)
-		$("#lesson_modal_iframe").prop("src", "" );
+		$("#lesson_modal_iframe").prop("src", "");
 		$("#lesson_modal_iframe").hide();
 		// Modal close button
 		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
@@ -509,12 +522,22 @@ function update_classroom(lang)
 		// Lesson name
 		$("#lesson_modal_description").hide();
 		// Lesson iframe
-		var frm = $(this).parent().prev().find("input").val();
-		$("#lesson_modal_iframe").prop("src", frm );
-		$("#lesson_modal_iframe").show();
-		// Lesson embed (hidden for user lessons)
-		$("#lesson_modal_embed").html("");
-		$("#lesson_modal_embed").hide();
+		var embed = $(this).parent().prev().find("input").val();
+		var is_iframe = ( embed.substr(0, 7) == "<iframe" ? true : false );
+		if( is_iframe ) {
+			// Lesson embed iframe
+			embed = embed.replace( '<iframe ', '<iframe frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" ' );
+			$("#lesson_modal_iframe").prop("src", "");
+			$("#lesson_modal_iframe").hide();
+			$("#lesson_modal_embed").html(embed);
+			$("#lesson_modal_embed").show();
+		} else {
+			// Lesson url
+			$("#lesson_modal_iframe").prop("src", embed);
+			$("#lesson_modal_iframe").show();
+			$("#lesson_modal_embed").html("");
+			$("#lesson_modal_embed").hide();
+		}
 		// Modal close button
 		$("#lesson_modal_close").html(json_lang_translate[global_language]["close"]);
 	});

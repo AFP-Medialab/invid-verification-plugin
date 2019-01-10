@@ -5,6 +5,10 @@
 // Whether plugin is running in production mode or not
 var production = false;
 
+// Main page name (to be added in manifest.json and menu.js too)
+var tmp = window.location.href.split("/");
+var page_name = tmp[3];
+
 /**
 * Values of parameters depending of environment
 */
@@ -38,8 +42,7 @@ else
 	var config_google_analytics_key = "UA-XXXXXXXX-Y";
 
 	// URL of tsv file holding translation strings
-	var config_url_csv = "http://invid.laurent-lacroix.com/InVIDTraductions.tsv";
-	// var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/redesign/InVIDTraductions.tsv"
+	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/redesign/InVIDTraductions.tsv"
 }
 
 /**

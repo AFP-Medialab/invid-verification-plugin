@@ -222,18 +222,23 @@ function submit_metadata()
     var url = document.getElementById("url-metadata").value;
     url = get_real_url_img(url);
     var img_radio = document.getElementById("img-meta-radio");
-    if (img_radio.checked) {
+    if( img_radio.checked ) {
         // Metadata
         var img = new Image();
         img.src = url;
         // No Metadata if img is not loaded
-        img.onload = function(){
-            var scale = Math.max(img.width/600, img.height/600);
-            if (scale > 1)
-            {
+        img.onload = function() {
+            /* var scale = Math.max(img.width/600, img.height/600);
+            if( scale > 1 ) {
                 img.width = Math.round(img.width/scale);
                 img.height = Math.round(img.height/scale);
-            }
+            } */
+			if( img.width > img.height ) {
+				img.width = "600";
+			} else {
+				img.height = "300";
+			}
+			img.style.marginTop = "20px";
             getExif(img);
         };
         // If error display error message

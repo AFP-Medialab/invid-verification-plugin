@@ -11,17 +11,15 @@ $(document).ready( function() {
 	// Init translations
 	translate_csv( url_csv );
 
-
 	// Add callback on InVID Logo
 	$("#invid-logo").on( "click", function() {
-		window.open('invid.html','_self',false);
+		window.open("invid.html",'_self',false);
 	});
 
 	// Add callback on We Verify Logo
-	/* $("#we-verify-logo").on( "click", function() {
-		window.open('invid.html','_self',false);
-	}); */
-
+	$("#we-verify-logo").on( "click", function() {
+		window.open("we-verify.html",'_self',false);
+	});
 
 	// Add callback on top menu items
 	$('.navbar').on('click', 'li a', function(e) {

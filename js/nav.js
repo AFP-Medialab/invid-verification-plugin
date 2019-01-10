@@ -45,13 +45,13 @@ function manage_top_menu_item( item )
 	var tab = $( item );
 	var href = tab.attr('href');
 
-	ga('set', 'page', "/invid.html#" + id_to_name(href.split("#").pop()));
+	ga('set', 'page', page_name+"/#" + id_to_name(href.split("#").pop()));
 	ga('send', 'pageview');
 
 	$('.active').removeClass( ACTIVE_CLASS );
 	tab.addClass( ACTIVE_CLASS );
 
-	if( href == "invid.html" || href == "#tools" ) {
+	if( href == "invid.html" || href == "we-verify.html" || href == "#tools" ) {
 		toggle_left_menu( false, href );
 	} else {
 		toggle_left_menu( true, href );
@@ -74,7 +74,7 @@ function manage_tools_menu_item( item, toggle, wanted_tab )
 	}
 	var href = tab.attr('href');
 
-	ga('set', 'page', "/invid.html#" + id_to_name(href.split("#").pop()));
+	ga('set', 'page', page_name+"/#" + id_to_name(href.split("#").pop()));
 	ga('send', 'pageview');
 
 	$("#myNavBar li a").each(function(){
@@ -91,7 +91,7 @@ function manage_tools_menu_item( item, toggle, wanted_tab )
 	tab.addClass(ACTIVE_CLASS);
 
 	if( toggle ) {
-		if( href == "invid.html" || href == "#tools" ) {
+		if( href == "invid.html" || href == "we-verify.html" || href == "#tools" ) {
 			toggle_left_menu( false, href );
 		} else {
 			toggle_left_menu( true, href );
@@ -126,7 +126,7 @@ function toggle_left_menu( visible, href )
 		$("#left_menu").html("");
 		$("#left_menu").hide();
 	}
-	if( href == "invid.html" || href == "#tools" ) {
+	if( href == "invid.html" || href == "we-verify.html" || href == "#tools" ) {
 		$("#home").show();
 	} else {
 		$("#home").hide();

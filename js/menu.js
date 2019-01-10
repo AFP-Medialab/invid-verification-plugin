@@ -1,8 +1,9 @@
 /* 
 * Set here your own Tracking ID 
-* See config.js !
 */
 var trackingID = "UA-XXXXXXXX-Y";
+var page_name = 'invid.html';
+// var page_name = 'we-verify.html';
 
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -12,7 +13,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', trackingID, 'auto');
 // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
 ga('set', 'checkProtocolTask', function(){});
-ga('set', 'page', '/invid.html#analysis');
+ga('set', 'page', '/'+page_name+'#analysis');
 ga('set', 'anonymizeIp', true);
 
 function get_images(url){
@@ -60,7 +61,7 @@ function getUrlImg(word) {
 analysisVideo = function(word){
 	var url = word.linkUrl;
 	if (url != "") {
-		chrome.tabs.create({url:"invid.html?video=" + url});
+		chrome.tabs.create({url:page_name+"?video=" + url});
 		// Google analytics
 		ga("send", "event", "ContextualMenu - AnalysisVideo", "click", url);
 	}
@@ -69,7 +70,7 @@ analysisVideo = function(word){
 imageMagnifier = function(word){
 	var url = getUrlImg(word);
 	if (url != "") {
-		chrome.tabs.create({url:"invid.html?img=" + url});
+		chrome.tabs.create({url:page_name+"?img=" + url});
 		// Google analytics
 		ga("send", "event", "ContextualMenu - Magnifier", "click", url);
 	}
@@ -88,7 +89,7 @@ imageReverseSearch = function(word){
 imageForensic = function(word){
 	var url = getUrlImg(word);
 	if (url != ""){
-		chrome.tabs.create({url:"invid.html?imgforen=" + url});
+		chrome.tabs.create({url:page_name+"?imgforen=" + url});
 		// Google analytics
 		ga("send", "event", "ContextualMenu - Forensic", "click", url);
 	}

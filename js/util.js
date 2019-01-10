@@ -225,6 +225,32 @@ function setPlaceholder( id, placeholder )
 }
 
 /**
+/**
+* @func set the source of an image
+* @id img id
+* @source image source
+*/
+function setImageSource( id, source ) 
+{
+	var img = document.getElementById(id);
+	if( ! img ) return;
+	img.src = source;
+}
+
+/**
+/**
+* @func set the href of a link
+* @id anchor id
+* @href anchor href
+*/
+function setLinkHref( id, href ) 
+{
+	var lnk = document.getElementById(id);
+	if( ! lnk ) return;
+	lnk.href = href;
+}
+
+/**
 * @func set the title of an element with a text, if the id correspond to a valid div
 * @id div id
 * @title div title
