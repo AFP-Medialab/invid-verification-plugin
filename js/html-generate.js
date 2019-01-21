@@ -73,7 +73,7 @@ function update_third_parties_menu(lang)
 	for( var i = 1; i <= 6; i ++ ) {
 		if( json_lang_translate[lang]["other_tools_title_"+i] != "" ) {
 			setInnerHtml("other_tools_title_"+i,	json_lang_translate[lang]["other_tools_title_"+i]);
-			setImageSource("other_tools_image_"+i,	"/img/pictos/"+json_lang_translate[lang]["other_tools_image_"+i]);
+			setImageSource("other_tools_image_"+i,	"img/pictos/"+json_lang_translate[lang]["other_tools_image_"+i]);
 			setLinkHref("other_tools_link_"+i,		json_lang_translate[lang]["other_tools_link_"+i]);
 			document.getElementById("other_tools_"+i).style.display = "block";
 		} else {
@@ -465,7 +465,7 @@ function update_classroom(lang)
 	// adds title and video of 1 to 5 lessons
 	var content = "";
 	var display = json_lang_translate[lang]["display"];
-	var pic = '<img src="/img/pictos/classroom-on.png">';
+	var pic = '<img src="img/pictos/classroom-on.png">';
 	var att = 'data-toggle="modal" data-keyboard="true" data-target="#lesson_modal"';
 	for( var i = 1; i <= 5; i++ ) {
 		var title = json_lang_translate[lang]["classroom_title_"+i];
