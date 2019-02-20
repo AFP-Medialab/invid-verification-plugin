@@ -45,6 +45,7 @@ function updateAllTranslations( language )
 	update_forensic(language);
 	update_about(language);
 	update_tuto(language);
+	update_quiz(language);
 	update_classroom(language);
 	updateTableLanguageAnalysis(language);
 	updateTableLanguageMetadata(language);
