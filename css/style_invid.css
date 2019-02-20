@@ -554,7 +554,7 @@ thead:last-child tr:last-child th:first-child, tbody:last-child tr:last-child td
 }
 
 /* About content */
-#about, #tutorial, #classroom{
+#about, #tutorial, #classroom, #quiz{
 	margin: 50px auto 15px;
 	padding: 0px 50px 40px;
 	width: 100%;
@@ -565,6 +565,9 @@ thead:last-child tr:last-child th:first-child, tbody:last-child tr:last-child td
 	text-align: justify;
 	line-height: 22px;
 	height: auto;
+}
+#quiz{
+	text-align: center;
 }
 
 /* Loader */
@@ -983,4 +986,13 @@ third-parties-menu div figure:hover{
 	#about, #tutorial, #classroom{
 		padding:0px 20px 20px 10px;
 	}
+}
+
+.quiz-move-left{
+	padding:210px 35px 210px 5px;
+	cursor:pointer;
+}
+.quiz-move-right{
+	padding:210px 5px 210px 15px;
+	cursor:pointer;
 }
