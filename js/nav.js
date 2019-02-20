@@ -32,6 +32,8 @@ function id_to_name(id)
 			return "tutorial";
 		case "classroom":
 			return "classroom";
+		case "quiz":
+			return "quiz";
 		default :
 			return "";
 	}
@@ -109,7 +111,7 @@ function manage_tools_menu_item( item, toggle, wanted_tab )
 */
 function toggle_left_menu( visible, href )
 {
-	if( visible && href != "#tutorial" && href != "#about" && href != "#survey" && href != "#classroom" ) {
+	if( visible && href != "#tutorial" && href != "#about" && href != "#survey" && href != "#classroom" && href != "#quiz" ) {
 		$("#left_menu").html( $("#home_menu" ).html() );
 		$("#left_menu div").each( function() {
 			$(this).removeClass("col-md-2 col-sm-3 col-xs-6");
