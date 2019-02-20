@@ -218,7 +218,7 @@ input:-webkit-autofill {
 }
 
 .button:hover {
-	background-color: #1d8c99;
+	background-color: #1195a4;
 }
 
 .button:active {
@@ -608,7 +608,7 @@ thead:last-child tr:last-child th:first-child, tbody:last-child tr:last-child td
 }
 
 /* About content */
-#about, #tutorial, #classroom{
+#about, #tutorial, #classroom, #quiz{
 	margin: 50px auto 15px;
 	padding: 0px 50px 40px;
 	width: 100%;
@@ -620,7 +620,10 @@ thead:last-child tr:last-child th:first-child, tbody:last-child tr:last-child td
 	line-height: 22px;
 	height: auto;
 }
-#about h1, #classroom h1, #tutorial h1{
+#quiz{
+	text-align: center;
+}
+#about h1, #classroom h1, #tutorial h1, #quiz h1{
 	width:100%;
 }
 
@@ -1043,4 +1046,13 @@ third-parties-menu div figure:hover{
 	#about, #tutorial, #classroom{
 		padding:0px 20px 20px 10px;
 	}
+}
+
+.quiz-move-left{
+	padding:210px 70px 210px 5px;
+	cursor:pointer;
+}
+.quiz-move-right{
+	padding:210px 5px 210px 25px;
+	cursor:pointer;
 }
