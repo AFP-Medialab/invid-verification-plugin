@@ -21,6 +21,7 @@ function clearNavbarAndMenuItems()
 	cleanId("navbar_about");
 	cleanId("navbar_survey");
 	cleanId("navbar_tuto");
+	cleanId("navbar_quiz");
 }
 
 /**
@@ -37,6 +38,7 @@ function update_navbar(lang)
 	setInnerHtml("navbar_about",				addSpan(json_lang_translate[lang]["navbar_about"]));
 	setInnerHtml("navbar_survey",				addSpan(json_lang_translate[lang]["navbar_survey"]));
 	setInnerHtml("navbar_tuto",					addSpan(json_lang_translate[lang]["navbar_tuto"]));
+	setInnerHtml("navbar_quiz",					addSpan(json_lang_translate[lang]["navbar_quiz"]));
 }
 
 /**
@@ -554,4 +556,195 @@ function update_classroom(lang)
 
 	// Footer
 	setInnerHtml("footer_classroom", json_lang_translate[lang]["footer_classroom"]);
+}
+
+
+/**
+* @func update the content of about tab in function of language
+* @lang actual language to display
+*/
+function update_quiz(lang) 
+{
+	// clean quiz tab
+	var quiz_tab = document.getElementById("quiz");
+	quiz_tab.innerHTML = "";
+
+	// main title
+	var h = document.createElement("h1");
+	h.innerHTML = json_lang_translate[lang]["quiz_title"];
+	quiz_tab.appendChild(h);
+
+	var quiz_items = document.createElement("div");
+	quiz_items.style.float = "left";
+	quiz_items.style.width = "70%";
+	quiz_items.style.textAlign = "center";
+	quiz_items.style.margin = "0 auto";
+	var max_quiz = 9, classname = "";
+	for( var i = 1; i <= max_quiz; i++ ) {
+		if( json_lang_translate[lang]["quiz_item_url_"+i] != "" ) {
+			var main_div = document.createElement("div");
+			main_div.id = "quiz_item_"+i;
+			main_div.style.float = "left";
+			main_div.style.textAlign = "center";
+			main_div.style.height = "auto";
+			if( classname == "" ) {
+				main_div.className = "";
+				classname = "hidden";
+			} else {
+				main_div.className = classname;
+			}
+			// Title
+			if( json_lang_translate[lang]["quiz_item_title_"+i] != "" ) {
+				var h2 = document.createElement("h2");
+				h2.style.marginTop = "20px";
+				h2.innerHTML = json_lang_translate[lang]["quiz_item_title_"+i];
+				main_div.appendChild(h2);
+			}
+			// Image
+			var img = document.createElement("img");
+			img.id = 'quiz_image_'+i;
+			img.src = json_lang_translate[lang]["quiz_item_url_"+i];
+			img.style.width = "100%";
+			img.style.marginTop = "40px";
+			img.style.marginBottom = "20px";
+			main_div.appendChild(img);
+			// Copy url
+			var btn = document.createElement("button");
+			btn.className = "btn-primary btn-lg";
+			btn.index = i;
+			btn.innerHTML = json_lang_translate[lang]["quiz_copy"];
+			btn.style.marginTop = "20px";
+			btn.addEventListener( 'click', function() {
+				var s = document.getElementById("quiz_image_"+this.index).src;
+				copyToClipboard(s);
+			});
+			main_div.appendChild(btn);
+			var br = document.createElement("br");
+			main_div.appendChild(br);
+			// Display explanations
+			var btn = document.createElement("button");
+			btn.className = "btn-primary btn-lg";
+			btn.innerHTML = json_lang_translate[lang]["quiz_explanations"];
+			btn.index = i;
+			btn.style.marginTop = "40px";
+			btn.style.width = "100%";
+			btn.addEventListener( 'click', function() {
+				var d = document.getElementById("quiz_explanation_"+this.index).className;
+				document.getElementById("quiz_explanation_"+this.index).className = ( d == "hidden" ? "" : "hidden" );
+			});
+			main_div.appendChild(btn);
+			// Explanations
+			var div = document.createElement("div");
+			div.id = "quiz_explanation_"+i;
+			div.innerHTML = json_lang_translate[lang]["quiz_item_answer_"+i];
+			div.style.textAlign = "justify";
+			div.style.padding = "15px";
+			div.style.backgroundColor= "#f8f8f8";
+			div.className = "hidden";
+			div.style.margin = "0";
+			main_div.appendChild(div);
+			var br = document.createElement("br");
+			main_div.appendChild(br);
+			quiz_items.appendChild(main_div);
+		}
+	}
+
+	var quiz_prev = document.createElement("div");
+	quiz_prev.id = "quiz_prev";
+	quiz_prev.style.visibility = "hidden";
+	quiz_prev.style.float = "left";
+	quiz_prev.style.padding = "";
+	quiz_prev.style.fontSize = "50px";
+	quiz_prev.innerHTML = '<div class="quiz-move-left"><img src="img/quiz/left.png" /></div>';
+	quiz_prev.addEventListener( 'click', function() {
+		quiz_toggle_items( "-1" );
+	});
+
+	var quiz_next = document.createElement("div");
+	quiz_next.id = "quiz_next";
+	quiz_next.style.float = "right";
+	quiz_next.style.padding = "";
+	quiz_next.style.fontSize = "50px";
+	quiz_next.innerHTML = '<div class="quiz-move-right"><img src="img/quiz/right.png" /></div>';
+	quiz_next.addEventListener( 'click', function() {
+		quiz_toggle_items( "1" );
+	});
+
+	var quiz_all = document.createElement("div");
+	quiz_all.id = "quiz_all";
+	quiz_all.style.overflow = "hidden";
+	quiz_all.appendChild(quiz_prev);
+	quiz_all.appendChild(quiz_items);
+	quiz_all.appendChild(quiz_next);
+	
+	quiz_tab.appendChild(quiz_all);
+}
+
+function copyToClipboard( text ) 
+{
+    if( window.clipboardData && window.clipboardData.setData ) {
+        // IE specific code path to prevent textarea being shown while dialog is visible.
+        return clipboardData.setData("Text", text); 
+    } else if( document.queryCommandSupported && document.queryCommandSupported("copy") ) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+        } catch (ex) {
+            console.warn("Copy to clipboard failed.", ex);
+            return false;
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    }
+}
+
+var quiz_current_index = 1;
+var quiz_max_index = 5;
+
+function quiz_toggle_items( index ) {
+	var idx = parseInt( index );
+	var lst = 0;
+	if( idx > 0 ) {
+		if( quiz_current_index + idx <= quiz_max_index ) {
+			for( var i = 1; i <= quiz_max_index; i++ ) {
+				if( document.getElementById("quiz_item_"+i) ) {
+					lst = i;
+					if( i == quiz_current_index + idx ) {
+						// document.getElementById("quiz_item_"+i).style.display = "";
+						document.getElementById("quiz_item_"+i).className = "";
+					} else {
+						// document.getElementById("quiz_item_"+i).style.display = "none";
+						document.getElementById("quiz_item_"+i).className = "hidden";
+					}
+				}
+			}
+			quiz_current_index+= idx;
+		}
+	}
+	if( idx < 0 ) {
+		if( quiz_current_index + idx >= 1 ) {
+			for( var i = 1; i <= quiz_max_index; i++ ) {
+				if( document.getElementById("quiz_item_"+i) ) {
+					lst = i;
+					if( i == quiz_current_index + idx ) {
+						// document.getElementById("quiz_item_"+i).style.display = "";
+						document.getElementById("quiz_item_"+i).className = "";
+					} else {
+						// document.getElementById("quiz_item_"+i).style.display = "none";
+						document.getElementById("quiz_item_"+i).className = "hidden";
+					}
+				}
+			}
+			quiz_current_index+= idx;
+		}
+	}
+
+	if( quiz_current_index == 1 ) document.getElementById("quiz_prev").style.visibility = "hidden";
+	else document.getElementById("quiz_prev").style.visibility = "visible";
+	if( quiz_current_index == lst ) document.getElementById("quiz_next").style.visibility = "hidden";
+	else document.getElementById("quiz_next").style.visibility = "visible";
 }
