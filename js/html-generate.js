@@ -703,7 +703,7 @@ function copyToClipboard( text )
 }
 
 var quiz_current_index = 1;
-var quiz_max_index = 5;
+var quiz_max_index = 9;
 
 function quiz_toggle_items( index ) {
 	var idx = parseInt( index );
