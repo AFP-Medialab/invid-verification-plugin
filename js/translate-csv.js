@@ -77,7 +77,7 @@ function translate_csv(path)
 			json_lang_translate = array_to_json( lang_array_csv );
 			updateLanguageText(global_language);
 			updateAllTranslations( global_language );
-		} else {
+		} else if( rawFile.readyState === 4 ) {
 			var localFile = new XMLHttpRequest();
 			localFile.onreadystatechange = function () {
 				if( localFile.readyState === 4 ) {
