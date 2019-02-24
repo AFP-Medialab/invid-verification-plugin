@@ -9,6 +9,9 @@ var production = false;
 var tmp = window.location.href.split("/");
 var page_name = tmp[3];
 
+// Number of quiz allowed in TSV file
+var config_quiz_max_items = 10;
+
 /**
 * Values of parameters depending of environment
 */
