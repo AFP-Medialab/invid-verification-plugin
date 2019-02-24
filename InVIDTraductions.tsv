@@ -490,10 +490,12 @@ other_tools_link_5
 other_tools_title_6			
 other_tools_image_6			
 other_tools_link_6			
-navbar_quiz	Quiz	Quiz	Quiz
+navbar_quiz	Quiz	Quiz	Prueba
 quiz_title	Real or fake ?	Real or fake ?	Real or fake ?
-quiz_copy	Copy URL to clipboard	Copier l'URL dans le presse-papier	Copiar URL
+quiz_copy	Copy URL	Copier l'URL	Copiar URL
 quiz_explanations	Explanations	Explications	Explicaciones
+quiz_unlock_explanations	Unlock quiz explanations	Déverrouiller les explications des quiz	Desbloquear las explicaciones de la prueba
+quiz_unlock_message	To display explanations, unlock them from About menu	Pour afficher les explications, débloquez les depuis le menu A propos	Para mostrar explicaciones, desbloquearlas desde el menú Acerca de
 quiz_item_url_1	http://reveal-mklab.iti.gr/forensics_demo/Catalonia.jpg	http://reveal-mklab.iti.gr/forensics_demo/Catalonia.jpg	http://reveal-mklab.iti.gr/forensics_demo/Catalonia.jpg
 quiz_item_title_1			
 quiz_item_answer_1	This picture was presented on Twitter as a Pulitzer photo during the Catalonian referendum of the 1st of October 2017. It aims to depict the conflict between Catalonian people against the Spanish Guardia Civil. The flag has been added to the picture afterwards. This fake picture was debunked by the Spanish press through similarity search. Several forensic filters also reveal the manipulation of that image. More info: <a target="_blank" href="https://elpais.com/elpais/2017/10/06/inenglish/1507278297_702753.html">https://elpais.com/elpais/2017/10/06/inenglish/1507278297_702753.html</a>	This picture was presented on Twitter as a Pulitzer photo during the Catalonian referendum of the 1st of October 2017. It aims to depict the conflict between Catalonian people against the Spanish Guardia Civil. The flag has been added to the picture afterwards. This fake picture was debunked by the Spanish press through similarity search. Several forensic filters also reveal the manipulation of that image. More info: <a target="_blank" href="https://elpais.com/elpais/2017/10/06/inenglish/1507278297_702753.html">https://elpais.com/elpais/2017/10/06/inenglish/1507278297_702753.html</a>	This picture was presented on Twitter as a Pulitzer photo during the Catalonian referendum of the 1st of October 2017. It aims to depict the conflict between Catalonian people against the Spanish Guardia Civil. The flag has been added to the picture afterwards. This fake picture was debunked by the Spanish press through similarity search. Several forensic filters also reveal the manipulation of that image. More info: <a target="_blank" href="https://elpais.com/elpais/2017/10/06/inenglish/1507278297_702753.html">https://elpais.com/elpais/2017/10/06/inenglish/1507278297_702753.html</a>
@@ -509,15 +511,18 @@ quiz_item_answer_4	The picture shows the Greek minister of Economy Euclides Tsak
 quiz_item_url_5	https://static.ladepeche.fr/content/media/image/zoom/2014/10/08/1656521-by7kfp5iaaar3cv.jpg	https://static.ladepeche.fr/content/media/image/zoom/2014/10/08/1656521-by7kfp5iaaar3cv.jpg	https://static.ladepeche.fr/content/media/image/zoom/2014/10/08/1656521-by7kfp5iaaar3cv.jpg
 quiz_item_title_5			
 quiz_item_answer_5	This picture circulated in France as a gathering of radical muslims women waiting in front of the French public body for family benefits. In fact, the picture was taken in London outside a police station probably in 2015. The logo on the upper right from the French public body for family benefits was added to the original picture which was cropped to avoid displaying a London bus sign and the police department name on the building. More info: <a target="_blank" href="https://observers.france24.com/en/20180824-verification-guide-cropped-photo-video">https://observers.france24.com/en/20180824-verification-guide-cropped-photo-video</a>	This picture circulated in France as a gathering of radical muslims women waiting in front of the French public body for family benefits. In fact, the picture was taken in London outside a police station probably in 2015. The logo on the upper right from the French public body for family benefits was added to the original picture which was cropped to avoid displaying a London bus sign and the police department name on the building. More info: <a target="_blank" href="https://observers.france24.com/en/20180824-verification-guide-cropped-photo-video">https://observers.france24.com/en/20180824-verification-guide-cropped-photo-video</a>	This picture circulated in France as a gathering of radical muslims women waiting in front of the French public body for family benefits. In fact, the picture was taken in London outside a police station probably in 2015. The logo on the upper right from the French public body for family benefits was added to the original picture which was cropped to avoid displaying a London bus sign and the police department name on the building. More info: <a target="_blank" href="https://observers.france24.com/en/20180824-verification-guide-cropped-photo-video">https://observers.france24.com/en/20180824-verification-guide-cropped-photo-video</a>
-quiz_item_url_6			
+quiz_item_url_6	https://www.youtube.com/embed/GPLl8Fje4os	https://www.youtube.com/embed/GPLl8Fje4os	https://www.youtube.com/embed/GPLl8Fje4os
 quiz_item_title_6			
-quiz_item_answer_6			
-quiz_item_url_7			
+quiz_item_answer_6	Test video 1	Test vidéo 1	Test video 1
+quiz_item_url_7	http://www.facebook.com/video/embed?video_id=10156284760923072	http://www.facebook.com/video/embed?video_id=10156284760923072	http://www.facebook.com/video/embed?video_id=10156284760923072
 quiz_item_title_7			
-quiz_item_answer_7			
-quiz_item_url_8			
+quiz_item_answer_7	Test video 2	Test vidéo 2	Test video 2
+quiz_item_url_8	https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
 quiz_item_title_8			
-quiz_item_answer_8			
-quiz_item_url_9			
+quiz_item_answer_8	Test video 3	Test vidéo 3	Test video 3
+quiz_item_url_9	https://www.youtube.com/embed/GPLl8Fje4os	https://www.youtube.com/embed/GPLl8Fje4os	https://www.youtube.com/embed/GPLl8Fje4os
 quiz_item_title_9			
-quiz_item_answer_9			
+quiz_item_answer_9	Test video 9	Test vidéo 9	Test video 9
+quiz_item_url_10	https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4	https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
+quiz_item_title_10			
+quiz_item_answer_10	Test video 10	Test vidéo 10	Test video 10
