@@ -330,21 +330,15 @@ function update_about(lang)
 	input.setAttribute("name", "human_rights");
 	input.setAttribute("id", "checkbox_rights");
 	// if cookie, check box
-	var arr = (document.cookie).split(';');
-	for( var cookie of arr ) {
-		var both = cookie.split('=');
-		if( both[0] == " rights" ) {
-			if (both[1] == "1") {
-				input.checked = true;
-				document.getElementById("panel").style.display = "";
-				document.getElementById("download-content").style.display = "";
-			} else {
-				document.getElementById("panel").style.display = "none";
-				document.getElementById("download-content").style.display = "none";
-			}
-		}
+	var chk = ( cookie_value( "rights" ) == "1" ? true : false );
+	if( chk ) {
+		input.checked = true;
+		document.getElementById("panel").style.display = "";
+		document.getElementById("download-content").style.display = "";
+	} else {
+		document.getElementById("panel").style.display = "none";
+		document.getElementById("download-content").style.display = "none";
 	}
-
 	input.addEventListener("change", function () {
 		if (this.checked) {
 			document.cookie = "rights=1;";
@@ -360,6 +354,39 @@ function update_about(lang)
 	var label = document.createElement("label");
 	label.setAttribute("for", "checkbox_rights");
 	label.innerHTML = "&nbsp;" + json_lang_translate[lang]["about_human_rights"];
+
+	about_tab.appendChild(input);
+	about_tab.appendChild(label);
+
+	about_tab.appendChild( document.createElement("br") );
+	about_tab.appendChild( document.createElement("br") );
+
+	var input = document.createElement("input");
+	input.setAttribute("type", "checkbox");
+	input.setAttribute("name", "unlock_explanations");
+	input.setAttribute("id", "checkbox_explain");
+	input.checked = ( cookie_value( "unlock" ) == "1" ? true : false );
+	input.addEventListener("change", function () {
+		if (this.checked) {
+			document.cookie = "unlock=1;";
+		} else {
+			document.cookie = "unlock=0;";
+			for( var i = 1; i <= config_quiz_max_items; i++ ) {
+				if( document.getElementById("quiz_explanation_"+i) ) {
+					document.getElementById("quiz_explanation_"+i).className = "hidden";
+				}
+			}
+		}
+		var btns = document.getElementById('quiz_all').getElementsByClassName('explanations');
+		for( var i = 0; i < btns.length; i++ ) {
+			btns[i].style.backgroundImage = ( this.checked ? "url(img/quiz/cadenas-on-bg.png)" : "url(img/quiz/cadenas-bg.png)" );
+			btns[i].style.backgroundRepeat = "no-repeat";
+		}
+	});
+
+	var label = document.createElement("label");
+	label.setAttribute("for", "checkbox_explain");
+	label.innerHTML = "&nbsp;" + json_lang_translate[lang]["quiz_unlock_explanations"];
 
 	about_tab.appendChild(input);
 	about_tab.appendChild(label);
@@ -579,8 +606,8 @@ function update_quiz(lang)
 	quiz_items.style.width = "70%";
 	quiz_items.style.textAlign = "center";
 	quiz_items.style.margin = "0 auto";
-	var max_quiz = 9, classname = "";
-	for( var i = 1; i <= max_quiz; i++ ) {
+	var classname = "";
+	for( var i = 1; i <= config_quiz_max_items; i++ ) {
 		if( json_lang_translate[lang]["quiz_item_url_"+i] != "" ) {
 			var main_div = document.createElement("div");
 			main_div.id = "quiz_item_"+i;
@@ -601,21 +628,57 @@ function update_quiz(lang)
 				main_div.appendChild(h2);
 			}
 			// Image
-			var img = document.createElement("img");
-			img.id = 'quiz_image_'+i;
-			img.src = json_lang_translate[lang]["quiz_item_url_"+i];
-			img.style.width = "100%";
-			img.style.marginTop = "40px";
-			img.style.marginBottom = "20px";
-			main_div.appendChild(img);
+			var src = json_lang_translate[lang]["quiz_item_url_"+i];
+			var tmp = src.split(".");
+			var ext = tmp[tmp.length-1];
+			if( ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "bmp" || ext == "gif" ) {
+				var img = document.createElement("img");
+				img.id = 'quiz_image_'+i;
+				img.src = src;
+				img.style.width = "100%";
+				img.style.marginTop = "40px";
+				img.style.marginBottom = "20px";
+				main_div.appendChild(img);
+			} else if( ext == "mp4" ) {
+				var vid = document.createElement("video");
+				img.id = 'quiz_video_'+i;
+				vid.width = "625";
+				vid.height = "450";
+				vid.controls = "controls";
+				vid.style.marginTop = "0";
+				vid.style.marginBottom = "20px";
+				var sou = document.createElement("source");
+				sou.src = src;
+				sou.type = "video/mp4";
+				vid.appendChild(sou);
+				main_div.appendChild(vid);
+			} else {
+				var frm = document.createElement("iframe");
+				frm.id = 'quiz_iframe_'+i; 
+				frm.src = src;
+				frm.border = "0";
+				frm.width = "625";
+				frm.height = "450";
+				frm.style.marginTop = "40px";
+				frm.style.marginBottom = "20px";
+				main_div.appendChild(frm); 
+			}
 			// Copy url
 			var btn = document.createElement("button");
 			btn.className = "btn-primary btn-lg";
 			btn.index = i;
 			btn.innerHTML = json_lang_translate[lang]["quiz_copy"];
 			btn.style.marginTop = "20px";
+			btn.style.backgroundImage = "none";
 			btn.addEventListener( 'click', function() {
-				var s = document.getElementById("quiz_image_"+this.index).src;
+				if( document.getElementById("quiz_image_"+this.index) ) {
+					var s = document.getElementById("quiz_image_"+this.index).src;
+				} else if( document.getElementById("quiz_iframe_"+this.index) ) { 
+					var s = document.getElementById("quiz_iframe_"+this.index).src;
+				} else if( document.getElementById("quiz_video_"+this.index) ) { 
+					var s = document.getElementsByTagName("source");
+					s = s[0].src;
+				}
 				copyToClipboard(s);
 			});
 			main_div.appendChild(btn);
@@ -623,15 +686,30 @@ function update_quiz(lang)
 			main_div.appendChild(br);
 			// Display explanations
 			var btn = document.createElement("button");
-			btn.className = "btn-primary btn-lg";
+			btn.className = "btn-primary btn-lg explanations";
 			btn.innerHTML = json_lang_translate[lang]["quiz_explanations"];
 			btn.index = i;
 			btn.style.marginTop = "40px";
 			btn.style.width = "100%";
 			btn.addEventListener( 'click', function() {
 				var d = document.getElementById("quiz_explanation_"+this.index).className;
-				document.getElementById("quiz_explanation_"+this.index).className = ( d == "hidden" ? "" : "hidden" );
+				var locked = ( cookie_value( "unlock" ) == "1" ? false : true );
+				if( locked ) {
+					alert( json_lang_translate[lang]["quiz_unlock_message"] );
+					document.getElementById("quiz_explanation_"+this.index).className = "hidden";
+				} else {
+					document.getElementById("quiz_explanation_"+this.index).className = ( d == "hidden" ? "" : "hidden" );
+				}
 			});
+			if( cookie_value( "unlock" ) == "1" ) {
+				btn.style.backgroundImage = "url(img/quiz/cadenas-on-bg.png)";
+				btn.style.backgroundRepeat = "no-repeat";
+				btn.style.backgroundPosition = "98% 50%";
+			} else {
+				btn.style.backgroundImage = "url(img/quiz/cadenas-bg.png)";
+				btn.style.backgroundRepeat = "no-repeat";
+				btn.style.backgroundPosition = "98% 50%";
+			}
 			main_div.appendChild(btn);
 			// Explanations
 			var div = document.createElement("div");
@@ -703,14 +781,13 @@ function copyToClipboard( text )
 }
 
 var quiz_current_index = 1;
-var quiz_max_index = 9;
 
 function quiz_toggle_items( index ) {
 	var idx = parseInt( index );
 	var lst = 0;
 	if( idx > 0 ) {
-		if( quiz_current_index + idx <= quiz_max_index ) {
-			for( var i = 1; i <= quiz_max_index; i++ ) {
+		if( quiz_current_index + idx <= config_quiz_max_items ) {
+			for( var i = 1; i <= config_quiz_max_items; i++ ) {
 				if( document.getElementById("quiz_item_"+i) ) {
 					lst = i;
 					if( i == quiz_current_index + idx ) {
@@ -727,7 +804,7 @@ function quiz_toggle_items( index ) {
 	}
 	if( idx < 0 ) {
 		if( quiz_current_index + idx >= 1 ) {
-			for( var i = 1; i <= quiz_max_index; i++ ) {
+			for( var i = 1; i <= config_quiz_max_items; i++ ) {
 				if( document.getElementById("quiz_item_"+i) ) {
 					lst = i;
 					if( i == quiz_current_index + idx ) {
@@ -747,4 +824,16 @@ function quiz_toggle_items( index ) {
 	else document.getElementById("quiz_prev").style.visibility = "visible";
 	if( quiz_current_index == lst ) document.getElementById("quiz_next").style.visibility = "hidden";
 	else document.getElementById("quiz_next").style.visibility = "visible";
+}
+
+function cookie_value( code )
+{
+	var arr = (document.cookie).split(';');
+	for( var cookie of arr ) {
+		var both = cookie.split('=');
+		if( both[0] == " "+code ) {
+			return both[1];
+		}
+	}
+	return false;
 }
