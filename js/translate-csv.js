@@ -69,31 +69,48 @@ function csv_to_array(csv)
 */
 function translate_csv(path) 
 {
-	var rawFile = new XMLHttpRequest();
-	rawFile.onreadystatechange = function () {
-		if( rawFile.readyState === 4 && ( rawFile.status === 200 || rawFile.status == 0 ) ) {
-			var allText = rawFile.responseText;
-			lang_array_csv = csv_to_array(allText);
-			json_lang_translate = array_to_json( lang_array_csv );
-			updateLanguageText(global_language);
-			updateAllTranslations( global_language );
-		} else if( /* true || */ rawFile.readyState === 4 ) {
-			var localFile = new XMLHttpRequest();
-			localFile.onreadystatechange = function () {
-				if( localFile.readyState === 4 ) {
-					if( localFile.status === 200 || localFile.status == 0 ) {
-						var allText = localFile.responseText;
-						lang_array_csv = csv_to_array( allText );
-						json_lang_translate = array_to_json( lang_array_csv );
-						updateLanguageText(global_language);
-						updateAllTranslations( global_language );
+	if( navigator.onLine ) {
+		var rawFile = new XMLHttpRequest();
+		rawFile.onreadystatechange = function () {
+			if( rawFile.readyState === 4 && ( rawFile.status === 200 || rawFile.status == 0 ) ) {
+				var allText = rawFile.responseText;
+				lang_array_csv = csv_to_array(allText);
+				json_lang_translate = array_to_json( lang_array_csv );
+				updateLanguageText(global_language);
+				updateAllTranslations( global_language );
+			} else if( /* true || */ rawFile.readyState === 4 ) {
+				var localFile = new XMLHttpRequest();
+				localFile.onreadystatechange = function () {
+					if( localFile.readyState === 4 ) {
+						if( localFile.status === 200 || localFile.status == 0 ) {
+							var allText = localFile.responseText;
+							lang_array_csv = csv_to_array( allText );
+							json_lang_translate = array_to_json( lang_array_csv );
+							updateLanguageText(global_language);
+							updateAllTranslations( global_language );
+						}
 					}
 				}
+				localFile.open( "GET", "InVIDTraductions.tsv", true );
+				localFile.send( null );
 			}
-			localFile.open( "GET", "InVIDTraductions.tsv", true );
-			localFile.send( null );
 		}
+		rawFile.open( "GET", path, true );
+		rawFile.send( null );
+	} else {
+		var localFile = new XMLHttpRequest();
+		localFile.onreadystatechange = function () {
+			if( localFile.readyState === 4 ) {
+				if( localFile.status === 200 || localFile.status == 0 ) {
+					var allText = localFile.responseText;
+					lang_array_csv = csv_to_array( allText );
+					json_lang_translate = array_to_json( lang_array_csv );
+					updateLanguageText(global_language);
+					updateAllTranslations( global_language );
+				}
+			}
+		}
+		localFile.open( "GET", "InVIDTraductions.tsv", true );
+		localFile.send( null );
 	}
-	rawFile.open( "GET", path, true );
-	rawFile.send( null );
 }
