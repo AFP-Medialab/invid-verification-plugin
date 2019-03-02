@@ -349,10 +349,12 @@ function calculateIFrameHeightRatio( iframe )
 	var l = "", r = "", w = 0, h = 0;
 	// Retrieve width
 	l = iframe.split('width="');
+	if( l.length == 1 ) return 80;
 	r = l[1].split('"');
 	w = r[0];
 	// Retrieve height
 	l = iframe.split('height="');
+	if( l.length == 1 ) return 80;
 	r = l[1].split('"');
 	h = r[0];
 	// Calculate ratio
