@@ -367,10 +367,13 @@ function update_about(lang)
 	input.setAttribute("id", "checkbox_explain");
 	input.checked = ( cookie_value( "unlock" ) == "1" ? true : false );
 	input.addEventListener("change", function () {
+		var date = new Date();
+        	date.setTime( date.getTime() + ( 3*365*24*60*60*1000 ) );
+        	var expires = "expires="+date.toGMTString();
 		if (this.checked) {
-			document.cookie = "unlock=1;";
+			document.cookie = "unlock=1; " + "path=/ ; " + expires;
 		} else {
-			document.cookie = "unlock=0;";
+			document.cookie = "unlock=0; " + "path=/; " + expires;
 			for( var i = 1; i <= config_quiz_max_items; i++ ) {
 				if( document.getElementById("quiz_explanation_"+i) ) {
 					document.getElementById("quiz_explanation_"+i).className = "hidden";
