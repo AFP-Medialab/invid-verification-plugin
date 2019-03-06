@@ -177,7 +177,7 @@ function checkParam()
 			$('#forensic').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
 			$("#forensic_menu_tab").addClass( ACTIVE_CLASS );
 			item = $("#forensic_menu_tab");
-			callForensic( url.split("?imgforen=")[1] );
+			callForensic( decodeURIComponent( url.split("?imgforen=")[1] ) );
 		} 
 		else if( url.includes("?imgkey=") ) 
 		{
