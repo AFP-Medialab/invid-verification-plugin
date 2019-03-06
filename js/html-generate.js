@@ -672,7 +672,7 @@ function update_quiz(lang)
 				frm.style.marginBottom = "20px";
 				main_div.appendChild(frm); 
 			}
-			if( typ == "video" ||  typ == "image" ) {
+			if( ( typ == "video" ||  typ == "image" ) && json_lang_translate[lang]["quiz_copy"] != "" ) {
 				// Copy url
 				var btn = document.createElement("button");
 				btn.className = "btn-primary btn-lg";
