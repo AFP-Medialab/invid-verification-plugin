@@ -642,7 +642,7 @@ function update_quiz(lang)
 				img.id = 'quiz_image_'+i;
 				img.src = src;
 				// img.style.width = "100%";
-				img.style.height = "500px";
+				img.style.maxHeight = "500px";
 				img.style.maxWidth = "100%";
 				/* img.style.maxWidth = "100%";
 				img.style.maxHeight = "500px"; */
