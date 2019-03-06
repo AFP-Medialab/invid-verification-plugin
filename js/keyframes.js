@@ -322,3 +322,11 @@ but_back.onclick = function() {
 	document.getElementById("keyframes_iframe").style.display = "none";
 	document.getElementById("keyframes_base").style.display = "";
 }
+
+/**
+* @func used when we want to call keyframes from url
+*/
+function callKeyframes(url) 
+{
+	document.getElementById("keyframes_input").value = url;
+}
