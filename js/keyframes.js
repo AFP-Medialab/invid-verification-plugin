@@ -138,91 +138,101 @@ function display_result(data, video_id)
 	var row = document.createElement("div");
 	row.setAttribute("class", "row");
 
-  for (sc in data.subshots) {
-    var column = document.createElement("div");
-    column.setAttribute("class", "column");
-    var a = document.createElement("a");
-    a.class = "mouse-preview";
-    var img = document.createElement("img");
-    img.src = data.subshots[sc].keyframes[1].url + "?dl=0";
-    img.style = "width: 100%; height: auto; cursor: pointer;";
-    img.onclick = function () {
-      reverseImgSearch('google', this.src);
-    };
-
-    a.appendChild(img);
-    column.appendChild(a);
-    row.appendChild(column);
-    key_cont.appendChild(row);
-  }
-
-  //load and put every shots under accordion
-  var row2 = document.createElement("div");
-  row2.setAttribute("class", "row");
-
-  for (sc in data.subshots) {
-    for (kf in data.subshots[sc].keyframes) {
-      if (kf != 1) {
-        var column2 = document.createElement("div");
-        column2.setAttribute("class", "column");
-        var a = document.createElement("a");
-        a.class = "mouse-preview";
-        var img = document.createElement("img");
-        img.src = data.subshots[sc].keyframes[kf].url + "?dl=0";
-        img.style = "width: 100%; height: auto; cursor: pointer;"
-        img.onclick = function () {
-          reverseImgSearch('google', this.src);
-        };
-
-        a.appendChild(img);
-        column2.appendChild(a);
-        row2.appendChild(column2);
-        panel_shot.appendChild(row2);
-      }
-    }
-  }
-
-/*
-	for( sc in data.scenes ) {
-		for( kf in data.scenes[sc].keyframes ) {
+	if( data.subshots && data.subshots.length > 0 ) 
+	{
+		for (sc in data.subshots) {
 			var column = document.createElement("div");
 			column.setAttribute("class", "column");
 			var a = document.createElement("a");
-			a.href = "#magnifier";
+			// a.href = "#magnifier";
 			a.class = "mouse-preview";
 			var img = document.createElement("img");
-			img.src = data.scenes[sc].keyframes[kf].url + "?dl=0";
+			img.src = data.subshots[sc].keyframes[1].url + "?dl=0";
 			img.style = "width: 100%; height: auto;";
+			/* img.onclick = function () {
+				window.location.href = "/"+page_name+"?img="+this.src;
+				// reverseImgSearch('google', this.src);
+			}; */
 			a.appendChild(img);
 			column.appendChild(a);
 			row.appendChild(column);
+			key_cont.appendChild(row);
 		}
-		key_cont.appendChild(row);
+		//load and put every shots under accordion
+		var row2 = document.createElement("div");
+		row2.setAttribute("class", "row");
+		for( sc in data.subshots ) {
+			for (kf in data.subshots[sc].keyframes) {
+				if (kf != 1) {
+					var column2 = document.createElement("div");
+					column2.setAttribute("class", "column");
+					var a = document.createElement("a");
+					// a.href = "#magnifier";
+					a.class = "mouse-preview";
+					var img = document.createElement("img");
+					img.src = data.subshots[sc].keyframes[kf].url + "?dl=0";
+					img.style = "width: 100%; height: auto;"
+					/* img.onclick = function () {
+						window.location.href = "/"+page_name+"?img="+this.src;
+						// reverseImgSearch('google', this.src);
+					}; */
+					a.appendChild(img);
+					column2.appendChild(a);
+					row2.appendChild(column2);
+					panel_shot.appendChild(row2);
+				}
+			}
+		}
 	}
 
-	// load and put every shots under accordion
-	var row2 = document.createElement("div");
-	row2.setAttribute("class", "row");
-
-	for( sc in data.scenes ) {
-		for( sh in data.scenes[sc].shots ) {
-			for( kf in data.scenes[sc].shots[sh].keyframes ) {
-				var column2 = document.createElement("div");
-				column2.setAttribute("class", "column");
+	if( data.scenes && data.scenes.length > 0 ) 
+	{
+		for( sc in data.scenes ) {
+			for( kf in data.scenes[sc].keyframes ) {
+				var column = document.createElement("div");
+				column.setAttribute("class", "column");
 				var a = document.createElement("a");
-				a.href = "#magnifier";
+				// a.href = "#magnifier";
 				a.class = "mouse-preview";
 				var img = document.createElement("img");
-				img.src = data.scenes[sc].shots[sh].keyframes[kf].url;
+				img.src = data.scenes[sc].keyframes[kf].url + "?dl=0";
 				img.style = "width: 100%; height: auto;"
+				/* img.onclick = function () {
+					window.location.href = "/"+page_name+"?img="+this.src;
+					// reverseImgSearch('google', this.src);
+				}; */
 				a.appendChild(img);
-				column2.appendChild(a);
-				row2.appendChild(column2);
+				column.appendChild(a);
+				row.appendChild(column);
 			}
-			panel_shot.appendChild(row2);
+			key_cont.appendChild(row);
+		}
+		// load and put every shots under accordion
+		var row2 = document.createElement("div");
+		row2.setAttribute("class", "row");
+		for( sc in data.scenes ) {
+			for( sh in data.scenes[sc].shots ) {
+				for( kf in data.scenes[sc].shots[sh].keyframes ) {
+					var column2 = document.createElement("div");
+					column2.setAttribute("class", "column");
+					var a = document.createElement("a");
+					// a.href = "#magnifier";
+					a.class = "mouse-preview";
+					var img = document.createElement("img");
+					img.src = data.scenes[sc].shots[sh].keyframes[kf].url;
+					img.style = "width: 100%; height: auto;"
+					/* img.onclick = function () {
+						window.location.href = "/"+page_name+"?img="+this.src;
+						// reverseImgSearch('google', this.src);
+					}; */
+					a.appendChild(img);
+					column2.appendChild(a);
+					row2.appendChild(column2);
+				}
+				panel_shot.appendChild(row2);
+			}
 		}
 	}
-*/
 
 	// call to @api.js function (l.140)
 	// activeThumbnail("keyframes-place");
@@ -233,7 +243,6 @@ function display_result(data, video_id)
 	var shots = document.getElementById("subshots-download");
 	shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
 }
-
 
 /**
 * @func send post and get request to keyframes server to process a video
