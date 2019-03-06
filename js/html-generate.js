@@ -726,8 +726,9 @@ function update_quiz(lang)
 				btn.addEventListener( 'click', function() {
 					for( i = 1; i <= config_quiz_max_items; i++ ) {
 						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
-							var image_url = "/we-verify.html?imgforen=";
-							image_url+= $("#quiz_image_"+i).attr("src");
+							/* callForensic( $("#quiz_image_"+i).attr("src") ); */
+							var image_url = "/"+page_name+"?imgforen=";
+							image_url+= encodeURIComponent( $("#quiz_image_"+i).attr("src") );
 							window.location.href = image_url;
 							break;
 						}
@@ -747,8 +748,9 @@ function update_quiz(lang)
 				btn.addEventListener( 'click', function() {
 					for( i = 1; i <= config_quiz_max_items; i++ ) {
 						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
-							var video_url = "/we-verify.html?imgkey=";
 							var youtube_url = $("#quiz_iframe_"+i).attr("src");
+							/* callKeyframes( youtube_url.replace( '/embed/', '/watch?v=' ) ); */
+							var video_url = "/"+page_name+"?imgkey=";
 							video_url+= youtube_url.replace( '/embed/', '/watch?v=' );
 							window.location.href = video_url;
 							break;
