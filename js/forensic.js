@@ -392,6 +392,7 @@ function updateTableLanguageForensic(lang)
 function callForensic(url) 
 {
 	document.getElementById("forensic_input").value = url;
+	document.getElementById("forensic_submit").click();	
 }
 
 /**
