@@ -161,7 +161,7 @@ function checkParam()
 {
 	var url = String( document.URL );
 	var item = "";
-	if( url.includes("?img=") || url.includes("?video=") || url.includes("?imgforen=") )
+	if( url.includes("?img=") || url.includes("?video=") || url.includes("?imgforen=") || url.includes("?imgkey=") )
 	{
 		$('.active').removeClass( ACTIVE_CLASS );
 		$('.show').removeClass( SHOW_CLASS ).addClass( HIDE_CLASS ).hide();
@@ -177,7 +177,14 @@ function checkParam()
 			$('#forensic').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
 			$("#forensic_menu_tab").addClass( ACTIVE_CLASS );
 			item = $("#forensic_menu_tab");
-			callForensic (url.split("?imgforen=")[1] );
+			callForensic( url.split("?imgforen=")[1] );
+		} 
+		else if( url.includes("?imgkey=") ) 
+		{
+			$('#keyframes').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
+			$("#keyframes_menu_tab").addClass( ACTIVE_CLASS );
+			item = $("#keyframes_menu_tab");
+			callKeyframes( url.split("?imgkey=")[1] );
 		} 
 		else 
 		{
