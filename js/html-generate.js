@@ -641,11 +641,8 @@ function update_quiz(lang)
 				var img = document.createElement("img");
 				img.id = 'quiz_image_'+i;
 				img.src = src;
-				// img.style.width = "100%";
 				img.style.maxHeight = "500px";
 				img.style.maxWidth = "100%";
-				/* img.style.maxWidth = "100%";
-				img.style.maxHeight = "500px"; */
 				img.style.margin = "40px auto 20px auto";
 				img.style.display = "block";
 				main_div.appendChild(img);
@@ -708,7 +705,14 @@ function update_quiz(lang)
 				btn.style.marginRight = "30px";
 				btn.style.backgroundImage = "none";
 				btn.addEventListener( 'click', function() {
-					alert("Similarity search");
+					for( i = 1; i <= config_quiz_max_items; i++ ) {
+						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
+							var image_url = "https://www.google.com/searchbyimage?image_url=";
+							image_url+= $("#quiz_image_"+i).attr("src");
+							openTab( image_url );
+							break;
+						}
+					}
 				});
 				main_div.appendChild(btn);
 				// Forensic search
@@ -720,7 +724,36 @@ function update_quiz(lang)
 				btn.style.marginTop = "20px";
 				btn.style.backgroundImage = "none";
 				btn.addEventListener( 'click', function() {
-					alert("Forensic search");
+					for( i = 1; i <= config_quiz_max_items; i++ ) {
+						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
+							var image_url = "/we-verify.html?imgforen=";
+							image_url+= $("#quiz_image_"+i).attr("src");
+							window.location.href = image_url;
+							break;
+						}
+					}
+				});
+				main_div.appendChild(btn);
+			}
+			if( typ == "video" ) {
+				// Forensic search
+				var btn = document.createElement("button");
+				btn.id = "keyframe_button";
+				btn.className = "btn-primary btn-lg";
+				btn.index = i;
+				btn.innerHTML = json_lang_translate[lang]["quiz_keyframes"];
+				btn.style.marginTop = "20px";
+				btn.style.backgroundImage = "none";
+				btn.addEventListener( 'click', function() {
+					for( i = 1; i <= config_quiz_max_items; i++ ) {
+						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
+							var video_url = "/we-verify.html?imgkey=";
+							var youtube_url = $("#quiz_iframe_"+i).attr("src");
+							video_url+= youtube_url.replace( '/embed/', '/watch?v=' );
+							window.location.href = video_url;
+							break;
+						}
+					}
 				});
 				main_div.appendChild(btn);
 			}
