@@ -329,4 +329,5 @@ but_back.onclick = function() {
 function callKeyframes(url) 
 {
 	document.getElementById("keyframes_input").value = url;
+	document.getElementById("keyframe_submit").click();
 }
