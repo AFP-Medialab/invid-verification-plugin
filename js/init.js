@@ -112,17 +112,14 @@ $(document).ready( function() {
 		$("#help_modal_iframe").prop("src", "");
 	});
 
-
 	// Accordion of classroom lessons
 	$(".resources-title").on( "click", function() {
 		$(".resources-content").hide();
 		$(this).next().fadeIn(500);
 	});
 
-
 	// Manages params received in url for right button menu accesses
 	checkParam();
-
 
 	// Correct jquery error 'msie undefined'
 	jQuery.browser = { msie: false, version: 0 };
@@ -130,4 +127,5 @@ $(document).ready( function() {
 		jQuery.browser.msie = true;
 		jQuery.browser.version = RegExp.$1;
 	}
+
 });
