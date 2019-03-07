@@ -184,7 +184,7 @@ function checkParam()
 			$('#keyframes').removeClass( HIDE_CLASS ).addClass( SHOW_CLASS ).hide().fadeIn( 550 );
 			$("#keyframes_menu_tab").addClass( ACTIVE_CLASS );
 			item = $("#keyframes_menu_tab");
-			callKeyframes( url.split("?imgkey=")[1] );
+			callKeyframes( decodeURIComponent( url.split("?imgkey=")[1] ) );
 		} 
 		else 
 		{
