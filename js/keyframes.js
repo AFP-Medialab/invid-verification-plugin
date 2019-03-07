@@ -148,11 +148,11 @@ function display_result(data, video_id)
 			a.class = "mouse-preview";
 			var img = document.createElement("img");
 			img.src = data.subshots[sc].keyframes[1].url + "?dl=0";
-			img.style = "width: 100%; height: auto;";
-			/* img.onclick = function () {
-				window.location.href = "/"+page_name+"?img="+this.src;
-				// reverseImgSearch('google', this.src);
-			}; */
+			img.style = "width: 100%; height: auto; cursor:pointer; ";
+			img.onclick = function () {
+				// window.location.href = "/"+page_name+"?img="+this.src;
+				reverseImgSearch('google', this.src);
+			};
 			a.appendChild(img);
 			column.appendChild(a);
 			row.appendChild(column);
@@ -171,11 +171,11 @@ function display_result(data, video_id)
 					a.class = "mouse-preview";
 					var img = document.createElement("img");
 					img.src = data.subshots[sc].keyframes[kf].url + "?dl=0";
-					img.style = "width: 100%; height: auto;"
-					/* img.onclick = function () {
-						window.location.href = "/"+page_name+"?img="+this.src;
-						// reverseImgSearch('google', this.src);
-					}; */
+					img.style = "width: 100%; height: auto; cursor:pointer; ";
+					img.onclick = function () {
+						// window.location.href = "/"+page_name+"?img="+this.src;
+						reverseImgSearch('google', this.src);
+					};
 					a.appendChild(img);
 					column2.appendChild(a);
 					row2.appendChild(column2);
@@ -196,11 +196,11 @@ function display_result(data, video_id)
 				a.class = "mouse-preview";
 				var img = document.createElement("img");
 				img.src = data.scenes[sc].keyframes[kf].url + "?dl=0";
-				img.style = "width: 100%; height: auto;"
-				/* img.onclick = function () {
-					window.location.href = "/"+page_name+"?img="+this.src;
-					// reverseImgSearch('google', this.src);
-				}; */
+				img.style = "width: 100%; height: auto; cursor:pointer; ";
+				img.onclick = function () {
+					// window.location.href = "/"+page_name+"?img="+this.src;
+					reverseImgSearch('google', this.src);
+				};
 				a.appendChild(img);
 				column.appendChild(a);
 				row.appendChild(column);
@@ -220,11 +220,11 @@ function display_result(data, video_id)
 					a.class = "mouse-preview";
 					var img = document.createElement("img");
 					img.src = data.scenes[sc].shots[sh].keyframes[kf].url;
-					img.style = "width: 100%; height: auto;"
-					/* img.onclick = function () {
-						window.location.href = "/"+page_name+"?img="+this.src;
-						// reverseImgSearch('google', this.src);
-					}; */
+					img.style = "width: 100%; height: auto; cursor:pointer; ";
+					img.onclick = function () {
+						// window.location.href = "/"+page_name+"?img="+this.src;
+						reverseImgSearch('google', this.src);
+					};
 					a.appendChild(img);
 					column2.appendChild(a);
 					row2.appendChild(column2);
