@@ -673,7 +673,7 @@ function update_quiz(lang)
 				main_div.appendChild(frm); 
 			}
 			if( ( typ == "video" ||  typ == "image" ) && json_lang_translate[lang]["quiz_copy"] != "" ) {
-				// Copy url
+				// COPY URL
 				var btn = document.createElement("button");
 				btn.className = "btn-primary btn-lg";
 				btn.index = i;
@@ -686,6 +686,7 @@ function update_quiz(lang)
 						var s = document.getElementById("quiz_image_"+this.index).src;
 					} else if( document.getElementById("quiz_iframe_"+this.index) ) { 
 						var s = document.getElementById("quiz_iframe_"+this.index).src;
+						s = s.replace( '/embed/', '/watch?v=' );
 					} else if( document.getElementById("quiz_video_"+this.index) ) { 
 						var s = document.getElementsByTagName("source");
 						s = s[0].src;
@@ -695,7 +696,7 @@ function update_quiz(lang)
 				main_div.appendChild(btn);
 			} 
 			if( typ == "image" ) {
-				// Similarity search
+				// SIMILARITY search
 				var btn = document.createElement("button");
 				btn.id = "similarity_button";
 				btn.className = "btn-primary btn-lg";
@@ -715,7 +716,7 @@ function update_quiz(lang)
 					}
 				});
 				main_div.appendChild(btn);
-				// Forensic search
+				// FORENSIC search
 				var btn = document.createElement("button");
 				btn.id = "forensic_button";
 				btn.className = "btn-primary btn-lg";
@@ -726,7 +727,6 @@ function update_quiz(lang)
 				btn.addEventListener( 'click', function() {
 					for( i = 1; i <= config_quiz_max_items; i++ ) {
 						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
-							/* callForensic( $("#quiz_image_"+i).attr("src") ); */
 							var image_url = "/"+page_name+"?imgforen=";
 							image_url+= encodeURIComponent( $("#quiz_image_"+i).attr("src") );
 							window.location.href = image_url;
@@ -737,7 +737,7 @@ function update_quiz(lang)
 				main_div.appendChild(btn);
 			}
 			if( typ == "video" ) {
-				// Forensic search
+				// KEYFRAMES search
 				var btn = document.createElement("button");
 				btn.id = "keyframe_button";
 				btn.className = "btn-primary btn-lg";
@@ -749,9 +749,8 @@ function update_quiz(lang)
 					for( i = 1; i <= config_quiz_max_items; i++ ) {
 						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
 							var youtube_url = $("#quiz_iframe_"+i).attr("src");
-							/* callKeyframes( youtube_url.replace( '/embed/', '/watch?v=' ) ); */
 							var video_url = "/"+page_name+"?imgkey=";
-							video_url+= youtube_url.replace( '/embed/', '/watch?v=' );
+							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=' ) );
 							window.location.href = video_url;
 							break;
 						}
