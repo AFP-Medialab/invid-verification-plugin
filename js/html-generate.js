@@ -267,7 +267,7 @@ function update_about(lang)
 	about_tab.appendChild(h);
 
 	var sp = document.createElement("span");
-	sp.innerHTML = json_lang_translate[lang]["about_lang"];
+	sp.innerHTML = json_lang_translate[lang]["about_lang"]+"&nbsp;";
 	about_tab.appendChild(sp);
 
 	var sel = document.createElement("select");
