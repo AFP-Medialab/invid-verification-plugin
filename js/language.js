@@ -3,7 +3,9 @@
 */
 
 // Determinate current language (en, fr) and init interface texts
-var global_language = "en";
+var defaultLang = navigator.language || navigator.userLanguage;
+if( defaultLang == "" || ( defaultLang != "fr" && defaultLang != "en" && defaultLang != "es" ) ) defaultLang = "en";
+var global_language = defaultLang;
 var cookieLang = getCookieLang();
 if( cookieLang != "" ) global_language = cookieLang;
 
@@ -79,4 +81,18 @@ function getCookieLang()
 		if( name == "language" ) return cookieElt[1];
 	}
 	return "";
+}
+
+/*
+* @func Set current top right language
+*/
+function select_current_language( language ) 
+{
+	$(".languages-list a").each( function() {
+		if( $(this).attr("data-lang") == language ) {
+			$(this).addClass("on");
+		} else {
+			$(this).removeClass("on");
+		}
+	});
 }
