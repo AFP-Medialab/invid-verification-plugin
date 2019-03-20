@@ -1,7 +1,7 @@
 (function () {
 
-	var page_name = "invid.html";
-	// var page_name = "we-verify.html";
+	// var page_name = "invid.html";
+	var page_name = "we-verify.html";
 
 	window.extractors = window.extractors || [];
 	/* Creation of a new extractor */
