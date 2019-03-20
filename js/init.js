@@ -3,6 +3,10 @@ var SHOW_CLASS = 'show';
 var HIDE_CLASS = 'hide';
 var ACTIVE_CLASS = 'active';
 
+// Facebook access token
+// To do => init with the cookie if available
+var fb_access_token = "";
+
 /**
 * Javascript runned when all is ready
 */
@@ -12,12 +16,13 @@ $(document).ready( function() {
 	translate_csv( url_csv );
 
 	// Add callback on InVID Logo
-	$("#invid-logo").on( "click", function() {
-		window.open("invid.html",'_self',false);
+	$("#invid-logo img").on( "click", function() {
+		// window.open("invid.html",'_self',false);
+		window.open("we-verify.html",'_self',false);
 	});
 
 	// Add callback on We Verify Logo
-	$("#we-verify-logo").on( "click", function() {
+	$("#we-verify-logo img").on( "click", function() {
 		window.open("we-verify.html",'_self',false);
 	});
 
@@ -128,4 +133,13 @@ $(document).ready( function() {
 		jQuery.browser.version = RegExp.$1;
 	}
 
+	// Facebook connect callback to retrieve token
+	window.addEventListener( 'message', function(e) {
+		fb_access_token = e.data[1];
+//		alert(fb_access_token);
+		$('iframe').hide();
+	}, false);
+
+	// Select current language
+	select_current_language( global_language );
 });
