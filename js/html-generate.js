@@ -268,10 +268,11 @@ function update_about(lang)
 
 	var sp = document.createElement("span");
 	sp.innerHTML = json_lang_translate[lang]["about_lang"]+"&nbsp;";
-	about_tab.appendChild(sp);
+	// about_tab.appendChild(sp);
 
 	var sel = document.createElement("select");
 	sel.name = "language";
+	sel.style.display = "none";
 	var keys = Object.keys(json_lang_translate);
 	for (var i = 0; i < keys.length; ++i) {
 		var new_opt = document.createElement("option");
@@ -285,7 +286,7 @@ function update_about(lang)
 	about_tab.appendChild(sel);
 
 	var br = document.createElement("hr");
-	about_tab.appendChild(br);
+	// about_tab.appendChild(br);
 
 	// set the on function for selector to update language
 	$("[name='language']").on("change", function(event) {
@@ -294,7 +295,17 @@ function update_about(lang)
 			updateLanguageText(language);
 			updateAllTranslations( language );
 			setCookieLang(language);
+			select_current_language( language );
 		}
+	});
+	$(".languages-list a").on("click", function(event) {
+		var language = $(this).attr("data-lang");
+		if( language != global_language ) {
+			updateLanguageText(language);
+			updateAllTranslations( language );
+			setCookieLang(language);
+		}
+		select_current_language( language );
 	});
 
 	for (var i = 0; i < arr_trans.length; ++i) {
