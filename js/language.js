@@ -52,6 +52,7 @@ function updateAllTranslations( language )
 	updateTableLanguageAnalysis(language);
 	updateTableLanguageMetadata(language);
 	updateTableLanguageForensic(language);
+	updateHomeTutorial(language);
 }
 
 /**
