@@ -142,4 +142,7 @@ $(document).ready( function() {
 
 	// Select current language
 	select_current_language( global_language );
+
+	// Display home tutorial popup
+	displayHomeTutorialPopup();
 });
