@@ -361,3 +361,57 @@ function calculateIFrameHeightRatio( iframe )
 	if( w == 0 ) return 0;
 	return 100 * h / w;
 }
+
+/**
+* @func Copy a text into the clipboard
+*/
+function copyToClipboard( text ) 
+{
+    if( window.clipboardData && window.clipboardData.setData ) {
+        // IE specific code path to prevent textarea being shown while dialog is visible.
+        return clipboardData.setData("Text", text); 
+    } else if( document.queryCommandSupported && document.queryCommandSupported("copy") ) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+        } catch (ex) {
+            console.warn("Copy to clipboard failed.", ex);
+            return false;
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    }
+}
+
+/**
+* @func Return the value of a cookie
+*/
+function cookie_value( code )
+{
+	var arr = (document.cookie).split(';');
+	for( var cookie of arr ) {
+		var both = cookie.split('=');
+		if( both[0] == " "+code ) {
+			return both[1];
+		}
+	}
+	return false;
+}
+
+/**
+* @func Display home tutorial popup
+*/
+function displayHomeTutorialPopup()
+{
+	if( true || cookie_value( "release_april_2019" ) != "1" ) 
+	{
+		$("#tutorial_modal").on("hidden.bs.modal", function() {
+			document.cookie = "release_april_2019=1;";
+		});
+		$("#display_tutorial_button").click();
+	}
+}
