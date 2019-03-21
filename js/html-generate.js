@@ -842,35 +842,101 @@ function update_quiz(lang)
 	quiz_all.appendChild(quiz_prev);
 	quiz_all.appendChild(quiz_items);
 	quiz_all.appendChild(quiz_next);
-	
+
 	quiz_tab.appendChild(quiz_all);
 }
 
-function copyToClipboard( text ) 
+/**
+* @func update the content of home tutorial popup
+* @lang actual language to display
+*/
+function updateHomeTutorial(lang)
 {
-    if( window.clipboardData && window.clipboardData.setData ) {
-        // IE specific code path to prevent textarea being shown while dialog is visible.
-        return clipboardData.setData("Text", text); 
-    } else if( document.queryCommandSupported && document.queryCommandSupported("copy") ) {
-        var textarea = document.createElement("textarea");
-        textarea.textContent = text;
-        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
-        } catch (ex) {
-            console.warn("Copy to clipboard failed.", ex);
-            return false;
-        } finally {
-            document.body.removeChild(textarea);
-        }
-    }
+	$("#tutorial_modal_title").html(json_lang_translate[lang]["home_tutorial_title"]);
+	// $("#tutorial_modal_description").html(json_lang_translate[lang]["home_tutorial_description"]);
+	$("#tutorial_modal_close").html(json_lang_translate[lang]["close"]);
+	update_home_tutorial_images(lang);
+}
+
+/**
+* @func update the content of home tutorial popup
+* @lang actual language to display
+*/
+function update_home_tutorial_images(lang) 
+{
+	// clean home tutorial popup images
+	var tutorial_tab = document.getElementById("tutorial_modal_images");
+	tutorial_tab.innerHTML = "";
+
+	var tutorial_items = document.createElement("div");
+	tutorial_items.style.float = "left";
+	tutorial_items.style.width = "70%";
+	tutorial_items.style.textAlign = "center";
+	tutorial_items.style.margin = "0 auto";
+	var classname = "";
+	for( var i = 1; i <= 5; i++ ) {
+		if( json_lang_translate[lang]["home_tutorial_image_"+i] != "" ) {
+			var main_div = document.createElement("div");
+			main_div.id = "tutorial_item_"+i;
+			main_div.style.float = "left";
+			main_div.style.width = "100%";
+			main_div.style.textAlign = "center";
+			main_div.style.height = "auto";
+			if( classname == "" ) {
+				main_div.className = "";
+				classname = "hidden";
+			} else {
+				main_div.className = classname;
+			}
+			// Image
+			var src = json_lang_translate[lang]["home_tutorial_image_"+i];
+			var img = document.createElement("img");
+			img.id = 'home_tutorial_image_'+i;
+			img.src = "img/tutorial/"+src;
+			img.style.maxHeight = "500px";
+			img.style.maxWidth = "100%";
+			img.style.margin = "40px auto 20px auto";
+			img.style.display = "block";
+			main_div.appendChild(img);
+			tutorial_items.appendChild(main_div);
+		}
+	}
+
+	var tutorial_prev = document.createElement("div");
+	tutorial_prev.id = "tutorial_prev";
+	tutorial_prev.style.visibility = "hidden";
+	tutorial_prev.style.float = "left";
+	tutorial_prev.style.padding = "";
+	tutorial_prev.style.fontSize = "50px";
+	tutorial_prev.innerHTML = '<div class="quiz-move-left"><img src="img/quiz/left.png" /></div>';
+	tutorial_prev.addEventListener( 'click', function() {
+		tutorial_toggle_items( "-1" );
+	});
+
+	var tutorial_next = document.createElement("div");
+	tutorial_next.id = "tutorial_next";
+	tutorial_next.style.float = "right";
+	tutorial_next.style.padding = "";
+	tutorial_next.style.fontSize = "50px";
+	tutorial_next.innerHTML = '<div class="quiz-move-right"><img src="img/quiz/right.png" /></div>';
+	tutorial_next.addEventListener( 'click', function() {
+		tutorial_toggle_items( "1" );
+	});
+
+	var tutorial_all = document.createElement("div");
+	tutorial_all.id = "tutorial_all";
+	tutorial_all.style.overflow = "hidden";
+	tutorial_all.appendChild(tutorial_prev);
+	tutorial_all.appendChild(tutorial_items);
+	tutorial_all.appendChild(tutorial_next);
+
+	tutorial_tab.appendChild(tutorial_all);
 }
 
 var quiz_current_index = 1;
 
-function quiz_toggle_items( index ) {
+function quiz_toggle_items( index )
+{
 	var idx = parseInt( index );
 	var lst = 0;
 	if( idx > 0 ) {
@@ -879,10 +945,8 @@ function quiz_toggle_items( index ) {
 				if( document.getElementById("quiz_item_"+i) ) {
 					lst = i;
 					if( i == quiz_current_index + idx ) {
-						// document.getElementById("quiz_item_"+i).style.display = "";
 						document.getElementById("quiz_item_"+i).className = "";
 					} else {
-						// document.getElementById("quiz_item_"+i).style.display = "none";
 						document.getElementById("quiz_item_"+i).className = "hidden";
 					}
 				}
@@ -896,10 +960,8 @@ function quiz_toggle_items( index ) {
 				if( document.getElementById("quiz_item_"+i) ) {
 					lst = i;
 					if( i == quiz_current_index + idx ) {
-						// document.getElementById("quiz_item_"+i).style.display = "";
 						document.getElementById("quiz_item_"+i).className = "";
 					} else {
-						// document.getElementById("quiz_item_"+i).style.display = "none";
 						document.getElementById("quiz_item_"+i).className = "hidden";
 					}
 				}
@@ -914,14 +976,45 @@ function quiz_toggle_items( index ) {
 	else document.getElementById("quiz_next").style.visibility = "visible";
 }
 
-function cookie_value( code )
+var tutorial_current_index = 1;
+
+function tutorial_toggle_items( index )
 {
-	var arr = (document.cookie).split(';');
-	for( var cookie of arr ) {
-		var both = cookie.split('=');
-		if( both[0] == " "+code ) {
-			return both[1];
+	var idx = parseInt( index );
+	var lst = 0;
+	if( idx > 0 ) {
+		if( tutorial_current_index + idx <= 5 ) {
+			for( var i = 1; i <= 5; i++ ) {
+				if( document.getElementById("tutorial_item_"+i) ) {
+					lst = i;
+					if( i == tutorial_current_index + idx ) {
+						document.getElementById("tutorial_item_"+i).className = "";
+					} else {
+						document.getElementById("tutorial_item_"+i).className = "hidden";
+					}
+				}
+			}
+			tutorial_current_index+= idx;
 		}
 	}
-	return false;
+	if( idx < 0 ) {
+		if( tutorial_current_index + idx >= 1 ) {
+			for( var i = 1; i <= 5; i++ ) {
+				if( document.getElementById("tutorial_item_"+i) ) {
+					lst = i;
+					if( i == tutorial_current_index + idx ) {
+						document.getElementById("tutorial_item_"+i).className = "";
+					} else {
+						document.getElementById("tutorial_item_"+i).className = "hidden";
+					}
+				}
+			}
+			tutorial_current_index+= idx;
+		}
+	}
+
+	if( tutorial_current_index == 1 ) document.getElementById("tutorial_prev").style.visibility = "hidden";
+	else document.getElementById("tutorial_prev").style.visibility = "visible";
+	if( tutorial_current_index == lst ) document.getElementById("tutorial_next").style.visibility = "hidden";
+	else document.getElementById("tutorial_next").style.visibility = "visible";
 }
