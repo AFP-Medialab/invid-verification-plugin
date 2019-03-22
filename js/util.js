@@ -407,10 +407,16 @@ function cookie_value( code )
 */
 function displayHomeTutorialPopup()
 {
-	if( true || cookie_value( "release_april_2019" ) != "1" ) 
+	var cookie_tutorial = ( cookie_value( "release_april_2019" ) == "1" ? 1 : 0 );
+	var display_tutorial = parseInt( $("#home_tutorial_display").val() );
+
+	if( display_tutorial == 2 || ( display_tutorial == 1 && cookie_tutorial != 1 ) ) 
 	{
 		$("#tutorial_modal").on("hidden.bs.modal", function() {
-			document.cookie = "release_april_2019=1;";
+			var date = new Date();
+			date.setTime( date.getTime() + ( 100*365*24*60*60*1000 ) );
+			var expires = "expires="+date.toGMTString();
+			document.cookie = "release_april_2019=1; " + "path=/; " + expires;
 		});
 		$("#display_tutorial_button").click();
 	}
