@@ -136,8 +136,14 @@ $(document).ready( function() {
 	// Facebook connect callback to retrieve token
 	window.addEventListener( 'message', function(e) {
 		fb_access_token = e.data[1];
-//		alert(fb_access_token);
-		$('iframe').hide();
+		$('#facebook_connect_iframe').hide();
+		if( fb_access_token != "" && $("#video_form2").length > 0 ) {
+			var url = $("#apibox").val();
+			var tmp = url.split( "facebook.com" );
+			if( tmp.length == 2 ) {
+				$("#video_analysis_submit").click();
+			}
+		}
 	}, false);
 
 	// Select current language
