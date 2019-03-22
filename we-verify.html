@@ -93,8 +93,8 @@
 					</div>
 					<div class="languages-list">
 						<a href="#" data-lang="en" title="English version">EN</a> 
-						<a href="#" data-lang="fr" title="Version française">FR</a> 
-						<a href="#" data-lang="es" title="Version en español">ES</a>
+						<a href="#" data-lang="fr" title="Version franÃ§aise">FR</a> 
+						<a href="#" data-lang="es" title="Version en espaÃ±ol">ES</a>
 					</div>
 				</div>
 
@@ -270,10 +270,12 @@
 								<br>
 								<br>
 							</div>
-							<input type="submit" value="Submit" class="button" />
+							<div id="facebook_connect_for_analysis" style="display:none;padding-bottom:20px;">
+								<iframe id="facebook_connect_iframe" style="border:1px solid #eee;padding-top:20px;"></iframe>
+							</div>
+							<input type="submit" value="Submit" class="button" id="video_analysis_submit" />
 						</form>
 
-<iframe src="https://caa.iti.gr/plugin_login_fb?tms=123"></iframe>
 
 						<div id="loader" class="loader"></div>
 						<br>
@@ -733,7 +735,7 @@
 
 	<footer style="display:none;">
 		<div>
-			© AFP 2019 - 
+			Â© AFP 2019 - 
 			<a href="https://www.afp.com/en/medialab" target="_blank">AFP Medialab</a>
 		</div>
 	</footer>
