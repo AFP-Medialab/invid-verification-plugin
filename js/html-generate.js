@@ -379,8 +379,8 @@ function update_about(lang)
 	input.checked = ( cookie_value( "unlock" ) == "1" ? true : false );
 	input.addEventListener("change", function () {
 		var date = new Date();
-        	date.setTime( date.getTime() + ( 3*365*24*60*60*1000 ) );
-        	var expires = "expires="+date.toGMTString();
+		date.setTime( date.getTime() + ( 3*365*24*60*60*1000 ) );
+		var expires = "expires="+date.toGMTString();
 		if (this.checked) {
 			document.cookie = "unlock=1; " + "path=/ ; " + expires;
 		} else {
@@ -559,7 +559,8 @@ function update_classroom(lang)
 	$("#user_resources_content button").html(json_lang_translate[global_language]["display"]);
 
 	// Popup of user lessons
-	$("#user_resources_content div.row div button").on( "click", function() {
+	// $("#user_resources_content div.row div button").on( "click", function() {
+	$("#lesson_user_tutorial_button").on( "click", function() {
 		// Title
 		$("#lesson_modal_title").html(json_lang_translate[global_language]["classroom_title"]);
 		// Lesson name
@@ -852,22 +853,20 @@ function update_quiz(lang)
 */
 function updateHomeTutorial(lang)
 {
+	// title and close button
 	$("#tutorial_modal_title").html(json_lang_translate[lang]["home_tutorial_title"]);
-	// $("#tutorial_modal_description").html(json_lang_translate[lang]["home_tutorial_description"]);
 	$("#tutorial_modal_close").html(json_lang_translate[lang]["close"]);
-	update_home_tutorial_images(lang);
-}
 
-/**
-* @func update the content of home tutorial popup
-* @lang actual language to display
-*/
-function update_home_tutorial_images(lang) 
-{
+	// display home tutorial hidden input
+	// 0 => never, 1 => first time, 2 => always
+	var input = document.getElementById("home_tutorial_display");
+	input.value = json_lang_translate[lang]["home_tutorial_display"];
+
 	// clean home tutorial popup images
 	var tutorial_tab = document.getElementById("tutorial_modal_images");
 	tutorial_tab.innerHTML = "";
 
+	// prepare tutorial images of carrousel
 	var tutorial_items = document.createElement("div");
 	tutorial_items.style.float = "left";
 	tutorial_items.style.width = "70%";
@@ -902,6 +901,7 @@ function update_home_tutorial_images(lang)
 		}
 	}
 
+	// tutorial prev button
 	var tutorial_prev = document.createElement("div");
 	tutorial_prev.id = "tutorial_prev";
 	tutorial_prev.style.visibility = "hidden";
@@ -913,6 +913,7 @@ function update_home_tutorial_images(lang)
 		tutorial_toggle_items( "-1" );
 	});
 
+	// tutorial next button
 	var tutorial_next = document.createElement("div");
 	tutorial_next.id = "tutorial_next";
 	tutorial_next.style.float = "right";
@@ -923,6 +924,7 @@ function update_home_tutorial_images(lang)
 		tutorial_toggle_items( "1" );
 	});
 
+	// tutorial full carrousel
 	var tutorial_all = document.createElement("div");
 	tutorial_all.id = "tutorial_all";
 	tutorial_all.style.overflow = "hidden";
