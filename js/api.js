@@ -72,7 +72,7 @@ function updateTable(json, key_lst, table)
 /**
 * @func Create a time row
 */
-function createTimeRow(title, time) 
+function createTimeRow(title, time)Â 
 {
     var regex = /(.*), (.*) \(?UTC\)?/;
     var row = makeRowTable(title, time);
@@ -753,7 +753,7 @@ function parseTWJson(json)
     /* Display buttons */
     if( ! hasDisplayButtons && ( json.processing_status == 'done' || (json.tweet_text_mentioned_locations.length && json.user_description_mentioned_locations.length) ) ) {
         var tmp = [];
-        if (json.user_description_mentioned_locations.length || json.tweet_text_mentioned_locations.length) {
+        if (json.user_description_mentioned_locations.length ||Â json.tweet_text_mentioned_locations.length) {
 			tmp.push("");
 		}
         displayButtons(0 /*json.num_verification_comments when added by iti*/, tmp, true);
@@ -811,10 +811,14 @@ function video_api_analysis(video_url, isProcess)
     //encode video to avoid & problem arguments
     video_url = video_url.replace("&", "%26");
 
+	// to check if it's a facebook video url
+	var tmp = video_url.split("facebook.com");
+	var is_facebook = ( tmp.length == 2 ? true : false );
+
     // Video verification V3
     var analysis_url = "http://caa.iti.gr/verify_videoV3?url=" + video_url + "&twtimeline=0";
-    if (isProcess)
-        analysis_url += "&reprocess=1"
+    if (isProcess) analysis_url += "&reprocess=1";
+	if( is_facebook ) analysis_url+= "&fb_access_token="+fb_access_token;
     loaded_tw = false;
     document.getElementById("loader").style.display = "block";
     document.getElementById("api-content").style.display = "none";
@@ -829,24 +833,24 @@ function video_api_analysis(video_url, isProcess)
                 if (global_language == "en")
                     return "Sorry but we cannot process this video link";
                 else if (global_language == "fr")
-                    return "Pardon, nous ne pouvons pas traiter ce lien vidéo";
+                    return "Pardon, nous ne pouvons pas traiter ce lien vidÃ©o";
             case "ERROR2":
                 if (global_language == "en")
                     return "This is a wrong url. Please check it and try again.";
                 else if (global_language == "fr")
-                    return "Cet url est invalide. Veuillez verifier le lien et réessayer."
+                    return "Cet url est invalide. Veuillez verifier le lien et rÃ©essayer."
             case "share":
                 return "";
             case "ERROR5":
                 if (global_language == "en")
                     return "No video found in this tweet";
                 else if (global_language == "fr")
-                    return "Aucune vidéo trouvée dans ce tweet"
+                    return "Aucune vidÃ©o trouvÃ©e dans ce tweet"
             default:
                 if (global_language == "en")
                     return "There were an error while trying to process this video. Please check the link and try again.";
                 else if (global_language == "fr")
-                    return "Une erreur est apparue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer.";
+                    return "Une erreur est apparue lors du traitement des la vidÃ©o. Veuillez verifier le lien et rÃ©essayer.";
         }
     } */
     /* Get response every 2 second until process done */
@@ -918,6 +922,7 @@ function video_api_analysis(video_url, isProcess)
                 callback = parseTWJson;
                 analysisType = "twitter";
             }
+			var is_facebook = false;
             if (url) {
                 url = url.replace("&", "%26");	// encode & character to avoid error of arguments
             }
@@ -925,9 +930,10 @@ function video_api_analysis(video_url, isProcess)
             $.getJSON(url, function(data) {
                 parse_response(data, url, callback);
             }).fail(function(jqxhr, textStatus, error) {
-                console.error("start response : " + url);
-                console.error(textStatus + ", " + error);
+                // console.error("start response : " + url);
+                // console.error(textStatus + ", " + error);
                 error_type = "default";
+				fb_access_token = "";
                 request_fail(json_lang_translate[global_language]["table_error_default"]);
             })
             /* Twitter Part response */
@@ -988,7 +994,7 @@ function submit_form()
 	if (url != "") {
         cleanElement("place-table");
         //cleanElement("place-debunked");
-        if (isYtUrl(url) || url.startsWith(facebook_url) || url.startsWith(twitter_url)) {
+        if (isYtUrl(url) || url.startsWith(facebook_url) ||Â url.startsWith(twitter_url)) {
             video_api_analysis(url, reprocessChecked);
         }
         else {
