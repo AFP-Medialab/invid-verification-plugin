@@ -72,7 +72,7 @@ function updateTable(json, key_lst, table)
 /**
 * @func Create a time row
 */
-function createTimeRow(title, time)Â 
+function createTimeRow(title, time)
 {
     var regex = /(.*), (.*) \(?UTC\)?/;
     var row = makeRowTable(title, time);
