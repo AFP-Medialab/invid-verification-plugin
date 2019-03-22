@@ -753,7 +753,7 @@ function parseTWJson(json)
     /* Display buttons */
     if( ! hasDisplayButtons && ( json.processing_status == 'done' || (json.tweet_text_mentioned_locations.length && json.user_description_mentioned_locations.length) ) ) {
         var tmp = [];
-        if (json.user_description_mentioned_locations.length ||Â json.tweet_text_mentioned_locations.length) {
+        if (json.user_description_mentioned_locations.length || json.tweet_text_mentioned_locations.length) {
 			tmp.push("");
 		}
         displayButtons(0 /*json.num_verification_comments when added by iti*/, tmp, true);
@@ -994,7 +994,7 @@ function submit_form()
 	if (url != "") {
         cleanElement("place-table");
         //cleanElement("place-debunked");
-        if (isYtUrl(url) || url.startsWith(facebook_url) ||Â url.startsWith(twitter_url)) {
+        if (isYtUrl(url) || url.startsWith(facebook_url) || url.startsWith(twitter_url)) {
             video_api_analysis(url, reprocessChecked);
         }
         else {
