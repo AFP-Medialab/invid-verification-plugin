@@ -144,5 +144,7 @@ $(document).ready( function() {
 	select_current_language( global_language );
 
 	// Display home tutorial popup
-	displayHomeTutorialPopup();
+	window.setTimeout( function() { 
+		displayHomeTutorialPopup();
+	}, 3000 );
 });
