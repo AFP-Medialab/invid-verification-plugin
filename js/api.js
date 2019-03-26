@@ -816,7 +816,7 @@ function video_api_analysis(video_url, isProcess)
 	var is_facebook = ( tmp.length == 2 ? true : false );
 
     // Video verification V3
-    var analysis_url = "http://caa.iti.gr/verify_videoV3?url=" + video_url + "&twtimeline=0";
+    var analysis_url = "https://caa.iti.gr/verify_videoV3?url=" + video_url + "&twtimeline=0";
     if (isProcess) analysis_url += "&reprocess=1";
 	if( is_facebook ) analysis_url+= "&fb_access_token="+fb_access_token;
     loaded_tw = false;
