@@ -7,6 +7,10 @@ var ACTIVE_CLASS = 'active';
 // To do => init with the cookie if available
 var fb_access_token = "";
 
+// Open street map manager and markers list
+var osm_map = null;
+var osm_markers = null;
+
 /**
 * Javascript runned when all is ready
 */
@@ -50,9 +54,10 @@ $(document).ready( function() {
 			} else {
 				panel.style.display = "block";
 				// Correct Google maps display none bug
-				google.maps.event.trigger(map, 'resize');
-				triggerMap();
+				// google.maps.event.trigger(map, 'resize');
+				// triggerMap();
 				loadTimeline();
+				osm_map.invalidateSize();
 			}
 		}
 	}
@@ -153,4 +158,30 @@ $(document).ready( function() {
 	window.setTimeout( function() { 
 		displayHomeTutorialPopup();
 	}, 3000 );
+
+	// Init open street map
+	osm_map = L.map('map').setView( [48.864716, 2.349014], 4 );
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(osm_map);
+
+	// Manage OSM search
+	$("#pac-button").on( 'click', function() {
+		var s = $("#pac-input").val();
+		var p = s.replace(", ", ",").replace(" ,",",").split( "," );
+		updateMap( p );
+		return false;
+		/* var q = "";
+		if( p.length == 1 ) {
+			// Un seul paramètre => chercher une ville
+			updateMap( "", p[0], "" );
+		} else if( p.length == 2 ) {
+			// Deux paramètres => chercher une ville (p1), dans un pays (p2)
+			updateMap( "", p[0], p[1] );
+		} else {
+			// Plus de paramètres => laisser faire le moteur
+			updateMap( p );
+		}
+		return false; */
+	});
 });
