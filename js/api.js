@@ -310,6 +310,8 @@ function placeImages(carousel_id, thumbnails_id, preview_id, img_list)
 */
 function createGoogleMaps()
 {
+	return;
+/*
     var mapOptions = {
         center: new google.maps.LatLng(0, 0),
         zoom: 10,
@@ -317,7 +319,7 @@ function createGoogleMaps()
     }
     var map = new google.maps.Map( document.getElementById("map"), mapOptions );
 
-    /* get Current Location if possible */
+    // get Current Location if possible
 	if( navigator.geolocation ) {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -381,22 +383,145 @@ function createGoogleMaps()
 		});
 		map.fitBounds(bounds);
 	});
-
+*/
 }
 
 /**
 * @func Change SearchBox value and submit it to the google map 
 */
-function updateMap( places )
+function updateMap( places, city, country )
 {
-    if( places != [] ) {
+	var u = "https://nominatim.openstreetmap.org/search?format=json";
+	var q = "";
+	if( ! city && ! country ) {
+		for( var i = 0; i < places.length; i++ ) {
+			q+= ( q != "" ? ", " : "" ) + places[i];
+		}
+		u+= "&q="+q.replace(", ", "+");
+	} else if( ! country && city ) {
+		q = "&city="+city.replace(" ","+");
+		u+= q;
+		// u+= "&limit=3";
+	} else if( country && city ) {
+		q = "&city="+city.replace(" ","+");
+		q+= "&country="+country.replace(" ","+");
+		u+= q;
+		// u+= "&limit=1";
+	}
+	u+= "&json_callback=positionOpenStreetMapMarker";
+	console.log(u);
+	// $("#osm_url").html(u);
+	$.get(u).done( function(resp) {
+		if( resp != "" ) {
+			eval( resp );
+		}
+	});
+
+	var searchBox = document.getElementById("pac-input");
+	if( searchBox && ! city && ! country ) {
+		searchBox.value = q;
+		searchBox.focus();
+	}
+
+	/* if( places != [] ) {
         var searchBox = document.getElementById("pac-input");
         if(searchBox){
             searchBox.value =places;
             searchBox.focus();
             google.maps.event.trigger(searchBox, 'keydown', { keyCode: 13 });
         }
+    } */
+}
+
+/**
+* @func Place geolocalisation markers on open street map
+*/
+function positionOpenStreetMapMarker( markers )
+{
+	// Remove previous markers
+	if( osm_markers && osm_markers.length ) {
+		for( var i = 0; i < osm_markers.length; i++ ) {
+			osm_map.removeLayer( osm_markers[i] );
+		}
+	}
+	osm_markers = [];
+	if( markers.length > 0 ) {
+		// Add "place" markers
+		var found = false;
+		if( ! found ) {
+			for( var i = 0; i < markers.length; i++ ) {
+				if( markers[i].class == "place" || markers[i].class == "capital" || markers[i].class == "capital_city" || markers[i].class == "natural" || markers[i].class == "boundary" ) {
+					var m = L.marker([markers[i].lat, markers[i].lon]).addTo(osm_map);
+					var p = '<div style="width:200px;height:auto;">';
+					p+= '<b>'+markers[i].class.toUpperCase()+' : </b>'+markers[i].display_name;
+					p+= '</div>';
+					m.bindPopup(p);
+					osm_markers.push( m );
+					if( ! found ) {
+						centerLeafletMapOnMarker(osm_map, m);
+						found = true;
+						break;
+					}
+				}
+			}
+		}
+		if( ! found ) {
+			// Try some other markers if nothing found
+			for( var i = 0; i < markers.length; i++ ) {
+				if( markers[i].class != "amenity" && markers[i].class != "shop" && markers[i].class != "tourism" && markers[i].class != "building" && markers[i].class != "highway" ) {
+					var m = L.marker([markers[i].lat, markers[i].lon]).addTo(osm_map);
+					var p = '<div style="width:200px;height:auto;">';
+					p+= '<b>'+markers[i].class.toUpperCase()+' : </b>'+markers[i].display_name;
+					p+= '</div>';
+					m.bindPopup(p);
+					osm_markers.push( m );
+					if( ! found ) {
+						centerLeafletMapOnMarker(osm_map, m);
+						found = true;
+					}
+				}
+			}
+		}
+		if( ! found ) {
+			// Finaly, add all markers if nothing found
+			for( var i = 0; i < markers.length; i++ ) {
+				var m = L.marker([markers[i].lat, markers[i].lon]).addTo(osm_map);
+				var p = '<div style="width:200px;height:auto;">';
+				p+= '<b>'+markers[i].class.toUpperCase()+' : </b>'+markers[i].display_name;
+				p+= '</div>';
+				m.bindPopup(p);
+				osm_markers.push( m );
+				if( ! found ) {
+					centerLeafletMapOnMarker(osm_map, m);
+					found = true;
+				}
+			}
+		}
+		osm_map.setZoom( 6 );
     }
+}
+
+/**
+* @func Center the osm map on a marker
+*/
+function centerLeafletMapOnMarker(map, marker) 
+{
+	var latLngs = [ marker.getLatLng() ];
+	var markerBounds = L.latLngBounds( latLngs );
+	map.fitBounds( markerBounds );
+}
+
+/**
+* @func Center the osm map on a group of markers
+*/
+function centerLeafletMapOnMarkersGroup(map, markers) 
+{
+	var markerBounds = [];
+	for( var i = 0; i < markers.length; i++ ) {
+		var latLngs = [ markers[i].getLatLng() ];
+		markerBounds.push( L.latLngBounds( latLngs ) );
+	}
+	map.fitBounds( markerBounds );
 }
 
 /**
@@ -507,7 +632,7 @@ function parseYTJson(json)
     }
     /* Update map*/
     if( !hasUpdateMap && json.video_description_mentioned_locations ) {
-        updateMap(json.video_description_mentioned_locations);
+        updateMap( json.video_description_mentioned_locations, "", "" );
         hasUpdateMap = true;
     }
 
@@ -635,7 +760,7 @@ function parseFBJson(json)
     }
     /* Update map*/
     if( ! hasUpdateMap && json.video_description_mentioned_locations ) {
-        updateMap(json.video_description_mentioned_locations);
+        updateMap( json.video_description_mentioned_locations, "", "" );
         hasUpdateMap = true;
     }
 }
@@ -771,7 +896,7 @@ function parseTWJson(json)
             tmp = tmp.concat(json.user_description_mentioned_locations);
             hasUpdateMapDesc = true;
         }
-        updateMap(tmp);
+        updateMap(tmp, "", "");
         hasUpdateMap = true;
     }
     // when verified comments added by iti
@@ -833,24 +958,24 @@ function video_api_analysis(video_url, isProcess)
                 if (global_language == "en")
                     return "Sorry but we cannot process this video link";
                 else if (global_language == "fr")
-                    return "Pardon, nous ne pouvons pas traiter ce lien vidÃ©o";
+                    return "Pardon, nous ne pouvons pas traiter ce lien vidéo";
             case "ERROR2":
                 if (global_language == "en")
                     return "This is a wrong url. Please check it and try again.";
                 else if (global_language == "fr")
-                    return "Cet url est invalide. Veuillez verifier le lien et rÃ©essayer."
+                    return "Cet url est invalide. Veuillez verifier le lien et réessayer."
             case "share":
                 return "";
             case "ERROR5":
                 if (global_language == "en")
                     return "No video found in this tweet";
                 else if (global_language == "fr")
-                    return "Aucune vidÃ©o trouvÃ©e dans ce tweet"
+                    return "Aucune vidéo trouvée dans ce tweet"
             default:
                 if (global_language == "en")
                     return "There were an error while trying to process this video. Please check the link and try again.";
                 else if (global_language == "fr")
-                    return "Une erreur est apparue lors du traitement des la vidÃ©o. Veuillez verifier le lien et rÃ©essayer.";
+                    return "Une erreur est apparue lors du traitement des la vidéo. Veuillez verifier le lien et réessayer.";
         }
     } */
     /* Get response every 2 second until process done */
