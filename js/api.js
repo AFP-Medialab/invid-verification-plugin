@@ -294,7 +294,7 @@ function placeImages(carousel_id, thumbnails_id, preview_id, img_list)
         var img = document.createElement("img");
         img.setAttribute("id", id);
         img.setAttribute("src", img_list[count]);
-        img.setAttribute("style", "display: none; position: fixed; top: 0%; right: 0%; max-height: 250px;");
+        img.setAttribute("style", "display: none; position: fixed; top: 0%; right: 0%; max-height: 250px; z-index: 1000;");
         prev.appendChild(img);
     }
     /* Thumbnails onclick */
