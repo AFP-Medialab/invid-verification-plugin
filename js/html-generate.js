@@ -102,7 +102,7 @@ function update_api(lang)
 	setInnerHtml("twitter_search_btn",			json_lang_translate[lang]["button_reverse_twitter"]);
 	setInnerHtml("footer_analysis",				json_lang_translate[lang]["footer_analysis"]);
 	setPlaceholder("apibox",					json_lang_translate[lang]["api_input"]);
-	setPlaceholder("pac-input",					json_lang_translate[lang]["api_searchbox"]);
+	// setPlaceholder("pac-input",					json_lang_translate[lang]["api_searchbox"]);
 }
 
 /**
