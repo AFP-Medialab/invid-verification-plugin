@@ -1,19 +1,6 @@
 /* Analysis */
-$("#video_analysis_submit").on( "click", function ga_analysis_url(e) {
-	var url = $("#apibox").val();
-	var tmp = url.split( "facebook.com" );
-	$("#facebook_connect_for_analysis").hide();
-	if( tmp.length > 1 && fb_access_token == "" ) {
-		$("#error-content").hide();
-		$("#api-content").hide();
-		$("#facebook_connect_iframe").prop("src", "https://caa.iti.gr/plugin_login_fb" );
-		$("#facebook_connect_for_analysis").show();
-		$("#facebook_connect_iframe").css("display","");
-		$("#facebook_connect_iframe").show();
-		e.preventDefault();
-		return false;
-	}
-	ga("send", "event", "Url_provided", 'submit', url);
+$("#video_form2 > input")[0].addEventListener("click", function ga_analysis_url(e) {
+	ga("send", "event", "Url_provided", 'submit', $("#apibox").val());
 });
 
 (function test() {

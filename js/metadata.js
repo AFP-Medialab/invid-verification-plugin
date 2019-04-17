@@ -1,24 +1,14 @@
-/**
-* Javascript used by metadata service
-*/
-
-/**
-* @func Create and h3 title
-*/
-function makeTitle(title, div)
-{
+/*Create Title*/
+function makeTitle(title, div){
     h3 = document.createElement("h3");
     h3.innerHTML = title;
     div.appendChild(h3);
 }
 
-/**
-* @func Create table for video metadata
-*/
-function makeTableMetadata(json, indexJson, names, lst_desc)
-{
+/*Create table for video metadata*/
+function makeTableMetadata(json, indexJson, names, lst_desc){
     var table = document.createElement("table");
-    for( var index in indexJson ) {
+    for (var index in indexJson){
         var tr = document.createElement("tr");
         var th = document.createElement("th");
         var td = document.createElement("td");
@@ -38,10 +28,9 @@ function makeTableMetadata(json, indexJson, names, lst_desc)
 * @arr ascii decimal representation to translate
 * @return string containing the translated str
 */
-function translateASCII(arr) 
-{
+function translateASCII(arr) {
     var res = "";
-    for( var i = 0; i < arr.length; ++i ) {
+    for (var i = 0; i < arr.length; ++i) {
         res += String.fromCharCode(parseInt(arr[i], 10));
     }
     return res;
@@ -49,11 +38,8 @@ function translateASCII(arr)
 
 var jsonLastImg = "{}";
 
-/**
-* @func Create table for image metadata 
-*/
-function imgTable(json_str, lang)
-{
+/*Create table for image metadata*/
+function imgTable(json_str, lang){
     jsonLastImg = json_str;
     cleanElement("place-metadata");
     cleanElement("error-metadata");
@@ -71,23 +57,24 @@ function imgTable(json_str, lang)
 
     var meta_place = document.getElementById("place-metadata");
 
-    for( var i = 0; i < topics.length; ++i ) {
+    for (var i = 0; i < topics.length; ++i) {
         var arr_keys = all_keys[i];
         var fields = list_from_json(jsonLang, "metadata_img_" + topics[i] + "_fields_");
         var desc = list_from_json(jsonLang, "metadata_img_" + topics[i] + "_desc_");
         var table = document.createElement("table");
         table.id = "imgTable_" + topics[i];
 
-        for( var j = 0; j < arr_keys.length; ++j ) {
-            if( json[arr_keys[j]] !== undefined ) {
+        for (var j = 0; j < arr_keys.length; ++j) {
+            if (json[arr_keys[j]] !== undefined) {
                 var tr = document.createElement("tr");
                 var th = document.createElement("th");
                 var td = document.createElement("td");
                 th.innerHTML = fields[j];
                 th.title = desc[j];
-                if( jsonLang["metadata_img_key_" + arr_keys[j] + "_" + json[arr_keys[j]]] !== undefined ) {
+                if (jsonLang["metadata_img_key_" + arr_keys[j] + "_" + json[arr_keys[j]]] !== undefined) {
                     td.innerHTML = jsonLang["metadata_img_key_" + arr_keys[j] + "_" + json[arr_keys[j]]];
-                } else if( arr_keys[j] === "UserComment" || arr_keys[j] === "MakerNote" ) {
+                } else if (arr_keys[j] === "UserComment" ||
+                    arr_keys[j] === "MakerNote") {
                     td.innerHTML = translateASCII(json[arr_keys[j]]);
                 } else {
                     td.innerHTML = json[arr_keys[j]];
@@ -97,12 +84,12 @@ function imgTable(json_str, lang)
                 table.appendChild(tr);
             }
         }
-        if( table.hasChildNodes() ) {
+        if (table.hasChildNodes()) {
             makeTitle(jsonLang["metadata_img_" + topics[i] + "_title"], meta_place);
             meta_place.appendChild(table);
         }
     }
-    if( json_str == "{}" ) {
+    if(json_str == "{}") {
         table = document.createElement("div");
         table.innerHTML = jsonLang["metadata_img_error_exif"];
         meta_place.appendChild(table);
@@ -115,11 +102,9 @@ var jsonTitleImageMetadata = {
     fr: "Métadonnées de l'image"
 };
 
-/**
-* @func exif metadata translations 
-*/
-function getExif(img) 
-{
+/* exif metadata translations */
+
+function getExif(img) {
     cleanElement("place-metadata");
     cleanElement("error-metadata");
     document.getElementById("error-metadata").style.display = "none";
@@ -132,7 +117,6 @@ function getExif(img)
     });
 }
 
-/* @jsonTitleTableMetadata */
 var jsonTitleTableMetadata = {
     index: {
         metadata: ["hasMoov", "duration", "timescale", "isFragmented", "fragment_duration", "isProgressive", "hasIOD",
@@ -144,11 +128,8 @@ var jsonTitleTableMetadata = {
     }
 }
 
-/**
-* @func get mp4 Metadata 
-*/
-function getMp4(vid) 
-{
+/* get Mp4 Metadata */
+function getMp4(vid) {
     cleanElement("place-metadata");
     cleanElement("error-metadata");
     document.getElementById("error-metadata").style.display = "none";
@@ -162,7 +143,7 @@ function getMp4(vid)
         document.getElementById("place-metadata").style.display = "none";
         document.getElementById("error-metadata").style.display = "block";
     };
-    // display metadata info when mp4box parsing isfinished
+    /* display metadata info when mp4box parsing isfinished */
     mp4box.onReady = function(info) {
         cleanElement("place-metadata");
         cleanElement("error-metadata");
@@ -176,16 +157,19 @@ function getMp4(vid)
             return;
         }
         var indexes = jsonTitleTableMetadata["index"];
-        var languageText = json_lang_translate[global_language];
+        var languageText = json_lang_translate[global_language];//jsonTitleTableMetadata[global_language];
+        //var metadataText = languageText["metadata"];
         //metadata
         makeTitle(languageText["metadata_title"], allMetaDataSpan);
         var table = makeTableMetadata(info, indexes["metadata"], list_from_json(languageText, "metadata_name_"), list_from_json(languageText, "metadata_desc_"));
         allMetaDataSpan.appendChild(table);
         //video Tracks
+        //var trackText = languageText["track"];
         makeTitle(languageText["track_title"], allMetaDataSpan);
         table = makeTableMetadata(info.videoTracks[0], indexes["track"], list_from_json(languageText, "track_name_"), list_from_json(languageText, "track_desc_"));
         allMetaDataSpan.appendChild(table);
         //audio Tracks
+        //var audioText = languageText["audio"];
         makeTitle(languageText["audio_title"], allMetaDataSpan);
         json_str = JSON.stringify(info.audioTracks[0], null, "\t");
         table = makeTableMetadata(info.audioTracks[0], indexes["audio"], list_from_json(languageText, "audio_name_"), list_from_json(languageText, "audio_desc_"));
@@ -194,7 +178,7 @@ function getMp4(vid)
 
     var arrayBuffer;
     var fileReader = new FileReader();
-    // send to mp4box when file reading is finished
+    /* send to mp4box when file reading is finished */
     fileReader.onload = function() {
         arrayBuffer = this.result;
         arrayBuffer.fileStart = 0;
@@ -204,44 +188,36 @@ function getMp4(vid)
     var blob = null;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", vid);
-    xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
+    xhr.responseType = "blob";//force the HTTP response, response-type header to be blob
     xhr.onload = function() {
-        blob = xhr.response; //xhr.response is now a blob object
+        blob = xhr.response;//xhr.response is now a blob object
         fileReader.readAsArrayBuffer(blob);
     }
     xhr.send();
 }
 
-/**
-* @func Submit metadata
-*/
-function submit_metadata()
-{
+function submit_metadata(){
     cleanElement("preview-metadata");
     cleanElement("error-metadata");
     var url = document.getElementById("url-metadata").value;
     url = get_real_url_img(url);
     var img_radio = document.getElementById("img-meta-radio");
-    if( img_radio.checked ) {
-        // Metadata
+    if (img_radio.checked) {
+        /* Metadata */
         var img = new Image();
         img.src = url;
-        // No Metadata if img is not loaded
-        img.onload = function() {
-            /* var scale = Math.max(img.width/600, img.height/600);
-            if( scale > 1 ) {
+        /* No Metadata if img is not loaded */
+        img.onload = function(){
+            var scale = Math.max(img.width/600, img.height/600);
+            if (scale > 1)
+            {
                 img.width = Math.round(img.width/scale);
                 img.height = Math.round(img.height/scale);
-            } */
-			if( img.width > img.height ) {
-				img.width = "600";
-			} else {
-				img.height = "300";
-			}
-			img.style.marginTop = "20px";
+            }
             getExif(img);
+            //getImgRawData(img.src);
         };
-        // If error display error message
+        /* If error display error message */
         img.onerror = function() {
             cleanElement("error-metadata");
             document.getElementById("error-metadata").innerHTML = json_lang_translate[global_language]["metadata_img_error"];
@@ -264,7 +240,6 @@ $('#local-metadata').change( function(event) {
     submit_metadata();
 });
 
-/* Metadata form managment */
 var form = document.getElementById("metadata_form");
 if (form.addEventListener){
     form.addEventListener("submit", submit_metadata, false);
@@ -273,11 +248,7 @@ form.addEventListener("submit", function(e){
     e.preventDefault();
 });
 
-/**
-* @func Place raw data
-*/
-function placeRawData(data)
-{
+function placeRawData(data){
     var div = document.getElementById("place-metadata");
     var h3 = document.createElement("h3");
     h3.innerHTML = "Image Binary Data";
@@ -288,11 +259,7 @@ function placeRawData(data)
     div.appendChild(raw);
 }
 
-/**
-* @func Get image raw data
-*/
-function getImgRawData(img)
-{
+function getImgRawData(img){
     var reader = new FileReader();
     reader.onload = function(e) {
         var rawData = reader.result;
@@ -309,18 +276,16 @@ function getImgRawData(img)
     xhr.send();
 }
 
-/**
-* @func Get uri of data
-*/
-function getDataUri(url) 
-{
+function getDataUri(url) {
     var image = new Image();
 
     image.onload = function () {
         var canvas = document.createElement('canvas');
-        canvas.width = this.naturalWidth;	// or 'width' if you want a special/scaled size
+        canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
         canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+
         canvas.getContext('2d').drawImage(this, 0, 0);
+
         // Get raw image data
         var data = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, '');
         placeRawData(data);
@@ -328,27 +293,20 @@ function getDataUri(url)
     image.src = url;
 }
 
-/**
-* @func GPS coordinates
-*/
-function getTableValue(thValue)
-{
+/*GPS coordinates*/
+function getTableValue(thValue){
     var table = document.getElementById('imgTable_gps');
     var thcells = table.getElementsByTagName('th');
     var tdcells = table.getElementsByTagName('td');
-    for( var i=0; i<thcells.length; i++ ) {  
-        if( thcells[i].innerHTML == thValue ) {
+    for (var i=0; i<thcells.length; i++){  
+        if (thcells[i].innerHTML == thValue) {
             return tdcells[i].innerHTML
         }
     }
     return "";
 }
 
-/**
-* @func Get location
-*/
-function getLocation()
-{
+function getLocation(){
     var jsonGpsImg = list_from_json(json_lang_translate[global_language], "metadata_img_gps_fields_");
     var GPSLatitudeRef = getTableValue(jsonGpsImg[0]);
     var GPSLatitude = getTableValue(jsonGpsImg[1]);
@@ -360,8 +318,8 @@ function getLocation()
         div.appendChild(br);
         var btn = document.createElement("button");
         btn.setAttribute("class","button");
-		btn.innerHTML = json_lang_translate[global_language]['metadata_gps_button'];
-		div.appendChild(btn);
+        btn.innerHTML = json_lang_translate[global_language]['metadata_gps_button'];
+        div.appendChild(btn);
         btn.onclick = function() {
             var mapurl = "http://maps.google.com/maps?q=";
             var arr_lat = GPSLatitude.split(",");
@@ -379,22 +337,16 @@ function getLocation()
 * @titles array of strings containing, ordered, titles for the table
 * @descs array of strings containing, ordered, descriptions for the titles of the table
 */
-function updateTitleTableMetadata(tableId, titles, descs)
-{
+function updateTitleTableMetadata(tableId, titles, descs) {
     var listTitle = $("#" + tableId).find("th");
-    for( var i = 0; i < listTitle.length; i++ ) {
+    for (var i = 0; i < listTitle.length; i++) {
         listTitle[i].innerHTML = titles[i];
         listTitle[i].title = descs[i];
     }
 }
 
-/**
-* @func Update table language metadata
-*/
-function updateTableLanguageMetadata(lang)
-{
-    if( document.getElementById("error-metadata").style.display !== "none" ) { 
-		// if error
+function updateTableLanguageMetadata(lang) {
+    if (document.getElementById("error-metadata").style.display !== "none") { // if error
         cleanElement("error-metadata");
         document.getElementById("error-metadata").innerHTML = json_lang_translate[lang]["metadata_img_error"];
         document.getElementById("place-metadata").style.display = "none";
@@ -402,8 +354,7 @@ function updateTableLanguageMetadata(lang)
         return;
     }
 
-    if( document.getElementById("preview-metadata").hasChildNodes() ) { 
-		// image selected
+    if (document.getElementById("preview-metadata").hasChildNodes()) { // image selected
         cleanElement("place-metadata");
         cleanElement("error-metadata");
         document.getElementById("error-metadata").style.display = "none";
@@ -411,19 +362,20 @@ function updateTableLanguageMetadata(lang)
         imgTable(jsonLastImg, lang);
         getLocation();
         return;
-    } 
-
-	var jsonText = json_lang_translate[lang];
-	var partNames = [];
-	var titles = [];
-	var descs = [];
-	for( var part of ["metadata", "track", "audio"] ) {
-		partNames.push(jsonText[part + "_title"]);
-		titles = titles.concat(list_from_json(jsonText, part + "_name_"));
-		descs = descs.concat(list_from_json(jsonText, part + "_desc_"));
-	}
-	$("#place-metadata").find("h3").html(function (index) {
-		return partNames[index];
-	});
-	updateTitleTableMetadata("place-metadata", titles, descs);
+    } else {
+        var jsonText = json_lang_translate[lang];
+        var partNames = [];
+        var titles = [];
+        var descs = [];
+        for (var part of ["metadata", "track", "audio"])
+        {
+            partNames.push(jsonText[part + "_title"]);
+            titles = titles.concat(list_from_json(jsonText, part + "_name_"));
+            descs = descs.concat(list_from_json(jsonText, part + "_desc_"));
+        }
+        $("#place-metadata").find("h3").html(function (index) {
+            return partNames[index];
+        })
+        updateTitleTableMetadata("place-metadata", titles, descs);
+    }
 }

@@ -508,18 +508,18 @@ var fm = (function ($) {
 		}
 
 		if (fm_options.show_email === true) {
-			email_html = '<li>	<label for="feedback_email">' + fm_options.email_label + '</label> ' + email_asterisk + ' <input type="email" class="feedback_email" ' + email_required + ' placeholder="' + fm_options.email_placeholder + '" style="height:32px;"></input> </li>';
+			email_html = '<li>	<label for="feedback_email">' + fm_options.email_label + '</label> ' + email_asterisk + ' <input type="email" class="feedback_email" ' + email_required + ' placeholder="' + fm_options.email_placeholder + '"></input> </li>';
 			email_feedback_content_class = " email_present";
 		}
 
 		if (fm_options.show_form === true) {
 			form_html = '<form class="feedback_me_form">'
 				+	'<ul>'
-				+		'<li>	<label for="feedback_name">' + fm_options.name_label + '</label> ' + name_asterisk + ' <input type="text" class="feedback_name" ' + name_required + ' placeholder="' + fm_options.name_placeholder + '" ' + name_pattern + ' style="height:32px;"></input> </li>'
+				+		'<li>	<label for="feedback_name">' + fm_options.name_label + '</label> ' + name_asterisk + ' <input type="text" class="feedback_name" ' + name_required + ' placeholder="' + fm_options.name_placeholder + '" ' + name_pattern + '></input> </li>'
 
 				+		 email_html
 
-				+		'<li>	<label for="feedback_message">' + fm_options.message_label + '</label> ' + message_asterisk + ' <textarea rows="3" class="feedback_message" maxlength="4000"' + message_required + ' placeholder="' + fm_options.message_placeholder + '" style="height:70px;"></textarea> </li>'
+				+		'<li>	<label for="feedback_message">' + fm_options.message_label + '</label> ' + message_asterisk + ' <textarea rows="6" class="feedback_message" maxlength="4000"' + message_required + ' placeholder="' + fm_options.message_placeholder + '"></textarea> </li>'
 
 				+		 radio_button_list_html
 
@@ -807,7 +807,7 @@ var fm = (function ($) {
 $(document).ready(function(){
     //set up some basic options for the feedback_me plugin
     fm_options = {
-        position: "right-bottom",
+        position: "left-bottom",
         name_required: true,
         show_email: true,
         email_required: true,
@@ -818,7 +818,7 @@ $(document).ready(function(){
         					 "Thanks to help us providing better tools!",
         submit_label : "Submit",
         show_asterisk_for_required: true,
-        feedback_url: config_feedback_hook_url,
+        feedback_url: YOUR_WEBHOOK_URL,
         delayed_options: {
             send_fail : "Sending failed. Please try again.",
             send_success : "Sent successfully."

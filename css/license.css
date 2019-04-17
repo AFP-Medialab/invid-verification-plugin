@@ -1,5 +1,6 @@
+/* Table */
 table { 
-    border: 1px solid #000000;
+    border: 1px solid #000;
     border-collapse: separate;
     border-left: 0;
     border-radius: 4px;
@@ -21,15 +22,15 @@ th, td {
     padding: 5px 4px 6px 4px; 
     text-align: left;
     vertical-align: top;
-    border-left: 1px solid #000000;    
+    border-left: 1px solid #000;    
 }
 
 th {
-    border-top: 1px solid #000000;
+    border-top: 1px solid #000;
 }
 
 td {
-    border-top: 1px solid #000000;    
+    border-top: 1px solid #000;    
 }
 thead:first-child tr:first-child th:first-child, tbody:first-child tr:first-child td:first-child {
     border-radius: 4px 0 0 0;

@@ -1,7 +1,3 @@
-/**
-* Javascript used by reddit extractor
-*/
-
 (function() {
 	window.extractors = window.extractors || [];
 

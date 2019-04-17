@@ -1,7 +1,3 @@
-/**
-* Javascript used by Vimeo extractor
-*/
-
 (function() {
 	window.extractors = window.extractors || [];
 
@@ -18,9 +14,8 @@
 		var json = JSON.parse(jsonEncoded);
 		var res = {height: 0}
 		for (var video of json.request.files.progressive) {
-			if( video["height"] > res["height"] ) {
+			if (video["height"] > res["height"])
 				res = video;
-			}
 		}
 		callback(res["url"]);
 	}
