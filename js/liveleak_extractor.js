@@ -1,3 +1,7 @@
+/**
+* Javascript used by live leaks extractor
+*/
+
 (function() {
 	window.extractors = window.extractors || [];
 
@@ -11,8 +15,9 @@
 	}
 
 	liveleakExtractor.extract = function (url, callback) {
-		if (url.startsWith("http://"))
+		if (url.startsWith("http://")) {
 			url = "https:" + url.split(':')[1];
+		}
 		var page = get_page(url);
 		var regexExtractor = /<source [^>]*src="([^"]+)"[^>]*>/;
 		callback(page.match(regexExtractor)[1]);

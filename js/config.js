@@ -6,11 +6,13 @@
 var production = false;
 
 // Main page name (to be added in manifest.json and menu.js too)
-var tmp = window.location.href.split("/");
-var page_name = tmp[3];
+var url_parser = document.createElement("a");
+url_parser.href = window.location.href;
+var tmp = url_parser.pathname.split("/");
+var page_name = tmp[tmp.length-1];
 
 // Number of quiz allowed in TSV file
-var config_quiz_max_items = 9;
+var config_quiz_max_items = 10;
 
 /**
 * Values of parameters depending of environment

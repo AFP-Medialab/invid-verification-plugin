@@ -1,5 +1,8 @@
-/* Set here your own Tracking ID */
-var trackingID = 'UA-XXXXXXXX-Y';
+/* 
+* Set here your own Tracking ID 
+* See config.js !
+*/
+var trackingID = config_google_analytics_key;
 
 window.addEventListener("load", function(){
   window.cookieconsent.initialise({
@@ -58,5 +61,5 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 window['ga-disable-'+trackingID] = true;
 ga('create', trackingID, 'auto');
 ga('set', 'checkProtocolTask', function(){}); // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
-ga('set', 'page', '/invid.html#analysis');
+ga('set', 'page', page_name);
 ga('set', 'anonymizeIp', true);

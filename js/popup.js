@@ -1,5 +1,8 @@
 (function () {
 
+	// var page_name = "invid.html";
+	var page_name = "we-verify.html";
+
 	window.extractors = window.extractors || [];
 	/* Creation of a new extractor */
 	/* The extractor must follow this format :
@@ -36,7 +39,7 @@
 	}
 
 	document.getElementById("invid-item").addEventListener("click", function openInvid() {
-		openTab("invid.html");
+		openTab(page_name);
 	});
 
 	var active = "";
