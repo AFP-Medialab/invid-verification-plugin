@@ -3,7 +3,7 @@
 */
 
 // Whether plugin is running in production mode or not
-var production = false;
+var production = true;
 
 // Main page name (to be added in manifest.json and menu.js too)
 var url_parser = document.createElement("a");
