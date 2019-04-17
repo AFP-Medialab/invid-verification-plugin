@@ -130,10 +130,8 @@
 
 .cr-slider {
     -webkit-appearance: none;
-/*removes default webkit styles*/
-    /*border: 1px solid white; *//*fix for FF unable to apply focus style bug */
     width: 300px;
-/*required for proper track sizing in FF*/
+	/* required for proper track sizing in FF */
     max-width: 100%;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -161,11 +159,6 @@
 .cr-slider:focus {
     outline: none;
 }
-/*
-.cr-slider:focus::-webkit-slider-runnable-track {
-background: #ccc;
-}
-*/
 
 .cr-slider::-moz-range-track {
     width: 100%;
@@ -184,7 +177,7 @@ background: #ccc;
     margin-top: -6px;
 }
 
-/*hide the outline behind the border*/
+/* hide the outline behind the border */
 .cr-slider:-moz-focusring {
     outline: 1px solid white;
     outline-offset: -1px;
@@ -193,11 +186,13 @@ background: #ccc;
 .cr-slider::-ms-track {
     width: 100%;
     height: 5px;
+	/* remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
     background: transparent;
-/*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
-    border-color: transparent;/*leave room for the larger thumb to overflow with a transparent border */
+	/* leave room for the larger thumb to overflow with a transparent border */
+    border-color: transparent;
     border-width: 6px 0;
-    color: transparent;/*remove default tick marks*/
+	/* remove default tick marks */
+    color: transparent;
 }
 .cr-slider::-ms-fill-lower {
     background: rgba(0, 0, 0, 0.5);

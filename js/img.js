@@ -1,49 +1,43 @@
-/* History */
-class History{
+/**
+* Javascript used by the magnifier
+*/
 
-    constructor(url){
+/**
+* @class History 
+*/
+class History 
+{
+    constructor( url ) {
         this.current_index = 0;
         this.history = [url];
     }
-
-    removeHistoryFrom(index){
+    removeHistoryFrom( index ) {
         return this.    history.splice(index, this.history.length - index);
     }
-
-    addHistory(url){
+    addHistory( url ) {
         if (this.current_index < this.history.length -1){
             this.removeHistoryFrom(this.current_index + 1);
         }
         this.current_index++;
         return this.history.push(url);
     }
-
-    getHistory(){
+    getHistory() {
         return this.history[this.current_index];
     }
-
-    clearHistory(){
+    clearHistory() {
         this.current_index = -1;
         return this.removeHistoryFrom(0);
     }
-
-    undo(){
-        if (this.current_index > 0)
-            this.current_index--;
-        /* display reverse search button */
-        if (this.current_index == 0 && !this.local_path)
-            displayRevBtnMagnifier();
-
+    undo() {
+        if( this.current_index > 0 ) this.current_index--;
+        // display reverse search button
+        if (this.current_index == 0 && !this.local_path) displayRevBtnMagnifier();
         return this.history[this.current_index];
     }
-
-    redo(){
-        /* hide reverse search button */
-        if (this.current_index == 0)
-            hideRevBtnMagnifier();
-
-        if (this.current_index < this.history.length - 1)
-            this.current_index++;
+    redo() {
+        // hide reverse search button
+        if (this.current_index == 0) hideRevBtnMagnifier();
+        if (this.current_index < this.history.length - 1) this.current_index++;
         return this.history[this.current_index]; 
     }
 }
@@ -51,24 +45,29 @@ class History{
 var histo = new History("test");
 histo.local = false;
 
-function removeElementsByClass(className){
+/**
+* @func remove elements having a specific class
+* @className class name of elements to remove
+*/
+function removeElementsByClass(className)
+{
     var elements = document.getElementsByClassName(className);
-    while(elements.length > 0){
+    while( elements.length > 0 ){
         elements[0].parentNode.removeChild(elements[0]);
     }
 }
 
-/*Recreate the zoom on the image*/
-function rebuild(img_url){
+/**
+* @func Recreate the zoom on the image
+* @img_url Url of image to rebuild zoom on
+*/
+function rebuild(img_url)
+{
     var test = document.getElementById("test");
-    if(test != null) {
-        test.remove();
-    }
+    if( test != null ) test.remove();
 
-    var test2 = document.getElementById("test2");
-    if(test2 != null) {
-        test2.remove();
-    }
+	var test2 = document.getElementById("test2");
+    if( test2 != null ) test2.remove();
 
     removeElementsByClass("zoomContainer");
 
@@ -88,7 +87,7 @@ function rebuild(img_url){
     document.getElementById("place-lens").appendChild(elem2);
     refreshTest2();
 
-    //init or update croppie
+    // init or update croppie
     $("#cropper").croppie('destroy', '');
     var basic = $("#cropper").croppie({
         viewport: { width: 200, height: 200 },
@@ -100,15 +99,22 @@ function rebuild(img_url){
     });
 }
 
-/*Check if url is valid*/
-function ValidURL(str) {
+/**
+*@func Check if url is valid
+*/
+function ValidURL(str) 
+{
     var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
     return regex.test(str);
 }
-/*submit image url*/
-function submit_img(){
+
+/**
+* @func Submit image url
+*/
+function submit_img()
+{
     var img_url = document.getElementById("urlbox").value;
-    if (img_url != "") {
+    if( img_url != "" ) {
         img_url = get_real_url_img(img_url);
         var old = histo.local;
         histo = new History(img_url);
@@ -128,7 +134,7 @@ function submit_img(){
         }
         document.getElementById("place-crop").style.display = "none";
         document.getElementById("copy_url_img_magnifier").style.display = (histo.local_path) ? "" : "none";
-        if (!ValidURL(img_url)) {
+        if( ! ValidURL(img_url) ) {
             document.getElementById("lst_search_btn").setAttribute("style", "display: none");
             document.getElementById("magnifier-content").style.display = (histo.local_path) ? "" : "none";
         }
@@ -140,17 +146,17 @@ function submit_img(){
 }
 
 var form = document.getElementById("img_form");
-if (form.addEventListener){
+if( form.addEventListener ) {
     form.addEventListener("submit", submit_img, false);
 }
-form.addEventListener("submit", function(e){
+form.addEventListener("submit", function(e) {
     e.preventDefault();
 });
 
-/*Display or hide scale element*/
+/* Display or hide scale element */
 document.getElementById("none").onclick = function() {
     document.getElementById("scale_input").style.display = "none";
-    //hide image display depending on function used
+    // hide image display depending on function used
     document.getElementById("rounded-switch").style.display = "";
     if (document.getElementById("toogle").checked) {
         document.getElementById("place-inner").style.display = "";
@@ -164,7 +170,7 @@ document.getElementById("none").onclick = function() {
 
 document.getElementById("sharp").onclick = function() {
     document.getElementById("scale_input").style.display = "none";
-    //hide image display depending on function used
+    // hide image display depending on function used
     document.getElementById("rounded-switch").style.display = "";
     if (document.getElementById("toogle").checked) {
         document.getElementById("place-inner").style.display = "";
@@ -178,7 +184,7 @@ document.getElementById("sharp").onclick = function() {
 
 document.getElementById("flip").onclick = function() {
     document.getElementById("scale_input").style.display = "none";
-    //hide image display depending on function used
+    // hide image display depending on function used
     document.getElementById("rounded-switch").style.display = "";
     if (document.getElementById("toogle").checked) {
         document.getElementById("place-inner").style.display = "";
@@ -190,10 +196,9 @@ document.getElementById("flip").onclick = function() {
     document.getElementById("place-crop").style.display = "none";
 }
 
-
 document.getElementById("bicubic").onclick = function() {
     document.getElementById("scale_input").style.display = "";
-    //hide image display depending on function used
+    // hide image display depending on function used
     document.getElementById("rounded-switch").style.display = "";
     if (document.getElementById("toogle").checked) {
         document.getElementById("place-inner").style.display = "";
@@ -213,7 +218,7 @@ document.getElementById("crop").onclick = function() {
     document.getElementById("place-lens").style.display = "none";
     document.getElementById("place-crop").style.display = "";
 
-    //init or update croppie
+    // init or update croppie
     $("#cropper").croppie('destroy', '');
     var basic = $("#cropper").croppie({
         viewport: { width: 200, height: 200 },
@@ -225,7 +230,7 @@ document.getElementById("crop").onclick = function() {
     });
 }
 
-/*Undo or redo filter*/
+/* Undo or redo filter */
 document.getElementById("undo").onclick = function() {
     rebuild(histo.undo());
 };
@@ -239,14 +244,18 @@ document.getElementById("scale").onchange = function(){
     $("#show_scale").html(": " + num + "%");
 }
 
-/*get selected filter and apply it*/
-function apply_filter(){
-    if (!document.getElementById('none').checked && document.getElementById("copy_url_img_magnifier").style.display == "none")
+/**
+* @func Get selected filter and apply it 
+*/
+function apply_filter()
+{
+    if (!document.getElementById('none').checked && document.getElementById("copy_url_img_magnifier").style.display == "none") {
         hideRevBtnMagnifier();
+	}
     var new_url = histo.getHistory();
     var scale = parseFloat(document.getElementById("scale").value) / 100
     var img = document.getElementById("test");
-    //Solve firefox : "SecurityError: The operation is insecure"
+    // Solve firefox : "SecurityError: The operation is insecure"
     img.crossOrigin = "anonymous";
     if(document.getElementById('sharp').checked)
         new_url = Filters.filterImage(img, "sharp", scale);
@@ -267,18 +276,20 @@ function apply_filter(){
     rebuild(histo.getHistory());
 };
 
-/*Listen if button clicked and submit the url*/
+/* Listen if button clicked and submit the url */
 var form = document.getElementById("filter_form");
-if (form.addEventListener){
+if( form.addEventListener ){
     form.addEventListener("submit", apply_filter, false);
 }
-
-form.addEventListener("submit", function(e){
+form.addEventListener("submit", function(e) {
     e.preventDefault();
 });
 
-/* switch tab to Magnifier tab*/
-function callMagnifier(url){
+/**
+* @func Switch tab to Magnifier tab
+*/
+function callMagnifier(url) 
+{
     document.getElementById("urlbox").value = url;
     submit_img();
 }
@@ -304,16 +315,17 @@ $('#file-input').change( function(event) {
         reverseImgSearch('google', getImg());
     };
 
-    /* Google button : Image reverse search */
+    /* Baidu button : Image reverse search */
     document.getElementById("baidu_rev_search_btn").onclick = function() {
         reverseImgSearch('baidu', getImg());
     };
 
-    /* Google button : Image reverse search */
+    /* Yandex button : Image reverse search */
     document.getElementById("yandex_rev_search_btn").onclick = function() {
         reverseImgSearch('yandex', getImg());
     };
 
+    /* Tineye button : Image reverse search */
     document.getElementById("tineye_rev_search_btn").onclick = function() {
         reverseImgSearch('tineye', getImg());
     }
@@ -327,8 +339,9 @@ $('#file-input').change( function(event) {
 /* For button to encode imge modified */
 document.getElementById("copy_url_img_magnifier").addEventListener("click", function() {
     var text = histo.getHistory();
-    if (!/data:image\/png/.test(text))
+    if( ! /data:image\/png/.test(text) ) {
         text = Filters.filterImage(document.getElementById("test"), "none", 1);
+	}
     copyText(text);
     this.innerHTML = "URL copied";
     openTab("https://www.google.com/searchbyimage?&image_url=")
@@ -339,20 +352,23 @@ document.getElementById("download_img_magnifier").addEventListener("click", func
     var url_start = histo.history[0];
     var image_name = url_start.substring(url_start.lastIndexOf("/") + 1);
     var index = image_name.indexOf("?");
-    if (index != -1)
-        image_name = image_name.substring(0, index);
-    //download as base extension
+    if (index != -1) image_name = image_name.substring(0, index);
+    // download as base extension
     this.download = image_name.substring(0, image_name.lastIndexOf("."));
 });
 
-/* Hide reverse button */
+/**
+* @func Hide reverse button 
+*/
 function hideRevBtnMagnifier()
 {
     document.getElementById("lst_search_btn").style.display = "none";
     document.getElementById("copy_url_img_magnifier").style.display = "";
 }
 
-/* Display reverse button */
+/**
+* @func Display reverse button 
+*/
 function displayRevBtnMagnifier()
 {
     document.getElementById("lst_search_btn").style.display = "inline";

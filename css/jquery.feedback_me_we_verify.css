@@ -6,7 +6,7 @@
 	-moz-transition: all 500ms ease-in-out;
 	-o-transition: all 500ms ease-in-out;
 	transition: all 500ms ease-in-out;
-	background: #136899;
+	background: #21a5b4;
 	color: #FFFFFF;
 }
 
@@ -28,7 +28,7 @@
 
 .feedback_trigger.left-top, .feedback_trigger.left-bottom , .feedback_trigger.right-top, .feedback_trigger.right-bottom { 
 	width: 40px;
-	height: 100px;
+	height: 108px;
 }
 
 .feedback_trigger.bottom-left{ 
@@ -58,22 +58,26 @@
 .feedback_name {
 	display: block;
 	width: 340px !important;
+	height:32px;
 }
 
 .feedback_email {
 	display: block;
-	width: 340px;
+	width: 340px !important;
+	height:32px;
 }
 
 .feedback_message {
 	display: block;
-	width: 340px;
+	width: 340px !important;
 	resize: none;
+	height:48px;
 }
 
 .feedback_submit {
-	background: #136899 !important;
+	background: #21a5b4 !important;
 	float: right;
+	margin-right:10px;
 }
 
 .feedback_trigger_text { 
@@ -98,11 +102,11 @@
 }
 
 .fm_clean {
-	background-color: #136899;
+	background-color: #21a5b4;
 }
 
 .fm_clean.feedback_trigger:hover {
-	background-color: #134099;
+	background-color: #1d8c99;
 }
 
 .fm_clean button{
@@ -498,7 +502,7 @@
 }
 
 .feedback-delayed-dlg.success {
-	background-color: #136899;
+	background-color: #21a5b4;
 }
 
 .feedback-delayed-dlg.fail {
