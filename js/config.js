@@ -31,7 +31,7 @@ if( production )
 	var config_google_analytics_key = "to-do";
 
 	// URL of tsv file holding translation strings
-	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/master/InVIDTraductions.tsv"
+	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.70/InVIDTraductions.tsv"
 }
 else
 {
