@@ -339,19 +339,23 @@
 						<div id="keyframes_base">
 							<div id="keyframes_title"></div>
 							<form id="keyframes_form">
-								<ul style="padding-left:0">
-									<input type="text" name="keyframes_url" id="keyframes_input">
-									<br>
-									<br>
-									<button id="keyframes_localfile" class="button"></button>
-									<input type="submit" value="Submit" class="button" id="keyframe_submit">
-									<br>
-									<br>
-									<div id="keyframes-wait" style="display: none;"></div>
-									<br>
-									<br>
-									<div id="loader-keyframes" class="loader"></div>
-								</ul>
+								<input type="text" name="keyframes_url" id="keyframes_input">
+								<br>
+								<br>
+								<div style="overflow:hidden;width:200px;margin:0 auto;">
+									<div style="float:right;">
+										<input type="submit" value="Submit" class="button" id="keyframe_submit">
+									</div>
+									<div style="float:left;">
+										<button id="keyframes_localfile" class="button"></button>
+									</div>
+								</div>
+								<br>
+								<br>
+								<div id="keyframes-wait" style="display: none;"></div>
+								<br>
+								<br>
+								<div id="loader-keyframes" class="loader"></div>
 							</form>
 							<div id="error-keyframes" style="display: none; color: red;"></div>
 							<div id="keyframes-content">
@@ -618,23 +622,27 @@
 						<div id="forensic_base">
 							<div id="forensic_title"></div>
 							<form id="forensic_form">
-								<ul style="padding-left:0;">
-									<input type="text" name="forensic_url" id="forensic_input">
-									<br>
-									<br>
-									<br>
-									<button id="forensic_localfile" class="button"></button>
-									<input type="submit" value="Submit" class="button" id="forensic_submit">
-									<br>
-									<br>
-									<div id="forensic-wait" style="display: none;"></div>
-									<br>
-									<br>
-									<div id="forensic-image" style="display: none;"></div>
-									<div id="loader-forensic" class="loader" style="display: none;"></div>
-									<br>
-									<br>
-								</ul>
+								<input type="text" name="forensic_url" id="forensic_input">
+								<br>
+								<br>
+								<br>
+								<div style="overflow:hidden;width:200px;margin:0 auto;">
+									<div style="float:right;">
+										<input type="submit" value="Submit" class="button" id="forensic_submit">
+									</div>
+									<div style="float:left;">
+										<button id="forensic_localfile" class="button"></button>
+									</div>
+								</div>
+								<br>
+								<br>
+								<div id="forensic-wait" style="display: none;"></div>
+								<br>
+								<br>
+								<div id="forensic-image" style="display: none;"></div>
+								<div id="loader-forensic" class="loader" style="display: none;"></div>
+								<br>
+								<br>
 							</form>
 							<div id="error-forensic"></div>
 							<div id="forensic-content">
