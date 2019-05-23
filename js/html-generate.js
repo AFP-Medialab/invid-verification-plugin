@@ -684,29 +684,7 @@ function update_quiz(lang)
 				frm.style.marginBottom = "20px";
 				main_div.appendChild(frm); 
 			}
-			if( ( typ == "video" ||  typ == "image" ) && json_lang_translate[lang]["quiz_copy"] != "" ) {
-				// COPY URL
-				var btn = document.createElement("button");
-				btn.className = "btn-primary btn-lg";
-				btn.index = i;
-				btn.innerHTML = json_lang_translate[lang]["quiz_copy"];
-				btn.style.marginTop = "20px";
-				btn.style.marginRight = "30px";
-				btn.style.backgroundImage = "none";
-				btn.addEventListener( 'click', function() {
-					if( document.getElementById("quiz_image_"+this.index) ) {
-						var s = document.getElementById("quiz_image_"+this.index).src;
-					} else if( document.getElementById("quiz_iframe_"+this.index) ) { 
-						var s = document.getElementById("quiz_iframe_"+this.index).src;
-						s = s.replace( '/embed/', '/watch?v=' );
-					} else if( document.getElementById("quiz_video_"+this.index) ) { 
-						var s = document.getElementsByTagName("source");
-						s = s[0].src;
-					}
-					copyToClipboard(s);
-				});
-				main_div.appendChild(btn);
-			} 
+			
 			if( typ == "image" ) {
 				// SIMILARITY search
 				var btn = document.createElement("button");
