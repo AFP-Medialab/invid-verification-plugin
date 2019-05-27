@@ -68,6 +68,7 @@
   color: #fff;
   background-color: #0366d6;
   text-transform: capitalize;
+  position: inherit;
 }
 
 .reuse-table__item {
