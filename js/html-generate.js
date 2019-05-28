@@ -453,7 +453,7 @@ function update_tuto(lang)
 	h.innerHTML = json_lang_translate[lang]["tuto_h_2"];
 	tuto_tab.appendChild(h);
 
-	var div = document.createElement("div");
+	/*var div = document.createElement("div");
 	div.style = "text-align: center";
 	var iframe = document.createElement("iframe");
 	iframe.width = "640";
@@ -461,7 +461,7 @@ function update_tuto(lang)
 	iframe.src = "https://www.youtube.com/embed/nmgbFODPiBY";
 	iframe.frameborder = "0"
 	div.appendChild(iframe);
-	tuto_tab.appendChild(div);
+	tuto_tab.appendChild(div);*/
 
 	for (var i = 3; i < 8; ++i) {
 		var p = document.createElement("p");
@@ -469,7 +469,7 @@ function update_tuto(lang)
 		tuto_tab.appendChild(p);
 	}
 
-	var div = document.createElement("div");
+	/*var div = document.createElement("div");
 	div.style = "text-align: center";
 	var iframe = document.createElement("iframe");
 	iframe.width = "640";
@@ -477,7 +477,7 @@ function update_tuto(lang)
 	iframe.src = "https://www.youtube.com/embed/8S59OMBvT8w";
 	iframe.frameborder = "0"
 	div.appendChild(iframe);
-	tuto_tab.appendChild(div);
+	tuto_tab.appendChild(div);*/
 
 	for (var i = 8; i < 12; ++i) {
 		var p = document.createElement("p");
@@ -684,7 +684,6 @@ function update_quiz(lang)
 				frm.style.marginBottom = "20px";
 				main_div.appendChild(frm); 
 			}
-			
 			if( typ == "image" ) {
 				// SIMILARITY search
 				var btn = document.createElement("button");
