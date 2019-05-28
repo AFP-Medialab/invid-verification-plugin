@@ -2176,17 +2176,19 @@
 				return;
 			}
 			var date = changed[method].call(changed, 'getDate');
-			if (date !== null && options.minInterval > 0) {
-				if (option === 'minDate') {
-					date.setMilliseconds(date.getMilliseconds() + options.minInterval);
+			if(date !== null){
+				if (options.minInterval > 0) {
+					if (option === 'minDate') {
+						date.setMilliseconds(date.getMilliseconds() + options.minInterval);
+					}
+					if (option === 'maxDate') {
+						date.setMilliseconds(date.getMilliseconds() - options.minInterval);
+					}
 				}
-				if (option === 'maxDate') {
-					date.setMilliseconds(date.getMilliseconds() - options.minInterval);
+				
+				if (date.getTime) {
+					other[method].call(other, 'option', option, date);
 				}
-			}
-			
-			if (date.getTime) {
-				other[method].call(other, 'option', option, date);
 			}
 		}
 
