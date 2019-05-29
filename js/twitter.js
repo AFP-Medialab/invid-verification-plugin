@@ -89,12 +89,13 @@ function submit_form()
 
 /* Add form submit listener */
 var form = document.getElementById("twitter_form");
-if (form.addEventListener){
+if(form){
+
 	form.addEventListener("submit", submit_form, false);
+	form.addEventListener("submit", function(e){
+		e.preventDefault();
+	});
 }
-form.addEventListener("submit", function(e){
-	e.preventDefault();
-});
 
 /* Add dates picker facility */
 $(document).ready( function() {

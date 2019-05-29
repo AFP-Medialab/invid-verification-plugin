@@ -136,7 +136,7 @@ function hideButtons()
     var buttons_id = [ "verif-content", "maps-content", "google_search_btn", "yandex_search_btn",
         /*"twitter-shares-content",*/ "twitter_search_btn", "tineye_search_btn"
     ]
-    for (id of buttons_id) {
+    for (var id of buttons_id) {
         document.getElementById(id).setAttribute("style", "display: none");
     }
 }
