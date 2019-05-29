@@ -139,10 +139,11 @@ $(document).ready( function() {
 	}
 
 	// Facebook connect callback to retrieve token
+	$("#apibox").prop("value", "");
 	window.addEventListener( 'message', function(e) {
 		fb_access_token = e.data[1];
 		$('#facebook_connect_iframe').hide();
-		if( fb_access_token != "" && $("#video_form2").length > 0 ) {
+		if( (fb_access_token !== undefined || fb_access_token != "") && $("#video_form2").length > 0 ) {
 			var url = $("#apibox").val();
 			var tmp = url.split( "facebook.com" );
 			if( tmp.length == 2 ) {

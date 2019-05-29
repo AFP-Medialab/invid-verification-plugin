@@ -146,12 +146,12 @@ function submit_img()
 }
 
 var form = document.getElementById("img_form");
-if( form.addEventListener ) {
+if(form){
     form.addEventListener("submit", submit_img, false);
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+    });
 }
-form.addEventListener("submit", function(e) {
-    e.preventDefault();
-});
 
 /* Display or hide scale element */
 document.getElementById("none").onclick = function() {
@@ -278,12 +278,12 @@ function apply_filter()
 
 /* Listen if button clicked and submit the url */
 var form = document.getElementById("filter_form");
-if( form.addEventListener ){
+if( form){
     form.addEventListener("submit", apply_filter, false);
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+    });    
 }
-form.addEventListener("submit", function(e) {
-    e.preventDefault();
-});
 
 /**
 * @func Switch tab to Magnifier tab
