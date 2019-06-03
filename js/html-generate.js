@@ -378,6 +378,7 @@ function update_about(lang)
 	input.setAttribute("name", "unlock_explanations");
 	input.setAttribute("id", "checkbox_explain");
 	input.checked = ( cookie_value( "unlock" ) == "1" ? true : false );
+	
 	input.addEventListener("change", function () {
 		var date = new Date();
 		date.setTime( date.getTime() + ( 3*365*24*60*60*1000 ) );
@@ -412,6 +413,7 @@ function update_about(lang)
 	div_trans.innerHTML = json_lang_translate[lang]["footer_about"];
 	about_tab.appendChild(div_trans);
 }
+
 
 /**
 * @func update the content of tuto tab in function of language
@@ -760,14 +762,21 @@ function update_quiz(lang)
 			btn.style.width = "100%";
 			btn.addEventListener( 'click', function() {
 				var d = document.getElementById("quiz_explanation_"+this.index).className;
-				var locked = ( cookie_value( "unlock" ) == "1" ? false : true );
+				var cook_val = cookie_value( "unlock" );
+				var locked;
+				//Hack for firefox addon that do not support cookies
+				if(!cook_val){
+					locked = (document.getElementById("checkbox_explain").checked)? false : true ;
+				}else{
+					locked = ( cookie_value( "unlock" ) == "1" ? false : true );
+				}
 				if( locked ) {
 					alert( json_lang_translate[lang]["quiz_unlock_message"] );
 					document.getElementById("quiz_explanation_"+this.index).className = "hidden";
 				} else {
 					document.getElementById("quiz_explanation_"+this.index).className = ( d == "hidden" ? "" : "hidden" );
 				}
-			});
+			}, true);
 			if( cookie_value( "unlock" ) == "1" ) {
 				btn.style.backgroundImage = "url(img/quiz/cadenas-on-bg.png)";
 				btn.style.backgroundRepeat = "no-repeat";

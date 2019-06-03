@@ -6,6 +6,8 @@
 "permissions": [
      "contextMenus",
      "tabs",
+     "cookies",
+     "sessions",
      "storage",
      "identity",
      "https://*.google.com/",
@@ -22,6 +24,7 @@
      "https://code.jquery.com/*",
      "https://tp.srgssr.ch/*",
      "https://www.rts.ch/*",
+     "https://caa.iti.gr/*",
      "<all_urls>" ],
 "browser_action" :
     {
@@ -39,6 +42,6 @@
         "48": "img/InVID_black.png",
         "128": "img/InVID_black.png"
     },
-"options_page": "we-verify.html",
+
 "content_security_policy": "script-src 'self' https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/ https://maps.googleapis.com https://maps.gstatic.com https://cdn.knightlab.com https://www.google-analytics.com https://www.googletagmanager.com/gtag/ https://platform.twitter.com/ https://cdn.syndication.twimg.com/ https://twitter.com/ https://code.jquery.com/ https://tp.srgssr.ch/ https://www.rts.ch/ https://multimedia2.iti.gr/ https://reveal-mklab.iti.gr/reveal/ 'unsafe-eval'; object-src 'self'; frame-src *;"
 }
