@@ -1,6 +1,6 @@
 {
 "name" :"Fake video news debunker by InVID",
-"version" :"0.70",
+"version" :"0.71",
 "manifest_version": 2,
 "description" :"InVID extension",
 "permissions": [
@@ -19,7 +19,7 @@
      "https://cdn.syndication.twimg.com/*",
      "http://multimedia2.iti.gr/*",
      "http://reveal-mklab.iti.gr/reveal/*",
-     "https://multimedia2.iti.gr/*",
+     "https://multimedia3.iti.gr/*",
      "https://reveal-mklab.iti.gr/reveal/*",
      "https://code.jquery.com/*",
      "https://tp.srgssr.ch/*",
