@@ -532,7 +532,7 @@ quiz_keyframes	Keyframes	Images clés	Imágenes claves	Nyckelbildrutor
 home_tutorial_title	Welcome to WeVerify	Bienvenue sur WeVerify	Bienvenido a WeVerify	Välkommen till We-Verify
 home_tutorial_image_1	ht_1_en.png	ht_1_fr.png	ht_1_es.png	ht_1_en.png
 home_tutorial_image_2	ht_2_en.png	ht_2_fr.png	ht_2_es.png	ht_2_en.png
-home_tutorial_image_3	ht_3_en.png	ht_3_fr.png	ht_3_es.png	
+home_tutorial_image_3	ht_3_en.png	ht_3_fr.png	ht_3_es.png	ht_3_en.png
 home_tutorial_image_4				
 home_tutorial_image_5				
-home_tutorial_display	1	1	1	
+home_tutorial_display	1	1	1	1
