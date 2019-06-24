@@ -115,6 +115,7 @@ function update_keyframes(lang)
 	setInnerHtml("keyframes_title",				"<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>");
 	setInnerHtml("keyframes_localfile",			addSpan(json_lang_translate[lang]["button_localfile"]));
 	setInnerHtml("keyframes_content_title",		"<h3>" + json_lang_translate[lang]["keyframes_content_title"] + "</h3>");
+	setInnerHtml("keyframes_tip",				json_lang_translate[lang]["keyframes_tip"]);
 	setInnerHtml("keyframes_content_acco",		json_lang_translate[lang]["keyframes_content_acco"]);
 	setInnerHtml("keyframes_iframe_back",		addSpan(json_lang_translate[lang]["forensic_card_back"]));
 	setInnerHtml("keyframes_download_subshots",	json_lang_translate[lang]["keyframes_download"]);
