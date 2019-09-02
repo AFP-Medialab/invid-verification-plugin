@@ -309,6 +309,11 @@ function update_about(lang)
 		select_current_language( language );
 	});
 
+	setInnerHtml("lang_code", json_lang_translate[lang]["lang_code"] );
+	setInnerHtml("lang_label_english", json_lang_translate["en"]["lang_label"]);
+	setInnerHtml("lang_label_french",json_lang_translate["fr"]["lang_label"]);
+	setInnerHtml("lang_label_spanish", json_lang_translate["es"]["lang_label"]);
+
 	for (var i = 0; i < arr_trans.length; ++i) {
 		var p = document.createElement("p");
 		p.innerHTML = arr_trans[i];
