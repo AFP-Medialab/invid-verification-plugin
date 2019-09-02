@@ -135,6 +135,14 @@ imageReverseSearchBing = function(word){
 	}
 };
 
+imageReverseSearchAll = function(word){
+	imageReverseSearch(word);
+	imageReverseSearchBaidu(word);
+	imageReverseSearchBing(word);
+	imageReverseSearchTineye(word);
+	imageReverseSearchYandex(word);
+};
+
 chrome.contextMenus.create({
  title: "Youtube thumbnails reverse search",
  contexts:["link", "video"], 
@@ -168,6 +176,12 @@ chrome.contextMenus.create({
 	title: "Image Forensic",
 	contexts:["image"],
 	onclick: imageForensic,
+});
+
+chrome.contextMenus.create({
+	title: "Image Reaverse Search - ALL",
+	contexts:["image", "link"],
+	onclick: imageReverseSearchAll,
 });
 
 chrome.contextMenus.create({
