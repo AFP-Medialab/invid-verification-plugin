@@ -41,11 +41,11 @@ function create_url(term, account, filter, lang, geocode, near, within, from_dat
 	}
 	if (filter != ""){
 
-		twitter_url += "%20filter:" + filter.replace(' ', '+');
+		twitter_url += "%20filter:" + filter;
 	}
 	if (verified)
 	{
-		twitter_url += ((filter == "")? "%20filter:" : "+") + "verified";
+		twitter_url += "%20filter:verified";
 	}
 	if (lang != ""){
 		twitter_url += "%20lang:" + lang;
