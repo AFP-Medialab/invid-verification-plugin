@@ -289,9 +289,33 @@ function update_about(lang)
 	var br = document.createElement("hr");
 	// about_tab.appendChild(br);
 
+
+	setInnerHtml("lang_code", json_lang_translate[lang]["lang_code"] );
+	let all_lang = json_lang_translate;
+
+
+	// Creates a list of all languages existing in the .tsv file.
+
+	let languages_item = "";
+	for(lang_symb in all_lang) {
+		let list = document.createElement('li');
+		let link = document.createElement('a');
+		link.type = "button";
+		link.setAttribute('data-lang', lang_symb);
+		if (lang == lang_symb)
+			link.setAttribute("class", "dropdown-item on");
+		else
+			link.setAttribute("class", "dropdown-item");
+		link.text =  json_lang_translate[lang_symb]["lang_label"];
+		list.appendChild(link);
+		languages_item += list.outerHTML;
+	};
+	setInnerHtml("lang_list", languages_item);
+
 	// set the on function for selector to update language
 	$("[name='language']").on("change", function(event) {
 		var language = $(this).val();
+		console.log(language + "change");
 		if( language != global_language ) {
 			updateLanguageText(language);
 			updateAllTranslations( language );
@@ -301,6 +325,7 @@ function update_about(lang)
 	});
 	$(".languages-list a").on("click", function(event) {
 		var language = $(this).attr("data-lang");
+		console.log(language + "click");
 		if( language != global_language ) {
 			updateLanguageText(language);
 			updateAllTranslations( language );
@@ -308,6 +333,7 @@ function update_about(lang)
 		}
 		select_current_language( language );
 	});
+
 
 	for (var i = 0; i < arr_trans.length; ++i) {
 		var p = document.createElement("p");
