@@ -1067,7 +1067,6 @@ third-parties-menu div figure:hover{
 }
 
 .languages-list a.on{
-	background-color:#21a5b4;
-	color:#fff;
+	color:#21a5b4;
 	border-radius:3px;
 }
