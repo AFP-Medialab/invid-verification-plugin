@@ -3,7 +3,7 @@
 */
 
 // @base_url_forensic where to send all get or post requests
-var base_url_forensic = "http://reveal-mklab.iti.gr/";
+var base_url_forensic = "https://reveal-mklab.iti.gr/";
 
 // @datas order of analysis type to display, depending on image width or height
 var datas_height = ["dqReport", "elaReport", "medianNoiseReport", "gridsReport", "gridsInversedReport", "dwNoiseReport", "blockingReport"];

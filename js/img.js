@@ -332,7 +332,7 @@ $('#file-input').change( function(event) {
 
     /* Verification button : Image Verification Assistant */
     document.getElementById("img_verif_btn").onclick = function() {
-        openTab("http://reveal-mklab.iti.gr/reveal/?image=" + histo.getHistory());
+        openTab("https://reveal-mklab.iti.gr/reveal/?image=" + histo.getHistory());
     };
 })();
 
