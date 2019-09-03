@@ -55,6 +55,7 @@ thumbnailsSearch = function(word){
 function getUrlImg(word) {
 	if (word.srcUrl)
 		return String(word.srcUrl);
+	
 	return String(word.linkUrl);
 }
 
@@ -79,6 +80,7 @@ imageMagnifier = function(word){
 imageReverseSearch = function(word){
 	var search_url = "https://www.google.com/searchbyimage?image_url=";
 	var url = getUrlImg(word);
+	
 	if (url != ""){
 		chrome.tabs.create({url:search_url + url});
 		// Google analytics
@@ -179,7 +181,7 @@ chrome.contextMenus.create({
 });
 
 chrome.contextMenus.create({
-	title: "Image Reaverse Search - ALL",
+	title: "Image Reverse Search - ALL",
 	contexts:["image", "link"],
 	onclick: imageReverseSearchAll,
 });
