@@ -1060,6 +1060,9 @@ third-parties-menu div figure:hover{
 	cursor:pointer;
 }
 
+.languages-list{
+	padding-right: 50px;
+}
 
 .languages-list a:hover,
 .languages-list a.on{
