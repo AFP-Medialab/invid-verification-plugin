@@ -297,7 +297,7 @@ function update_about(lang)
 	// Creates a list of all languages existing in the .tsv file.
 
 	let languages_item = "";
-	for(lang_symb in all_lang) {
+	for(let lang_symb in all_lang) {
 		let list = document.createElement('li');
 		let link = document.createElement('a');
 		link.type = "button";
