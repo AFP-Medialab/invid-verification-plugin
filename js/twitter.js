@@ -32,7 +32,7 @@ function replaceAll(str, find, replace)
 /**
 * @func Create the url
 */
-function create_url(term, account, filter, lang, geocode, near, within, from_date, to_date, verified)
+function create_url(term, account, filter, lang, geocode, url, near, within, from_date, to_date, verified)
 {
 	var twitter_url = "https://twitter.com/search?f=tweets&q="
 	twitter_url = twitter_url +  replaceAll(term, "#", "%23");
@@ -52,6 +52,9 @@ function create_url(term, account, filter, lang, geocode, near, within, from_dat
 	}
 	if (geocode != ""){
 		twitter_url +=  "%20geocode:" + geocode;
+	}
+	if(url != ""){
+		twitter_url += "%20url:" + url;
 	}
 	if (near != ""){
 		twitter_url += "%20near:" + near;
@@ -87,9 +90,10 @@ function submit_form()
 	var from_date = document.getElementById("from-date").value;
 	var to_date = document.getElementById("to-date").value;
 	var verified = document.getElementById("verified").checked;
+	var url = document.getElementById("url-filter").value;
 
 	if( ! (term=="" && account=="" && filter=="" && lang=="" && geocode=="" && near=="" && from_date=="" && to_date=="") ) {
-		var url = create_url(term, account, filter, lang, geocode, near, within, from_date, to_date, verified);
+		var url = create_url(term, account, filter, lang, geocode, url, near, within, from_date, to_date, verified);
 		
 		ga('send', 'event', 'Url_provided', 'submit', url);
 		openTab(url);
