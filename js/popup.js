@@ -116,10 +116,12 @@
 					if (isYtUrl(url))
 						addUrl(domText, getYtUrl(url)); //getYtVideoUrl(getYtUrl(url)));
 					for (var extractor of window.extractors) {
-						if (extractor.validUrl(url))
+
+						if (extractor.validUrl(url)){
 							extractor.extract(url, function (urlRes) {
 								addUrl(domText, urlRes);
 							});
+						}
 					}
 				}
 				if (domText.innerHTML == "")
