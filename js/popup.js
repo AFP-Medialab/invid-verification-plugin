@@ -154,8 +154,8 @@
 					for (var extractor of window.extractors) {
 
 						if (extractor.validUrl(url)){
-								extractor.extract(url, function (urlRes) {
-								addUrl(domText, urlRes);//promises.push(new Promise(addUrl(domText, urlRes)));
+							extractor.extract(url, function (urlRes) {
+								addUrl(domText, urlRes);
 							});
 						}
 					}
