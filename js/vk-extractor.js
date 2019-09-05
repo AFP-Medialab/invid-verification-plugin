@@ -27,6 +27,7 @@
                 throw new Error("Could not create HTTP request object.");
             } 
             var sourceHTML;
+            var mp4Url = "";
             var request = makeHttpObject();
             request.open("GET", videoUrl, true);
             request.send(null);
@@ -38,7 +39,7 @@
 
                     mp4Url = mp4Url.split("\"")[1];
                     
-                    callback(mp4Url);
+                   callback(mp4Url);
                 }
             };
 

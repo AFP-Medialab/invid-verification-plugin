@@ -112,6 +112,7 @@
 			if (results && results.length && results[0] && results[0].length) {
 				if (domText.childNodes.length == 1)
 					domText.innerHTML = "";
+				var promises = [];
 				for (var url of results[0]) {
 					if (isYtUrl(url))
 						addUrl(domText, getYtUrl(url)); //getYtVideoUrl(getYtUrl(url)));
@@ -119,15 +120,26 @@
 
 						if (extractor.validUrl(url)){
 							extractor.extract(url, function (urlRes) {
-								addUrl(domText, urlRes);
+								promises.push(new Promise(addUrl(domText, urlRes)));
 							});
 						}
 					}
 				}
-				if (domText.innerHTML == "")
+				var isEmpty = true;
+				promises
+				.then((response) => {
+					if (domText.innerHTML != "")
+						isEmpty = false;
+				})
+				.catch((err) => {
+					window.alert("ERROR: " + err);
+				})
+				if (isEmpty)
+				{
 					domText.innerHTML = nothing_found_msg;
-			}
-		});
+				}
+		}
+	})
 	}
 
 	function getTabUrl(callback) {
