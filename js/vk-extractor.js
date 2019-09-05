@@ -69,7 +69,6 @@
                                                     return self.indexOf(value) === index;
                                                 });
                         
-                        window.alert(videos);
                         videos.forEach( video => { 
                             extractOne("https://vk.com/" + video)
                                 .then(url => {
