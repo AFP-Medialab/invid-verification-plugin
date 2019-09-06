@@ -97,6 +97,121 @@ if(form){
 	});
 }
 
+
+/* Details button listener */
+function generate_pie_chart(svg_id, json, title, low_color, hight_color)
+{
+	let svg = d3.select(svg_id),
+		width = svg.attr("width"),
+		height = svg.attr("height"),
+		radius = Math.min(width, height) / 2;
+
+	let g = svg.append("g")
+		.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+	let N = json.length;
+	let greenRange = [low_color, hight_color];
+	let color = d3.scaleLinear().domain([0, N])
+		.range(greenRange);
+
+	var pie = d3.pie().value(function(d) {
+		return d.doc_count;
+	});
+
+	var path = d3.arc()
+		.outerRadius(radius - 10)
+		.innerRadius(0);
+
+	var label = d3.arc()
+		.outerRadius(radius)
+		.innerRadius(radius - 80);
+
+		let data = json;
+
+		let arc = g.selectAll(".arc")
+			.data(pie(data))
+			.enter().append("g")
+			.attr("class", "arc");
+
+		arc.append("path")
+			.attr("d", path)
+			.attr("fill", function(d) {
+				let key_nb = 0;
+				for (let i = 0; i < json.length; i++)
+					if (json[i].key === d.data.key)
+						key_nb = N - i;
+				return color(key_nb);
+			});
+
+		var getAngle = function (d) {
+			return (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
+		};
+
+		arc.append("text")
+			.attr("transform", function(d) {
+				return "translate(" + path.centroid(d) + ") " +
+					"rotate(" + getAngle(d) + ")"; })
+			.attr("dy", 5)
+			.style("text-anchor", "start")
+			.text(function(d) { return d.data.key; })
+			.style("fill", "#3a3a3a");
+
+}
+
+let json = [
+	{
+		key: "webissimo",
+		doc_count: 95
+	},
+	{
+		key: "ActuSuisse",
+		doc_count: 75
+	}
+	,
+	{
+		key: "jeanlg75",
+		doc_count: 61
+	}
+	,
+	{
+		key: "wixoo_fr",
+		doc_count: 56
+	}
+	,
+	{
+		key: "alain46551486",
+		doc_count: 53
+	}
+	,
+	{
+		key: "IkanNews",
+		doc_count: 43
+	}
+	,
+	{
+		key: "Melinda_B",
+		doc_count: 33
+	}
+	,
+	{
+		key: "Sissi_Lys",
+		doc_count: 27
+	}
+	,
+	{
+		key: "bouche_bee",
+		doc_count: 24
+	}
+	,
+	{
+		key: "kekinladanMcf",
+		doc_count: 24
+	}
+];
+
+
+generate_pie_chart("#top_users_pie_chart", json, "Top Users", '#98f6ef', '#6db3ac');
+
 /* Add dates picker facility */
 $(document).ready( function() {
 	$( "#from-date" ).datetimepicker();
