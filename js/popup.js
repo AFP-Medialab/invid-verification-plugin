@@ -101,6 +101,11 @@
 		img.src = url;
 		img.setAttribute("style", "max-height: 50px; max-width: 50px;");
 		div.appendChild(img);
+
+		img.addEventListener('click', event => {
+			event.preventDefault();
+			chrome.tabs.create({url: url});
+		});
 	}
 
 	function addIframe(divId) {
