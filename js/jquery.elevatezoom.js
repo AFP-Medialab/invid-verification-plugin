@@ -50,6 +50,8 @@ if ( typeof Object.create !== 'function' ) {
 					self.options.lensColour = "none", //colour of the lens background
 					self.options.lensOpacity =  "1" //opacity of the lens
 				}
+				console.log(self.options);
+				self.options.lensSize = 400;
 				//INNER OVERRIDE SETTINGS
 				if(self.options.zoomType == "inner") {self.options.showLens = false;}
 
@@ -123,7 +125,7 @@ if ( typeof Object.create !== 'function' ) {
 				self.isWindowActive = false;
 				self.isLensActive = false;
 				self.isTintActive = false;
-				self.overWindow = false;    
+				self.overWindow = false;
 
 				//CrossFade Wrappe
 				if(self.options.imageCrossfade){
@@ -190,7 +192,7 @@ if ( typeof Object.create !== 'function' ) {
 					// adjust images less than the window height
 
 					if(self.nzHeight < self.options.zoomWindowWidth/self.widthRatio){
-						lensHeight = self.nzHeight;              
+						lensHeight = self.nzHeight;
 					}
 					else{
 						lensHeight = String((self.options.zoomWindowHeight/self.heightRatio))
@@ -257,7 +259,7 @@ if ( typeof Object.create !== 'function' ) {
 				//create the div's                                                + ""
 				//self.zoomContainer = $('<div/>').addClass('zoomContainer').css({"position":"relative", "height":self.nzHeight, "width":self.nzWidth});
 
-				self.zoomContainer = $('<div class="zoomContainer" style="-webkit-transform: translateZ(0);position:absolute;left:'+self.nzOffset.left+'px;top:'+self.nzOffset.top+'px;height:'+self.nzHeight+'px;width:'+self.nzWidth+'px;"></div>');
+				self.zoomContainer = $('<div class="zoomContainer" style="cursor: none; -webkit-transform: translateZ(0);position:absolute;left:'+self.nzOffset.left+'px;top:'+self.nzOffset.top+'px;height:'+self.nzHeight+'px;width:'+self.nzWidth+'px;"></div>');
 				//original : $('body').append(self.zoomContainer);
 				self.$elem.parent().append(self.zoomContainer);	
 
