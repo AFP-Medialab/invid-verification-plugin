@@ -106,31 +106,17 @@
 				"height: 100px; width: 100px; background-color: inherit;");
 	}
 
-	function upImg(img) {
-		if (img.offsetLeft !== 0)
-			img.setAttribute("style", 
-				"height: 100px; width: 100px; background-color: inherit; position: absolute");
-		else
-			img.setAttribute("style", 
-				"height: 100px; width: 100px; background-color: inherit;");
-	}
-
 	function addImg(div, url) {
 		var img = document.createElement("img");
 		img.src = url;
 		img.setAttribute("style", "max-height: 50px; max-width: 50px;");
-<<<<<<< HEAD
 
 		div.appendChild(img)
-=======
-		div.appendChild(img);
->>>>>>> #61: open image in new tab when clicked
 
 		img.addEventListener('click', event => {
 			event.preventDefault();
 			chrome.tabs.create({url: url});
 		});
-<<<<<<< HEAD
 		
 		img.addEventListener('mouseenter', event => {
 			event.preventDefault();
@@ -142,8 +128,7 @@
 			img.setAttribute("style", "max-height: 50px; max-width: 50px;");
 		});
 
-=======
->>>>>>> #61: open image in new tab when clicked
+
 	}
 
 	function addIframe(divId) {
