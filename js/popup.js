@@ -106,6 +106,25 @@
 			event.preventDefault();
 			chrome.tabs.create({url: url});
 		});
+		
+		img.addEventListener('mouseenter', event => {
+			//window.alert("ENTERED");
+			event.preventDefault();
+			//var mousePos = getMouseLocation(event);
+
+			var bigImg = document.createElement("img");
+			img.setAttribute("style", "max-height: initial; max-width: initial;");
+			//bigImg.src = url;
+			//bigImg.style.display = 'block';
+			//bigImg.style.top = (mousePos[1]) + 'px';
+			//bigImg.style.left = (mousePos[0]+20) + 'px';
+			//div.appendChild(bigImg);
+		})
+
+		img.addEventListener("mouseleave", event => {
+			event.preventDefault();
+			img.setAttribute("style", "max-height: 50px; max-width: 50px;");
+		})
 	}
 
 	function addIframe(divId) {
