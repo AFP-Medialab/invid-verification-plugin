@@ -96,26 +96,20 @@
 		domText.appendChild(document.createElement("br"));
 	}
 
-	function getMouseLocation(e) {
-		if (!e) var e = window.event;
-		if (e.pageX || e.pageY) {
-			posx = e.pageX;
-			posy = e.pageY;
-		}
-		else if (e.clientX || e.clientY) {
-			posx = e.clientX + document.body.scrollLeft    + document.documentElement.scrollLeft;
-			posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-		}
-		return new Array(posx, posy);
+	function upImg(img) {
+		if (img.offsetLeft !== 0)
+			img.setAttribute("style", 
+				"height: 100px; width: 100px; background-color: inherit; position: absolute");
+		else
+			img.setAttribute("style", 
+				"height: 100px; width: 100px; background-color: inherit;");
 	}
 
 	function addImg(div, url) {
 		var img = document.createElement("img");
-		var singleDiv = document.createElement("div");
-		//singleDiv.setAttribute("style", "height: 50px; width: 50px; background-color: inherit;");
 		img.src = url;
 		img.setAttribute("style", "max-height: 50px; max-width: 50px;");
-		//singleDiv.appendChild(img);
+
 		div.appendChild(img)
 
 		img.addEventListener('click', event => {
@@ -124,26 +118,14 @@
 		});
 		
 		img.addEventListener('mouseenter', event => {
-			//window.alert("ENTERED");
 			event.preventDefault();
-			//var mousePos = getMouseLocation(event);
-			if (img.offsetLeft !== 0)
-				img.setAttribute("style", "height: 100px; width: 100px; background-color: inherit; position: absolute");
-			else
-			img.setAttribute("style", "height: 100px; width: 100px; background-color: inherit;");
-			
-
-			//bigImg.src = url;
-			//bigImg.style.display = 'block';
-			//bigImg.style.top = (mousePos[1]) + 'px';
-			//bigImg.style.left = (mousePos[0]+20) + 'px';
-			//div.appendChild(bigImg);
+			upImg(img);
 		});
 
-			img.addEventListener('mouseleave', event => {
-				event.preventDefault();
-				img.setAttribute("style", "max-height: 50px; max-width: 50px;");
-			});
+		img.addEventListener('mouseleave', event => {
+			event.preventDefault();
+			img.setAttribute("style", "max-height: 50px; max-width: 50px;");
+		});
 
 	}
 
