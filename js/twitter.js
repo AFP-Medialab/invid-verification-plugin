@@ -158,7 +158,7 @@ function generate_pie_chart(svg_id, json, title, low_color, hight_color)
 
 }
 
-let json = [
+let pie_chart_json = [
 	{
 		key: "webissimo",
 		doc_count: 95
@@ -210,7 +210,10 @@ let json = [
 ];
 
 
-generate_pie_chart("#top_users_pie_chart", json, "Top Users", '#98f6ef', '#6db3ac');
+let histogram_json
+
+
+generate_pie_chart("#top_users_pie_chart", pie_chart_json, "Top Users", '#98f6ef', '#6db3ac');
 
 /* Add dates picker facility */
 $(document).ready( function() {
