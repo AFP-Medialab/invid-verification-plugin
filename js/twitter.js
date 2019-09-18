@@ -1,7 +1,7 @@
 /**
 * Javascript used by twitter service
 */
-
+import generateQuery from './call-elastic.js';
 /**
 * @func Convert date into epoch time
 */
@@ -209,12 +209,12 @@ let pie_chart_json = [
 	}
 ];
 
-
+//var json = pie_chart_json;
+generateQuery("sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc").then((respJson) =>{
 let histogram_json
 
-
-generate_pie_chart("#top_users_pie_chart", pie_chart_json, "Top Users", '#98f6ef', '#6db3ac');
-
+	generate_pie_chart("#top_users_pie_chart", respJson, "Top Users", '#98f6ef', '#6db3ac');
+})
 /* Add dates picker facility */
 $(document).ready( function() {
 	$( "#from-date" ).datetimepicker();
