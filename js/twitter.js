@@ -220,7 +220,7 @@ var layout = {
 
 var json = pie_chart_json;
 
-generateHashtagHistogramQuery("#Hashtag").then((respJson) => {
+generateHashtagHistogramQuery("#Hashtag", true).then((respJson) => {
 let histogram_json
 
   Plotly.newPlot('top_users_pie_chart', respJson, layout);

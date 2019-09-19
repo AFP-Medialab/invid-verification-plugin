@@ -108,6 +108,11 @@ function getHistoQuery(matchPhrase){
               },
               "size": 5
             }
+          },
+          "1": {
+            "sum": {
+              "field": "nretweets"
+            }
           }
         }
       }
@@ -158,30 +163,42 @@ function getHistoQuery(matchPhrase){
   }
 }
 
-function getPlotlyJson(json, hashtag)
+function usersGet(dateObj, infos)
 {
+  dateObj["3"]["buckets"].forEach(elt => {
+    infos.push({
+      date: dateObj['key_as_string'],
+      key: elt["key"],
+      nb: elt["doc_count"]
+    })
+  })
+  return infos;
+}
+
+function retweetsGet(dateObj, infos)
+{
+    infos.push({
+      date: dateObj['key_as_string'],
+      key: "Retweets",
+      nb: dateObj["1"].value
+    })
+    return infos;
+}
+
+function getPlotlyJson(json, specificGet)
+{
+  console.log(json)
   let dates = json["aggregations"]["2"]["buckets"];
 
   var infos = [];
 
   dates.forEach(dateObj => {
-
-    
-      dateObj["3"]["buckets"].forEach(elt => {
-        infos.push({
-          date: dateObj['key_as_string'],
-          key: elt["key"],
-          nb: elt["doc_count"]
-        })
-      })
-    if (hashtag !== null)
-    {
+      specificGet(dateObj, infos);
       infos.push({
         date: dateObj['key_as_string'],
         key: "TOTAL",
         nb: dateObj["doc_count"],
       })
-    }
   });
   var lines = [];
   while (infos.length !== 0) {
@@ -191,10 +208,7 @@ function getPlotlyJson(json, hashtag)
     let date = info.date;
     let nb = info.nb;
     let width;
-    if (infos.length === 1)
-      width = 10;
-    else
-      width = 1;
+  
     let plotlyInfo = {
       type: "line",
       line: {
@@ -221,7 +235,7 @@ function getPlotlyJson(json, hashtag)
   return lines;
 }
 
-export function generateEssidHistogramQuery(sessid) {
+export function generateEssidHistogramQuery(sessid, retweets) {
 
     let matchPhrase = 
       { 
@@ -243,13 +257,16 @@ export function generateEssidHistogramQuery(sessid) {
     });
     const myJson = await response.json();
 
-   return getPlotlyJson(myJson, null);
+    if (retweets)
+      return getPlotlyJson(myJson, retweetsGet);
+    else
+      return getPlotlyJson(myJson, usersGet);
 
   }
   return userAction();
 }
 
-export function generateHashtagHistogramQuery(hashtag) {
+export function generateHashtagHistogramQuery(hashtag, retweets) {
 
   let matchPhrase = 
   { 
@@ -271,11 +288,15 @@ export function generateHashtagHistogramQuery(hashtag) {
     });
     const myJson = await response.json();
 
-  return getPlotlyJson(myJson, hashtag);
-
+    if (retweets)
+      return getPlotlyJson(myJson, retweetsGet);
+    else
+      return getPlotlyJson(myJson, usersGet);
   }
   return userAction();
 }
+
+
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
