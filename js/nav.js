@@ -34,6 +34,8 @@ function id_to_name(id)
 			return "classroom";
 		case "quiz":
 			return "quiz";
+		case "twitterSna":
+			return "twitterSna";
 		default :
 			return "";
 	}

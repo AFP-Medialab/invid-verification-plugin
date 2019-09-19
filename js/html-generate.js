@@ -55,6 +55,8 @@ function update_tools_menu(lang)
 	setInnerHtml("menu_met_tit",				json_lang_translate[lang]["navbar_metadata"]);
 	setInnerHtml("menu_vid_tit",				json_lang_translate[lang]["navbar_rights"]);
 	setInnerHtml("menu_for_tit",				json_lang_translate[lang]["navbar_forensic"]);
+	setInnerHtml("menu_sna_tit", 				json_lang_translate[lang]["navbar_twitter_sna"]);
+
 	setTitle("menu_api_dsc",					json_lang_translate[lang]["api_title"]);
 	setTitle("menu_key_dsc",					json_lang_translate[lang]["keyframes_title"]);
 	setTitle("menu_thu_dsc",					json_lang_translate[lang]["youtube_title"]);
@@ -63,6 +65,7 @@ function update_tools_menu(lang)
 	setTitle("menu_met_dsc",					json_lang_translate[lang]["metadata_title"]);
 	setTitle("menu_vid_dsc",					json_lang_translate[lang]["copyright_title"]);
 	setTitle("menu_for_dsc",					json_lang_translate[lang]["forensic_title"]);
+	setTitle("menu_sna_dsk",					json_lang_translate[lang]["twitter_sna_title"])
 }
 
 /**
@@ -139,13 +142,14 @@ function update_thumbnails(lang)
 * @func update the translations of twitter search tab in function of language
 * @lang actual lang to display
 */
-function update_twitter(lang) 
+function update_twitter(lang)
 {
 	// add translations to item needed
 	setInnerHtml("twitter_title",				"<h1>" + json_lang_translate[lang]["twitter_title"] + "</h1>");
 	setInnerHtml("twitter_local_time",			json_lang_translate[lang]["twitter_local_time"]);
 	setInnerHtml("twitter_gmt",					json_lang_translate[lang]["twitter_gmt"]);
 	setInnerHtml("footer_twitter",				json_lang_translate[lang]["footer_twitter"]);
+
 	setPlaceholder("termbox",					json_lang_translate[lang]["twitter_termbox"]);
 	setPlaceholder("tw-account",				json_lang_translate[lang]["twitter_tw-account"]);
 	setPlaceholder("filter",					json_lang_translate[lang]["twitter_filter"]);
@@ -156,6 +160,35 @@ function update_twitter(lang)
 	setPlaceholder("from-date",					json_lang_translate[lang]["twitter_from-date"]);
 	setPlaceholder("to-date",					json_lang_translate[lang]["twitter_to-date"]);
 }
+
+/**
+ * @func update the translations of twitter sna tab in function of language
+ * @lang actual lang to display
+ */
+function update_twitter_sna(lang)
+{
+	// add translations to item needed
+	setInnerHtml("twitterStats_title",				"<h1>" + json_lang_translate[lang]["twitter_sna_title"] + "</h1>");
+	setInnerHtml("twitterStats_local_time",			json_lang_translate[lang]["twitter_sna_local_time"]);
+	setInnerHtml("twitterStats_gmt",				json_lang_translate[lang]["twitter_sna_gmt"]);
+	setInnerHtml("twitterStats-footer",				json_lang_translate[lang]["footer_twitter"]);
+	setInnerHtml("twitterStats-media",				json_lang_translate[lang]["twitter_sna_media"]);
+	setInnerHtml("twitterStats_media_none",			json_lang_translate[lang]["twitterStats_media_none"]);
+	setInnerHtml("twitterStats_media_images",		json_lang_translate[lang]["twitterStats_media_images"]);
+	setInnerHtml("twitterStats_media_videos",		json_lang_translate[lang]["twitterStats_media_videos"]);
+	setInnerHtml("twitterStats_media_both",			json_lang_translate[lang]["twitterStats_media_both"]);
+	setInnerHtml("twitterStats-verified",			json_lang_translate[lang]["twitter_sna_verified"]);
+	setInnerHtml("twitterStats_verified_no",		json_lang_translate[lang]["twitterStats_verified_no"]);
+	setInnerHtml("twitterStats_verified_yes",		json_lang_translate[lang]["twitterStats_verified_yes"]);
+
+
+	setPlaceholder("twitterStats-search",			json_lang_translate[lang]["twitter_sna_search"]);
+	setPlaceholder("twitterStats-user",				json_lang_translate[lang]["twitter_sna_user"]);
+	setPlaceholder("twitterStats-lang",				json_lang_translate[lang]["twitter_sna_lang"]);
+	setPlaceholder("twitterStats-from-date",		json_lang_translate[lang]["twitter_sna_from_date"]);
+	setPlaceholder("twitterStats-to-date",			json_lang_translate[lang]["twitter_sna_until_date"]);
+}
+
 
 /**
 * @func update the translations of magnifier tab in function of language

@@ -28,6 +28,7 @@
 
 	<script src="js/config.js"></script>
 	<script src="js/cookieconsent.min.js"></script>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 	<script src="js/ga.js"></script>
 
 </head>
@@ -213,6 +214,17 @@
 									<figcaption>
 										<span id="menu_for_tit">&nbsp;</span>
 										<img src="img/pictos/help.png" id="menu_for_dsc" data-toggle="modal" data-keyboard="true" data-target="#help_modal" data-prefix="forensic">
+									</figcaption>
+								</figure>
+							</div>
+							<div class="col-md-2 col-sm-3 col-xs-6">
+								<figure>
+									<a href="#twitterSna" id="Twitter_SNA">
+										<img src="img/pictos/twitter-sna.png" alt="TwitterSna" class="picto">
+									</a>
+									<figcaption>
+										<span id="menu_sna_tit">&nbsp;</span>
+										<img src="img/pictos/help.png" id="menu_sna_dsk" data-toggle="modal" data-keyboard="true" data-target="#help_modal" data-prefix="sna">
 									</figcaption>
 								</figure>
 							</div>
@@ -460,9 +472,77 @@
 								<br> 
 								<br>
 								<input type="submit" value="Submit" class="button" />
+
+
 							</ul>
 						</form>
 						<div id="footer_twitter" class="footer"></div>
+					</div>
+
+					<!-- TWITTER STATS VIEW -->
+
+					<div id="twitterSna" class="form-action hide">
+						<div id="twitterStats_title"></div>
+						<form id="twitterStats_form">
+							<ul style="padding-left:0;">
+								<br>
+								<input type="text" id="twitterStats-search" name="search"/>
+								<br>
+								<input type="text" id="twitterStats-lang" name="lang">
+								<br>
+								<input type="text" id="twitterStats-user" name="user">
+								<br>
+								<div id="twitterStats-fromto-content">
+									<input type="text" id="twitterStats-from-date" style="width:40%;">
+									<input type="text" id="twitterStats-to-date" style="width:40%;">
+								</div>
+
+								<br>
+								<div id="twitterStats-radios-media">
+									<span type="text" id="twitterStats-media"></span>
+
+									<input type="radio" id="twitterStats-radio_none" name="media" checked/>
+									<span id="twitterStats_media_none"></span>
+
+									<input type="radio" id="twitterStats-radio-images" name="media" translate="no" />
+									<span id="twitterStats_media_images"></span>
+
+									<input type="radio" id="twitterStats-radio-videos" name="media" translate="no" />
+									<span id="twitterStats_media_videos"></span>
+
+									<input type="radio" id="twitterStats-radio-both" name="media" translate="no" />
+									<span id="twitterStats_media_both"></span>
+								</div>
+								<br>
+								<div id="twitterStats-radios-verified">
+									<span id="twitterStats-verified"></span>
+									<input type="radio" id="twitterStats-radio-no" name="verified" checked/>
+									<span id="twitterStats_verified_no"></span>
+
+									<input type="radio" id="twitterStats-radio_yes" name="verified" translate="no"/>
+									<span id="twitterStats_verified_yes"></span>
+								</div>
+
+								<br>
+								<div id="twitterStats-radios-time">
+									<input type="radio" id="twitterStats-radio_local_time" name="time" checked/>
+									<span id="twitterStats_local_time"></span>
+
+									<input type="radio" id="twitterStats-radio-gmt" name="time" translate="no" />
+									<span id="twitterStats_gmt"></span>
+								</div>
+
+								<br>
+								<br>
+								<input type="submit" value="Submit" class="button" id="submitSna" />
+
+								<div id="twitterStats-loader" class="loader"></div>
+								<div id="twitterStats-Graphs">
+									<div id="top_users_pie_chart"> </div>
+								</div>
+							</ul>
+						</form>
+						<div id="twitterStats-footer" class="footer"></div>
 					</div>
 
 					<!-- MAGNIFIER VIEW -->
@@ -869,6 +949,8 @@
 	<script src="js/carousel.js"></script>
 	<!-- For Google maps-->
 	<!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=createGoogleMaps"></script> -->
+	<!-- For d3.js graphics -->
+	<script src="js/d3.js"></script>
 	<!-- For Youtube thumbnails reverse search -->
 	<script src="js/video.js"></script>
 	<!-- For Metadata -->
@@ -876,7 +958,14 @@
 	<script src="js/mp4box.all.js"></script>
 	<script src="js/metadata.js"></script>
 	<!-- For Twitter search -->
-	<script src="js/twitter.js"></script> 
+
+	<script type="module" src="js/call-elastic.js"></script> 
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script src="js/twitter.js"></script>
+
+	<!-- For Twitter Sna -->
+	<script type="module" src="js/twitterSna.js"></script>
+
 	<!-- For feedback -->
 	<script src="js/jquery.feedback_me.js"></script>
 	<!-- For google analysis -->
