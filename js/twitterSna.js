@@ -1,7 +1,7 @@
 /**
  * Javascript used by twitter service
  */
-
+import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery} from './call-elastic.js';
 
 /**
  *
@@ -84,6 +84,11 @@ function submit_sna_form() {
                 console.log("finished " + param["session"] + "status " + param["status"]);
             }
             $("#twitterStats-loader").css("display", "none");
+            
+            generateEssidHistogramQuery(param["session"], true).then(plotlyJson => {
+
+                Plotly.newPlot('top_users_pie_chart', plotlyJson);
+            })
         });
     });
 }

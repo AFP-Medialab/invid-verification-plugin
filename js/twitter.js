@@ -1,7 +1,7 @@
 /**
 * Javascript used by twitter service
 */
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery} from './call-elastic.js';
+
 /**
 * @func Convert date into epoch time
 */
