@@ -1,7 +1,7 @@
 /**
  * Javascript used by twitter service
  */
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery} from './call-elastic.js';
+import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateHashtagCloudQuery} from './call-elastic.js';
 
 /**
  *
@@ -85,10 +85,25 @@ function submit_sna_form() {
             }
             $("#twitterStats-loader").css("display", "none");
             
-            generateEssidHistogramQuery(param["session"], true).then(plotlyJson => {
+            var layout = { 
+              
+            };
+            generatePieChartQuery(param["session"], param["from"], param["until"]).then(plotlyJson => {
 
                 Plotly.newPlot('top_users_pie_chart', plotlyJson);
-            })
+            });
+            generateEssidHistogramQuery(param["session"], true, param["from"], param["until"]).then(plotlyJson => {
+
+                Plotly.newPlot('retweet_time_chart', plotlyJson, layout);
+            });
+            generateEssidHistogramQuery(param["session"], false, param["from"], param["until"]).then(plotlyJson => {
+
+                Plotly.newPlot('user_time_chart', plotlyJson, layout);
+            }); 
+            generateHashtagCloudQuery(param["session"], param["from"], param["until"]).then(plotlyJson => {
+
+                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, layout);
+            });
         });
     });
 }

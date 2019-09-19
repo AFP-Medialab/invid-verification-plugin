@@ -1,75 +1,35 @@
 
 //var sessid = "sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc"
-export function generatePieChartQuery(sessid) {
+export function generatePieChartQuery(sessid, startDate, endDate) {
+  let chartInfo = {
+    "terms": {
+      "field": "username",
+      "order": {
+        "_count": "desc"
+      },
+      "size": 10
+    }
+  };
+
+  let matchPhrase =                 {
+    "match_phrase": {
+      "essid": {
+        "query": sessid
+      }
+    }
+  };
+
   const userAction = async () => {
     const response = await fetch('http:localhost:9200/twinttweets/_search', {
       method: 'POST',
       body:
-        JSON.stringify({
-          "aggs": {
-            "2": {
-              "terms": {
-                "field": "username",
-                "order": {
-                  "_count": "desc"
-                },
-                "size": 10
-              }
-            }
-          },
-          "size": 0,
-          "_source": {
-            "excludes": []
-          },
-          "stored_fields": [
-            "*"
-          ],
-          "script_fields": {},
-          "docvalue_fields": [
-            {
-              "field": "date",
-              "format": "date_time"
-            }
-          ],
-          "query": {
-            "bool": {
-              "must": [
-                {
-                  "match_all": {}
-                },
-                {
-                  "match_all": {}
-                },
-                {
-                  "match_phrase": {
-                    "essid": {
-                      "query": sessid
-                    }
-                  }
-                },
-                {
-                  "range": {
-                    "date": {
-                      "format": "strict_date_optional_time",
-                      "gte": "2018-09-18T11:30:24.961Z",
-                      "lte": "2019-09-18T11:30:24.961Z"
-                    }
-                  }
-                }
-              ],
-              "filter": [],
-              "should": [],
-              "must_not": []
-            }
-          }
-        }),
+        JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
       headers: {
         'Content-Type': 'application/json'
       } //*/
     });
     const myJson = await response.json(); //extract JSON from the http response
     // do something with myJson
-    console.log(myJson["aggregations"]["2"]["buckets"]);
 
     let vals = [];
     let keys = [];
@@ -89,33 +49,165 @@ export function generatePieChartQuery(sessid) {
   return (userAction());
 }
 
-function getHistoQuery(matchPhrase){ 
-  return {
-    "aggs": {
-      "2": {
-        "date_histogram": {
-          "field": "date",
-          "calendar_interval": "1w",
-          "time_zone": "Europe/Paris",
-          "min_doc_count": 1
-        },
-        "aggs": {
-          "3": {
-            "terms": {
-              "field": "username",
-              "order": {
-                "_count": "desc"
-              },
-              "size": 5
-            }
-          },
-          "1": {
-            "sum": {
-              "field": "nretweets"
-            }
-          }
+export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate) {
+
+  let matchPhrase = 
+    { 
+      "match_phrase": 
+      {
+        "essid": {
+          "query": sessid
         }
       }
+    }
+
+  let fieldInfo = 
+  {
+    "date_histogram": {
+      "field": "date",
+      "calendar_interval": "1w",
+      "time_zone": "Europe/Paris",
+      "min_doc_count": 1
+    },
+    "aggs": {
+      "3": {
+        "terms": {
+          "field": "username",
+          "order": {
+            "_count": "desc"
+          },
+          "size": 5
+        }
+      },
+      "1": {
+        "sum": {
+          "field": "nretweets"
+        }
+      }
+    }
+  }
+
+  const userAction = async () => {
+    const response = await fetch('http:localhost:9200/twinttweets/_search', {
+      method: 'POST',
+      body:
+        JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
+      headers: {
+        'Content-Type': 'application/json'
+      } //*/
+    });
+    const myJson = await response.json();
+
+    if (retweets)
+      return getPlotlyJsonHisto(myJson, retweetsGet);
+    else
+      return getPlotlyJsonHisto(myJson, usersGet);
+
+  }
+  return userAction();
+}
+
+export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endDate) {
+
+let matchPhrase = 
+{ 
+    "match_phrase": 
+    {
+      "hashtags": {
+        "query": hashtag
+      }
+    }
+  }
+
+  let fieldInfo = 
+  {
+    "date_histogram": {
+      "field": "date",
+      "calendar_interval": "1w",
+      "time_zone": "Europe/Paris",
+      "min_doc_count": 1
+    },
+    "aggs": {
+      "3": {
+        "terms": {
+          "field": "username",
+          "order": {
+            "_count": "desc"
+          },
+          "size": 5
+        }
+      },
+      "1": {
+        "sum": {
+          "field": "nretweets"
+        }
+      }
+    }
+  }
+
+const userAction = async () => {
+  const response = await fetch('http:localhost:9200/twinttweets/_search', {
+    method: 'POST',
+    body:
+      JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
+    headers: {
+      'Content-Type': 'application/json'
+    } //*/
+  });
+  const myJson = await response.json();
+
+  if (retweets)
+    return getPlotlyJsonHisto(myJson, retweetsGet);
+  else
+    return getPlotlyJsonHisto(myJson, usersGet);
+}
+return userAction();
+}
+
+export function generateHashtagCloudQuery(sessid, startDate, endDate)
+{
+  let matchPhrase = 
+    { 
+      "match_phrase": 
+      {
+        "essid": {
+          "query": sessid
+        }
+      }
+    }
+
+  let fieldInfo = {
+    "terms": {
+      "field": "hashtags",
+      "order": {
+        "_count": "desc"
+      },
+      "size": 14
+    }
+  }
+
+  const userAction = async () => {
+    const response = await fetch('http:localhost:9200/twinttweets/_search', {
+      method: 'POST',
+      body:
+        JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
+      headers: {
+        'Content-Type': 'application/json'
+      } //*/
+    });
+    const myJson = await response.json();
+
+      return getPlotlyJsonCloud(myJson, retweetsGet);
+
+  }
+  return userAction();
+}
+
+function getQuery(matchPhrase, chartInfo, startDate, endDate){ 
+  return {
+    "aggs": {
+      "2": 
+       chartInfo
     },
     "size": 0,
     "_source": {
@@ -149,8 +241,8 @@ function getHistoQuery(matchPhrase){
             "range": {
               "date": {
                 "format": "strict_date_optional_time",
-                "gte": "2018-09-18T14:37:51.469Z",
-                "lte": "2019-09-18T14:37:51.469Z"
+                "gte": startDate,
+                "lte": endDate
               }
             }
           }
@@ -185,9 +277,43 @@ function retweetsGet(dateObj, infos)
     return infos;
 }
 
-function getPlotlyJson(json, specificGet)
+function getPlotlyJsonCloud(json)
 {
-  console.log(json)
+  var labels = [];
+  var parents = [];
+  var value = [];
+
+  let hashtags = json["aggregations"]["2"]["buckets"];
+
+  let mainHashtag = hashtags[0];
+
+  labels.push(mainHashtag["key"]);
+  parents.push("");
+  value.push(mainHashtag["doc_count"]);
+  
+  hashtags.shift();
+
+  hashtags.forEach(hashtag =>
+    {
+        labels.push(hashtag["key"]);
+        parents.push(mainHashtag["key"]);
+        value.push(hashtag["doc_count"]);
+    })
+    var obj = { 
+      outsidetextfont: {size: 20, color: "#377eb8"},
+      leaf: {opacity: 0.4},
+      marker: {line: {width: 2}},
+      type: "sunburst",
+      labels: labels,
+      parents: parents,
+      values: value
+    }
+    console.log(obj);
+    return obj;
+}
+
+function getPlotlyJsonHisto(json, specificGet)
+{
   let dates = json["aggregations"]["2"]["buckets"];
 
   var infos = [];
@@ -235,66 +361,6 @@ function getPlotlyJson(json, specificGet)
   return lines;
 }
 
-export function generateEssidHistogramQuery(sessid, retweets) {
-
-    let matchPhrase = 
-      { 
-        "match_phrase": 
-        {
-          "essid": {
-            "query": sessid
-          }
-        }
-      }
-  const userAction = async () => {
-    const response = await fetch('http:localhost:9200/twinttweets/_search', {
-      method: 'POST',
-      body:
-        JSON.stringify(getHistoQuery(matchPhrase)),
-      headers: {
-        'Content-Type': 'application/json'
-      } //*/
-    });
-    const myJson = await response.json();
-
-    if (retweets)
-      return getPlotlyJson(myJson, retweetsGet);
-    else
-      return getPlotlyJson(myJson, usersGet);
-
-  }
-  return userAction();
-}
-
-export function generateHashtagHistogramQuery(hashtag, retweets) {
-
-  let matchPhrase = 
-  { 
-      "match_phrase": 
-      {
-        "hashtags": {
-          "query": hashtag
-        }
-      }
-    }
-  const userAction = async () => {
-    const response = await fetch('http:localhost:9200/twinttweets/_search', {
-      method: 'POST',
-      body:
-        JSON.stringify(getHistoQuery(matchPhrase)),
-      headers: {
-        'Content-Type': 'application/json'
-      } //*/
-    });
-    const myJson = await response.json();
-
-    if (retweets)
-      return getPlotlyJson(myJson, retweetsGet);
-    else
-      return getPlotlyJson(myJson, usersGet);
-  }
-  return userAction();
-}
 
 
 function getRandomColor() {
