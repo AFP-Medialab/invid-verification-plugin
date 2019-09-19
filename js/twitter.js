@@ -1,7 +1,7 @@
 /**
 * Javascript used by twitter service
 */
-import generateQuery from './call-elastic.js';
+import {generatePieChartQuery, generateHistogramQuery} from './call-elastic.js';
 /**
 * @func Convert date into epoch time
 */
@@ -208,12 +208,24 @@ let pie_chart_json = [
 		doc_count: 24
 	}
 ];
+var data = [{
+	values: [19, 26, 55],
+	labels: ['Residential', 'Non-Residential', 'Utility'],
+	type: 'pie'
+  }];
+//*/
+let layout = {
+	
+  };
 
-//var json = pie_chart_json;
-generateQuery("sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc").then((respJson) =>{
+var json = pie_chart_json;
+
+generateHistogramQuery(null, "#prison").then((respJson) => {
 let histogram_json
 
-	generate_pie_chart("#top_users_pie_chart", respJson, "Top Users", '#98f6ef', '#6db3ac');
+  Plotly.newPlot('top_users_pie_chart', respJson);
+	
+	//generate_pie_chart("#top_users_pie_chart", respJson, "Top Users", '#98f6ef', '#6db3ac');
 })
 /* Add dates picker facility */
 $(document).ready( function() {
