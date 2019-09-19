@@ -1,7 +1,7 @@
 /**
 * Javascript used by twitter service
 */
-import {generatePieChartQuery, generateHistogramQuery} from './call-elastic.js';
+import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery} from './call-elastic.js';
 /**
 * @func Convert date into epoch time
 */
@@ -214,16 +214,16 @@ var data = [{
 	type: 'pie'
   }];
 //*/
-let layout = {
-	
+var layout = {
+	title: "Users"
   };
 
 var json = pie_chart_json;
 
-generateHistogramQuery(null, "#prison").then((respJson) => {
+generateHashtagHistogramQuery("#Hashtag").then((respJson) => {
 let histogram_json
 
-  Plotly.newPlot('top_users_pie_chart', respJson);
+  Plotly.newPlot('top_users_pie_chart', respJson, layout);
 	
 	//generate_pie_chart("#top_users_pie_chart", respJson, "Top Users", '#98f6ef', '#6db3ac');
 })
