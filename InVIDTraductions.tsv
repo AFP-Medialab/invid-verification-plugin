@@ -11,6 +11,7 @@ navbar_forensic	Forensic	Forensic	Forensic
 navbar_about	About	A propos	Sobre nosotros
 navbar_survey	Survey	Questionnaire	Cuestionario
 navbar_tuto	Tutorial	Tutoriel	Tutorial
+navbar_twitter_sna	Twitter SNA.	Twitter SNA.	Twitter SNA.
 button_submit	Submit	Envoyer	Enviar
 button_download	Download	Télécharger	Descargar
 button_apply	Apply	Appliquer	Aplicar
@@ -538,3 +539,21 @@ home_tutorial_image_5
 home_tutorial_display	1	1	1
 lang_code	EN	FR	ES
 lang_label	English	Français	Español
+twitterStatsErrorMessage2	Keyword, Since or Until dates are empty	Mot clé, Depuis ou jusqu'à non précisé	Los campos Palabra clave, Desde o Hasta estén vacíos
+twitter_sna_title	Twitter Social network analysis	Analyse des réseaux sociaux sur Twitter	Twitter Análisis de redes sociales
+twitter_sna_local_time	Local time	Heure locale	Hora local
+twitter_sna_gmt	GMT	GMT	GMT
+twitter_sna_search	＊Keyword or #	＊Mot clé ou #	＊Palabra clave o #
+twitter_sna_user	Tweeted by (Twitter account name)	Tweeter par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)
+twitter_sna_verified	Verified users Only :	Utilisateurs verifiés uniquement :	Usuarios verificados únicamente :
+twitter_sna_lang	Language (e.g. en, fr, de, es, ru, ja, zh...)	Langue (ex: en, fr, de, es ru, ja, zh...)	Idioma (ej: en, fr, de, es ru, ja, zh...)
+twitter_sna_media	Medias restrictions :	Restriction des Médias :	Médios restricciones :
+twitter_sna_from_date	＊Since	＊Depuis	＊Desde
+twitter_sna_until_date	＊Until	＊Jusqu'à	＊Hasta
+twitterStats_media_none	none	aucune	ninguna
+twitterStats_media_images	pictures	images	fotos
+twitterStats_media_videos	videos	vidéos	vídeo
+twitterStats_media_both	both	les deux	tanto
+twitterStats_verified_no	no	non	no
+twitterStats_verified_yes	yes	oui	si
+twitterStatsErrorMessage	Please fill the required fields (＊)	Veuillez remplir les champs requis (＊)	Rellene los campos requeridos (＊)
