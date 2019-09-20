@@ -88,40 +88,51 @@ function submit_sna_form() {
             }
             $("#twitterStats-loader").css("display", "none");
             
-            var cloudlayout = { 
-                margin: {l: 0, r: 0, b: 0, t: 0},
-                width: 500,
-                height: 500
-              
-            };
 
-            var layout = {
-                title: 'TimeLine',
-                xaxis: {
-                  range: [from, until],
-                  rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
-                 },
-              };
+           
             generatePieChartQuery(param["session"], param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
-
-                Plotly.newPlot('top_users_pie_chart', plotlyJson);
+                var layout = {
+                    title: "Top utilisateurs"
+                }
+                Plotly.newPlot('top_users_pie_chart', plotlyJson, layout);
             });
             generateEssidHistogramQuery(param["session"], true, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
-
+                var layout = {
+                    margin: {l: 0, r: 0, b: 50, t: 50},
+                    title: 'TimeLine des retweets',
+                    xaxis: {
+                      range: [from, until],
+                      rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
+                     },
+                  };
                 Plotly.newPlot('retweet_time_chart', plotlyJson, layout);
             });
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
-
+                var layout = {
+                    margin: {l: 0, r: 0, b: 50, t: 50},
+                    title: 'TimeLine des utilisateurs',
+                    xaxis: {
+                      range: [from, until],
+                      rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
+                     },
+                  };
                 Plotly.newPlot('user_time_chart', plotlyJson, layout);
             }); 
             generateCloudQuery(param["session"], "hashtags",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
-
-                console.log(plotlyJson);
+                var cloudlayout = { 
+                    title: "Hashtags associés",
+                    margin: {l: 0, r: 0, b: 50, t: 50}
+                  
+                };
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
             });
             generateCloudQuery(param["session"], "username",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
-
-                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
+                var cloudlayout = { 
+                    title: "Utilisateurs les plus retweetés",
+                    margin: {l: 0, r: 0, b: 50, t: 50}
+                  
+                };
+                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout);
             });
 
         });

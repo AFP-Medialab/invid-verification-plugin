@@ -183,13 +183,6 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
       },
       "size": 14
     },
-   /* "aggs": {
-      "1": {
-        "sum": {
-          "field": "nretweets"
-        }
-      }
-    }*/
   }:{
     "terms": {
       "field": field,
@@ -204,7 +197,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
           "field": "nretweets"
         }
       }
-    }
+    },
   }
 
   const userAction = async () => {
@@ -300,15 +293,18 @@ function retweetsGet(dateObj, infos) {
   return infos;
 }
 
-function mostRetweetGet(keys, values) {
-
-  values.push(key["1"]["value"]["nb"]);
-  return values;
+function mostRetweetGet(key, values, labels, parents, mainKey) {
+  if (key["1"]["value"] > 0){
+    values.push(key["1"]["value"]);
+    labels.push(key["key"]);
+    parents.push(mainKey["key"]);
+  }
 }
 
-function hashtagsGet(key, values) {
+function hashtagsGet(key, values, labels, parents, mainKey) {
   values.push(key["doc_count"]);
-  return values;
+  labels.push(key["key"]);
+  parents.push(mainKey["key"]);
 }
 
 function getPlotlyJsonCloud(json, specificGet) {
@@ -326,11 +322,8 @@ function getPlotlyJsonCloud(json, specificGet) {
 
   keys.shift();
 
-  keys.forEach(key => {
-
-    labels.push(key["key"]);
-    parents.push(mainKey["key"]);
-    specificGet(key, value);
+  keys.forEach(key => {   
+    specificGet(key, value, labels, parents, mainKey);
   })
   var obj = [{
     type: "sunburst",
