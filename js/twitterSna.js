@@ -165,7 +165,7 @@ function getRequest(url)
 async function waitStatusDone(session){
     let url = "http://localhost:8080/twitter-gateway/status/" + session;
     let res = null;
-    let cpt = 20;
+    let cpt = 2100;
     while (cpt > 0)
     {
         const response = getRequest(url)

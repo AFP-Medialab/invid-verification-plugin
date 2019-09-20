@@ -288,9 +288,9 @@ function getPlotlyJsonCloud(json)
 
   let mainHashtag = hashtags[0];
 
-  labels.push(mainHashtag["key"]);
+  labels.push("");
   parents.push("");
-  value.push(mainHashtag["doc_count"]);
+  value.push(0);
   
   hashtags.shift();
 
