@@ -185,7 +185,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
     },
   }:{
     "terms": {
-      "field": field,
+      "field": "username",
       "order": {
         "_count": "desc"
       },
@@ -194,11 +194,11 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
     "aggs": {
       "1": {
         "sum": {
-          "field": "nretweets"
+          "field": field
         }
       }
     },
-  }
+  };
 
   const userAction = async () => {
     const response = await fetch('http:localhost:9200/twinttweets/_search', {
@@ -294,10 +294,10 @@ function retweetsGet(dateObj, infos) {
 }
 
 function mostRetweetGet(key, values, labels, parents, mainKey) {
-  if (key["1"]["value"] > 0){
+  if (key["1"]["value"] > 10){
     values.push(key["1"]["value"]);
     labels.push(key["key"]);
-    parents.push(mainKey["key"]);
+    parents.push("Users");
   }
 }
 
@@ -316,11 +316,18 @@ function getPlotlyJsonCloud(json, specificGet) {
 
   let mainKey = keys[0];
 
-  labels.push("");
+  console.log(mainKey)
+  if (mainKey["key"].charAt(0) === '#'){
+    console.log("ENTERED");
+    labels.push(mainKey["key"]);
+    keys.shift();
+  }
+  else
+    labels.push("Users");
   parents.push("");
   value.push(0);
 
-  keys.shift();
+ // keys.shift();
 
   keys.forEach(key => {   
     specificGet(key, value, labels, parents, mainKey);

@@ -126,13 +126,21 @@ function submit_sna_form() {
                 };
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
             });
-            generateCloudQuery(param["session"], "username",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+            generateCloudQuery(param["session"], "nretweets",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Utilisateurs les plus retweetés",
                     margin: {l: 0, r: 0, b: 50, t: 50}
                   
                 };
                 Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout);
+            });
+            generateCloudQuery(param["session"], "nlikes",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+                var cloudlayout = { 
+                    title: "Utilisateurs les plus likés",
+                    margin: {l: 0, r: 0, b: 50, t: 50}
+                  
+                };
+                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout);
             });
 
         });
