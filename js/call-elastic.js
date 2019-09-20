@@ -11,7 +11,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
     }
   };
 
-  let matchPhrase =                 {
+  let matchPhrase = {
     "match_phrase": {
       "essid": {
         "query": sessid
@@ -51,17 +51,17 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
 
 export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate) {
 
-  let matchPhrase = 
-    { 
-      "match_phrase": 
-      {
-        "essid": {
-          "query": sessid
-        }
+  let matchPhrase =
+  {
+    "match_phrase":
+    {
+      "essid": {
+        "query": sessid
       }
     }
+  }
 
-  let fieldInfo = 
+  let fieldInfo =
   {
     "date_histogram": {
       "field": "date",
@@ -109,9 +109,9 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
 
 export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endDate) {
 
-let matchPhrase = 
-{ 
-    "match_phrase": 
+  let matchPhrase =
+  {
+    "match_phrase":
     {
       "hashtags": {
         "query": hashtag
@@ -119,7 +119,7 @@ let matchPhrase =
     }
   }
 
-  let fieldInfo = 
+  let fieldInfo =
   {
     "date_histogram": {
       "field": "date",
@@ -145,44 +145,65 @@ let matchPhrase =
     }
   }
 
-const userAction = async () => {
-  const response = await fetch('http:localhost:9200/twinttweets/_search', {
-    method: 'POST',
-    body:
-      JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
-    headers: {
-      'Content-Type': 'application/json'
-    } //*/
-  });
-  const myJson = await response.json();
+  const userAction = async () => {
+    const response = await fetch('http:localhost:9200/twinttweets/_search', {
+      method: 'POST',
+      body:
+        JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
+      headers: {
+        'Content-Type': 'application/json'
+      } //*/
+    });
+    const myJson = await response.json();
 
-  if (retweets)
-    return getPlotlyJsonHisto(myJson, retweetsGet);
-  else
-    return getPlotlyJsonHisto(myJson, usersGet);
-}
-return userAction();
+    if (retweets)
+      return getPlotlyJsonHisto(myJson, retweetsGet);
+    else
+      return getPlotlyJsonHisto(myJson, usersGet);
+  }
+  return userAction();
 }
 
-export function generateHashtagCloudQuery(sessid, startDate, endDate)
-{
-  let matchPhrase = 
-    { 
-      "match_phrase": 
-      {
-        "essid": {
-          "query": sessid
-        }
+export function generateCloudQuery(sessid, field, startDate, endDate) {
+  let matchPhrase =
+  {
+    "match_phrase":
+    {
+      "essid": {
+        "query": sessid
       }
     }
+  }
 
-  let fieldInfo = {
+  let fieldInfo = (field === "hashtags")?{
     "terms": {
-      "field": "hashtags",
+      "field": field,
       "order": {
         "_count": "desc"
       },
       "size": 14
+    },
+   /* "aggs": {
+      "1": {
+        "sum": {
+          "field": "nretweets"
+        }
+      }
+    }*/
+  }:{
+    "terms": {
+      "field": field,
+      "order": {
+        "_count": "desc"
+      },
+      "size": 14
+    },
+    "aggs": {
+      "1": {
+        "sum": {
+          "field": "nretweets"
+        }
+      }
     }
   }
 
@@ -197,18 +218,21 @@ export function generateHashtagCloudQuery(sessid, startDate, endDate)
     });
     const myJson = await response.json();
 
-      return getPlotlyJsonCloud(myJson, retweetsGet);
+    if (field === "hashtags") {
+      return getPlotlyJsonCloud(myJson, hashtagsGet);
+    }
+    else
+      return getPlotlyJsonCloud(myJson, mostRetweetGet);
 
   }
   return userAction();
 }
 
-function getQuery(matchPhrase, chartInfo, startDate, endDate){ 
-  console.log(startDate)
+function getQuery(matchPhrase, chartInfo, startDate, endDate) {
   return {
     "aggs": {
-      "2": 
-       chartInfo
+      "2":
+        chartInfo
     },
     "size": 0,
     "_source": {
@@ -256,8 +280,7 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate){
   }
 }
 
-function usersGet(dateObj, infos)
-{
+function usersGet(dateObj, infos) {
   dateObj["3"]["buckets"].forEach(elt => {
     infos.push({
       date: dateObj['key_as_string'],
@@ -268,63 +291,70 @@ function usersGet(dateObj, infos)
   return infos;
 }
 
-function retweetsGet(dateObj, infos)
-{
-    infos.push({
-      date: dateObj['key_as_string'],
-      key: "Retweets",
-      nb: dateObj["1"].value
-    })
-    return infos;
+function retweetsGet(dateObj, infos) {
+  infos.push({
+    date: dateObj['key_as_string'],
+    key: "Retweets",
+    nb: dateObj["1"].value
+  })
+  return infos;
 }
 
-function getPlotlyJsonCloud(json)
-{
+function mostRetweetGet(keys, values) {
+
+  values.push(key["1"]["value"]["nb"]);
+  return values;
+}
+
+function hashtagsGet(key, values) {
+  values.push(key["doc_count"]);
+  return values;
+}
+
+function getPlotlyJsonCloud(json, specificGet) {
   var labels = [];
   var parents = [];
   var value = [];
 
-  let hashtags = json["aggregations"]["2"]["buckets"];
+  let keys = json["aggregations"]["2"]["buckets"];
 
-  let mainHashtag = hashtags[0];
+  let mainKey = keys[0];
 
   labels.push("");
   parents.push("");
   value.push(0);
-  
-  hashtags.shift();
 
-  hashtags.forEach(hashtag =>
-    {
-        labels.push(hashtag["key"]);
-        parents.push(mainHashtag["key"]);
-        value.push(hashtag["doc_count"]);
-    })
-    var obj = [{ 
-      type: "sunburst",
-      labels: labels,
-      parents: parents,
-      values: value,
-      outsidetextfont: {size: 20, color: "#377eb8"},
-      leaf: {opacity: 0.4}
-    }];
-    console.log(obj);
-    return obj;
+  keys.shift();
+
+  keys.forEach(key => {
+
+    labels.push(key["key"]);
+    parents.push(mainKey["key"]);
+    specificGet(key, value);
+  })
+  var obj = [{
+    type: "sunburst",
+    labels: labels,
+    parents: parents,
+    values: value,
+    outsidetextfont: { size: 20, color: "#377eb8" },
+    leaf: { opacity: 0.4 }
+  }];
+  return obj;
 }
 
-function getPlotlyJsonHisto(json, specificGet)
-{
+function getPlotlyJsonHisto(json, specificGet) {
   let dates = json["aggregations"]["2"]["buckets"];
 
   var infos = [];
 
   dates.forEach(dateObj => {
-      specificGet(dateObj, infos);
-      infos.push({
-        date: dateObj['key_as_string'],
-        key: "TOTAL",
-        nb: dateObj["doc_count"],
-      })
+    specificGet(dateObj, infos);
+    infos.push({
+      date: dateObj['key_as_string'],
+      key: "TOTAL",
+      nb: dateObj["doc_count"],
+    })
   });
   var lines = [];
   while (infos.length !== 0) {
@@ -334,7 +364,7 @@ function getPlotlyJsonHisto(json, specificGet)
     let date = info.date;
     let nb = info.nb;
     let width;
-  
+
     let plotlyInfo = {
       type: "line",
       line: {
@@ -361,8 +391,6 @@ function getPlotlyJsonHisto(json, specificGet)
   return lines;
 }
 
-
-
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -374,5 +402,5 @@ function getRandomColor() {
 
 /*
             else if (hashtag !== null)
-     
+
    // generateQuery().then((json) => responseJson = json);*/

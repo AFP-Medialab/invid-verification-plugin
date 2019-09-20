@@ -1,7 +1,7 @@
 /**
  * Javascript used by twitter service
  */
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateHashtagCloudQuery} from './call-elastic.js';
+import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery} from './call-elastic.js';
 
 /**
  *
@@ -9,8 +9,11 @@ import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHisto
  *
  */
 function formToJsonCollectRequest(search, user, lang, from, until, media, verified, retweetsHandling) {
+    var searchObj = {
+        "search": search
+    }
     var CollectRequest = {
-        "search": search,
+        "search": searchObj,
         "lang": lang,
         "user": user,
         "from": from,
@@ -92,8 +95,6 @@ function submit_sna_form() {
               
             };
 
-            console.log(from);
-
             var layout = {
                 title: 'TimeLine',
                 xaxis: {
@@ -113,10 +114,15 @@ function submit_sna_form() {
 
                 Plotly.newPlot('user_time_chart', plotlyJson, layout);
             }); 
-            generateHashtagCloudQuery(param["session"], param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+            generateCloudQuery(param["session"], "hashtags",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+
+                console.log(plotlyJson);
+                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
+            });
+            generateCloudQuery(param["session"], "username",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
 
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
-            });//*/
+            });
 
         });
     });
