@@ -91,22 +91,33 @@ function submit_sna_form() {
                 height: 500
               
             };
-            generatePieChartQuery(param["session"], param["from"], param["until"]).then(plotlyJson => {
+
+            console.log(from);
+
+            var layout = {
+                title: 'TimeLine',
+                xaxis: {
+                  range: [from, until],
+                  rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
+                 },
+              };
+            generatePieChartQuery(param["session"], param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
 
                 Plotly.newPlot('top_users_pie_chart', plotlyJson);
             });
-            generateEssidHistogramQuery(param["session"], true, param["from"], param["until"]).then(plotlyJson => {
+            generateEssidHistogramQuery(param["session"], true, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
 
-                Plotly.newPlot('retweet_time_chart', plotlyJson);
+                Plotly.newPlot('retweet_time_chart', plotlyJson, layout);
             });
-            generateEssidHistogramQuery(param["session"], false, param["from"], param["until"]).then(plotlyJson => {
+            generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
 
-                Plotly.newPlot('user_time_chart', plotlyJson);
+                Plotly.newPlot('user_time_chart', plotlyJson, layout);
             }); 
-            generateHashtagCloudQuery(param["session"], param["from"], param["until"]).then(plotlyJson => {
+            generateHashtagCloudQuery(param["session"], param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
 
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
-            });
+            });//*/
+
         });
     });
 }

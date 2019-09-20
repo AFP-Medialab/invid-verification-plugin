@@ -204,6 +204,7 @@ export function generateHashtagCloudQuery(sessid, startDate, endDate)
 }
 
 function getQuery(matchPhrase, chartInfo, startDate, endDate){ 
+  console.log(startDate)
   return {
     "aggs": {
       "2": 
