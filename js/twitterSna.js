@@ -1,7 +1,7 @@
 /**
  * Javascript used by twitter service
  */
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery} from './call-elastic.js';
+import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray} from './call-elastic.js';
 
 /**
  *
@@ -109,6 +109,7 @@ function submit_sna_form() {
             });
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var layout = {
+                    overflow: "visible",
                     margin: {l: 0, r: 0, b: 50, t: 50},
                     title: 'TimeLine des utilisateurs',
                     xaxis: {
@@ -141,6 +142,10 @@ function submit_sna_form() {
                   
                 };
                 Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout);
+            });
+
+            generateURLArray(param["session"], param["query"]["from"], param["query"]["until"]).then(arrayStr => {
+                document.getElementById('url_array').innerHTML = arrayStr;
             });
 
         });

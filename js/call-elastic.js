@@ -65,7 +65,7 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
   {
     "date_histogram": {
       "field": "date",
-      "calendar_interval": "1w",
+      "calendar_interval": "4h",
       "time_zone": "Europe/Paris",
       "min_doc_count": 1
     },
@@ -98,10 +98,11 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
     });
     const myJson = await response.json();
 
-    if (retweets)
-      return getPlotlyJsonHisto(myJson, retweetsGet);
-    else
-      return getPlotlyJsonHisto(myJson, usersGet);
+    if (myJson !== null)
+      if (retweets)
+        return getPlotlyJsonHisto(myJson, retweetsGet);
+      else
+        return getPlotlyJsonHisto(myJson, usersGet);
 
   }
   return userAction();
@@ -123,7 +124,7 @@ export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endD
   {
     "date_histogram": {
       "field": "date",
-      "calendar_interval": "1w",
+      "calendar_interval": "1d",
       "time_zone": "Europe/Paris",
       "min_doc_count": 1
     },
@@ -156,10 +157,11 @@ export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endD
     });
     const myJson = await response.json();
 
-    if (retweets)
-      return getPlotlyJsonHisto(myJson, retweetsGet);
-    else
-      return getPlotlyJsonHisto(myJson, usersGet);
+    if (myJson != null)
+      if (retweets)
+        return getPlotlyJsonHisto(myJson, retweetsGet);
+      else
+        return getPlotlyJsonHisto(myJson, usersGet);
   }
   return userAction();
 }
@@ -221,6 +223,59 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
   return userAction();
 }
 
+export function generateURLArray(sessid, startDate, endDate)
+{
+  let matchPhrase =
+  {
+    "match_phrase":
+    {
+      "essid": {
+        "query": sessid
+      }
+    }
+  };
+  var chartInfo = {
+    "terms": {
+      "field": "urls",
+      "order": {
+        "_count": "desc"
+      },
+      "size": 10
+    }
+  };
+
+  const userAction = async () => {
+    const response = await fetch('http:localhost:9200/twinttweets/_search', {
+      method: 'POST',
+      body:
+        JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
+      headers: {
+        'Content-Type': 'application/json'
+      } //*/
+    });
+    const myJson = await response.json();
+
+   
+    var array = getURLArray(myJson);
+
+    var arrayStr = '<table>' +
+    '<tr>' +
+      '<td>url</td>' +
+      '<td>count</td>' +
+    '</tr>';
+    
+    array.forEach(row =>
+      {
+        arrayStr += '<tr>' +
+          '<td><a href="' + row.url + '">' + row.url + '</a></td>' +
+          '<td>' + row.count + '</td></tr>';
+      })
+    arrayStr += '</table>';
+    return arrayStr;
+  }
+  return userAction();
+}
+
 function getQuery(matchPhrase, chartInfo, startDate, endDate) {
   return {
     "aggs": {
@@ -273,6 +328,17 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
   }
 }
 
+function getURLArray(json)
+{
+  var urlArray = [];
+  var buckets = json["aggregations"]["2"]["buckets"];
+
+  buckets.forEach(bucket => {
+    urlArray.push({url: bucket["key"], count: bucket["doc_count"]});
+  })
+  return urlArray;
+}
+
 function usersGet(dateObj, infos) {
   dateObj["3"]["buckets"].forEach(elt => {
     infos.push({
@@ -316,18 +382,15 @@ function getPlotlyJsonCloud(json, specificGet) {
 
   let mainKey = keys[0];
 
-  console.log(mainKey)
   if (mainKey["key"].charAt(0) === '#'){
-    console.log("ENTERED");
     labels.push(mainKey["key"]);
     keys.shift();
   }
   else
     labels.push("Users");
+
   parents.push("");
   value.push(0);
-
- // keys.shift();
 
   keys.forEach(key => {   
     specificGet(key, value, labels, parents, mainKey);
@@ -366,6 +429,7 @@ function getPlotlyJsonHisto(json, specificGet) {
     let width;
 
     let plotlyInfo = {
+      type: "scatter",
       type: "line",
       line: {
         color: color,
