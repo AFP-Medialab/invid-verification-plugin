@@ -85,7 +85,10 @@ function submit_sna_form() {
             }
             $("#twitterStats-loader").css("display", "none");
             
-            var layout = { 
+            var cloudlayout = { 
+                margin: {l: 0, r: 0, b: 0, t: 0},
+                width: 500,
+                height: 500
               
             };
             generatePieChartQuery(param["session"], param["from"], param["until"]).then(plotlyJson => {
@@ -94,15 +97,15 @@ function submit_sna_form() {
             });
             generateEssidHistogramQuery(param["session"], true, param["from"], param["until"]).then(plotlyJson => {
 
-                Plotly.newPlot('retweet_time_chart', plotlyJson, layout);
+                Plotly.newPlot('retweet_time_chart', plotlyJson);
             });
             generateEssidHistogramQuery(param["session"], false, param["from"], param["until"]).then(plotlyJson => {
 
-                Plotly.newPlot('user_time_chart', plotlyJson, layout);
+                Plotly.newPlot('user_time_chart', plotlyJson);
             }); 
             generateHashtagCloudQuery(param["session"], param["from"], param["until"]).then(plotlyJson => {
 
-                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, layout);
+                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
             });
         });
     });

@@ -299,15 +299,14 @@ function getPlotlyJsonCloud(json)
         parents.push(mainHashtag["key"]);
         value.push(hashtag["doc_count"]);
     })
-    var obj = { 
-      outsidetextfont: {size: 20, color: "#377eb8"},
-      leaf: {opacity: 0.4},
-      marker: {line: {width: 2}},
+    var obj = [{ 
       type: "sunburst",
       labels: labels,
       parents: parents,
-      values: value
-    }
+      values: value,
+      outsidetextfont: {size: 20, color: "#377eb8"},
+      leaf: {opacity: 0.4}
+    }];
     console.log(obj);
     return obj;
 }
