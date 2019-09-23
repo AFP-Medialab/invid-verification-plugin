@@ -83,7 +83,7 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
         "terms": {
           "field": "username",
           "order": {
-            "_count": "desc"
+            "1": "desc"
           },
           "size": 5
         },
@@ -195,7 +195,8 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
     }
   }
 
-  let fieldInfo = (field === "hashtags") ? 
+  let fieldInfo = 
+  (field === "hashtags") ? 
   {
     "terms": {
       "field": field,
@@ -204,11 +205,12 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
       },
       "size": 14
     },
-  } : {
+  } : 
+  (field === "nretweets" || field === "nlikes")? {
       "terms": {
         "field": "username",
         "order": {
-          "_count": "desc"
+          "1": "desc"
         },
         "size": 14
       },
@@ -218,7 +220,16 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
             "field": field
           }
         }
-      },
+      }
+    } : 
+    {
+      "terms": {
+        "field": "username",
+        "order": {
+          "_count": "desc"
+        },
+        "size": 14
+      }
     };
 
   const userAction = async () => {
@@ -232,12 +243,14 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
     });
     const myJson = await response.json();
 
+    console.log(field + " : ");
+    console.log(myJson);
     if (field === "hashtags") {
       return getPlotlyJsonCloud(myJson, hashtagsGet, mainKey);
     }
-    else if (field === "nretweets")
+    else if (field === "nretweets" || field == "nlikes")
       return getPlotlyJsonCloud(myJson, mostRetweetGet,mainKey);
-    else
+    else 
       return getPlotlyJsonCloud(myJson, mostTweetsGet, mainKey);
 
   }
@@ -438,7 +451,7 @@ function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
     parents: parents,
     values: value,
     outsidetextfont: { size: 20, color: "#377eb8" },
-    leaf: { opacity: 0.4 }
+ //   leaf: { opacity: 0.4 }
   }];
   return obj;
 }
