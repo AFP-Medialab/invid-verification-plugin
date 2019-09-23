@@ -112,10 +112,13 @@ function submit_sna_form() {
 
             console.log(param["session"]);
             generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var layout = {
-                    title: "Top utilisateurs"
-                }
-                Plotly.newPlot('top_users_pie_chart', plotlyJson);
+                var cloudlayout = { 
+                    title: "Utilisateurs les plus actifs",
+                    margin: {l: 0, r: 0, b: 50, t: 50},
+                    
+                  
+                };
+                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout);
             });
          /*   generateEssidHistogramQuery(param["session"], true, param["query"]["from"], param["query"]["until"], colors).then(plotlyJson => {
                 var layout = {

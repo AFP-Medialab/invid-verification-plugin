@@ -380,8 +380,6 @@ function getURLArray(json) {
 }
 
 function usersGet(dateObj, infos) {
-  // console.log(dateObj["3"]["buckets"]);
-
 
   dateObj["3"]["buckets"].forEach(obj => {
     if (obj["1"]["value"] > 5) {
