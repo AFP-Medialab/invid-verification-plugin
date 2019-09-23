@@ -8,11 +8,26 @@ import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHisto
  * @func Make the json string from fields
  *
  */
-function formToJsonCollectRequest(search, user, lang, from, until, media, verified, retweetsHandling) {
-    var searchObj = {
-        "search": search
+function formToJsonCollectRequest(search, search_or, search_not, user, lang, from, until, media, verified, retweetsHandling) {
+
+    let search_list = search.trim().split(" ");
+
+    let or_list = null;
+    let not_list = null;
+    if (search_or !== "")
+        or_list = search_or.trim().split(" ");
+    if (search_not !== "")
+        not_list = search_not.trim().split(" ");
+
+    console.log("search : " + search_list[0] + " and " + search_list + " or " + or_list + " not " + not_list);
+    let searchObj = {
+        "search": search_list.shift(),
+        "and" : search_list,
+        "or" : or_list,
+        "not" : not_list
     }
-    var CollectRequest = {
+
+    let CollectRequest = {
         "search": searchObj,
         "lang": lang,
         "user": user,
@@ -52,6 +67,9 @@ function getMediaValue() {
 function submit_sna_form() {
 
     let search = document.getElementById("twitterStats-search").value;
+    let search_or  = document.getElementById("twitterStats-search-or").value;
+    let search_not = document.getElementById("twitterStats-search-not").value;
+
     let formlang = document.getElementById("twitterStats-lang").value;
     let user = document.getElementById("twitterStats-user").value;
     let from = document.getElementById("twitterStats-from-date").value;
@@ -62,7 +80,6 @@ function submit_sna_form() {
 
     let retweetsHandling = null;
 
-
     if (search == "" || from == "" || until == "") {
         alert(json_lang_translate[global_language]["twitterStatsErrorMessage"]);
         return;
@@ -70,18 +87,19 @@ function submit_sna_form() {
 
     $("#twitterStats-loader").css("display", "block");
 
-    let jsonCollectRequest = formToJsonCollectRequest(search, user,formlang, from, until, media, verified , retweetsHandling);
+    let jsonCollectRequest = formToJsonCollectRequest(search, search_or, search_not,  user,formlang, from, until, media, verified , retweetsHandling);
 
     let url = "http://localhost:8080/twitter-gateway/collect";
 
     let response = postRequest(jsonCollectRequest, url);
-
+    if (response == null)
+        alert("Bad request");
     response().then((jsonResponse) => {
 
         waitStatusDone(jsonResponse["session"]).then((param) =>
         {
             if (param == null) {
-                console.log("error : timeout");
+                console.log("error : timeout, or invalid request");
             }
             else {
                 console.log("finished " + param["session"] + "status " + param["status"]);
@@ -171,6 +189,8 @@ function postRequest(jsonRequest, url)
                 },
                 body: jsonRequest
             });
+        if (!response.ok)
+            return null;
         const myJson = await response.json(); //extract JSON from the http response
         // do something with myJson
         return myJson;
@@ -189,6 +209,8 @@ function getRequest(url)
             fetch(url, {
                 method: 'GET',
             });
+        if (!response.ok)
+            return null;
         const myJson = await response.json(); //extract JSON from the http response
         // do something with myJson
         return myJson;
@@ -201,10 +223,13 @@ async function waitStatusDone(session){
     let cpt = 2100;
     while (cpt > 0)
     {
-        const response = getRequest(url)
+        await delay(500);
+        const response = getRequest(url);
         response().then(json => {
             if (json["status"] === "Done" || json["status"] === "Error")
                 res = json;
+            else if(json == null)
+                return null;
         });
         if (res !== null)
             return res;
