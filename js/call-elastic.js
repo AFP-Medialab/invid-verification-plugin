@@ -1,4 +1,5 @@
 
+var json = {};
 //var sessid = "sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc"
 export function generatePieChartQuery(sessid, startDate, endDate) {
   let chartInfo = {
@@ -114,7 +115,6 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
     });
     const myJson = await response.json();
 
-    console.log(myJson);
     if (myJson !== null)
       if (retweets)
         return getPlotlyJsonHisto(myJson, retweetsGet);
@@ -243,8 +243,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
     });
     const myJson = await response.json();
 
-    console.log(field + " : ");
-    console.log(myJson);
+    json = myJson;
     if (field === "hashtags") {
       return getPlotlyJsonCloud(myJson, hashtagsGet, mainKey);
     }
@@ -257,6 +256,45 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
   return userAction();
 }
 
+export function getTweets(startDate, endDate) {
+ /* var fieldInfo = {
+    "terms": {
+      "field": "username",
+      "order": {
+        "1": "desc"
+      },
+      "size": 14
+    },
+    "aggs": {
+      "1": {
+        "sum": {
+          "field": "nretweets"
+        }
+      }
+    }
+  };
+
+  var matchPhrase = {
+    "match_phrase":
+    {
+      "essid": {
+        "query": sessid
+      }
+    }
+  };
+
+  const userAction = async () => {
+    const response = await fetch('http:localhost:9200/twinttweets/_search', {
+      method: 'POST',
+      body:
+        JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
+      headers: {
+        'Content-Type': 'application/json'
+      } //
+    });
+    const myJson = await response.json();*/
+    return json;
+}
 export function generateURLArray(sessid, startDate, endDate) {
   let matchPhrase =
   {
@@ -314,7 +352,7 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
       "2":
         chartInfo
     },
-    "size": 0,
+    "size": 1000,
     "_source": {
       "excludes": []
     },
