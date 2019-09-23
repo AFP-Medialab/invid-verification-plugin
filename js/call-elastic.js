@@ -49,7 +49,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
   return (userAction());
 }
 
-export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate) {
+export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate, colors) {
 
   let matchPhrase =
   {
@@ -65,7 +65,7 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
   {
     "date_histogram": {
       "field": "date",
-      "calendar_interval": "4h",
+      "calendar_interval": "1h",
       "time_zone": "Europe/Paris",
       "min_doc_count": 1
     },
@@ -98,11 +98,12 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
     });
     const myJson = await response.json();
 
+//    console.log(myJson);
     if (myJson !== null)
       if (retweets)
-        return getPlotlyJsonHisto(myJson, retweetsGet);
+        return getPlotlyJsonHisto(myJson, retweetsGet, colors);
       else
-        return getPlotlyJsonHisto(myJson, usersGet);
+        return getPlotlyJsonHisto(myJson, usersGet, colors);
 
   }
   return userAction();
@@ -142,6 +143,7 @@ export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endD
         "sum": {
           "field": "nretweets"
         }
+
       }
     }
   }
@@ -340,13 +342,15 @@ function getURLArray(json)
 }
 
 function usersGet(dateObj, infos) {
-  dateObj["3"]["buckets"].forEach(elt => {
+ // console.log(dateObj["3"]["buckets"]);
+  
+    dateObj["3"]["buckets"].forEach(obj =>
     infos.push({
       date: dateObj['key_as_string'],
-      key: elt["key"],
-      nb: elt["doc_count"]
-    })
-  })
+      key: obj["key"],
+      nb: obj["doc_count"]
+    }));
+  
   return infos;
 }
 
@@ -406,7 +410,7 @@ function getPlotlyJsonCloud(json, specificGet) {
   return obj;
 }
 
-function getPlotlyJsonHisto(json, specificGet) {
+function getPlotlyJsonHisto(json, specificGet, colors) {
   let dates = json["aggregations"]["2"]["buckets"];
 
   var infos = [];
@@ -420,9 +424,10 @@ function getPlotlyJsonHisto(json, specificGet) {
     })
   });
   var lines = [];
+  var i = 0;
   while (infos.length !== 0) {
 
-    var color = getRandomColor();
+    var color = getRandomColor(colors, i++);
     let info = infos.pop();
     let date = info.date;
     let nb = info.nb;
@@ -455,9 +460,11 @@ function getPlotlyJsonHisto(json, specificGet) {
   return lines;
 }
 
-function getRandomColor() {
+function getRandomColor(colors, index) {
   var letters = '0123456789ABCDEF';
   var color = '#';
+  if (colors != null)
+    return colors[index];
   for (var i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }

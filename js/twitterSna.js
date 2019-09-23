@@ -88,6 +88,7 @@ function submit_sna_form() {
             }
             $("#twitterStats-loader").css("display", "none");
             
+            var colors = ['#C0392B', '#2874A6']
 
            
             generatePieChartQuery(param["session"], param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
@@ -96,7 +97,7 @@ function submit_sna_form() {
                 }
                 Plotly.newPlot('top_users_pie_chart', plotlyJson, layout);
             });
-            generateEssidHistogramQuery(param["session"], true, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+            generateEssidHistogramQuery(param["session"], true, param["query"]["from"], param["query"]["until"], colors).then(plotlyJson => {
                 var layout = {
                     margin: {l: 0, r: 0, b: 50, t: 50},
                     title: 'TimeLine des retweets',
