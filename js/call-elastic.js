@@ -7,7 +7,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
       "order": {
         "_count": "desc"
       },
-      "size": 3200
+      "size": 10
     }
   };
 
@@ -184,7 +184,7 @@ export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endD
   return userAction();
 }
 
-export function generateCloudQuery(sessid, field, startDate, endDate) {
+export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
   let matchPhrase =
   {
     "match_phrase":
@@ -195,7 +195,8 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
     }
   }
 
-  let fieldInfo = (field === "hashtags") ? {
+  let fieldInfo = (field === "hashtags") ? 
+  {
     "terms": {
       "field": field,
       "order": {
@@ -232,10 +233,12 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
     const myJson = await response.json();
 
     if (field === "hashtags") {
-      return getPlotlyJsonCloud(myJson, hashtagsGet);
+      return getPlotlyJsonCloud(myJson, hashtagsGet, mainKey);
     }
+    else if (field === "nretweets")
+      return getPlotlyJsonCloud(myJson, mostRetweetGet,mainKey);
     else
-      return getPlotlyJsonCloud(myJson, mostRetweetGet);
+      return getPlotlyJsonCloud(myJson, mostTweetsGet, mainKey);
 
   }
   return userAction();
@@ -344,6 +347,15 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
   }
 }
 
+
+function mostTweetsGet(key, values, labels, parents, mainKey) {
+  if (key["doc_count"] > 0) {
+    values.push(key["doc_count"]);
+    labels.push(key["key"]);
+    parents.push(mainKey);
+  }
+}
+
 function getURLArray(json) {
   var urlArray = [];
   var buckets = json["aggregations"]["2"]["buckets"];
@@ -385,7 +397,7 @@ function mostRetweetGet(key, values, labels, parents, mainKey) {
   if (key["1"]["value"] > 10) {
     values.push(key["1"]["value"]);
     labels.push(key["key"]);
-    parents.push("Users");
+    parents.push(mainKey);
   }
 }
 
@@ -395,7 +407,7 @@ function hashtagsGet(key, values, labels, parents, mainKey) {
   parents.push(mainKey["key"]);
 }
 
-function getPlotlyJsonCloud(json, specificGet) {
+function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
   var labels = [];
   var parents = [];
   var value = [];
@@ -409,7 +421,10 @@ function getPlotlyJsonCloud(json, specificGet) {
     keys.shift();
   }
   else
-    labels.push("Users");
+  {
+    mainKey = hashTagKey;
+    labels.push(hashTagKey);
+  }
 
   parents.push("");
   value.push(0);

@@ -91,7 +91,8 @@ function submit_sna_form() {
             var colors = ['#C0392B', '#2874A6']
 
            
-            generatePieChartQuery(param["session"], param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+            console.log(param);
+            generateCloudQuery(param["session"], "ntweets", param["query"]["from"], param["query"]["until"], param["query"]["search"]["search"]).then(plotlyJson => {
                 var layout = {
                     title: "Top utilisateurs"
                 }
@@ -120,7 +121,7 @@ function submit_sna_form() {
                   };
                 Plotly.newPlot('user_time_chart', plotlyJson, layout);
             }); 
-            generateCloudQuery(param["session"], "hashtags",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+            generateCloudQuery(param["session"], "hashtags",  param["query"]["from"], param["query"]["until"], param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Hashtags associés",
                     margin: {l: 0, r: 0, b: 50, t: 50}
@@ -128,7 +129,7 @@ function submit_sna_form() {
                 };
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
             });
-            generateCloudQuery(param["session"], "nretweets",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+            generateCloudQuery(param["session"], "nretweets",  param["query"]["from"], param["query"]["until"], param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Utilisateurs les plus retweetés",
                     margin: {l: 0, r: 0, b: 50, t: 50}
@@ -136,7 +137,7 @@ function submit_sna_form() {
                 };
                 Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout);
             });
-            generateCloudQuery(param["session"], "nlikes",  param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+            generateCloudQuery(param["session"], "nlikes",  param["query"]["from"], param["query"]["until"], param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Utilisateurs les plus likés",
                     margin: {l: 0, r: 0, b: 50, t: 50}
