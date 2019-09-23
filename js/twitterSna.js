@@ -19,7 +19,6 @@ function formToJsonCollectRequest(search, search_or, search_not, user, lang, fro
     if (search_not !== "")
         not_list = search_not.trim().split(" ");
 
-    console.log("search : " + search_list[0] + " and " + search_list + " or " + or_list + " not " + not_list);
     let searchObj = {
         "search": search_list.shift(),
         "and" : search_list,
@@ -100,9 +99,15 @@ function submit_sna_form() {
         {
             if (param == null) {
                 console.log("error : timeout, or invalid request");
+                alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                return;
             }
-            else {
-                console.log("finished " + param["session"] + "status " + param["status"]);
+            else if (param["statsu"] === "Error"){
+                alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                return;
+            }
+            else{
+                console.log("Finished successfully")
             }
             $("#twitterStats-loader").css("display", "none");
             
