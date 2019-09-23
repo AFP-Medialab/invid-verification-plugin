@@ -535,7 +535,7 @@ home_tutorial_image_1	ht_1_en.png	ht_1_fr.png	ht_1_es.png
 home_tutorial_image_2	ht_2_en.png	ht_2_fr.png	ht_2_es.png
 home_tutorial_image_3	ht_3_en.png	ht_3_fr.png	ht_3_es.png
 home_tutorial_image_4			
-home_tutorial_image_5			
+home_tutorial_image_5
 home_tutorial_display	1	1	1
 lang_code	EN	FR	ES
 lang_label	English	Français	Español
@@ -557,3 +557,29 @@ twitterStats_media_both	both	les deux	tanto
 twitterStats_verified_no	no	non	no
 twitterStats_verified_yes	yes	oui	si
 twitterStatsErrorMessage	Please fill the required fields (＊)	Veuillez remplir les champs requis (＊)	Rellene los campos requeridos (＊)
+lang_choices	Language : 	Langues : 	Lenguas :
+lang_all	All	Toutes	Todos
+lang_fr	French	Français	Francés
+lang_en	English	Anglais	Inglés
+lang_es	Spanish	Espagnole	Español
+lang_ar	Arab	Arabe	Árabe
+lang_de	German	Allemand	Alemán
+lang_it	Italian	Italien	Italiano
+lang_id	Indonesian	Indonésien	Indonesio
+lang_pt	Portuguese	Portugais	Portugués
+lang_ko	Korean	Coréen	Coreano
+lang_tr	Turkish	Turc	Turco
+lang_ru	Russian	Russe	Ruso
+lang_nl	Dutch	Néerlandais	Holandés
+lang_hi	Hindi	Indou	Hindú
+lang_no	Norwegian	Norvégien	Noruego
+lang_sv	Swedish	Suédois	Sueco
+lang_fi	Finnish	Finlandais	Finlandés
+lang_da	Danish	Danois	Danés
+lang_pl	Polish	Polonais	Polaco
+lang_hu	Hungarian	Hongrois	Húngaro
+lang_fa	Farsi	Persan	Farsi
+lang_he	Hebrew	Hébreu	Hebreo
+lang_ur	Urdu	Ourdou	Urdu
+lang_th	Thai	Thaï	Tailandés
+

@@ -3,7 +3,7 @@
 <head>
 
 	<title>We Verify Toolkit</title>
-	
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 	<meta name="copyright" content="AFP Medialab">
@@ -39,7 +39,7 @@
 	<header>
 		<div class="container-fluid">
 			<div class="row" style="border-bottom:1px solid #edece8;">
-	
+
 				<!-- LOGO INVID -->
 				<div class="col-md-2 col-sm-2 col-xs-2 text-left" style="padding-right:0;">
 					<div id="invid-logo" alt="Logo InVid">
@@ -284,7 +284,7 @@
 							<div>
 								<input type="text" id="apibox" name="video_url2"/>
 								<br>
-								<input type="checkbox" id="api_reprocess" name="api_reprocess"/> 
+								<input type="checkbox" id="api_reprocess" name="api_reprocess"/>
 								<label for="api_reprocess" id="api_repro"></label>
 								<br>
 								<br>
@@ -409,7 +409,7 @@
 								<button id="keyframes_iframe_back" class="button"></button>
 							</div>
 							<div>
-								<iframe src="http://multimedia3.iti.gr/video_fragmentation/service/start.html" width="85%" height="750px" 
+								<iframe src="http://multimedia3.iti.gr/video_fragmentation/service/start.html" width="85%" height="750px"
 								frameborder="0"></iframe>
 							</div>
 						</div>
@@ -425,13 +425,13 @@
 								<input type="text" name="video_url" id="youtube_input"/>
 								<br>
 								<div id="engine">
-									<input type="radio" id="google_engine" name="engine" checked translate="no" /> Google 
-									<input type="radio" id="yandex_engine" name="engine" translate="no" /> Yandex 
-									<input type="radio" id="bing_engine" name="engine" translate="no"> Bing 
-									<input type="radio" id="tineye_engine" name="engine" translate="no"> 
+									<input type="radio" id="google_engine" name="engine" checked translate="no" /> Google
+									<input type="radio" id="yandex_engine" name="engine" translate="no" /> Yandex
+									<input type="radio" id="bing_engine" name="engine" translate="no"> Bing
+									<input type="radio" id="tineye_engine" name="engine" translate="no">
 									<div style="display: inline-block;"> Tineye
-									</div> 
-								</div> 
+									</div>
+								</div>
 								<br>
 								<input type="submit" value="Submit" class="button" />
 							</ul>
@@ -461,7 +461,7 @@
 								<br>
 								<div id="fromto-content">
 									<input type="text" id="from-date" style="width:40%;">
-									<input type="text" id="to-date" style="width:40%;"> 
+									<input type="text" id="to-date" style="width:40%;">
 								</div>
 								<br>
 								<br>
@@ -469,7 +469,7 @@
 								<span id="twitter_local_time"></span>
 								<input type="radio" id="gmt" name="time" translate="no" />
 								<span id="twitter_gmt"></span>
-								<br> 
+								<br>
 								<br>
 								<input type="submit" value="Submit" class="button" />
 
@@ -479,7 +479,7 @@
 						<div id="footer_twitter" class="footer"></div>
 					</div>
 
-					<!-- TWITTER STATS VIEW -->
+					<!-- TWITTER SNA VIEW -->
 
 					<div id="twitterSna" class="form-action hide">
 						<div id="twitterStats_title"></div>
@@ -488,15 +488,43 @@
 								<br>
 								<input type="text" id="twitterStats-search" name="search"/>
 								<br>
-								<input type="text" id="twitterStats-lang" name="lang">
-								<br>
+
 								<input type="text" id="twitterStats-user" name="user">
 								<br>
 								<div id="twitterStats-fromto-content">
 									<input type="text" id="twitterStats-from-date" style="width:40%;">
 									<input type="text" id="twitterStats-to-date" style="width:40%;">
 								</div>
-
+                                <br>
+                                <div>
+                                    <span id="lang_choices"></span>
+                                    <select id="twitterStats-lang">
+                                        <option id="lang_all" value=""/>
+                                        <option id="lang_en" value="en"/>
+                                        <option id="lang_fr" value="fr"/>
+                                        <option id="lang_es" value="es"/>
+                                        <option id="lang_ar" value="ar"/>
+                                        <option id="lang_da" value="da"/>
+                                        <option id="lang_de" value="de"/>
+                                        <option id="lang_fa" value="fa"/>
+                                        <option id="lang_fi" value="fi"/>
+                                        <option id="lang_he" value="he"/>
+                                        <option id="lang_hi" value="hi"/>
+                                        <option id="lang_hu" value="hu"/>
+                                        <option id="lang_id" value="id"/>
+                                        <option id="lang_it" value="it"/>
+                                        <option id="lang_ko" value="ko"/>
+                                        <option id="lang_nl" value="nl"/>
+                                        <option id="lang_no" value="no"/>
+                                        <option id="lang_pl" value="pl"/>
+                                        <option id="lang_pt" value="pt"/>
+                                        <option id="lang_ru" value="ru"/>
+                                        <option id="lang_sv" value="sv"/>
+                                        <option id="lang_th" value="th"/>
+                                        <option id="lang_tr" value="tr"/>
+                                        <option id="lang_ur" value="ur"/>
+                                    </select>
+                                </div>
 								<br>
 								<div id="twitterStats-radios-media">
 									<span type="text" id="twitterStats-media"></span>
@@ -546,7 +574,7 @@
 									<div id="likes_cloud_chart"> </div>
 									<div id="url_array"></div>
 								</div>
-								
+
 							</ul>
 						</form>
 						<div id="twitterStats-footer" class="footer"></div>
@@ -562,7 +590,7 @@
 								<div class="image-upload">
 									<br>
 									<label for="file-input">
-										<img src="img/file.png"/> 
+										<img src="img/file.png"/>
 										<div id="local_file"></div>
 									</label>
 									<input id="file-input" type="file"/>
@@ -601,7 +629,7 @@
 												 : 100%
 											</span>
 										</div>
-										<br>		
+										<br>
 										<br>
 										<input type="submit" id="apply_button" value="Apply" class="button" />
 										<br>
@@ -657,7 +685,7 @@
 									Google Image
 								</button>
 							</div>
-						</div> 
+						</div>
 						<div id="footer_magnifier" class="footer"></div>
 					</div>
 
@@ -671,7 +699,7 @@
 								<div class="image-upload">
 									<br>
 									<label for="local-metadata">
-										<img src="img/file.png"/> 
+										<img src="img/file.png"/>
 										<div id="metadata_localfile"></div>
 									</label>
 									<input id="local-metadata" type="file"/>
@@ -804,7 +832,7 @@
 										<span style="width:110px;display:inline-block;">Youtube: </span>https://www.youtube.com/embed/5wRv8boqIEc
 										<br>
 										<span style="width:110px;display:inline-block;">Twitter: </span>https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
-										<br>	
+										<br>
 										<span style="width:110px;display:inline-block;">iframe: </span>&lt;iframe src="https://www.youtube.com/embed/5wRv8boqIEc" width="960" height="569"&gt;&lt;/iframe&gt;
 									</div>
 								</div>
@@ -842,7 +870,7 @@
 
 	<footer style="display:none;">
 		<div>
-			Â© AFP 2019 - 
+			Â© AFP 2019 -
 			<a href="https://www.afp.com/en/medialab" target="_blank">AFP Medialab</a>
 		</div>
 	</footer>
@@ -938,11 +966,11 @@
 	<script src="js/html-generate.js"></script>
 	<!-- For language -->
 	<script src="js/language.js"></script>
-	<!-- For Api (Analysis) --> 
+	<!-- For Api (Analysis) -->
 	<script src="js/api.js"></script>
 	<!-- For Forensic Analysis-->
 	<script src="js/forensic.js"></script>
-	<!-- For Keyframes --> 
+	<!-- For Keyframes -->
 	<script src="js/keyframes.js"></script>
 	<!-- For Copyright Management -->
 	<script src="js/copyright.js"></script>
@@ -966,7 +994,7 @@
 	<script src="js/metadata.js"></script>
 	<!-- For Twitter search -->
 
-	<script type="module" src="js/call-elastic.js"></script> 
+	<script type="module" src="js/call-elastic.js"></script>
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 	<script src="js/twitter.js"></script>
 

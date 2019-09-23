@@ -62,7 +62,6 @@ function submit_sna_form() {
 
     let retweetsHandling = null;
 
-
     if (search == "" || from == "" || until == "") {
         alert(json_lang_translate[global_language]["twitterStatsErrorMessage"]);
         return;
@@ -75,13 +74,14 @@ function submit_sna_form() {
     let url = "http://localhost:8080/twitter-gateway/collect";
 
     let response = postRequest(jsonCollectRequest, url);
-
+    if (response == null)
+        alert("Bad request");
     response().then((jsonResponse) => {
 
         waitStatusDone(jsonResponse["session"]).then((param) =>
         {
             if (param == null) {
-                console.log("error : timeout");
+                console.log("error : timeout, or invalid request");
             }
             else {
                 console.log("finished " + param["session"] + "status " + param["status"]);
@@ -168,6 +168,8 @@ function postRequest(jsonRequest, url)
                 },
                 body: jsonRequest
             });
+        if (!response.ok)
+            return null;
         const myJson = await response.json(); //extract JSON from the http response
         // do something with myJson
         return myJson;
@@ -186,6 +188,8 @@ function getRequest(url)
             fetch(url, {
                 method: 'GET',
             });
+        if (!response.ok)
+            return null;
         const myJson = await response.json(); //extract JSON from the http response
         // do something with myJson
         return myJson;
@@ -198,10 +202,13 @@ async function waitStatusDone(session){
     let cpt = 2100;
     while (cpt > 0)
     {
-        const response = getRequest(url)
+        await delay(500);
+        const response = getRequest(url);
         response().then(json => {
             if (json["status"] === "Done" || json["status"] === "Error")
                 res = json;
+            else if(json == null)
+                return null;
         });
         if (res !== null)
             return res;
