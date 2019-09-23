@@ -183,6 +183,7 @@ function update_twitter_sna(lang)
 
 
 	setPlaceholder("twitterStats-search",			json_lang_translate[lang]["twitter_sna_search"]);
+	setPlaceholder("twitterStats-search-and",		json_lang_translate[lang]["twitter_sna_and"]);
 	setPlaceholder("twitterStats-search-or",		json_lang_translate[lang]["twitter_sna_or"]);
 	setPlaceholder("twitterStats-search-not",		json_lang_translate[lang]["twitter_sna_not"]);
 	setPlaceholder("twitterStats-user",				json_lang_translate[lang]["twitter_sna_user"]);
@@ -190,31 +191,38 @@ function update_twitter_sna(lang)
 	setPlaceholder("twitterStats-to-date",			json_lang_translate[lang]["twitter_sna_until_date"]);
 
 	//langauges list
-	setInnerHtml("lang_choices",	json_lang_translate[lang]["lang_choices"]);
-	setInnerHtml("lang_all",		json_lang_translate[lang]["lang_all"]);
-	setInnerHtml("lang_en",			json_lang_translate[lang]["lang_en"]);
-	setInnerHtml("lang_fr",			json_lang_translate[lang]["lang_fr"]);
-	setInnerHtml("lang_es",			json_lang_translate[lang]["lang_es"]);
-	setInnerHtml("lang_ar",			json_lang_translate[lang]["lang_ar"]);
-	setInnerHtml("lang_da",			json_lang_translate[lang]["lang_da"]);
-	setInnerHtml("lang_de",			json_lang_translate[lang]["lang_de"]);
-	setInnerHtml("lang_fa",			json_lang_translate[lang]["lang_fa"]);
-	setInnerHtml("lang_fi",			json_lang_translate[lang]["lang_fi"]);
-	setInnerHtml("lang_he",			json_lang_translate[lang]["lang_he"]);
-	setInnerHtml("lang_hi",			json_lang_translate[lang]["lang_hi"]);
-	setInnerHtml("lang_hu",			json_lang_translate[lang]["lang_hu"]);
-	setInnerHtml("lang_id",			json_lang_translate[lang]["lang_id"]);
-	setInnerHtml("lang_it",			json_lang_translate[lang]["lang_it"]);
-	setInnerHtml("lang_ko",			json_lang_translate[lang]["lang_ko"]);
-	setInnerHtml("lang_nl",			json_lang_translate[lang]["lang_nl"]);
-	setInnerHtml("lang_no",			json_lang_translate[lang]["lang_no"]);
-	setInnerHtml("lang_pl",			json_lang_translate[lang]["lang_pl"]);
-	setInnerHtml("lang_pt",			json_lang_translate[lang]["lang_pt"]);
-	setInnerHtml("lang_ru",			json_lang_translate[lang]["lang_ru"]);
-	setInnerHtml("lang_sv",			json_lang_translate[lang]["lang_sv"]);
-	setInnerHtml("lang_th",			json_lang_translate[lang]["lang_th"]);
-	setInnerHtml("lang_tr",			json_lang_translate[lang]["lang_tr"]);
-	setInnerHtml("lang_ur",			json_lang_translate[lang]["lang_ur"]);
+	setInnerHtml("lang_choices",					json_lang_translate[lang]["lang_choices"]);
+	setInnerHtml("lang_all",						json_lang_translate[lang]["lang_all"]);
+	setInnerHtml("lang_en",							json_lang_translate[lang]["lang_en"]);
+	setInnerHtml("lang_fr",							json_lang_translate[lang]["lang_fr"]);
+	setInnerHtml("lang_es",							json_lang_translate[lang]["lang_es"]);
+	setInnerHtml("lang_ar",							json_lang_translate[lang]["lang_ar"]);
+	setInnerHtml("lang_da",							json_lang_translate[lang]["lang_da"]);
+	setInnerHtml("lang_de",							json_lang_translate[lang]["lang_de"]);
+	setInnerHtml("lang_fa",							json_lang_translate[lang]["lang_fa"]);
+	setInnerHtml("lang_fi",							json_lang_translate[lang]["lang_fi"]);
+	setInnerHtml("lang_he",							json_lang_translate[lang]["lang_he"]);
+	setInnerHtml("lang_hi",							json_lang_translate[lang]["lang_hi"]);
+	setInnerHtml("lang_hu",							json_lang_translate[lang]["lang_hu"]);
+	setInnerHtml("lang_id",							json_lang_translate[lang]["lang_id"]);
+	setInnerHtml("lang_it",							json_lang_translate[lang]["lang_it"]);
+	setInnerHtml("lang_ko",							json_lang_translate[lang]["lang_ko"]);
+	setInnerHtml("lang_nl",							json_lang_translate[lang]["lang_nl"]);
+	setInnerHtml("lang_no",							json_lang_translate[lang]["lang_no"]);
+	setInnerHtml("lang_pl",							json_lang_translate[lang]["lang_pl"]);
+	setInnerHtml("lang_pt",							json_lang_translate[lang]["lang_pt"]);
+	setInnerHtml("lang_ru",							json_lang_translate[lang]["lang_ru"]);
+	setInnerHtml("lang_sv",							json_lang_translate[lang]["lang_sv"]);
+	setInnerHtml("lang_th",							json_lang_translate[lang]["lang_th"]);
+	setInnerHtml("lang_tr",							json_lang_translate[lang]["lang_tr"]);
+	setInnerHtml("lang_ur",							json_lang_translate[lang]["lang_ur"]);
+
+	//Chart titles
+	setInnerHtml("top_users_pie_chart_title",		json_lang_translate[lang]["top_users_pie_chart"]);
+	setInnerHtml("user_time_chart_title",			json_lang_translate[lang]["user_time_chart"]);
+	setInnerHtml("hashtag_cloud_chart_title",		json_lang_translate[lang]["hashtag_cloud_chart"]);
+	setInnerHtml("retweets_cloud_chart_title",		json_lang_translate[lang]["retweets_cloud_chart"]);
+	setInnerHtml("likes_cloud_chart_title",			json_lang_translate[lang]["likes_cloud_chart"]);
 
 
 }

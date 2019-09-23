@@ -487,7 +487,8 @@
 							<ul style="padding-left:0;">
 								<br>
                                 <div>
-                                    <input type="text" id="twitterStats-search" name="search"/>
+                                    <input type="text" id="twitterStats-search" name="search" style="width:40%;"/>
+									<input type="text" id="twitterStats-search-and" name="search-and" style="width:40%;"/>
                                     <input type="text" id="twitterStats-search-or" name="search-or" style="width:40%;"/>
                                     <input type="text" id="twitterStats-search-not" name="search-not" style="width:40%;"/>
                                 </div>
@@ -567,15 +568,26 @@
 								<br>
 								<br>
 								<input type="submit" value="Submit" class="button" id="submitSna" />
-
+								<br>
 								<div id="twitterStats-loader" class="loader"></div>
-								<div id="twitterStats-Graphs">
+								<br>
+								<div id="twitterStats-Graphs" style="display: none;">
+									<br>
+									<span id="top_users_pie_chart_title"></span>
 									<div id="top_users_pie_chart"> </div>
-									<div id="retweet_time_chart"> </div>
+									<br>
+									<span id="user_time_chart_title"></span>
 									<div id="user_time_chart"> </div>
+									<br>
+									<span id="hashtag_cloud_chart_title"></span>
 									<div id="hashtag_cloud_chart"> </div>
+									<br>
+									<span id="retweets_cloud_chart_title"></span>
 									<div id="retweets_cloud_chart"> </div>
+									<br>
+									<span id="likes_cloud_chart_title"></span>
 									<div id="likes_cloud_chart"> </div>
+									<br>
 									<div id="url_array"></div>
 								</div>
 
