@@ -7,7 +7,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
       "order": {
         "_count": "desc"
       },
-      "size": 10
+      "size": 3200
     }
   };
 
@@ -34,10 +34,19 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
     let vals = [];
     let keys = [];
     let buckets = myJson["aggregations"]["2"]["buckets"];
+    var i = 0;
+    var tot = 0;
     buckets.forEach(elt => {
-      vals.push(elt["doc_count"]);
-      keys.push(elt["key"]);
+
+      if (i++ < 10) {
+        vals.push(elt["doc_count"]);
+        keys.push(elt["key"]);
+      }
+      else
+        tot += elt["doc_count"];
     });
+    vals.push(tot);
+    keys.push("OTHERS");
 
     let plotlyJson = [{
       values: vals,
@@ -77,6 +86,13 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
             "_count": "desc"
           },
           "size": 5
+        },
+        "aggs": {
+          "1": {
+            "sum": {
+              "field": "nretweets"
+            }
+          }
         }
       },
       "1": {
@@ -98,12 +114,12 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
     });
     const myJson = await response.json();
 
-//    console.log(myJson);
+    console.log(myJson);
     if (myJson !== null)
       if (retweets)
-        return getPlotlyJsonHisto(myJson, retweetsGet, colors);
+        return getPlotlyJsonHisto(myJson, retweetsGet);
       else
-        return getPlotlyJsonHisto(myJson, usersGet, colors);
+        return getPlotlyJsonHisto(myJson, usersGet);
 
   }
   return userAction();
@@ -179,7 +195,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
     }
   }
 
-  let fieldInfo = (field === "hashtags")?{
+  let fieldInfo = (field === "hashtags") ? {
     "terms": {
       "field": field,
       "order": {
@@ -187,22 +203,22 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
       },
       "size": 14
     },
-  }:{
-    "terms": {
-      "field": "username",
-      "order": {
-        "_count": "desc"
+  } : {
+      "terms": {
+        "field": "username",
+        "order": {
+          "_count": "desc"
+        },
+        "size": 14
       },
-      "size": 14
-    },
-    "aggs": {
-      "1": {
-        "sum": {
-          "field": field
+      "aggs": {
+        "1": {
+          "sum": {
+            "field": field
+          }
         }
-      }
-    },
-  };
+      },
+    };
 
   const userAction = async () => {
     const response = await fetch('http:localhost:9200/twinttweets/_search', {
@@ -225,8 +241,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate) {
   return userAction();
 }
 
-export function generateURLArray(sessid, startDate, endDate)
-{
+export function generateURLArray(sessid, startDate, endDate) {
   let matchPhrase =
   {
     "match_phrase":
@@ -257,21 +272,20 @@ export function generateURLArray(sessid, startDate, endDate)
     });
     const myJson = await response.json();
 
-   
+
     var array = getURLArray(myJson);
 
     var arrayStr = '<table>' +
-    '<tr>' +
+      '<tr>' +
       '<td>url</td>' +
       '<td>count</td>' +
-    '</tr>';
-    
-    array.forEach(row =>
-      {
-        arrayStr += '<tr>' +
-          '<td><a href="' + row.url + '">' + row.url + '</a></td>' +
-          '<td>' + row.count + '</td></tr>';
-      })
+      '</tr>';
+
+    array.forEach(row => {
+      arrayStr += '<tr>' +
+        '<td><a href="' + row.url + '">' + row.url + '</a></td>' +
+        '<td>' + row.count + '</td></tr>';
+    })
     arrayStr += '</table>';
     return arrayStr;
   }
@@ -330,27 +344,31 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
   }
 }
 
-function getURLArray(json)
-{
+function getURLArray(json) {
   var urlArray = [];
   var buckets = json["aggregations"]["2"]["buckets"];
 
   buckets.forEach(bucket => {
-    urlArray.push({url: bucket["key"], count: bucket["doc_count"]});
+    urlArray.push({ url: bucket["key"], count: bucket["doc_count"] });
   })
   return urlArray;
 }
 
 function usersGet(dateObj, infos) {
- // console.log(dateObj["3"]["buckets"]);
-  
-    dateObj["3"]["buckets"].forEach(obj =>
-    infos.push({
-      date: dateObj['key_as_string'],
-      key: obj["key"],
-      nb: obj["doc_count"]
-    }));
-  
+  // console.log(dateObj["3"]["buckets"]);
+
+
+  dateObj["3"]["buckets"].forEach(obj => {
+    if (obj["1"]["value"] > 5) {
+      infos.push({
+        date: dateObj['key_as_string'],
+        key: obj["key"],
+        nb: obj["1"]["value"]
+
+      })
+    }
+  });
+
   return infos;
 }
 
@@ -364,7 +382,7 @@ function retweetsGet(dateObj, infos) {
 }
 
 function mostRetweetGet(key, values, labels, parents, mainKey) {
-  if (key["1"]["value"] > 10){
+  if (key["1"]["value"] > 10) {
     values.push(key["1"]["value"]);
     labels.push(key["key"]);
     parents.push("Users");
@@ -386,7 +404,7 @@ function getPlotlyJsonCloud(json, specificGet) {
 
   let mainKey = keys[0];
 
-  if (mainKey["key"].charAt(0) === '#'){
+  if (mainKey["key"].charAt(0) === '#') {
     labels.push(mainKey["key"]);
     keys.shift();
   }
@@ -396,7 +414,7 @@ function getPlotlyJsonCloud(json, specificGet) {
   parents.push("");
   value.push(0);
 
-  keys.forEach(key => {   
+  keys.forEach(key => {
     specificGet(key, value, labels, parents, mainKey);
   })
   var obj = [{
@@ -410,7 +428,7 @@ function getPlotlyJsonCloud(json, specificGet) {
   return obj;
 }
 
-function getPlotlyJsonHisto(json, specificGet, colors) {
+function getPlotlyJsonHisto(json, specificGet) {
   let dates = json["aggregations"]["2"]["buckets"];
 
   var infos = [];
@@ -421,25 +439,26 @@ function getPlotlyJsonHisto(json, specificGet, colors) {
       date: dateObj['key_as_string'],
       key: "TOTAL",
       nb: dateObj["doc_count"],
-    })
+    });
+    infos.push({
+      date: dateObj['key_as_string'],
+      key: "Retweets",
+      nb: dateObj["1"]["value"]
+    });
   });
   var lines = [];
   var i = 0;
   while (infos.length !== 0) {
 
-    var color = getRandomColor(colors, i++);
+    //  var color = getRandomColor(colors, i++);
     let info = infos.pop();
     let date = info.date;
     let nb = info.nb;
-    let width;
-
+    var type = "markers";
+    if (info.key === "TOTAL" || info.key === "Retweets")
+      type = 'lines';
     let plotlyInfo = {
-      type: "scatter",
-      type: "line",
-      line: {
-        color: color,
-        width: width
-      },
+      mode: type,
       name: info.key,
       x: [],
       y: []
@@ -463,7 +482,7 @@ function getPlotlyJsonHisto(json, specificGet, colors) {
 function getRandomColor(colors, index) {
   var letters = '0123456789ABCDEF';
   var color = '#';
-  if (colors != null)
+  if (colors != null && index > colors.size)
     return colors[index];
   for (var i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
