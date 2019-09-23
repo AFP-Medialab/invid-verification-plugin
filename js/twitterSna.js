@@ -119,11 +119,12 @@ function submit_sna_form() {
             generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Utilisateurs les plus actifs",
-                    margin: {l: 0, r: 0, b: 50, t: 50},
-                    
-                  
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout);
+                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, 
+                {displayModeBar: false});
             });
          /*   generateEssidHistogramQuery(param["session"], true, param["query"]["from"], param["query"]["until"], colors).then(plotlyJson => {
                 var layout = {
@@ -146,31 +147,34 @@ function submit_sna_form() {
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
                      },
                   };
-                Plotly.newPlot('user_time_chart', plotlyJson, layout);
+                Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
             }); 
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Hashtags associés",
-                    margin: {l: 0, r: 0, b: 50, t: 50}
-                  
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
+                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
             });
             generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Utilisateurs les plus retweetés",
-                    margin: {l: 0, r: 0, b: 50, t: 50}
-                  
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout);
+                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
             });
             generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     title: "Utilisateurs les plus likés",
-                    margin: {l: 0, r: 0, b: 50, t: 50}
-                  
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout);
+                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
             });
 
             generateURLArray(param["session"], from, until).then(arrayStr => {
