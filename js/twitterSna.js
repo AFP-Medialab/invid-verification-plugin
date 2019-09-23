@@ -8,20 +8,20 @@ import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHisto
  * @func Make the json string from fields
  *
  */
-function formToJsonCollectRequest(search, search_or, search_not, user, lang, from, until, media, verified, retweetsHandling) {
+function formToJsonCollectRequest(search, search_and, search_or, search_not, user, lang, from, until, media, verified, retweetsHandling) {
 
-    let search_list = search.trim().split(" ");
+    let and_list, or_list, not_list = null;
 
-    let or_list = null;
-    let not_list = null;
+    if (search_and !== "")
+        and_list = search_and.trim().split(" ");
     if (search_or !== "")
         or_list = search_or.trim().split(" ");
     if (search_not !== "")
         not_list = search_not.trim().split(" ");
 
     let searchObj = {
-        "search": search_list.shift(),
-        "and" : search_list,
+        "search": search,
+        "and" : and_list,
         "or" : or_list,
         "not" : not_list
     }
@@ -66,6 +66,7 @@ function getMediaValue() {
 function submit_sna_form() {
 
     let search = document.getElementById("twitterStats-search").value;
+    let search_and  = document.getElementById("twitterStats-search-and").value;
     let search_or  = document.getElementById("twitterStats-search-or").value;
     let search_not = document.getElementById("twitterStats-search-not").value;
 
@@ -86,7 +87,7 @@ function submit_sna_form() {
 
     $("#twitterStats-loader").css("display", "block");
 
-    let jsonCollectRequest = formToJsonCollectRequest(search, search_or, search_not,  user,formlang, from, until, media, verified , retweetsHandling);
+    let jsonCollectRequest = formToJsonCollectRequest(search, search_and, search_or, search_not,  user,formlang, from, until, media, verified , retweetsHandling);
 
     let url = "http://localhost:8080/twitter-gateway/collect";
 
@@ -110,7 +111,7 @@ function submit_sna_form() {
                 console.log("Finished successfully")
             }
             $("#twitterStats-loader").css("display", "none");
-            
+            $("#twitterStats-Graphs").css("display", "block");
             var colors = ['#C0392B', '#2874A6']
 
             //Utilisateurs les actifs
@@ -118,29 +119,16 @@ function submit_sna_form() {
             console.log(param["session"]);
             generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
-                    title: "Utilisateurs les plus actifs",
                     margin: {l: 0, r: 0, b: 50, t: 50},
                     
                   
                 };
                 Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout);
             });
-         /*   generateEssidHistogramQuery(param["session"], true, param["query"]["from"], param["query"]["until"], colors).then(plotlyJson => {
-                var layout = {
-                    margin: {l: 0, r: 0, b: 50, t: 50},
-                    title: 'TimeLine des retweets',
-                    xaxis: {
-                      range: [from, until],
-                      rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
-                     },
-                  };
-                Plotly.newPlot('retweet_time_chart', plotlyJson, layout);
-            });*/
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var layout = {
                     overflow: "visible",
                     margin: {l: 0, r: 0, b: 50, t: 50},
-                    title: 'TimeLine des utilisateurs',
                     xaxis: {
                       range: [from, until],
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
@@ -150,7 +138,6 @@ function submit_sna_form() {
             }); 
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
-                    title: "Hashtags associés",
                     margin: {l: 0, r: 0, b: 50, t: 50}
                   
                 };
@@ -158,7 +145,6 @@ function submit_sna_form() {
             });
             generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
-                    title: "Utilisateurs les plus retweetés",
                     margin: {l: 0, r: 0, b: 50, t: 50}
                   
                 };
@@ -166,7 +152,6 @@ function submit_sna_form() {
             });
             generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
-                    title: "Utilisateurs les plus likés",
                     margin: {l: 0, r: 0, b: 50, t: 50}
                   
                 };
@@ -231,7 +216,6 @@ async function waitStatusDone(session){
     let cpt = 2100;
     while (cpt > 0)
     {
-        await delay(500);
         const response = getRequest(url);
         response().then(json => {
             if (json["status"] === "Done" || json["status"] === "Error")

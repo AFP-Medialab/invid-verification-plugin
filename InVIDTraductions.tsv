@@ -544,8 +544,9 @@ twitter_sna_title	Twitter Social network analysis	Analyse des réseaux sociaux s
 twitter_sna_local_time	Local time	Heure locale	Hora local
 twitter_sna_gmt	GMT	GMT	GMT
 twitter_sna_search	＊Keyword or #	＊Mot clé ou #	＊Palabra clave o #
-twitter_sna_or	Or	Ou	o
-twitter_sna_not	Without	Sans	Sin
+twitter_sna_and	Words that has to be in tweets	Mots devant être dans les tweets	Palabras que deben estar en los tweets
+twitter_sna_or	Words that can be in the tweets	Mots pouvant être dans les tweets	Palabras que pueden estar en los tweets
+twitter_sna_not	Words that can not be in tweets	Mots ne pouvant pas être dans les tweets	Palabras que no pueden estar en los tweets
 twitter_sna_user	Tweeted by (Twitter account name)	Tweeté par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)
 twitter_sna_verified	Verified users Only :	Utilisateurs verifiés uniquement :	Usuarios verificados únicamente :
 twitter_sna_media	Medias restrictions :	Restriction des Médias :	Médios restricciones :
@@ -584,4 +585,9 @@ lang_he	Hebrew	Hébreu	Hebreo
 lang_ur	Urdu	Ourdou	Urdu
 lang_th	Thai	Thaï	Tailandés
 twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'est produite lors du traitement des tweets	Se produjo un error en el procesamiento de tweets
+top_users_pie_chart	Most active users	Utilisateurs les plus actifs	Usuarios más activos
+user_time_chart	Users activity Timeline	Frise chronologique de l'activité des utilisateurs	Línea de tiempo del actividad de los usuarios
+hashtag_cloud_chart	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
+retweets_cloud_chart	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
+likes_cloud_chart	Most liked users	Utilisateurs les plus likés	Usuarios más retweeteados
 
