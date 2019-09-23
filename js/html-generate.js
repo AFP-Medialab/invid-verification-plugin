@@ -183,8 +183,9 @@ function update_twitter_sna(lang)
 
 
 	setPlaceholder("twitterStats-search",			json_lang_translate[lang]["twitter_sna_search"]);
+	setPlaceholder("twitterStats-search-or",		json_lang_translate[lang]["twitter_sna_or"]);
+	setPlaceholder("twitterStats-search-not",		json_lang_translate[lang]["twitter_sna_not"]);
 	setPlaceholder("twitterStats-user",				json_lang_translate[lang]["twitter_sna_user"]);
-	//setPlaceholder("twitterStats-lang",				json_lang_translate[lang]["twitter_sna_lang"]);
 	setPlaceholder("twitterStats-from-date",		json_lang_translate[lang]["twitter_sna_from_date"]);
 	setPlaceholder("twitterStats-to-date",			json_lang_translate[lang]["twitter_sna_until_date"]);
 

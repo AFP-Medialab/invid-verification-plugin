@@ -544,9 +544,10 @@ twitter_sna_title	Twitter Social network analysis	Analyse des réseaux sociaux s
 twitter_sna_local_time	Local time	Heure locale	Hora local
 twitter_sna_gmt	GMT	GMT	GMT
 twitter_sna_search	＊Keyword or #	＊Mot clé ou #	＊Palabra clave o #
-twitter_sna_user	Tweeted by (Twitter account name)	Tweeter par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)
+twitter_sna_or	Or	Ou	o
+twitter_sna_not	Without	Sans	Sin
+twitter_sna_user	Tweeted by (Twitter account name)	Tweeté par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)
 twitter_sna_verified	Verified users Only :	Utilisateurs verifiés uniquement :	Usuarios verificados únicamente :
-twitter_sna_lang	Language (e.g. en, fr, de, es, ru, ja, zh...)	Langue (ex: en, fr, de, es ru, ja, zh...)	Idioma (ej: en, fr, de, es ru, ja, zh...)
 twitter_sna_media	Medias restrictions :	Restriction des Médias :	Médios restricciones :
 twitter_sna_from_date	＊Since	＊Depuis	＊Desde
 twitter_sna_until_date	＊Until	＊Jusqu'à	＊Hasta
