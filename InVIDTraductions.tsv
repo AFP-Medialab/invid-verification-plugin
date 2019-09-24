@@ -559,8 +559,8 @@ twitterStats_media_both	both	les deux	tanto
 twitterStats_verified_no	no	non	no
 twitterStats_verified_yes	yes	oui	si
 twitterStatsErrorMessage	Please fill the required fields (＊)	Veuillez remplir les champs requis (＊)	Rellene los campos requeridos (＊)
-lang_choices	Language : 	Langues : 	Lenguas :
-lang_all	All	Toutes	Todos
+lang_choices	Filter on language : 	Filtre de langue : 	Filtro de lengua :
+lang_all	none	aucun	ninguno
 lang_fr	French	Français	Francés
 lang_en	English	Anglais	Inglés
 lang_es	Spanish	Espagnole	Español
