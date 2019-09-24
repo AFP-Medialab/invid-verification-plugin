@@ -171,11 +171,11 @@ function submit_sna_form() {
                 var plot = document.getElementById("hashtag_cloud_chart");
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 plot.on('plotly_click', data => {
-                    document.getElementById("twitterStats-search").value = data.points[0].label;
-                    document.getElementById("twitterStats-Graphs").style.display = "none";
-                    Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
-                    submit_sna_form();
-
+                  //  document.getElementById("twitterStats-search").value = data.points[0].label;
+                   // document.getElementById("twitterStats-Graphs").style.display = "none";
+                  //  Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
+                    var win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
+                   
                 })
             });
           
