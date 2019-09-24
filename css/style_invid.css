@@ -996,3 +996,11 @@ third-parties-menu div figure:hover{
 	padding:210px 5px 210px 15px;
 	cursor:pointer;
 }
+
+.title_custom{
+	background-color:#edece8;
+	padding:10px;
+	border-radius:5px;
+	cursor:pointer;
+	font-size:20px;
+}

@@ -225,7 +225,28 @@ function update_twitter_sna(lang)
 	setInnerHtml("likes_cloud_chart_title",			json_lang_translate[lang]["likes_cloud_chart"]);
 
 
+	//Toggle views
+	customSlideToggle("user_time_chart_title","user_time_chart_content");
+	customSlideToggle("retweets_cloud_chart_title","most_retweeted");
+	customSlideToggle("likes_cloud_chart_title","most_liked");
+	customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart");
+	customSlideToggle("top_users_pie_chart_title","top_users");
+
 }
+
+/**
+ * @func slide toggle for a div
+ *
+ */
+function customSlideToggle(button_id, div_to_toggle_id){
+	$("#" + div_to_toggle_id).hide();
+	$(document).ready(function() {
+		$("#" + button_id).click(function () {
+			$("#" + div_to_toggle_id).slideToggle();
+		});
+	});
+}
+
 
 
 /**
