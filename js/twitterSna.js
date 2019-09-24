@@ -210,7 +210,7 @@ function displayTweetsOfDate(plot, place, button)
                                 && (pointDate.getHours() >= objDate.getHours() -1 && pointDate.getHours() <= objDate.getHours() +1))
                                 {
                                     let date = new Date(tweetObj.fields.date[0]);
-                                    tweetArr += '<tr><td>' + point.data.name + '</td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                                    tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
                                                             date.getHours() + 'h' + date.getMinutes() + '</td>' + 
                                                      '<td>' + tweetObj._source.tweet + '</td>' +
                                     '<td>' + tweetObj._source.nretweets + '</td></tr>';
@@ -229,6 +229,7 @@ function displayTweetsOfDate(plot, place, button)
                     visibilityButton.style.display = 'none';
                 }
 }
+
 function displayTweetsOfUser(plot, place, button)
 {
 
@@ -254,7 +255,8 @@ function displayTweetsOfUser(plot, place, button)
             }
         });
 
-        tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br><br>" +  tweetArr;
+        tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">' 
+             + data.points[0].label+ "</a><br><br>" +  tweetArr;
         tweetPlace.style.display = "block";
         visibilityButton.style.display = "block";
      //   plotlyJson.labels.array.forEach(label => {
