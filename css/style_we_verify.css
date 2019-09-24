@@ -1073,3 +1073,17 @@ third-parties-menu div figure:hover{
 .js-plotly-plot .plotly, .js-plotly-plot .plotly div{
 	margin: auto!important;
 }
+
+.top_users{
+	position: relative;
+}
+
+.top_users_pie_chart
+{
+	position: absolute;
+}
+
+.tweets_place
+{
+	position: absolute;
+}

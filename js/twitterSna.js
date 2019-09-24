@@ -126,16 +126,31 @@ function submit_sna_form() {
                   
                 Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
 
+
                 plot.on('plotly_click', data => {
                     var json = getTweets(from, until);
                     console.log(data);
+                    var tweetArr ='<table>' +
+                            '<tr>' +
+                                '<td>Date</td>' +
+                                '<td>Tweet</td>' +
+                                '<td>Nb of retweets</td>' +
+                            '</tr>';
                     json.hits.hits.forEach(tweetObj => {
                         if (tweetObj._source.username === data.points[0].label)
                         {
-                            var tweetPlace = document.getElementById("tweets_place");
-                            tweetPlace.innerHTML += tweetObj._source.tweet + "<br><br>";
+                            let date = new Date(tweetObj.fields.date[0]);
+                                tweetArr += '<tr><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                                                        date.getHours() + 'h' + date.getMinutes() + '</td>' + 
+                                                 '<td>' + tweetObj._source.tweet + '</td>' +
+                                '<td>' + tweetObj._source.nretweets + '</td></tr>';
+                            
                         }
                     });
+                    var tweetPlace = document.getElementById("tweets_place");
+
+                    tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br>" +  tweetArr;
+                    tweetPlace.style.visibility = "visible";
                    console.log(json);
                  //   plotlyJson.labels.array.forEach(label => {
                         
