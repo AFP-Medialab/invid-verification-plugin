@@ -122,7 +122,44 @@ function submit_sna_form() {
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
                      },
                   };
+                var plot = document.getElementById("user_time_chart");
                 Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
+                plot.on('plotly_click', data =>
+                {
+                    var json = getTweets();
+                    console.log(data);
+                    var tweetArr ='<table>' +
+                    '<tr>' +
+                        '<td>Username</td>' +
+                        '<td>Date</td>' +
+                        '<td>Tweet</td>' +
+                        '<td>Nb of retweets</td>' +
+                    '</tr>';
+                    data.points.forEach(point => {
+                        json.hits.hits.forEach(tweetObj => {
+                            if (tweetObj._source.username === point.data.name)
+                            {
+                                var pointDate = new Date(point.x);
+                                var objDate = new Date(tweetObj._source.date);
+                                console.log(pointDate);
+                                console.log(objDate);
+                                if (pointDate.getDate() === objDate.getDate() 
+                                && pointDate.getMonth() === objDate.getMonth() 
+                                && pointDate.getFullYear() === objDate.getFullYear() 
+                                && (pointDate.getHours() >= objDate.getHours() -1 && pointDate.getHours() <= objDate.getHours() +1))
+                                {
+                                    let date = new Date(tweetObj.fields.date[0]);
+                                    tweetArr += '<tr><td>' + point.data.name + '</td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                                                            date.getHours() + 'h' + date.getMinutes() + '</td>' + 
+                                                     '<td>' + tweetObj._source.tweet + '</td>' +
+                                    '<td>' + tweetObj._source.nretweets + '</td></tr>';
+                                }
+                            }
+                        });
+                    });
+                    var tweetPlace = document.getElementById("tweets_arr_user_time_place");
+                    tweetPlace.innerHTML = tweetArr;
+                })
             }); 
 
             generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -156,15 +193,8 @@ function submit_sna_form() {
                 };
 
                 var plot = document.getElementById("top_users_pie_chart");
-                  
-             
-
                 Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
-                
-             
-
-
             });
           
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -192,7 +222,6 @@ function displayTweetsOfUser(plot, place, button)
     var tweetPlace = document.getElementById(place);
     plot.on('plotly_click', data => {
         var json = getTweets();
-        console.log(data);
         var tweetArr ='<table>' +
                 '<tr>' +
                     '<td>Date</td>' +
@@ -214,7 +243,6 @@ function displayTweetsOfUser(plot, place, button)
         tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br><br>" +  tweetArr;
         tweetPlace.style.display = "block";
         visibilityButton.style.display = "block";
-       console.log(json);
      //   plotlyJson.labels.array.forEach(label => {
             
        // });
