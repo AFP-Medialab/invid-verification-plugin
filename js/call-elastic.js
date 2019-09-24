@@ -257,42 +257,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
 }
 
 export function getTweets(startDate, endDate) {
- /* var fieldInfo = {
-    "terms": {
-      "field": "username",
-      "order": {
-        "1": "desc"
-      },
-      "size": 14
-    },
-    "aggs": {
-      "1": {
-        "sum": {
-          "field": "nretweets"
-        }
-      }
-    }
-  };
 
-  var matchPhrase = {
-    "match_phrase":
-    {
-      "essid": {
-        "query": sessid
-      }
-    }
-  };
-
-  const userAction = async () => {
-    const response = await fetch('http:localhost:9200/twinttweets/_search', {
-      method: 'POST',
-      body:
-        JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
-      headers: {
-        'Content-Type': 'application/json'
-      } //
-    });
-    const myJson = await response.json();*/
     return json;
 }
 export function generateURLArray(sessid, startDate, endDate) {
@@ -352,7 +317,7 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
       "2":
         chartInfo
     },
-    "size": 1000,
+    "size": 3200,
     "_source": {
       "excludes": []
     },
