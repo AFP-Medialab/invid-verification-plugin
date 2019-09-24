@@ -131,7 +131,10 @@ function submit_sna_form() {
                     width: 700,
                     height: 700,
                 };
+
+                var plot = document.getElementById("retweets_cloud_chart");
                 Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
             });
             generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
@@ -139,7 +142,10 @@ function submit_sna_form() {
                     width: 700,
                     height: 700,
                 };
+
+                var plot = document.getElementById("likes_cloud_chart");
                 Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
             });
             //Utilisateurs les actifs
             generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -183,6 +189,7 @@ function displayTweetsOfUser(plot, place, button)
 {
 
     var visibilityButton = document.getElementById(button);
+    var tweetPlace = document.getElementById(place);
     plot.on('plotly_click', data => {
         var json = getTweets();
         console.log(data);
@@ -203,7 +210,6 @@ function displayTweetsOfUser(plot, place, button)
                 
             }
         });
-        var tweetPlace = document.getElementById(place);
 
         tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br><br>" +  tweetArr;
         tweetPlace.style.display = "block";
@@ -215,8 +221,7 @@ function displayTweetsOfUser(plot, place, button)
     })
     
     visibilityButton.onclick = e => {
-           var elt = document.getElementById("tweets_arr_place");
-           elt.style.display = "none";
+           tweetPlace.style.display = "none";
            visibilityButton.style.display = 'none';
     }
 }
