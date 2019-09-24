@@ -129,13 +129,25 @@ function submit_sna_form() {
                 plot.on('plotly_click', data => {
                     var json = getTweets(from, until);
                     console.log(data);
+                    var tweetArr ='<table>' +
+                            '<tr>' +
+                                '<td>Tweet</td>' +
+                                '<td>Nb of retweets</td>' +
+                            '</tr>';
                     json.hits.hits.forEach(tweetObj => {
                         if (tweetObj._source.username === data.points[0].label)
                         {
-                            var tweetPlace = document.getElementById("tweets_place");
-                            tweetPlace.innerHTML += tweetObj._source.tweet + "<br><br>";
+                            
+                            
+                            tweetArr += '<tr><td>' + tweetObj._source.tweet + "</td>" +
+                                "<td>" + tweetObj._source.nretweets +"</td></tr>";
+                            
                         }
                     });
+                    var tweetPlace = document.getElementById("tweets_place");
+
+                    tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br>" +  tweetArr;
+                    tweetPlace.style.visibility = "visible";
                    console.log(json);
                  //   plotlyJson.labels.array.forEach(label => {
                         
