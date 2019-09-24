@@ -207,7 +207,7 @@ function displayTweetsOfDate(plot, place, button)
                                 if (pointDate.getDate() === objDate.getDate() 
                                 && pointDate.getMonth() === objDate.getMonth() 
                                 && pointDate.getFullYear() === objDate.getFullYear() 
-                                && (pointDate.getHours() >= objDate.getHours() -1 && pointDate.getHours() <= objDate.getHours() +1))
+                                && (pointDate.getHours() >= objDate.getHours() -2 && (pointDate.getHours() <= objDate.getHours() +1 || (pointDate.getHours() <= objDate.getHours() +2 && objDate.getMinutes() > 30))))
                                 {
                                     let date = new Date(tweetObj.fields.date[0]);
                                     tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
