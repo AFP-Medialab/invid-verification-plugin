@@ -112,51 +112,7 @@ function submit_sna_form() {
             }
             $("#twitterStats-loader").css("display", "none");
             $("#twitterStats-Graphs").css("display", "block");
-            var colors = ['#C0392B', '#2874A6']
 
-            //Utilisateurs les actifs
-            generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = {
-                    automargin: true,
-                    width: 700,
-                    height: 700,
-                };
-
-                var plot = document.getElementById("top_users_pie_chart");
-                  
-                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
-
-
-                plot.on('plotly_click', data => {
-                    var json = getTweets(from, until);
-                    console.log(data);
-                    var tweetArr ='<table>' +
-                            '<tr>' +
-                                '<td>Date</td>' +
-                                '<td>Tweet</td>' +
-                                '<td>Nb of retweets</td>' +
-                            '</tr>';
-                    json.hits.hits.forEach(tweetObj => {
-                        if (tweetObj._source.username === data.points[0].label)
-                        {
-                            let date = new Date(tweetObj.fields.date[0]);
-                                tweetArr += '<tr><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
-                                                        date.getHours() + 'h' + date.getMinutes() + '</td>' + 
-                                                 '<td>' + tweetObj._source.tweet + '</td>' +
-                                '<td>' + tweetObj._source.nretweets + '</td></tr>';
-                            
-                        }
-                    });
-                    var tweetPlace = document.getElementById("tweets_place");
-
-                    tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br>" +  tweetArr;
-                    tweetPlace.style.visibility = "visible";
-                   console.log(json);
-                 //   plotlyJson.labels.array.forEach(label => {
-                        
-                   // });
-                })
-            });
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var layout = {
                     overflow: "visible",
@@ -168,6 +124,49 @@ function submit_sna_form() {
                   };
                 Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
             }); 
+
+            generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
+                var cloudlayout = { 
+                    automargin: true,
+                    width: 700,
+                    height: 700,
+                };
+
+                var plot = document.getElementById("retweets_cloud_chart");
+                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
+            });
+            generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
+                var cloudlayout = { 
+                    automargin: true,
+                    width: 700,
+                    height: 700,
+                };
+
+                var plot = document.getElementById("likes_cloud_chart");
+                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
+            });
+            //Utilisateurs les actifs
+            generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
+                var cloudlayout = {
+                    automargin: true,
+                    width: 700,
+                    height: 700,
+                };
+
+                var plot = document.getElementById("top_users_pie_chart");
+                  
+             
+
+                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
+                
+             
+
+
+            });
+          
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     automargin: true,
@@ -176,22 +175,7 @@ function submit_sna_form() {
                 };
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
             });
-            generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = { 
-                    automargin: true,
-                    width: 700,
-                    height: 700,
-                };
-                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
-            });
-            generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = { 
-                    automargin: true,
-                    width: 700,
-                    height: 700,
-                };
-                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
-            });
+          
 
             generateURLArray(param["session"], from, until).then(arrayStr => {
                 document.getElementById('url_array').innerHTML = arrayStr;
@@ -201,6 +185,46 @@ function submit_sna_form() {
     });
 }
 
+function displayTweetsOfUser(plot, place, button)
+{
+
+    var visibilityButton = document.getElementById(button);
+    var tweetPlace = document.getElementById(place);
+    plot.on('plotly_click', data => {
+        var json = getTweets();
+        console.log(data);
+        var tweetArr ='<table>' +
+                '<tr>' +
+                    '<td>Date</td>' +
+                    '<td>Tweet</td>' +
+                    '<td>Nb of retweets</td>' +
+                '</tr>';
+        json.hits.hits.forEach(tweetObj => {
+            if (tweetObj._source.username === data.points[0].label)
+            {
+                let date = new Date(tweetObj.fields.date[0]);
+                    tweetArr += '<tr><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                                            date.getHours() + 'h' + date.getMinutes() + '</td>' + 
+                                     '<td>' + tweetObj._source.tweet + '</td>' +
+                    '<td>' + tweetObj._source.nretweets + '</td></tr>';
+                
+            }
+        });
+
+        tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br><br>" +  tweetArr;
+        tweetPlace.style.display = "block";
+        visibilityButton.style.display = "block";
+       console.log(json);
+     //   plotlyJson.labels.array.forEach(label => {
+            
+       // });
+    })
+    
+    visibilityButton.onclick = e => {
+           tweetPlace.style.display = "none";
+           visibilityButton.style.display = 'none';
+    }
+}
 /**
  *
  * @function make a Post request and wait for result

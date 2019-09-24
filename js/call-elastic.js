@@ -256,10 +256,11 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
   return userAction();
 }
 
-export function getTweets(startDate, endDate) {
+export function getTweets() {
 
     return json;
 }
+
 export function generateURLArray(sessid, startDate, endDate) {
   let matchPhrase =
   {
