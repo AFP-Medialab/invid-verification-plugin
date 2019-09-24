@@ -115,13 +115,13 @@ function submit_sna_form() {
 
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var layout = {
-                    overflow: "visible",
                     margin: {l: 0, r: 0, b: 50, t: 50},
                     xaxis: {
                       range: [from, until],
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
                      },
                   };
+                  console.log(plotlyJson);
                 var plot = document.getElementById("user_time_chart");
                 Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
                 displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility")
@@ -168,7 +168,15 @@ function submit_sna_form() {
                     width: 700,
                     height: 700,
                 };
+                var plot = document.getElementById("hashtag_cloud_chart");
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                plot.on('plotly_click', data => {
+                    document.getElementById("twitterStats-search").value = data.points[0].label;
+                    document.getElementById("twitterStats-Graphs").style.display = "none";
+                    Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
+                    submit_sna_form();
+
+                })
             });
           
 
