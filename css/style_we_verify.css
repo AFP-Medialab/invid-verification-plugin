@@ -1069,3 +1069,7 @@ third-parties-menu div figure:hover{
 	color:#21a5b4;
 	border-radius:3px;
 }
+
+.js-plotly-plot .plotly, .js-plotly-plot .plotly div{
+	margin: auto!important;
+}

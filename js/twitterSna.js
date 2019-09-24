@@ -1,7 +1,7 @@
 /**
  * Javascript used by twitter service
  */
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray} from './call-elastic.js';
+import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray, getTweets} from './call-elastic.js';
 
 /**
  *
@@ -115,15 +115,32 @@ function submit_sna_form() {
             var colors = ['#C0392B', '#2874A6']
 
             //Utilisateurs les actifs
-
-            console.log(param["session"]);
             generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = { 
-                    margin: {l: 0, r: 0, b: 50, t: 50},
-                    
-                  
+                var cloudlayout = {
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout);
+
+                var plot = document.getElementById("top_users_pie_chart");
+                  
+                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+
+                plot.on('plotly_click', data => {
+                    var json = getTweets(from, until);
+                    console.log(data);
+                    json.hits.hits.forEach(tweetObj => {
+                        if (tweetObj._source.username === data.points[0].label)
+                        {
+                            var tweetPlace = document.getElementById("tweets_place");
+                            tweetPlace.innerHTML += tweetObj._source.tweet + "<br><br>";
+                        }
+                    });
+                   console.log(json);
+                 //   plotlyJson.labels.array.forEach(label => {
+                        
+                   // });
+                })
             });
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var layout = {
@@ -134,28 +151,31 @@ function submit_sna_form() {
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
                      },
                   };
-                Plotly.newPlot('user_time_chart', plotlyJson, layout);
+                Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
             }); 
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
-                    margin: {l: 0, r: 0, b: 50, t: 50}
-                  
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout);
+                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
             });
             generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
-                    margin: {l: 0, r: 0, b: 50, t: 50}
-                  
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout);
+                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
             });
             generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
-                    margin: {l: 0, r: 0, b: 50, t: 50}
-                  
+                    automargin: true,
+                    width: 700,
+                    height: 700,
                 };
-                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout);
+                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
             });
 
             generateURLArray(param["session"], from, until).then(arrayStr => {
