@@ -550,380 +550,398 @@
                                     <option id="lang_ur" value="ur"/>
                                 </select>
                             </div>
-								<br>
-								<div id="twitterStats-radios-media">
-									<span type="text" id="twitterStats-media"></span>
+                            <br>
+                            <div id="twitterStats-radios-media">
+                                <span type="text" id="twitterStats-media"></span>
 
-									<input type="radio" id="twitterStats-radio_none" name="media" checked/>
-									<span id="twitterStats_media_none"></span>
+                                <input type="radio" id="twitterStats-radio_none" name="media" checked/>
+                                <span id="twitterStats_media_none"></span>
 
-									<input type="radio" id="twitterStats-radio-images" name="media" translate="no" />
-									<span id="twitterStats_media_images"></span>
+                                <input type="radio" id="twitterStats-radio-images" name="media" translate="no"/>
+                                <span id="twitterStats_media_images"></span>
 
-									<input type="radio" id="twitterStats-radio-videos" name="media" translate="no" />
-									<span id="twitterStats_media_videos"></span>
+                                <input type="radio" id="twitterStats-radio-videos" name="media" translate="no"/>
+                                <span id="twitterStats_media_videos"></span>
 
-									<input type="radio" id="twitterStats-radio-both" name="media" translate="no" />
-									<span id="twitterStats_media_both"></span>
-								</div>
-								<br>
-								<div id="twitterStats-radios-verified">
-									<span id="twitterStats-verified"></span>
-									<input type="radio" id="twitterStats-radio-no" name="verified" checked/>
-									<span id="twitterStats_verified_no"></span>
+                                <input type="radio" id="twitterStats-radio-both" name="media" translate="no"/>
+                                <span id="twitterStats_media_both"></span>
+                            </div>
+                            <br>
+                            <div id="twitterStats-radios-verified">
+                                <span id="twitterStats-verified"></span>
+                                <input type="radio" id="twitterStats-radio-no" name="verified" checked/>
+                                <span id="twitterStats_verified_no"></span>
 
-									<input type="radio" id="twitterStats-radio_yes" name="verified" translate="no"/>
-									<span id="twitterStats_verified_yes"></span>
-								</div>
+                                <input type="radio" id="twitterStats-radio_yes" name="verified" translate="no"/>
+                                <span id="twitterStats_verified_yes"></span>
+                            </div>
 
-								<br>
-								<div id="twitterStats-radios-time">
-									<input type="radio" id="twitterStats-radio_local_time" name="time" checked/>
-									<span id="twitterStats_local_time"></span>
+                            <br>
+                            <div id="twitterStats-radios-time">
+                                <input type="radio" id="twitterStats-radio_local_time" name="time" checked/>
+                                <span id="twitterStats_local_time"></span>
 
-									<input type="radio" id="twitterStats-radio-gmt" name="time" translate="no" />
-									<span id="twitterStats_gmt"></span>
-								</div>
+                                <input type="radio" id="twitterStats-radio-gmt" name="time" translate="no"/>
+                                <span id="twitterStats_gmt"></span>
+                            </div>
 
-								<br>
-								<br>
-								<input type="submit" value="Submit" class="button" id="submitSna" />
-								<br>
-								<div id="twitterStats-loader" class="loader"></div>
-								<br>
-								<div id="twitterStats-Graphs" style="display: none;">
-									<div id='user_time'>
-										<span id="user_time_chart_title"></span>
-										<div id="user_time_chart"> </div>	
-										<input type="button" class="button toggleVisibility" id="user_time_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
-										<div id="tweets_arr_user_time_place" class="toggleVisibility"></div>
-									</div>
-									<br>
-									<div id="most_retweeted">
-										<span id="retweets_cloud_chart_title"></span>
-										<div id="retweets_cloud_chart"> </div>
-										<input type="button" class="button toggleVisibility" id="most_retweeted_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
-										<div id="tweets_arr_retweet_place" class="toggleVisibility"></div>
-									</div>
-									<br>
-									<div id="most_liked">
-										<span id="likes_cloud_chart_title"></span>
-										<div id="likes_cloud_chart"> </div>
-										<input type="button" class="button toggleVisibility" id="most_liked_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
-										<div id="tweets_arr_like_place" class="toggleVisibility"></div>
-									</div>
-									<br>
-																	
-									<span id="hashtag_cloud_chart_title"></span>
-									<div id="hashtag_cloud_chart"> </div>
-									<br>
-									<div id="top_users">
-										<span id="top_users_pie_chart_title"></span>
-										<div id="top_users_pie_chart"> </div>
-										<input type="button" class="button toggleVisibility" id="top_users_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
-										
-												<div id="tweets_arr_place" class="toggleVisibility"></div>
-									</div><br>
-	
-								
-									<div id="url_array"></div>
-								</div>
+                            <br>
+                            <br>
+                            <input type="submit" value="Submit" class="button" id="submitSna"/>
+                            <br>
+                            <div id="twitterStats-loader" class="loader"></div>
+                            <br>
+                            <div id="twitterStats-Graphs" style="display: none;">
 
-							</ul>
-						</form>
-						<div id="twitterStats-footer" class="footer"></div>
-					</div>
+                                <div id="user_time_chart_title" class="title_custom"></div>
+                                <div id="user_time_chart_content">
+                                    <div id='user_time'>
+                                        <div id="user_time_chart"></div>
+                                        <input type="button" class="button toggleVisibility"
+                                               id="user_time_tweets_toggle_visibility" value="hide"
+                                               style="display: none; float: right;"></input>
+                                        <div id="tweets_arr_user_time_place" class="toggleVisibility"></div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div id="retweets_cloud_chart_title" class="title_custom"></div>
+                                <div id="most_retweeted">
+                                    <div id="retweets_cloud_chart"></div>
+                                    <input type="button" class="button toggleVisibility"
+                                           id="most_retweeted_tweets_toggle_visibility" value="hide"
+                                           style="display: none; float: right;"></input>
+                                    <div id="tweets_arr_retweet_place" class="toggleVisibility"></div>
+                                </div>
+                                <br>
+                                <div id="likes_cloud_chart_title" class="title_custom"></div>
+                                <div id="most_liked">
+                                    <div id="likes_cloud_chart"></div>
+                                    <input type="button" class="button toggleVisibility"
+                                           id="most_liked_tweets_toggle_visibility" value="hide"
+                                           style="display: none; float: right;"></input>
+                                    <div id="tweets_arr_like_place" class="toggleVisibility"></div>
+                                </div>
+                                <br>
 
-					<!-- MAGNIFIER VIEW -->
+                                <div id="hashtag_cloud_chart_title" class="title_custom"></div>
+                                <div id="hashtag_cloud_chart_content">
+                                    <div id="hashtag_cloud_chart"></div>
+                                </div>
 
-					<div id="magnifier" class="form-action hide">
-						<div id="magnifier_title"></div>
-						<form id="img_form">
-							<ul style="padding-left:0;">
-								<input type="text" id="urlbox" name="url" style="" />
-								<div class="image-upload">
-									<br>
-									<label for="file-input">
-										<img src="img/file.png"/>
-										<div id="local_file"></div>
-									</label>
-									<input id="file-input" type="file"/>
-								</div>
-								<br>
-								<input type="submit" value="Submit" class="button" />
-								<br>
-							</ul>
-						</form>
-						<br>
-						<div id="magnifier-content" style="display: none;">
-							<br>
-							<button class="accordion">
-								<div id="magnifier_accor"></div>
-							</button>
-							<div class="panel">
-								<br>
-								<form id="filter_form">
-									<ul style="padding-left:0;">
-										<br>
-										<input type="radio" id="none" name="filter" checked/>
-										<span id="magnifier_radio_1"></span>
-										<input type="radio" id="sharp" name="filter"/>
-										<span id="magnifier_radio_2"></span>
-										<input type="radio" id="flip" name="filter">
-										<span id="magnifier_radio_3"></span>
-										<input type="radio" id="bicubic" name="filter"/>
-										<span id="magnifier_radio_4"></span>
-										<input type="radio" id="crop" name="filter">
-										<span id="magnifier_radio_5"></span>
-										<div id="scale_input" style="display: none;">
-											<br>
-											<input id="scale" type="range" min="25" max="400" value="100" step="1"/>
-											<div id="magnifier_scale"></div>
-											<span id="show_scale">
+                                <br>
+                                <div id="top_users_pie_chart_title" class="title_custom"></div>
+                                <div id="top_users_content">
+                                    <div id="top_users"></div>
+
+                                    <div id="top_users_pie_chart"></div>
+                                    <input type="button" class="button toggleVisibility"
+                                           id="top_users_tweets_toggle_visibility" value="hide"
+                                           style="display: none; float: right;"></input>
+
+                                    <div id="tweets_arr_place" class="toggleVisibility"></div>
+                                </div>
+                            </div>
+                            <br>
+
+
+                            <div id="url_array"></div>
+                </div>
+
+                </ul>
+                </form>
+                <div id="twitterStats-footer" class="footer"></div>
+            </div>
+
+            <!-- MAGNIFIER VIEW -->
+
+            <div id="magnifier" class="form-action hide">
+                <div id="magnifier_title"></div>
+                <form id="img_form">
+                    <ul style="padding-left:0;">
+                        <input type="text" id="urlbox" name="url" style=""/>
+                        <div class="image-upload">
+                            <br>
+                            <label for="file-input">
+                                <img src="img/file.png"/>
+                                <div id="local_file"></div>
+                            </label>
+                            <input id="file-input" type="file"/>
+                        </div>
+                        <br>
+                        <input type="submit" value="Submit" class="button"/>
+                        <br>
+                    </ul>
+                </form>
+                <br>
+                <div id="magnifier-content" style="display: none;">
+                    <br>
+                    <button class="accordion">
+                        <div id="magnifier_accor"></div>
+                    </button>
+                    <div class="panel">
+                        <br>
+                        <form id="filter_form">
+                            <ul style="padding-left:0;">
+                                <br>
+                                <input type="radio" id="none" name="filter" checked/>
+                                <span id="magnifier_radio_1"></span>
+                                <input type="radio" id="sharp" name="filter"/>
+                                <span id="magnifier_radio_2"></span>
+                                <input type="radio" id="flip" name="filter">
+                                <span id="magnifier_radio_3"></span>
+                                <input type="radio" id="bicubic" name="filter"/>
+                                <span id="magnifier_radio_4"></span>
+                                <input type="radio" id="crop" name="filter">
+                                <span id="magnifier_radio_5"></span>
+                                <div id="scale_input" style="display: none;">
+                                    <br>
+                                    <input id="scale" type="range" min="25" max="400" value="100" step="1"/>
+                                    <div id="magnifier_scale"></div>
+                                    <span id="show_scale">
 >>>>>>> e4e9b9161e0efe2454084c0d9ae192209550d4c9
 												 : 100%
 											</span>
-                                    </div>
-                                    <br>
-                                    <br>
-                                    <input type="submit" id="apply_button" value="Apply" class="button"/>
-                                    <br>
-                                </ul>
-                            </form>
-                            <button id="undo" class="button">
-                                <div id="button_undo"></div>
-                            </button>
-                            <button id="redo" class="button">
-                                <div id="button_redo"></div>
-                            </button>
-                        </div>
-                        <br>
-                        <div id="rounded-switch" style="">
-                            <div id="magnifier_switch"></div>
-                            <label class="switch">
-                                <input type="checkbox" id="toogle">
-                                <div class="slider round"></div>
-                            </label>
-                        </div>
-                        <br>
-                        <br>
-                        <br>
-                        <div style="position: relative;">
-                            <div id="place-inner" style="display: none;">
-                                <img id="test" src="" data-zoom-image="">
-                            </div>
-                            <div id="place-lens">
-                                <img id="test2" src="" data-zoom-image="">
-                            </div>
-                            <div id="place-crop" style="width: 500px; height: 500px; margin: auto; display: none;">
-                                <div id="cropper"></div>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <br>
-                        <div style="display: inline;">
-                            <a class="button" id="download_img_magnifier" href="" download="picture.png"
-                               style="color: white; text-decoration: none">
-                                <span id="button_downloads"></span>
-                            </a>
-
-                            <div id="lst_search_btn" style="display: inline;">
-                                <button id="img_rev_search_btn" class="button"></button>
-                                <button id="baidu_rev_search_btn" class="button"></button>
-                                <button id="yandex_rev_search_btn" class="button"></button>
-                                <div style="display: inline-block;">
-                                    <button id="tineye_rev_search_btn" class="button"></button>
                                 </div>
-                                <button id="img_verif_btn" class="button"></button>
-                            </div>
-                            <button id="copy_url_img_magnifier" class="button" translate="no">
-                                Google Image
-                            </button>
-                        </div>
-                    </div>
-                    <div id="footer_magnifier" class="footer"></div>
-                </div>
-
-                <!-- METADATA VIEW -->
-
-                <div id="metadata" class="form-action hide">
-                    <div id="metadata_content_title"></div>
-                    <form id="metadata_form">
-                        <ul style="padding-left:0;">
-                            <input type="text" id="url-metadata" name="url" style=""/>
-                            <div class="image-upload">
                                 <br>
-                                <label for="local-metadata">
-                                    <img src="img/file.png"/>
-                                    <div id="metadata_localfile"></div>
-                                </label>
-                                <input id="local-metadata" type="file"/>
-                            </div>
-                            <br>
-                            <input type="radio" id="img-meta-radio" name="file_type" checked/>
-                            <span id="metadata_radio_image"></span>
-                            <input type="radio" id="video-meta-radio" name="file_type"/>
-                            <span id="metadata_radio_video"></span>
-                            <br>
-                            <br>
-                            <input type="submit" value="Submit" class="button"/>
-                            <br>
-                        </ul>
-                    </form>
-                    <div id="preview-metadata"></div>
-                    <div id="place-metadata"></div>
-                    <div id="error-metadata" style="display: none;"></div>
-                    <div id="footer_metadata" class="footer"></div>
-                </div>
-
-                <!-- COPYRIGHT VIEW -->
-
-                <div id="copyright-tab" class="form-action hide">
-                    <div id="copyright_title"></div>
-                    <form id="copyright-form">
-                        <div>
-                            <input type="text" id="copyright-video_url" name="copyright-video_url"/>
-                            <br>
-                            <br>
-                        </div>
-                        <input id="copyright-form_submit" type="submit" value="Submit" class="button"/>
-                    </form>
-                    <div id="copyright-loader" class="loader"></div>
-                    <div id="copyright-content">
-                        <div id="copyright-summary"></div>
-                    </div>
-                    <div id="copyright-error"></div>
-                    <br><br>
-                    <div class="copyright-footer footer" id="footer_rights"></div>
-                </div>
-
-                <!-- FORENSIC VIEW -->
-
-                <div id="forensic" class="form-action hide">
-                    <div id="forensic_base">
-                        <div id="forensic_title"></div>
-                        <form id="forensic_form">
-                            <input type="text" name="forensic_url" id="forensic_input">
-                            <br>
-                            <br>
-                            <br>
-                            <div style="overflow:hidden;width:240px;margin:0 auto;">
-                                <div style="float:right;">
-                                    <input type="submit" value="Submit" class="button" id="forensic_submit">
-                                </div>
-                                <div style="float:left;">
-                                    <button id="forensic_localfile" class="button"></button>
-                                </div>
-                            </div>
-                            <br>
-                            <br>
-                            <div id="forensic-wait" style="display: none;"></div>
-                            <br>
-                            <br>
-                            <div id="forensic-image" style="display: none;"></div>
-                            <div id="loader-forensic" class="loader" style="display: none;"></div>
-                            <br>
-                            <br>
+                                <br>
+                                <input type="submit" id="apply_button" value="Apply" class="button"/>
+                                <br>
+                            </ul>
                         </form>
-                        <div id="error-forensic"></div>
-                        <div id="forensic-content">
-                            <div id="forensic_content_title"></div>
-                            <div id="forensic-place"></div>
-                            <br>
-                            <br>
-                        </div>
-                        <div id="forensic-modal"></div>
+                        <button id="undo" class="button">
+                            <div id="button_undo"></div>
+                        </button>
+                        <button id="redo" class="button">
+                            <div id="button_redo"></div>
+                        </button>
                     </div>
-                    <div id="forensic_iframe" style="display: none;">
-                        <div>
-                            <button id="forensic_iframe_back" class="button"></button>
+                    <br>
+                    <div id="rounded-switch" style="">
+                        <div id="magnifier_switch"></div>
+                        <label class="switch">
+                            <input type="checkbox" id="toogle">
+                            <div class="slider round"></div>
+                        </label>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div style="position: relative;">
+                        <div id="place-inner" style="display: none;">
+                            <img id="test" src="" data-zoom-image="">
                         </div>
-                        <div>
-                            <iframe src="https://reveal-mklab.iti.gr/reveal/" width="85%" height="750px"
-                                    frameborder="0"></iframe>
+                        <div id="place-lens">
+                            <img id="test2" src="" data-zoom-image="">
+                        </div>
+                        <div id="place-crop" style="width: 500px; height: 500px; margin: auto; display: none;">
+                            <div id="cropper"></div>
                         </div>
                     </div>
-                    <div id="footer_forensic" class="footer"></div>
-                </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div style="display: inline;">
+                        <a class="button" id="download_img_magnifier" href="" download="picture.png"
+                           style="color: white; text-decoration: none">
+                            <span id="button_downloads"></span>
+                        </a>
 
-                <!-- TUTORIAL VIEW -->
-
-                <div id="tutorial" class="form-action hide">
-                    <div id="footer_tutorial" class="footer"></div>
-                </div>
-
-                <!-- CLASSROOM VIEW -->
-
-                <div id="classroom" class="form-action hide" style="max-width:1000px">
-                    <h1 id="classroom_title"></h1>
-                    <div class="remote-resources">
-                        <div id="remote_resources_title" class="resources-title"></div>
-                        <div id="remote_resources_content" class="resources-content container-fluid">Bla bla bla</div>
-                    </div>
-                    <div class="user-resources">
-                        <div id="user_resources_title" class="resources-title"></div>
-                        <div id="user_resources_content" class="resources-content container-fluid"
-                             style="display:none;">
-                            <p id="user_resources_intro" class="bold"></p>
-                            <div class="row hidden">
-                                <div class="col-sm-9 col-xs-9">
-                                    <p id="user_resources_intro_local"></p>
-                                    <input type="file" id="user_resources_local"></input>
-                                </div>
-                                <div class="col-sm-3 col-xs-3 text-right">
-                                    <button data-toggle="modal" data-keyboard="true" data-target="#lesson_modal"
-                                            class="btn-primary btn-lg"></button>
-                                </div>
+                        <div id="lst_search_btn" style="display: inline;">
+                            <button id="img_rev_search_btn" class="button"></button>
+                            <button id="baidu_rev_search_btn" class="button"></button>
+                            <button id="yandex_rev_search_btn" class="button"></button>
+                            <div style="display: inline-block;">
+                                <button id="tineye_rev_search_btn" class="button"></button>
                             </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-sm-9 col-xs-9">
-                                    <p id="user_resources_intro_remote"></p>
-                                    <input type="text" id="user_resources_remote"></input>
-                                </div>
-                                <div class="col-sm-3 col-xs-3 text-right">
-                                    <button data-toggle="modal" data-keyboard="true" data-target="#lesson_modal"
-                                            class="btn-primary btn-lg" id="lesson_user_tutorial_button"></button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-xs-12" style="line-height:30px;color:#aaaaaa;">
-                                    <span style="width:110px;display:inline-block;">Youtube: </span>https://www.youtube.com/embed/5wRv8boqIEc
-                                    <br>
-                                    <span style="width:110px;display:inline-block;">Twitter: </span>https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
-                                    <br>
-                                    <span style="width:110px;display:inline-block;">iframe: </span>&lt;iframe
-                                    src="https://www.youtube.com/embed/5wRv8boqIEc" width="960" height="569"&gt;&lt;/iframe&gt;
-                                </div>
-                            </div>
+                            <button id="img_verif_btn" class="button"></button>
                         </div>
+                        <button id="copy_url_img_magnifier" class="button" translate="no">
+                            Google Image
+                        </button>
                     </div>
                 </div>
-
-                <!-- QUIZ VIEW -->
-
-                <div id="quiz" class="form-action hide">
-                    <div id="footer_quiz" class="footer"></div>
-                </div>
-
-                <!-- ABOUT VIEW -->
-
-                <div id="about" class="form-action hide">
-                    <div id="footer_about" class="footer"></div>
-                </div>
-
-                <!-- SURVEY VIEW -->
-
-                <div id="survey" class="form-action hide">
-                    <!-- <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBmt3LKN76GRIM6i5GzX94F_VEnTF5VHMwDoOWgITBq0ntuA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0"></iframe> -->
-                </div>
-
+                <div id="footer_magnifier" class="footer"></div>
             </div>
 
-            <div class="col-md-1 col-sm-1 col-xs-2">&nbsp;</div>
+            <!-- METADATA VIEW -->
+
+            <div id="metadata" class="form-action hide">
+                <div id="metadata_content_title"></div>
+                <form id="metadata_form">
+                    <ul style="padding-left:0;">
+                        <input type="text" id="url-metadata" name="url" style=""/>
+                        <div class="image-upload">
+                            <br>
+                            <label for="local-metadata">
+                                <img src="img/file.png"/>
+                                <div id="metadata_localfile"></div>
+                            </label>
+                            <input id="local-metadata" type="file"/>
+                        </div>
+                        <br>
+                        <input type="radio" id="img-meta-radio" name="file_type" checked/>
+                        <span id="metadata_radio_image"></span>
+                        <input type="radio" id="video-meta-radio" name="file_type"/>
+                        <span id="metadata_radio_video"></span>
+                        <br>
+                        <br>
+                        <input type="submit" value="Submit" class="button"/>
+                        <br>
+                    </ul>
+                </form>
+                <div id="preview-metadata"></div>
+                <div id="place-metadata"></div>
+                <div id="error-metadata" style="display: none;"></div>
+                <div id="footer_metadata" class="footer"></div>
+            </div>
+
+            <!-- COPYRIGHT VIEW -->
+
+            <div id="copyright-tab" class="form-action hide">
+                <div id="copyright_title"></div>
+                <form id="copyright-form">
+                    <div>
+                        <input type="text" id="copyright-video_url" name="copyright-video_url"/>
+                        <br>
+                        <br>
+                    </div>
+                    <input id="copyright-form_submit" type="submit" value="Submit" class="button"/>
+                </form>
+                <div id="copyright-loader" class="loader"></div>
+                <div id="copyright-content">
+                    <div id="copyright-summary"></div>
+                </div>
+                <div id="copyright-error"></div>
+                <br><br>
+                <div class="copyright-footer footer" id="footer_rights"></div>
+            </div>
+
+            <!-- FORENSIC VIEW -->
+
+            <div id="forensic" class="form-action hide">
+                <div id="forensic_base">
+                    <div id="forensic_title"></div>
+                    <form id="forensic_form">
+                        <input type="text" name="forensic_url" id="forensic_input">
+                        <br>
+                        <br>
+                        <br>
+                        <div style="overflow:hidden;width:240px;margin:0 auto;">
+                            <div style="float:right;">
+                                <input type="submit" value="Submit" class="button" id="forensic_submit">
+                            </div>
+                            <div style="float:left;">
+                                <button id="forensic_localfile" class="button"></button>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div id="forensic-wait" style="display: none;"></div>
+                        <br>
+                        <br>
+                        <div id="forensic-image" style="display: none;"></div>
+                        <div id="loader-forensic" class="loader" style="display: none;"></div>
+                        <br>
+                        <br>
+                    </form>
+                    <div id="error-forensic"></div>
+                    <div id="forensic-content">
+                        <div id="forensic_content_title"></div>
+                        <div id="forensic-place"></div>
+                        <br>
+                        <br>
+                    </div>
+                    <div id="forensic-modal"></div>
+                </div>
+                <div id="forensic_iframe" style="display: none;">
+                    <div>
+                        <button id="forensic_iframe_back" class="button"></button>
+                    </div>
+                    <div>
+                        <iframe src="https://reveal-mklab.iti.gr/reveal/" width="85%" height="750px"
+                                frameborder="0"></iframe>
+                    </div>
+                </div>
+                <div id="footer_forensic" class="footer"></div>
+            </div>
+
+            <!-- TUTORIAL VIEW -->
+
+            <div id="tutorial" class="form-action hide">
+                <div id="footer_tutorial" class="footer"></div>
+            </div>
+
+            <!-- CLASSROOM VIEW -->
+
+            <div id="classroom" class="form-action hide" style="max-width:1000px">
+                <h1 id="classroom_title"></h1>
+                <div class="remote-resources">
+                    <div id="remote_resources_title" class="resources-title"></div>
+                    <div id="remote_resources_content" class="resources-content container-fluid">Bla bla bla</div>
+                </div>
+                <div class="user-resources">
+                    <div id="user_resources_title" class="resources-title"></div>
+                    <div id="user_resources_content" class="resources-content container-fluid"
+                         style="display:none;">
+                        <p id="user_resources_intro" class="bold"></p>
+                        <div class="row hidden">
+                            <div class="col-sm-9 col-xs-9">
+                                <p id="user_resources_intro_local"></p>
+                                <input type="file" id="user_resources_local"></input>
+                            </div>
+                            <div class="col-sm-3 col-xs-3 text-right">
+                                <button data-toggle="modal" data-keyboard="true" data-target="#lesson_modal"
+                                        class="btn-primary btn-lg"></button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-9 col-xs-9">
+                                <p id="user_resources_intro_remote"></p>
+                                <input type="text" id="user_resources_remote"></input>
+                            </div>
+                            <div class="col-sm-3 col-xs-3 text-right">
+                                <button data-toggle="modal" data-keyboard="true" data-target="#lesson_modal"
+                                        class="btn-primary btn-lg" id="lesson_user_tutorial_button"></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-xs-12" style="line-height:30px;color:#aaaaaa;">
+                                <span style="width:110px;display:inline-block;">Youtube: </span>https://www.youtube.com/embed/5wRv8boqIEc
+                                <br>
+                                <span style="width:110px;display:inline-block;">Twitter: </span>https://video.twimg.com/amplify_video/1055750649462308866/vid/640x360/yqQIZj-jHZRxl0i2.mp4
+                                <br>
+                                <span style="width:110px;display:inline-block;">iframe: </span>&lt;iframe
+                                src="https://www.youtube.com/embed/5wRv8boqIEc" width="960" height="569"&gt;&lt;/iframe&gt;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUIZ VIEW -->
+
+            <div id="quiz" class="form-action hide">
+                <div id="footer_quiz" class="footer"></div>
+            </div>
+
+            <!-- ABOUT VIEW -->
+
+            <div id="about" class="form-action hide">
+                <div id="footer_about" class="footer"></div>
+            </div>
+
+            <!-- SURVEY VIEW -->
+
+            <div id="survey" class="form-action hide">
+                <!-- <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBmt3LKN76GRIM6i5GzX94F_VEnTF5VHMwDoOWgITBq0ntuA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0"></iframe> -->
+            </div>
 
         </div>
+
+        <div class="col-md-1 col-sm-1 col-xs-2">&nbsp;</div>
+
+    </div>
     </div>
 </main>
 

@@ -229,8 +229,8 @@ function update_twitter_sna(lang)
 	customSlideToggle("user_time_chart_title","user_time_chart_content", lang);
 	customSlideToggle("retweets_cloud_chart_title","most_retweeted", lang);
 	customSlideToggle("likes_cloud_chart_title","most_liked", lang);
-	customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart", lang);
-	customSlideToggle("top_users_pie_chart_title","top_users", lang);
+	customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart_content", lang);
+	customSlideToggle("top_users_pie_chart_title","top_users_content", lang);
 
 }
 
