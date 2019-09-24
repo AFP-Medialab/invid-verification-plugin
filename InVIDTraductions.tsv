@@ -585,9 +585,9 @@ lang_he	Hebrew	Hébreu	Hebreo
 lang_ur	Urdu	Ourdou	Urdu
 lang_th	Thai	Thaï	Tailandés
 twitterSnaErrorMessage	An error occurred while processing tweets	Une erreur s'est produite lors du traitement des tweets	Se produjo un error en el procesamiento de tweets
-top_users_pie_chart	Most active users	Utilisateurs les plus actifs	Usuarios más activos
-user_time_chart	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación
-hashtag_cloud_chart	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
-retweets_cloud_chart	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
-likes_cloud_chart	Most liked users	Utilisateurs les plus likés	Usuarios más retweeteados
+top_users_pie_chart_title	Most active users	Utilisateurs les plus actifs	Usuarios más activos
+user_time_chart_title	Propagation timeline	Frise chronologique de propagation	Línea de tiempo de propagación
+hashtag_cloud_chart_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
+retweets_cloud_chart_title	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
+likes_cloud_chart_title	Most liked users	Utilisateurs les plus likés	Usuarios más retweeteados
 

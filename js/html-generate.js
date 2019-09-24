@@ -218,19 +218,19 @@ function update_twitter_sna(lang)
 	setInnerHtml("lang_ur",							json_lang_translate[lang]["lang_ur"]);
 
 	//Chart titles
-	setInnerHtml("top_users_pie_chart_title",		json_lang_translate[lang]["top_users_pie_chart"]);
-	setInnerHtml("user_time_chart_title",			json_lang_translate[lang]["user_time_chart"]);
-	setInnerHtml("hashtag_cloud_chart_title",		json_lang_translate[lang]["hashtag_cloud_chart"]);
-	setInnerHtml("retweets_cloud_chart_title",		json_lang_translate[lang]["retweets_cloud_chart"]);
-	setInnerHtml("likes_cloud_chart_title",			json_lang_translate[lang]["likes_cloud_chart"]);
+	setInnerHtml("top_users_pie_chart_title",		"▼ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
+	setInnerHtml("user_time_chart_title",			"▼ " + json_lang_translate[lang]["user_time_chart_title"]);
+	setInnerHtml("hashtag_cloud_chart_title",		"▼ " + json_lang_translate[lang]["hashtag_cloud_chart_title"]);
+	setInnerHtml("retweets_cloud_chart_title",		"▼ " + json_lang_translate[lang]["retweets_cloud_chart_title"]);
+	setInnerHtml("likes_cloud_chart_title",			"▼ " + json_lang_translate[lang]["likes_cloud_chart_title"]);
 
 
 	//Toggle views
-	customSlideToggle("user_time_chart_title","user_time_chart_content");
-	customSlideToggle("retweets_cloud_chart_title","most_retweeted");
-	customSlideToggle("likes_cloud_chart_title","most_liked");
-	customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart");
-	customSlideToggle("top_users_pie_chart_title","top_users");
+	customSlideToggle("user_time_chart_title","user_time_chart_content", lang);
+	customSlideToggle("retweets_cloud_chart_title","most_retweeted", lang);
+	customSlideToggle("likes_cloud_chart_title","most_liked", lang);
+	customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart", lang);
+	customSlideToggle("top_users_pie_chart_title","top_users", lang);
 
 }
 
@@ -238,11 +238,16 @@ function update_twitter_sna(lang)
  * @func slide toggle for a div
  *
  */
-function customSlideToggle(button_id, div_to_toggle_id){
+function customSlideToggle(button_id, div_to_toggle_id, lang){
 	$("#" + div_to_toggle_id).hide();
 	$(document).ready(function() {
 		$("#" + button_id).click(function () {
-			$("#" + div_to_toggle_id).slideToggle();
+			$("#" + div_to_toggle_id).slideToggle(500, function (){
+				if ($("#" + div_to_toggle_id).is(":visible"))
+					setInnerHtml(button_id,	"▲ " + json_lang_translate[lang][button_id]);
+				else
+					setInnerHtml(button_id,	"▼ " + json_lang_translate[lang][button_id]);
+			});
 		});
 	});
 }
