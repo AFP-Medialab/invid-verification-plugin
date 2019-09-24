@@ -550,143 +550,137 @@
                                     <option id="lang_ur" value="ur"/>
                                 </select>
                             </div>
-                            <br>
-                            <div id="twitterStats-radios-media">
-                                <span type="text" id="twitterStats-media"></span>
+								<br>
+								<div id="twitterStats-radios-media">
+									<span type="text" id="twitterStats-media"></span>
 
-                                <input type="radio" id="twitterStats-radio_none" name="media" checked/>
-                                <span id="twitterStats_media_none"></span>
+									<input type="radio" id="twitterStats-radio_none" name="media" checked/>
+									<span id="twitterStats_media_none"></span>
 
-                                <input type="radio" id="twitterStats-radio-images" name="media" translate="no"/>
-                                <span id="twitterStats_media_images"></span>
+									<input type="radio" id="twitterStats-radio-images" name="media" translate="no" />
+									<span id="twitterStats_media_images"></span>
 
-                                <input type="radio" id="twitterStats-radio-videos" name="media" translate="no"/>
-                                <span id="twitterStats_media_videos"></span>
+									<input type="radio" id="twitterStats-radio-videos" name="media" translate="no" />
+									<span id="twitterStats_media_videos"></span>
 
-                                <input type="radio" id="twitterStats-radio-both" name="media" translate="no"/>
-                                <span id="twitterStats_media_both"></span>
-                            </div>
-                            <br>
-                            <div id="twitterStats-radios-verified">
-                                <span id="twitterStats-verified"></span>
-                                <input type="radio" id="twitterStats-radio-no" name="verified" checked/>
-                                <span id="twitterStats_verified_no"></span>
+									<input type="radio" id="twitterStats-radio-both" name="media" translate="no" />
+									<span id="twitterStats_media_both"></span>
+								</div>
+								<br>
+								<div id="twitterStats-radios-verified">
+									<span id="twitterStats-verified"></span>
+									<input type="radio" id="twitterStats-radio-no" name="verified" checked/>
+									<span id="twitterStats_verified_no"></span>
 
-                                <input type="radio" id="twitterStats-radio_yes" name="verified" translate="no"/>
-                                <span id="twitterStats_verified_yes"></span>
-                            </div>
+									<input type="radio" id="twitterStats-radio_yes" name="verified" translate="no"/>
+									<span id="twitterStats_verified_yes"></span>
+								</div>
 
-                            <br>
-                            <div id="twitterStats-radios-time">
-                                <input type="radio" id="twitterStats-radio_local_time" name="time" checked/>
-                                <span id="twitterStats_local_time"></span>
+								<br>
+								<div id="twitterStats-radios-time">
+									<input type="radio" id="twitterStats-radio_local_time" name="time" checked/>
+									<span id="twitterStats_local_time"></span>
 
-                                <input type="radio" id="twitterStats-radio-gmt" name="time" translate="no"/>
-                                <span id="twitterStats_gmt"></span>
-                            </div>
+									<input type="radio" id="twitterStats-radio-gmt" name="time" translate="no" />
+									<span id="twitterStats_gmt"></span>
+								</div>
 
-                            <br>
-                            <br>
-                            <input type="submit" value="Submit" class="button" id="submitSna"/>
-                            <br>
+								<br>
+								<br>
+								<input type="submit" value="Submit" class="button" id="submitSna" />
+								<br>
+								<div id="twitterStats-loader" class="loader"></div>
+								<br>
+								<div id="twitterStats-Graphs" style="display: none;">
+									<div id='user_time'>
+										<span id="user_time_chart_title"></span>
+										<div id="user_time_chart"> </div>	
+										<input type="button" class="button toggleVisibility" id="user_time_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
+										<div id="tweets_arr_user_time_place" class="toggleVisibility"></div>
+									</div>
+									<br>
+									<div id="most_retweeted">
+										<span id="retweets_cloud_chart_title"></span>
+										<div id="retweets_cloud_chart"> </div>
+										<input type="button" class="button toggleVisibility" id="most_retweeted_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
+										<div id="tweets_arr_retweet_place" class="toggleVisibility"></div>
+									</div>
+									<br>
+									<div id="most_liked">
+										<span id="likes_cloud_chart_title"></span>
+										<div id="likes_cloud_chart"> </div>
+										<input type="button" class="button toggleVisibility" id="most_liked_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
+										<div id="tweets_arr_like_place" class="toggleVisibility"></div>
+									</div>
+									<br>
+																	
+									<span id="hashtag_cloud_chart_title"></span>
+									<div id="hashtag_cloud_chart"> </div>
+									<br>
+									<div id="top_users">
+										<span id="top_users_pie_chart_title"></span>
+										<div id="top_users_pie_chart"> </div>
+										<input type="button" class="button toggleVisibility" id="top_users_tweets_toggle_visibility" value="hide" style="display: none; float: right;"></input>
+										
+												<div id="tweets_arr_place" class="toggleVisibility"></div>
+									</div><br>
+	
+								
+									<div id="url_array"></div>
+								</div>
 
-                            <div id="twitterStats-loader" class="loader"></div>
-                            <br>
+							</ul>
+						</form>
+						<div id="twitterStats-footer" class="footer"></div>
+					</div>
 
-                            <div id="twitterStats-Graphs" style="display: none;">
+					<!-- MAGNIFIER VIEW -->
 
-
-                                <div id="user_time_chart_title" class="title_custom"></div>
-                                <div id="user_time_chart_content">
-                                    <div id="user_time_chart"></div>
-                                </div>
-                                <br>
-
-                                <div id="retweets_cloud_chart_title" class="title_custom"></div>
-                                <div id="most_retweeted">
-                                    <div id="retweets_cloud_chart"></div>
-                                    <input type="button" class="button" id="most_retweeted_tweets_toggle_visibility"
-                                           value="hide" style="display: none; float: right;"></input>
-                                    <div id="tweets_arr_retweet_place"></div>
-                                </div>
-                                <br>
-
-                                <div id="likes_cloud_chart_title" class="title_custom"></div>
-                                <div id="most_liked">
-                                    <div id="likes_cloud_chart"></div>
-                                    <input type="button" class="button" id="most_liked_tweets_toggle_visibility"
-                                           value="hide" style="display: none; float: right;"></input>
-                                    <div id="tweets_arr_like_place"></div>
-                                </div>
-                                <br>
-
-                                <div id="hashtag_cloud_chart_title" class="title_custom"></div>
-                                <div id="hashtag_cloud_chart"></div>
-                                <br>
-
-                                <div id="top_users_pie_chart_title" class="title_custom"></div>
-                                <div id="top_users">
-                                    <div id="top_users_pie_chart"></div>
-                                    <input type="button" class="button" id="top_users_tweets_toggle_visibility"
-                                           value="hide" style="display: none; float: right;"></input>
-                                    <div id="tweets_arr_place"></div>
-                                </div>
-                                <br>
-
-                                <div id="url_array"></div>
-                            </div>
-
-                        </ul>
-                    </form>
-                    <div id="twitterStats-footer" class="footer"></div>
-                </div>
-
-                <!-- MAGNIFIER VIEW -->
-
-                <div id="magnifier" class="form-action hide">
-                    <div id="magnifier_title"></div>
-                    <form id="img_form">
-                        <ul style="padding-left:0;">
-                            <input type="text" id="urlbox" name="url" style=""/>
-                            <div class="image-upload">
-                                <br>
-                                <label for="file-input">
-                                    <img src="img/file.png"/>
-                                    <div id="local_file"></div>
-                                </label>
-                                <input id="file-input" type="file"/>
-                            </div>
-                            <br>
-                            <input type="submit" value="Submit" class="button"/>
-                            <br>
-                        </ul>
-                    </form>
-                    <br>
-                    <div id="magnifier-content" style="display: none;">
-                        <br>
-                        <button class="accordion">
-                            <div id="magnifier_accor"></div>
-                        </button>
-                        <div class="panel">
-                            <br>
-                            <form id="filter_form">
-                                <ul style="padding-left:0;">
-                                    <br>
-                                    <input type="radio" id="none" name="filter" checked/>
-                                    <span id="magnifier_radio_1"></span>
-                                    <input type="radio" id="sharp" name="filter"/>
-                                    <span id="magnifier_radio_2"></span>
-                                    <input type="radio" id="flip" name="filter">
-                                    <span id="magnifier_radio_3"></span>
-                                    <input type="radio" id="bicubic" name="filter"/>
-                                    <span id="magnifier_radio_4"></span>
-                                    <input type="radio" id="crop" name="filter">
-                                    <span id="magnifier_radio_5"></span>
-                                    <div id="scale_input" style="display: none;">
-                                        <br>
-                                        <input id="scale" type="range" min="25" max="400" value="100" step="1"/>
-                                        <div id="magnifier_scale"></div>
-                                        <span id="show_scale">
+					<div id="magnifier" class="form-action hide">
+						<div id="magnifier_title"></div>
+						<form id="img_form">
+							<ul style="padding-left:0;">
+								<input type="text" id="urlbox" name="url" style="" />
+								<div class="image-upload">
+									<br>
+									<label for="file-input">
+										<img src="img/file.png"/>
+										<div id="local_file"></div>
+									</label>
+									<input id="file-input" type="file"/>
+								</div>
+								<br>
+								<input type="submit" value="Submit" class="button" />
+								<br>
+							</ul>
+						</form>
+						<br>
+						<div id="magnifier-content" style="display: none;">
+							<br>
+							<button class="accordion">
+								<div id="magnifier_accor"></div>
+							</button>
+							<div class="panel">
+								<br>
+								<form id="filter_form">
+									<ul style="padding-left:0;">
+										<br>
+										<input type="radio" id="none" name="filter" checked/>
+										<span id="magnifier_radio_1"></span>
+										<input type="radio" id="sharp" name="filter"/>
+										<span id="magnifier_radio_2"></span>
+										<input type="radio" id="flip" name="filter">
+										<span id="magnifier_radio_3"></span>
+										<input type="radio" id="bicubic" name="filter"/>
+										<span id="magnifier_radio_4"></span>
+										<input type="radio" id="crop" name="filter">
+										<span id="magnifier_radio_5"></span>
+										<div id="scale_input" style="display: none;">
+											<br>
+											<input id="scale" type="range" min="25" max="400" value="100" step="1"/>
+											<div id="magnifier_scale"></div>
+											<span id="show_scale">
+>>>>>>> e4e9b9161e0efe2454084c0d9ae192209550d4c9
 												 : 100%
 											</span>
                                     </div>

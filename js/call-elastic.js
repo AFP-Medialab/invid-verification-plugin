@@ -318,7 +318,7 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
       "2":
         chartInfo
     },
-    "size": 3200,
+    "size": 10000,
     "_source": {
       "excludes": []
     },

@@ -115,14 +115,16 @@ function submit_sna_form() {
 
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var layout = {
-                    overflow: "visible",
                     margin: {l: 0, r: 0, b: 50, t: 50},
                     xaxis: {
                       range: [from, until],
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
                      },
                   };
+                  console.log(plotlyJson);
+                var plot = document.getElementById("user_time_chart");
                 Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
+                displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility")
             }); 
 
             generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -156,15 +158,8 @@ function submit_sna_form() {
                 };
 
                 var plot = document.getElementById("top_users_pie_chart");
-                  
-             
-
                 Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
-                
-             
-
-
             });
           
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -173,7 +168,15 @@ function submit_sna_form() {
                     width: 700,
                     height: 700,
                 };
+                var plot = document.getElementById("hashtag_cloud_chart");
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                plot.on('plotly_click', data => {
+                    document.getElementById("twitterStats-search").value = data.points[0].label;
+                    document.getElementById("twitterStats-Graphs").style.display = "none";
+                    Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
+                    submit_sna_form();
+
+                })
             });
           
 
@@ -185,6 +188,56 @@ function submit_sna_form() {
     });
 }
 
+function displayTweetsOfDate(plot, place, button)
+{
+    var visibilityButton = document.getElementById(button);
+    var tweetPlace = document.getElementById(place);
+    plot.on('plotly_click', data =>
+                {
+
+                    var json = getTweets();
+                    console.log(data);
+                    var tweetArr ='<table>' +
+                    '<tr>' +
+                        '<td>Username</td>' +
+                        '<td>Date</td>' +
+                        '<td>Tweet</td>' +
+                        '<td>Nb of retweets</td>' +
+                    '</tr>';
+                    data.points.forEach(point => {
+                        json.hits.hits.forEach(tweetObj => {
+                            if (tweetObj._source.username === point.data.name)
+                            {
+                                var pointDate = new Date(point.x);
+                                var objDate = new Date(tweetObj._source.date);
+                                console.log(pointDate);
+                                console.log(objDate);
+                                if (pointDate.getDate() === objDate.getDate() 
+                                && pointDate.getMonth() === objDate.getMonth() 
+                                && pointDate.getFullYear() === objDate.getFullYear() 
+                                && (pointDate.getHours() >= objDate.getHours() -2 && (pointDate.getHours() <= objDate.getHours() +1 || (pointDate.getHours() <= objDate.getHours() +2 && objDate.getMinutes() > 30))))
+                                {
+                                    let date = new Date(tweetObj.fields.date[0]);
+                                    tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                                                            date.getHours() + 'h' + date.getMinutes() + '</td>' + 
+                                                     '<td>' + tweetObj._source.tweet + '</td>' +
+                                    '<td>' + tweetObj._source.nretweets + '</td></tr>';
+                                }
+                            }
+                        });
+                    });
+                    tweetPlace.innerHTML = tweetArr;
+                    tweetPlace.style.display = "block";
+                    visibilityButton.style.display = "block";
+                 
+                })
+
+                visibilityButton.onclick = e => {
+                    tweetPlace.style.display = "none";
+                    visibilityButton.style.display = 'none';
+                }
+}
+
 function displayTweetsOfUser(plot, place, button)
 {
 
@@ -192,7 +245,6 @@ function displayTweetsOfUser(plot, place, button)
     var tweetPlace = document.getElementById(place);
     plot.on('plotly_click', data => {
         var json = getTweets();
-        console.log(data);
         var tweetArr ='<table>' +
                 '<tr>' +
                     '<td>Date</td>' +
@@ -211,10 +263,10 @@ function displayTweetsOfUser(plot, place, button)
             }
         });
 
-        tweetPlace.innerHTML = "Tweets of " + data.points[0].label+ "<br><br>" +  tweetArr;
+        tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">' 
+             + data.points[0].label+ "</a><br><br>" +  tweetArr;
         tweetPlace.style.display = "block";
         visibilityButton.style.display = "block";
-       console.log(json);
      //   plotlyJson.labels.array.forEach(label => {
             
        // });
