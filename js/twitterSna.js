@@ -359,11 +359,12 @@ function getRequest(url)
 async function waitStatusDone(session){
     let url = "http://localhost:8080/twitter-gateway/status/" + session;
     let res = null;
+    console.log("waitStatusDone start");
     let cpt = 2100;
     while (cpt > 0)
     {
         const response = getRequest(url);
-        response().then(json => {
+        await response().then(json => {
             if (json["status"] === "Done" || json["status"] === "Error")
                 res = json;
             else if(json == null)
