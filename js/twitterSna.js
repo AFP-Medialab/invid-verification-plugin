@@ -147,8 +147,7 @@ function submit_sna_form() {
                 Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
 
-                let newTransform = unrotateMainHashtag(search);
-                plot.on('plotly_relayout', [{transform: newTransform}])
+                unrotateMainHashtag(search);
             });
             generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
@@ -161,8 +160,7 @@ function submit_sna_form() {
                 Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
 
-                let newTransform = unrotateMainHashtag(search);
-                plot.on('plotly_relayout', [{transform: newTransform}])
+                unrotateMainHashtag(search);
             });
             //Utilisateurs les actifs
             generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -175,8 +173,7 @@ function submit_sna_form() {
                 Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
 
-                let newTransform = unrotateMainHashtag(search);
-                plot.on('plotly_relayout', [{transform: newTransform}])
+                unrotateMainHashtag(search);
             });
           
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -196,8 +193,8 @@ function submit_sna_form() {
                    
                 });
 
-                let newTransform = unrotateMainHashtag(search);
-                plot.on('plotly_relayout', [{transform: newTransform}])
+                unrotateMainHashtag(search);
+                
                     
             });
             
@@ -227,7 +224,6 @@ function unrotateMainHashtag(search)
             
         }
     })
-    return newTransform;
 }
 
 function displayTweetsOfDate(plot, place, button)
