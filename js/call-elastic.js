@@ -467,7 +467,7 @@ function getPlotlyJsonHisto(json, specificGet) {
     specificGet(dateObj, infos);
     infos.push({
       date: dateObj['key_as_string'],
-      key: "TOTAL",
+      key: "Tweets",
       nb: dateObj["doc_count"],
     });
     infos.push({
@@ -485,7 +485,7 @@ function getPlotlyJsonHisto(json, specificGet) {
     let date = info.date;
     let nb = info.nb;
     var type = "markers";
-    if (info.key === "TOTAL" || info.key === "Retweets")
+    if (info.key === "Tweets" || info.key === "Retweets")
       type = 'lines';
     let plotlyInfo = {
       mode: type,
