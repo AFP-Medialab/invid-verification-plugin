@@ -590,20 +590,26 @@
                             <input type="submit" value="Submit" class="button" id="submitSna"/>
                             <br>
                             <div id="twitterStats-loader" class="loader"></div>
-                            <br>
+							<br>
+							
+							<input id="exportButton" type="button" class="button" value="export"></input>
                             <div id="twitterStats-Graphs" style="display: none;">
+							
+							<div id="user_time_chart_content" class="chart_content">
+								<div id="user_time_chart_title" class="title_custom"></div>
+								
+									
+								<div id='user_time'>
+									<div id="user_time_chart"></div>
+									<input type="button" class="button toggleVisibility"
+											id="user_time_tweets_toggle_visibility" value="hide"
+											style="display: none; float: right;"></input>
+									<div id="tweets_arr_user_time_place" class="toggleVisibility"></div>
+								</div>
 
-                                <div id="user_time_chart_title" class="title_custom"></div>
-                                <div id="user_time_chart_content">
-                                    <div id='user_time'>
-                                        <div id="user_time_chart"></div>
-                                        <input type="button" class="button toggleVisibility"
-                                               id="user_time_tweets_toggle_visibility" value="hide"
-                                               style="display: none; float: right;"></input>
-                                        <div id="tweets_arr_user_time_place" class="toggleVisibility"></div>
-                                    </div>
-                                </div>
-                                <br>
+							<br>
+							</div>
+							<div id='retweets_chart_content' class="chart_content">
                                 <div id="retweets_cloud_chart_title" class="title_custom"></div>
                                 <div id="most_retweeted">
                                     <div id="retweets_cloud_chart"></div>
@@ -611,8 +617,10 @@
                                            id="most_retweeted_tweets_toggle_visibility" value="hide"
                                            style="display: none; float: right;"></input>
                                     <div id="tweets_arr_retweet_place" class="toggleVisibility"></div>
-                                </div>
-                                <br>
+								</div>
+								<br>
+							</div>
+							<div id='likes_chart_content' class="chart_content">
                                 <div id="likes_cloud_chart_title" class="title_custom"></div>
                                 <div id="most_liked">
                                     <div id="likes_cloud_chart"></div>
@@ -620,15 +628,19 @@
                                            id="most_liked_tweets_toggle_visibility" value="hide"
                                            style="display: none; float: right;"></input>
                                     <div id="tweets_arr_like_place" class="toggleVisibility"></div>
-                                </div>
-                                <br>
+								</div>
+								<br>
+							</div>
+							
+							<div id='hashtags_chart_content' class="chart_content">
 
                                 <div id="hashtag_cloud_chart_title" class="title_custom"></div>
                                 <div id="hashtag_cloud_chart_content">
                                     <div id="hashtag_cloud_chart"></div>
                                 </div>
-
-                                <br>
+								<br>
+							</div>
+							<div id='top_users_chart_content' class="chart_content">
                                 <div id="top_users_pie_chart_title" class="title_custom"></div>
                                 <div id="top_users_content">
                                     <div id="top_users"></div>
@@ -639,12 +651,13 @@
                                            style="display: none; float: right;"></input>
 
                                     <div id="tweets_arr_place" class="toggleVisibility"></div>
-                                </div>
+								</div>
+								<br>
                             </div>
-                            <br>
 
-
-                            <div id="url_array"></div>
+						</div>
+						<div id="url_array"></div>
+							
                 </div>
 
                 </ul>
@@ -1081,7 +1094,7 @@
 
 <!-- For Twitter Sna -->
 <script type="module" src="js/twitterSna.js"></script>
-
+<script src="html2pdf.js-master/dist/html2pdf.bundle.min.js"></script>
 <!-- For feedback -->
 <script src="js/jquery.feedback_me.js"></script>
 <!-- For google analysis -->

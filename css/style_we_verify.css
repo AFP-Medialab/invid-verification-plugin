@@ -1074,24 +1074,11 @@ third-parties-menu div figure:hover{
 	margin: auto!important;
 }
 
-.top_users{
-	position: relative;
-}
-
-.top_users_pie_chart
-{
-	position: absolute;
-}
-
-.tweets_place
-{
-	position: absolute;
-}
-
 .title_custom{
 	background-color:#f8f8f8;
-	padding:10px;
+	padding:5px;
 	border-radius:5px;
 	cursor:pointer;
 	font-size:20px;
 }
+

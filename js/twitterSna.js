@@ -2,7 +2,7 @@
  * Javascript used by twitter service
  */
 import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray, getTweets} from './call-elastic.js';
-
+//import {customSlideToggle} from './html-generate.js'
 /**
  *
  * @func Make the json string from fields
@@ -104,6 +104,8 @@ function submit_sna_form() {
         waitStatusDone(jsonResponse["session"])
         .then((param) =>
         {
+            document.getElementById('exportButton').addEventListener('click', () => exportPDF('twitterStats-Graphs', search + '_' + from + '_' + until + '.pdf', 'l'));
+       
             if (param == null) {
                 console.log("error : timeout, or invalid request");
                 alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
@@ -122,23 +124,27 @@ function submit_sna_form() {
             
             generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
                 var layout = {
-                    margin: {l: 0, r: 0, b: 50, t: 50},
+                    automargin: true,
+                   // margin: {l: 0, r: 0, b: 50, t: 50},
                     xaxis: {
                       range: [from, until],
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
                      },
+                    // height: 390,
                   };
-
+                  console.log($("#user_time").is(":visible"));
+                  
+                
                 var plot = document.getElementById("user_time_chart");
                 Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
-                displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility")
+                displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
             }); 
 
             generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     automargin: true,
-                    width: 700,
-                    height: 700,
+                    width: 500,
+                    height: 500,
                 };
 
 
@@ -152,9 +158,10 @@ function submit_sna_form() {
             generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     automargin: true,
-                    width: 700,
-                    height: 700,
+                    width: 500,
+                    height: 500,
                 };
+               
                
                 var plot = document.getElementById("likes_cloud_chart");
                 Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
@@ -166,9 +173,10 @@ function submit_sna_form() {
             generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = {
                     automargin: true,
-                    width: 700,
-                    height: 700,
-                };
+                    width: 500,
+                    height: 500,
+                }; 
+                
                 var plot = document.getElementById("top_users_pie_chart");
                 Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
@@ -179,10 +187,11 @@ function submit_sna_form() {
             generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
                 var cloudlayout = { 
                     automargin: true,
-                    width: 700,
-                    height: 700,
+                    width: 500,
+                    height: 500,
                 };
-
+                
+                
                 var plot = document.getElementById("hashtag_cloud_chart");
                 Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
                 plot.on('plotly_click', data => {
@@ -208,6 +217,42 @@ function submit_sna_form() {
 
     })
         
+}
+
+function exportPDF(div, name)
+{	
+
+    document.getElementById("user_time_chart_content").style.height = "297mm";
+   
+    if(!$("#user_time").is(":visible"))
+        $("#user_time").slideToggle();
+
+   
+    document.getElementById("hashtags_chart_content").style.height = "297mm";
+    if(!$("#hashtag_cloud_chart_content").is(":visible"))
+        $("#hashtag_cloud_chart_content").slideToggle();
+
+   
+    document.getElementById("likes_chart_content").style.height = "297mm";
+    if(!$("#most_liked").is(":visible"))
+        $("#most_liked").slideToggle();
+
+    
+    document.getElementById("retweets_chart_content").style.height = "297mm";
+    if(!$("#most_retweeted").is(":visible"))
+        $("#most_retweeted").slideToggle();
+  
+    document.getElementById("retweets_chart_content").style.height = "297mm";
+    if(!$("#top_users_content").is(":visible"))
+        $("#top_users_content").slideToggle();
+
+    let elt = document.getElementById(div);
+    var opt = {
+        filename:     name,
+        image:        { type: 'jpeg', quality: 1 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'p'}
+      };
+    html2pdf().set(opt).from(elt).save();
 }
 
 function unrotateMainHashtag(search)
