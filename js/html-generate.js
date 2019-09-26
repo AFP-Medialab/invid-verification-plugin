@@ -124,6 +124,24 @@ function update_keyframes(lang)
 	setInnerHtml("keyframes_download_subshots",	json_lang_translate[lang]["keyframes_download"]);
 	setInnerHtml("footer_keyframes",			json_lang_translate[lang]["footer_keyframes"]);
 	setPlaceholder("keyframes_input",			json_lang_translate[lang]["keyframes_input"]);
+
+
+	$("#Keyframe_datailed_content").hide();
+	setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_detail"]);
+	$(document).ready(function() {
+		$("#Keyframe_title").click(function () {
+			if ($("#Keyframe_datailed_content").is(":visible")) {
+				$("#Keyframe_datailed_content").hide();
+				$("#Keyframe_simple_content").show();
+				setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_detail"]);
+			}
+			else {
+				$("#Keyframe_simple_content").hide();
+				$("#Keyframe_datailed_content").show();
+				setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_simple"]);
+			}
+		});
+	});
 }
 
 /**
@@ -865,7 +883,7 @@ function update_quiz(lang)
 						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
 							var youtube_url = $("#quiz_iframe_"+i).attr("src");
 							var video_url = page_name+"?imgkey=";
-							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=' ) );
+							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=') );
 							window.location.href = video_url;
 							break;
 						}

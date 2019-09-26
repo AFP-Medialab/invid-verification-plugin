@@ -19,7 +19,8 @@ var ask_analyse = false;
 */
 function submit_form() 
 {
-	var url = $("[name=keyframes_url]").val();
+	let url = $("[name=keyframes_url]").val();
+	url = url.replace("?rel=0", "");
 	if( url != "" ) {
 		// send video and wait for processed status
 		send_keyframe_video(url);
@@ -121,81 +122,44 @@ function parse_response(data, url, video_id)
 */
 function display_result(data, video_id) 
 {
-	// display or hide elements we need
 	document.getElementById("keyframes-content").style.display = "block";
-	var key_cont = document.getElementById("keyframes-place");
-	var panel_shot = document.getElementById("panel-shots");
 	document.getElementById("error-keyframes").style.display = "none";
 	document.getElementById("loader-keyframes").style.display = "none";
 	document.getElementById("keyframes-wait").style.display = "none";
-	key_cont.style.display = "block";
-	// clear precedent display
-	key_cont.innerHTML = "";
-	panel_shot.innerHTML = "";
 
-	// creation of rows and columns (css style) to display 3 images by row
 	// display of scene keyframes
-	var row = document.createElement("div");
+	let row = document.createElement("div");
 	row.setAttribute("class", "row");
 
-	if( data.subshots && data.subshots.length > 0 ) 
-	{
-		for (sc in data.subshots) {
-			var column = document.createElement("div");
-			column.setAttribute("class", "column");
-			var a = document.createElement("a");
-			// a.href = "#magnifier";
-			a.class = "mouse-preview";
-			var img = document.createElement("img");
-			img.src = data.subshots[sc].keyframes[1].url + "?dl=0";
-			img.style = "width: 100%; height: auto; cursor:pointer; ";
-			img.onclick = function () {
-				// window.location.href = "/"+page_name+"?img="+this.src;
-				reverseImgSearch('google', this.src);
-			};
-			a.appendChild(img);
-			column.appendChild(a);
-			row.appendChild(column);
-			key_cont.appendChild(row);
-		}
-		//load and put every shots under accordion
-		var row2 = document.createElement("div");
-		row2.setAttribute("class", "row");
-		for( sc in data.subshots ) {
-			for (kf in data.subshots[sc].keyframes) {
-				if (kf != 1) {
-					var column2 = document.createElement("div");
-					column2.setAttribute("class", "column");
-					var a = document.createElement("a");
-					// a.href = "#magnifier";
-					a.class = "mouse-preview";
-					var img = document.createElement("img");
-					img.src = data.subshots[sc].keyframes[kf].url + "?dl=0";
-					img.style = "width: 100%; height: auto; cursor:pointer; ";
-					img.onclick = function () {
-						// window.location.href = "/"+page_name+"?img="+this.src;
-						reverseImgSearch('google', this.src);
-					};
-					a.appendChild(img);
-					column2.appendChild(a);
-					row2.appendChild(column2);
-					panel_shot.appendChild(row2);
-				}
-			}
-		}
-	}
 
+	console.log(data);
 	if( data.scenes && data.scenes.length > 0 ) 
 	{
-		for( sc in data.scenes ) {
-			for( kf in data.scenes[sc].keyframes ) {
-				var column = document.createElement("div");
+		for(scene in data.scenes)
+		{
+			let scene_keyframe = document.createElement("div");
+			scene_keyframe.setAttribute("id", "scene_keyframe");
+			scene_keyframe.setAttribute("class", "row");
+
+
+			let scene_numer = Number(scene) + 1;
+			let scene_title = document.createElement("a");
+			scene_title.setAttribute("class" ,"btn btn-default disabled btn-lg btn-block")
+			let title_text = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString() );
+			scene_title.appendChild(title_text);
+			scene_keyframe.appendChild(scene_title);
+			scene_keyframe.appendChild(document.createElement("br"));
+
+
+			// Keyframes of each scenes
+			for(keyframe in data.scenes[scene].keyframes) {
+				let column = document.createElement("h2");
 				column.setAttribute("class", "column");
-				var a = document.createElement("a");
-				// a.href = "#magnifier";
+				let a = document.createElement("a");
 				a.class = "mouse-preview";
-				var img = document.createElement("img");
-				img.src = data.scenes[sc].keyframes[kf].url + "?dl=0";
+
+				let img = document.createElement("img");
+				img.src = data.scenes[scene].keyframes[keyframe].url + "?dl=0";
 				img.style = "width: 100%; height: auto; cursor:pointer; ";
 				img.onclick = function () {
 					// window.location.href = "/"+page_name+"?img="+this.src;
@@ -203,34 +167,45 @@ function display_result(data, video_id)
 				};
 				a.appendChild(img);
 				column.appendChild(a);
-				row.appendChild(column);
+				scene_keyframe.appendChild(column);
 			}
-			key_cont.appendChild(row);
-		}
-		// load and put every shots under accordion
-		var row2 = document.createElement("div");
-		row2.setAttribute("class", "row");
-		for( sc in data.scenes ) {
-			for( sh in data.scenes[sc].shots ) {
-				for( kf in data.scenes[sc].shots[sh].keyframes ) {
-					var column2 = document.createElement("div");
-					column2.setAttribute("class", "column");
-					var a = document.createElement("a");
-					// a.href = "#magnifier";
+			document.getElementById("Keyframe_simple_content").appendChild(scene_keyframe);
+
+			// shots of each scenes
+
+			let scene_detailed = document.createElement("div");
+			scene_detailed.setAttribute("id", "scene_detailed");
+			scene_detailed.setAttribute("class", "row");
+
+			let scene_title2 = document.createElement("a");
+			scene_title2.setAttribute("class" ,"btn btn-default disabled btn-lg btn-block");
+			let title_text2 = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString() );
+			scene_title2.appendChild(title_text2);
+			scene_detailed.appendChild(scene_title2);
+
+			//scene_detailed.appendChild(scene_title);
+
+
+			for (shot in data.scenes[scene].shots) {
+				for (image in data.scenes[scene].shots[shot].keyframes) {
+					let column = document.createElement("div");
+					column.setAttribute("class", "column");
+					let a = document.createElement("a");
 					a.class = "mouse-preview";
-					var img = document.createElement("img");
-					img.src = data.scenes[sc].shots[sh].keyframes[kf].url;
+
+					let img = document.createElement("img");
+					img.src = data.scenes[scene].shots[shot].keyframes[image].url + "?dl=0";
 					img.style = "width: 100%; height: auto; cursor:pointer; ";
 					img.onclick = function () {
 						// window.location.href = "/"+page_name+"?img="+this.src;
 						reverseImgSearch('google', this.src);
 					};
 					a.appendChild(img);
-					column2.appendChild(a);
-					row2.appendChild(column2);
+					column.appendChild(a);
+					scene_detailed.appendChild(column);
 				}
-				panel_shot.appendChild(row2);
 			}
+			document.getElementById("Keyframe_datailed_content").appendChild(scene_detailed);
 		}
 	}
 
@@ -240,8 +215,8 @@ function display_result(data, video_id)
 
 	// add the download to download .zip file buttons
 	// subshots button
-	var shots = document.getElementById("subshots-download");
-	shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
+	//var shots = document.getElementById("subshots-download");
+	//shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
 }
 
 /**
@@ -260,7 +235,7 @@ function send_keyframe_video(video_url)
 	// hide the precedent error message if there was one
 	document.getElementById("error-keyframes").setAttribute("style", "display: none");
 	// create url to send video
-	var post_url = base_url_keyframes + "segmentation";
+	let post_url = base_url_keyframes + "segmentation";
 
 	// display wait message status
 	document.getElementById("keyframes-wait").setAttribute("style", "display: block");
@@ -268,7 +243,7 @@ function send_keyframe_video(video_url)
 	document.getElementById("loader-keyframes").style.display = "block";
 	// send video and wait for response
 	$.post(post_url, JSON.stringify({"video_url": video_url, "user_key": user_key, "overwrite": 0}), function (data) {
-	    var video_id = data["video_id"];
+	    let video_id = data["video_id"];
 		// verify if video not already done process
 		$.getJSON(base_url_keyframes + "result/" + video_id + "_json", function(data) {
 			// if yes stop process if one and display already computed results

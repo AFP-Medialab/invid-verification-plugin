@@ -997,7 +997,15 @@ third-parties-menu div figure:hover{
 	cursor:pointer;
 }
 
-.title_custom{
+.title_custom {
+	background-color:#edece8;
+	padding:10px;
+	border-radius:5px;
+	cursor:pointer;
+	font-size:20px;
+}
+
+.scene_title_custom{
 	background-color:#edece8;
 	padding:10px;
 	border-radius:5px;
