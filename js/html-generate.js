@@ -236,7 +236,7 @@ function update_twitter_sna(lang)
 	setInnerHtml("lang_ur",							json_lang_translate[lang]["lang_ur"]);
 
 	//Chart titles
-	setInnerHtml("top_users_pie_chart_title",		"▼ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
+	setInnerHtml("top_users_pie_chart_title",		"▲ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
 	setInnerHtml("user_time_chart_title",			"▼ " + json_lang_translate[lang]["user_time_chart_title"]);
 	setInnerHtml("hashtag_cloud_chart_title",		"▼ " + json_lang_translate[lang]["hashtag_cloud_chart_title"]);
 	setInnerHtml("retweets_cloud_chart_title",		"▼ " + json_lang_translate[lang]["retweets_cloud_chart_title"]);
@@ -245,9 +245,13 @@ function update_twitter_sna(lang)
 
 	//Toggle views
 	customSlideToggle("user_time_chart_title","user_time", lang);
+	$("#most_retweeted").hide();
 	customSlideToggle("retweets_cloud_chart_title","most_retweeted", lang);
+	$("#most_liked").hide();
 	customSlideToggle("likes_cloud_chart_title","most_liked", lang);
+	$("#hashtag_cloud_chart_content").hide();
 	customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart_content", lang);
+	$("#top_users_content").hide();
 	customSlideToggle("top_users_pie_chart_title","top_users_content", lang);
 
 }
@@ -257,7 +261,6 @@ function update_twitter_sna(lang)
  *
  */
 function customSlideToggle(button_id, div_to_toggle_id, lang){
-	$("#" + div_to_toggle_id).hide();
 	$(document).ready(function() {
 		$("#" + button_id).click(function () {
 			$("#" + div_to_toggle_id).slideToggle(500, function (){
