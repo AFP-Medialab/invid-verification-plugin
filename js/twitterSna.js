@@ -104,7 +104,7 @@ function submit_sna_form() {
         waitStatusDone(jsonResponse["session"])
         .then((param) =>
         {
-            document.getElementById('exportButton').addEventListener('click', () => exportPDF('twitterStats-Graphs', search + '_' + from + '_' + until + '.pdf', 'l'));
+           // document.getElementById('exportButton').addEventListener('click', () => exportPDF('twitterStats-Graphs', search + '_' + from + '_' + until + '.pdf', 'l'));
        
             if (param == null) {
                 console.log("error : timeout, or invalid request");
@@ -136,7 +136,7 @@ function submit_sna_form() {
                   
                 
                 var plot = document.getElementById("user_time_chart");
-                Plotly.newPlot('user_time_chart', plotlyJson, layout, {displayModeBar: false});
+                Plotly.newPlot('user_time_chart', plotlyJson, layout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
                 displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
             }); 
 
@@ -150,7 +150,7 @@ function submit_sna_form() {
 
                 
                 var plot = document.getElementById("retweets_cloud_chart");
-                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
                 displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
 
                 unrotateMainHashtag(search);
@@ -164,7 +164,7 @@ function submit_sna_form() {
                
                
                 var plot = document.getElementById("likes_cloud_chart");
-                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout,{modeBarButtons: [[ "toImage" ]], displaylogo: false});
                 displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
 
                 unrotateMainHashtag(search);
@@ -178,7 +178,7 @@ function submit_sna_form() {
                 }; 
                 
                 var plot = document.getElementById("top_users_pie_chart");
-                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
                 displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
 
                 unrotateMainHashtag(search);
@@ -193,7 +193,7 @@ function submit_sna_form() {
                 
                 
                 var plot = document.getElementById("hashtag_cloud_chart");
-                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {displayModeBar: false});
+                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
                 plot.on('plotly_click', data => {
                   //  document.getElementById("twitterStats-search").value = data.points[0].label;
                    // document.getElementById("twitterStats-Graphs").style.display = "none";
