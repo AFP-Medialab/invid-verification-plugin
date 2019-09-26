@@ -131,24 +131,31 @@ function display_result(data, video_id)
 	let row = document.createElement("div");
 	row.setAttribute("class", "row");
 
+	// clean precedent display
+
+	document.getElementById("Keyframe_simple_content").innerHTML = "";
+	document.getElementById("Keyframe_datailed_content").innerHTML = "";
+
 
 	console.log(data);
 	if( data.scenes && data.scenes.length > 0 ) 
 	{
+		let scene_count = data.scenes.length;
 		for(scene in data.scenes)
 		{
 			let scene_keyframe = document.createElement("div");
 			scene_keyframe.setAttribute("id", "scene_keyframe");
 			scene_keyframe.setAttribute("class", "row");
 
-
 			let scene_numer = Number(scene) + 1;
-			let scene_title = document.createElement("a");
-			scene_title.setAttribute("class" ,"btn btn-default disabled btn-lg btn-block")
-			let title_text = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString() );
-			scene_title.appendChild(title_text);
-			scene_keyframe.appendChild(scene_title);
-			scene_keyframe.appendChild(document.createElement("br"));
+
+			if (scene_count > 1) {
+				let scene_title = document.createElement("a");
+				scene_title.setAttribute("class", "btn btn-default disabled btn-lg btn-block")
+				let title_text = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString());
+				scene_title.appendChild(title_text);
+				scene_keyframe.appendChild(scene_title);
+			}
 
 
 			// Keyframes of each scenes
@@ -177,14 +184,14 @@ function display_result(data, video_id)
 			scene_detailed.setAttribute("id", "scene_detailed");
 			scene_detailed.setAttribute("class", "row");
 
-			let scene_title2 = document.createElement("a");
-			scene_title2.setAttribute("class" ,"btn btn-default disabled btn-lg btn-block");
-			let title_text2 = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString() );
-			scene_title2.appendChild(title_text2);
-			scene_detailed.appendChild(scene_title2);
-
-			//scene_detailed.appendChild(scene_title);
-
+			if (scene_count > 1) {
+				let scene_title2 = document.createElement("a");
+				scene_title2.setAttribute("class", "btn btn-default disabled btn-lg btn-block");
+				let title_text2 = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString());
+				scene_title2.appendChild(title_text2);
+				scene_detailed.appendChild(scene_title2);
+				scene_detailed.appendChild(document.createElement("br"));
+			}
 
 			for (shot in data.scenes[scene].shots) {
 				for (image in data.scenes[scene].shots[shot].keyframes) {
@@ -215,8 +222,8 @@ function display_result(data, video_id)
 
 	// add the download to download .zip file buttons
 	// subshots button
-	//var shots = document.getElementById("subshots-download");
-	//shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
+	var shots = document.getElementById("subshots-download");
+	shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
 }
 
 /**
