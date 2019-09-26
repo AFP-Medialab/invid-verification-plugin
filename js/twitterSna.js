@@ -130,7 +130,8 @@ function submit_sna_form() {
                       range: [from, until],
                       rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
                      },
-                    // height: 390,
+                     
+                    width: 1200,
                   };
                   
                 
