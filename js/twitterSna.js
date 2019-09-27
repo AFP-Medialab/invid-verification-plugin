@@ -32,6 +32,7 @@ function datesAreValid(from, until)
  */
 function formToJsonCollectRequest() {
 
+    document.getElementById("tweetCounter_contents").innerHTML = "";
     document.getElementById("tweets_arr_like_place").innerHTML = "";
     document.getElementById('tweets_arr_place').innerHTML = "";
     document.getElementById('tweets_arr_retweet_place').innerHTML = "";
@@ -119,7 +120,6 @@ function getMediaValue() {
 function submit_sna_form() {
 
     let jsonCollectRequest = formToJsonCollectRequest();
-
     if (jsonCollectRequest == null)
         return;
 
@@ -130,6 +130,7 @@ function submit_sna_form() {
     let response = postRequest(jsonCollectRequest, url);
     if (response == null)
         alert("Bad request");
+
     response().then((jsonResponse) => {
 
         waitStatusDone(jsonResponse["session"])
@@ -149,11 +150,13 @@ function submit_sna_form() {
             else{
                 console.log("Finished successfully")
             }
+
             $("#twitterStats-loader").css("display", "none");
             $("#twitterStats-Graphs").css("display", "block");
 
 
             generateGraphs(param);
+
             if (document.getElementById("twitterStats-user").value != ""){
                 $("#retweets_chart_content").hide();
                 $("#likes_chart_content").hide();

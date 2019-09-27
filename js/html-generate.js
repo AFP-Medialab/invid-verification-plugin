@@ -6,7 +6,7 @@
 /**
 * @func clear all navbar and menu items text
 */
-function clearNavbarAndMenuItems() 
+function clearNavbarAndMenuItems()
 {
 	cleanId("navbar_analysis");
 	cleanId("navbar_tools");
@@ -28,7 +28,7 @@ function clearNavbarAndMenuItems()
 * @func update the content of the navbar in function of language
 * @lang actual lang to display
 */
-function update_navbar(lang) 
+function update_navbar(lang)
 {
 	// clear navbar and menu items
 	clearNavbarAndMenuItems();
@@ -45,7 +45,7 @@ function update_navbar(lang)
 * @func update the content of the tools menu in function of language
 * @lang actual lang to display
 */
-function update_tools_menu(lang) 
+function update_tools_menu(lang)
 {
 	setInnerHtml("menu_api_tit",				json_lang_translate[lang]["navbar_analysis"]);
 	setInnerHtml("menu_key_tit",				json_lang_translate[lang]["navbar_keyframes"]);
@@ -72,7 +72,7 @@ function update_tools_menu(lang)
 * @func update the content of the tools menu in function of language
 * @lang actual lang to display
 */
-function update_third_parties_menu(lang) 
+function update_third_parties_menu(lang)
 {
 	setInnerHtml("third_parties_title",			json_lang_translate[lang]["third_parties_title"]);
 	for( var i = 1; i <= 6; i ++ ) {
@@ -91,7 +91,7 @@ function update_third_parties_menu(lang)
 * @func update the content of the api tab in function of language
 * @lang actual lang to display
 */
-function update_api(lang) 
+function update_api(lang)
 {
 	// add translation to items needed from api tab
 	setInnerHtml("api_title",					"<h1>" + json_lang_translate[lang]["api_title"] + "</h1>");
@@ -112,7 +112,7 @@ function update_api(lang)
 * @func update the translations of keyframes tab in function of language
 * @lang actual lang to display
 */
-function update_keyframes(lang) 
+function update_keyframes(lang)
 {
 	// add translations to item needed
 	setInnerHtml("keyframes_title",				"<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>");
@@ -148,7 +148,7 @@ function update_keyframes(lang)
 * @func update the translations of YouTube thumbnails tab in function of language
 * @lang actual lang to display
 */
-function update_thumbnails(lang) 
+function update_thumbnails(lang)
 {
 	// add translations to item needed
 	setInnerHtml("youtube_title",				"<h1>" + json_lang_translate[lang]["youtube_title"] + "</h1>");
@@ -236,15 +236,18 @@ function update_twitter_sna(lang)
 	setInnerHtml("lang_ur",							json_lang_translate[lang]["lang_ur"]);
 
 	//Chart titles
-	setInnerHtml("top_users_pie_chart_title",		"▲ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
-	setInnerHtml("user_time_chart_title",			"▼ " + json_lang_translate[lang]["user_time_chart_title"]);
+	setInnerHtml("user_time_chart_title",			"▲ " + json_lang_translate[lang]["user_time_chart_title"]);
+	setInnerHtml("tweetCounter_title", "▼ " + json_lang_translate[lang]["tweetCounter_title"]);
 	setInnerHtml("hashtag_cloud_chart_title",		"▼ " + json_lang_translate[lang]["hashtag_cloud_chart_title"]);
 	setInnerHtml("retweets_cloud_chart_title",		"▼ " + json_lang_translate[lang]["retweets_cloud_chart_title"]);
 	setInnerHtml("likes_cloud_chart_title",			"▼ " + json_lang_translate[lang]["likes_cloud_chart_title"]);
+	setInnerHtml("top_users_pie_chart_title",		"▼ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
 
 
 	//Toggle views
 	customSlideToggle("user_time_chart_title","user_time", lang);
+	$("#tweetCounter_contents").hide();
+	customSlideToggle("tweetCounter_title","tweetCounter_contents", lang);
 	$("#most_retweeted").hide();
 	customSlideToggle("retweets_cloud_chart_title","most_retweeted", lang);
 	$("#most_liked").hide();
@@ -260,15 +263,14 @@ function update_twitter_sna(lang)
  * @func slide toggle for a div
  *
  */
-function customSlideToggle(button_id, div_to_toggle_id, lang){
-	$(document).ready(function() {
+function customSlideToggle(button_id, div_to_toggle_id, lang) {
+	$(document).ready(function () {
 		$("#" + button_id).click(function () {
-			$("#" + div_to_toggle_id).slideToggle(500, function (){
-				if ($("#" + div_to_toggle_id).is(":visible"))
-					setInnerHtml(button_id,	"▲ " + json_lang_translate[lang][button_id]);
-				else
-					setInnerHtml(button_id,	"▼ " + json_lang_translate[lang][button_id]);
-			});
+			if ($("#" + div_to_toggle_id).is(":visible"))
+				setInnerHtml(button_id, "▼ " + json_lang_translate[lang][button_id]);
+			else
+				setInnerHtml(button_id, "▲ " + json_lang_translate[lang][button_id]);
+			$("#" + div_to_toggle_id).slideToggle(250);
 		});
 	});
 }
@@ -279,7 +281,7 @@ function customSlideToggle(button_id, div_to_toggle_id, lang){
 * @func update the translations of magnifier tab in function of language
 * @lang actual lang to display
 */
-function update_magnifier(lang) 
+function update_magnifier(lang)
 {
 	// add translations to item needed
 	setInnerHtml("magnifier_title",				"<h1>" + json_lang_translate[lang]["magnifier_title"] + "</h1>");
@@ -308,7 +310,7 @@ function update_magnifier(lang)
 * @func update the translations of metadata tab in function of language
 * @lang actual lang to display
 */
-function update_metadata(lang) 
+function update_metadata(lang)
 {
 	// add translations to item needed
 	setInnerHtml("metadata_content_title",		"<h1>" + json_lang_translate[lang]["metadata_content_title"] + "</h1>");
@@ -323,7 +325,7 @@ function update_metadata(lang)
 * @func update the translations of copyright tab in function of language
 * @lang actual lang to display
 */
-function update_copyright(lang) 
+function update_copyright(lang)
 {
 	// add translations to item needed
 	setInnerHtml("copyright_title",				"<h1>" + json_lang_translate[lang]["copyright_title"] + "</h1>");
@@ -335,7 +337,7 @@ function update_copyright(lang)
 * @func update the translations of forensic tab in function of language
 * @lang actual lang to display
 */
-function update_forensic(lang) 
+function update_forensic(lang)
 {
 	// add translations to item needed
 	setInnerHtml("forensic_title",				"<h1>" + json_lang_translate[lang]["forensic_title"] + "</h1>");
@@ -371,7 +373,7 @@ function update_submit(lang)
 * @func update the content of about tab in function of language
 * @lang actual language to display
 */
-function update_about(lang) 
+function update_about(lang)
 {
 	// clean about tab
 	var about_tab = document.getElementById("about");
@@ -522,7 +524,7 @@ function update_about(lang)
 	input.setAttribute("name", "unlock_explanations");
 	input.setAttribute("id", "checkbox_explain");
 	input.checked = ( cookie_value( "unlock" ) == "1" ? true : false );
-	
+
 	input.addEventListener("change", function () {
 		var date = new Date();
 		date.setTime( date.getTime() + ( 3*365*24*60*60*1000 ) );
@@ -563,7 +565,7 @@ function update_about(lang)
 * @func update the content of tuto tab in function of language
 * @lang actual language to display
 */
-function update_tuto(lang) 
+function update_tuto(lang)
 {
 	// clean tutorial tab
 	var tuto_tab = document.getElementById("tutorial");
@@ -643,7 +645,7 @@ function update_tuto(lang)
 * @func update the content of classroom tab in function of language
 * @lang actual language to display
 */
-function update_classroom(lang) 
+function update_classroom(lang)
 {
 	// main title
 	setInnerHtml( "classroom_title", json_lang_translate[lang]["classroom_title"] );
@@ -752,7 +754,7 @@ function update_classroom(lang)
 * @func update the content of about tab in function of language
 * @lang actual language to display
 */
-function update_quiz(lang) 
+function update_quiz(lang)
 {
 	// clean quiz tab
 	var quiz_tab = document.getElementById("quiz");
@@ -822,14 +824,14 @@ function update_quiz(lang)
 			} else {
 				typ = "video";
 				var frm = document.createElement("iframe");
-				frm.id = 'quiz_iframe_'+i; 
+				frm.id = 'quiz_iframe_'+i;
 				frm.src = src;
 				frm.border = "0";
 				frm.width = "625";
 				frm.height = "450";
 				frm.style.marginTop = "40px";
 				frm.style.marginBottom = "20px";
-				main_div.appendChild(frm); 
+				main_div.appendChild(frm);
 			}
 			if( typ == "image" ) {
 				// SIMILARITY search

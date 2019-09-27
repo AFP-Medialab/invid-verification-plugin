@@ -1070,6 +1070,7 @@ third-parties-menu div figure:hover{
 	border-radius:3px;
 }
 
+/* Twitter sna */
 .js-plotly-plot .plotly, .js-plotly-plot .plotly div{
 	margin: auto!important;
 }
@@ -1080,4 +1081,21 @@ third-parties-menu div figure:hover{
 	border-radius:5px;
 	cursor:pointer;
 	font-size:20px;
+}
+
+#twitterStats-Graphs {
+	display: none;
+	margin: 30px auto 15px;
+	padding: 10px 50px 40px;
+	width: 800px;
+	border: 2px solid #F8F8F8;
+	border-radius: 4px;
+	text-align: center;
+	line-height: 22px;
+}
+
+#counter_number {
+	margin: 30px auto 15px;
+	padding: 10px 50px 40px;
+	font-size: 60pt;
 }

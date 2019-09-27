@@ -1,4 +1,24 @@
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray, getTweets} from './call-elastic.js';
+import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray, getTweets, generateTweetCount} from './call-elastic.js';
+
+
+function getNbTweets(param, givenFrom, givenUntil){
+    generateTweetCount(param["session"], givenFrom,givenUntil).then(res => {
+        console.log(res.value);
+        let counter = document.createElement("div");
+        counter.setAttribute("id", "counter_number");
+        let nb_text = document.createTextNode(res.value);
+        counter.appendChild(nb_text);
+
+        let tweetDiv = document.createElement("div");
+        let tweetText = document.createTextNode("Tweets");
+        tweetDiv.appendChild(tweetText);
+
+
+        document.getElementById("tweetCounter_contents").appendChild(counter);
+        document.getElementById("tweetCounter_contents").appendChild(tweetDiv);
+        
+    })
+}
 
 
 function showEssidHistogram(param, givenFrom, givenUntil){
@@ -15,7 +35,7 @@ function showEssidHistogram(param, givenFrom, givenUntil){
         };
 
 
-        var plot = document.getElementById("user_time_chart");
+        let plot = document.getElementById("user_time_chart");
         Plotly.newPlot('user_time_chart', plotlyJson, layout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
         displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
     });
@@ -112,7 +132,9 @@ function urlArray(param, givenFrom, givenUntil){
 export function generateGraphs(param){
     let givenFrom = document.getElementById("twitterStats-from-date").value;
     let givenUntil = document.getElementById("twitterStats-to-date").value;
+
     showEssidHistogram(param, givenFrom, givenUntil);
+    getNbTweets(param, givenFrom, givenUntil);
     mostRetweetPie(param, givenFrom, givenUntil);
     mostLikePie(param, givenFrom, givenUntil);
     mostTweetPie(param, givenFrom, givenUntil);
