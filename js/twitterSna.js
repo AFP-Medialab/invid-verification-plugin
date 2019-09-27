@@ -1,14 +1,40 @@
+import {generateGraphs} from "./twitterSnaGraphs.js";
+
 /**
  * Javascript used by twitter service
  */
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray, getTweets} from './call-elastic.js';
 //import {customSlideToggle} from './html-generate.js'
 /**
  *
  * @func Make the json string from fields
  *
  */
-function formToJsonCollectRequest(search, search_and, search_or, search_not, user, lang, from, until, media, verified, retweetsHandling) {
+function formToJsonCollectRequest() {
+
+    document.getElementById("tweets_arr_like_place").innerHTML = "";
+    document.getElementById('tweets_arr_place').innerHTML = "";
+    document.getElementById('tweets_arr_retweet_place').innerHTML = "";
+    document.getElementById('tweets_arr_user_time_place').innerHTML = "";
+
+    let search = document.getElementById("twitterStats-search").value;
+    let search_and  = document.getElementById("twitterStats-search-and").value;
+    let search_or  = document.getElementById("twitterStats-search-or").value;
+    let search_not = document.getElementById("twitterStats-search-not").value;
+
+    let formLang = document.getElementById("twitterStats-lang").value;
+    let user = document.getElementById("twitterStats-user").value;
+    let from = document.getElementById("twitterStats-from-date").value;
+    let until = document.getElementById("twitterStats-to-date").value;
+
+    let verified = document.getElementById("twitterStats-radio_yes").checked;
+    let media = getMediaValue;
+
+    let retweetsHandling = null;
+
+    if (search == "" || from == "" || until == "") {
+        alert(json_lang_translate[global_language]["twitterStatsErrorMessage"]);
+        return null;
+    }
 
     let and_list, or_list, not_list = null;
 
@@ -28,7 +54,7 @@ function formToJsonCollectRequest(search, search_and, search_or, search_not, use
 
     let CollectRequest = {
         "search": searchObj,
-        "lang": lang,
+        "lang": formLang,
         "user": user,
         "from": from,
         "until": until,
@@ -40,7 +66,6 @@ function formToJsonCollectRequest(search, search_and, search_or, search_not, use
         if (value !== null && value !== "")
             return value
     });
-    console.log(res);
     return res;
 }
 
@@ -65,34 +90,12 @@ function getMediaValue() {
  */
 function submit_sna_form() {
 
-    document.getElementById("tweets_arr_like_place").innerHTML = "";
-    document.getElementById('tweets_arr_place').innerHTML = "";
-    document.getElementById('tweets_arr_retweet_place').innerHTML = "";
-    document.getElementById('tweets_arr_user_time_place').innerHTML = "";
-    
-    let search = document.getElementById("twitterStats-search").value;
-    let search_and  = document.getElementById("twitterStats-search-and").value;
-    let search_or  = document.getElementById("twitterStats-search-or").value;
-    let search_not = document.getElementById("twitterStats-search-not").value;
+    let jsonCollectRequest = formToJsonCollectRequest();
 
-    let formlang = document.getElementById("twitterStats-lang").value;
-    let user = document.getElementById("twitterStats-user").value;
-    let from = document.getElementById("twitterStats-from-date").value;
-    let until = document.getElementById("twitterStats-to-date").value;
-
-    let verified = document.getElementById("twitterStats-radio_yes").checked;
-    let media = getMediaValue;
-
-    let retweetsHandling = null;
-
-    if (search == "" || from == "" || until == "") {
-        alert(json_lang_translate[global_language]["twitterStatsErrorMessage"]);
+    if (jsonCollectRequest == null)
         return;
-    }
 
     $("#twitterStats-loader").css("display", "block");
-
-    let jsonCollectRequest = formToJsonCollectRequest(search, search_and, search_or, search_not,  user,formlang, from, until, media, verified , retweetsHandling);
 
     let url = "http://localhost:8080/twitter-gateway/collect";
 
@@ -121,102 +124,16 @@ function submit_sna_form() {
             $("#twitterStats-loader").css("display", "none");
             $("#twitterStats-Graphs").css("display", "block");
 
-            
-            generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
-                var layout = {
-                    automargin: true,
-                   // margin: {l: 0, r: 0, b: 50, t: 50},
-                    xaxis: {
-                      range: [from, until],
-                      rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
-                     },
-                     
-                    width: 1200,
-                  };
-                  
-                
-                var plot = document.getElementById("user_time_chart");
-                Plotly.newPlot('user_time_chart', plotlyJson, layout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
-                displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
-            }); 
 
-            generateCloudQuery(param["session"], "nretweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = { 
-                    automargin: true,
-                    width: 500,
-                    height: 500,
-                };
+            generateGraphs(param);
+            if (document.getElementById("twitterStats-user").value != ""){
+                $("#retweets_chart_content").hide();
+                $("#likes_chart_content").hide();
+                $("#top_users_chart_content").hide();
+            }
+        });
+    });
 
-
-                
-                var plot = document.getElementById("retweets_cloud_chart");
-                Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
-                displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
-
-                unrotateMainHashtag(search);
-            });
-            generateCloudQuery(param["session"], "nlikes", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = { 
-                    automargin: true,
-                    width: 500,
-                    height: 500,
-                };
-               
-               
-                var plot = document.getElementById("likes_cloud_chart");
-                Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout,{modeBarButtons: [[ "toImage" ]], displaylogo: false});
-                displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
-
-                unrotateMainHashtag(search);
-            });
-            //Utilisateurs les actifs
-            generateCloudQuery(param["session"], "ntweets", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = {
-                    automargin: true,
-                    width: 500,
-                    height: 500,
-                }; 
-                
-                var plot = document.getElementById("top_users_pie_chart");
-                Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
-                displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
-
-                unrotateMainHashtag(search);
-            });
-          
-            generateCloudQuery(param["session"], "hashtags", from, until, param["query"]["search"]["search"]).then(plotlyJson => {
-                var cloudlayout = { 
-                    automargin: true,
-                    width: 500,
-                    height: 500,
-                };
-                
-                
-                var plot = document.getElementById("hashtag_cloud_chart");
-                Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
-                plot.on('plotly_click', data => {
-                  //  document.getElementById("twitterStats-search").value = data.points[0].label;
-                   // document.getElementById("twitterStats-Graphs").style.display = "none";
-                  //  Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
-                    var win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
-                   
-                });
-
-                unrotateMainHashtag(search);
-                
-                    
-            });
-            
-            generateURLArray(param["session"], from, until).then(arrayStr => {
-                document.getElementById('url_array').innerHTML = arrayStr;
-            });
-
-        })
-
-        
-
-    })
-        
 }
 
 function exportPDF(div, name)
@@ -255,111 +172,7 @@ function exportPDF(div, name)
     html2pdf().set(opt).from(elt).save();
 }
 
-function unrotateMainHashtag(search)
-{
-    Array.from(document.getElementsByClassName("slicetext")).forEach(slice => {
-        if (slice.dataset.unformatted === search)
-        {
-            var transform = slice.getAttribute("transform");
 
-            let translates = transform.split(/rotate\(...\)/);
-            let newTransform = "";
-            translates.forEach(translate => newTransform += translate);
-            slice.setAttribute("transform", newTransform);
-            
-        }
-    })
-}
-
-function displayTweetsOfDate(plot, place, button)
-{
-    var visibilityButton = document.getElementById(button);
-    var tweetPlace = document.getElementById(place);
-    plot.on('plotly_click', data =>
-                {
-
-                    var json = getTweets();
-                    var tweetArr ='<table>' +
-                    '<tr>' +
-                        '<td>Username</td>' +
-                        '<td>Date</td>' +
-                        '<td>Tweet</td>' +
-                        '<td>Nb of retweets</td>' +
-                    '</tr>';
-                    data.points.forEach(point => {
-                        json.hits.hits.forEach(tweetObj => {
-                            if (tweetObj._source.username === point.data.name)
-                            {
-                                var pointDate = new Date(point.x);
-                                var objDate = new Date(tweetObj._source.date);
-                                console.log(pointDate);
-                                console.log(objDate);
-                                if ((((pointDate.getDate() === objDate.getDate() 
-                                    && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() +2)))
-                                    || (pointDate.getDate() === objDate.getDate() +1 && objDate.getHours() >= 22 && pointDate.getHours() <= 2))
-                                    && pointDate.getMonth() === objDate.getMonth() 
-                                    && pointDate.getFullYear() === objDate.getFullYear())
-                                {
-                                    let date = new Date(tweetObj.fields.date[0]);
-                                    tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
-                                                            date.getHours() + 'h' + date.getMinutes() + '</td>' + 
-                                                     '<td>' + tweetObj._source.tweet + '</td>' +
-                                    '<td>' + tweetObj._source.nretweets + '</td></tr>';
-                                }
-                            }
-                        });
-                    });
-                    tweetPlace.innerHTML = tweetArr;
-                    tweetPlace.style.display = "block";
-                    visibilityButton.style.display = "block";
-                 
-                })
-
-                visibilityButton.onclick = e => {
-                    tweetPlace.style.display = "none";
-                    visibilityButton.style.display = 'none';
-                }
-}
-
-function displayTweetsOfUser(plot, place, button)
-{
-
-    var visibilityButton = document.getElementById(button);
-    var tweetPlace = document.getElementById(place);
-    plot.on('plotly_click', data => {
-        var json = getTweets();
-        var tweetArr ='<table>' +
-                '<tr>' +
-                    '<td>Date</td>' +
-                    '<td>Tweet</td>' +
-                    '<td>Nb of retweets</td>' +
-                '</tr>';
-        json.hits.hits.forEach(tweetObj => {
-            if (tweetObj._source.username === data.points[0].label)
-            {
-                let date = new Date(tweetObj.fields.date[0]);
-                    tweetArr += '<tr><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
-                                            date.getHours() + 'h' + date.getMinutes() + '</td>' + 
-                                     '<td>' + tweetObj._source.tweet + '</td>' +
-                    '<td>' + tweetObj._source.nretweets + '</td></tr>';
-                
-            }
-        });
-
-        tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">' 
-             + data.points[0].label+ "</a><br><br>" +  tweetArr;
-        tweetPlace.style.display = "block";
-        visibilityButton.style.display = "block";
-     //   plotlyJson.labels.array.forEach(label => {
-            
-       // });
-    })
-    
-    visibilityButton.onclick = e => {
-           tweetPlace.style.display = "none";
-           visibilityButton.style.display = 'none';
-    }
-}
 /**
  *
  * @function make a Post request and wait for result
@@ -407,7 +220,6 @@ function getRequest(url)
 async function waitStatusDone(session){
     let url = "http://localhost:8080/twitter-gateway/status/" + session;
     let res = null;
-    console.log("waitStatusDone start");
     let cpt = 2100;
     while (cpt > 0)
     {

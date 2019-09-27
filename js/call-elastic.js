@@ -242,7 +242,6 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
       } //*/
     });
     const myJson = await response.json();
-
     json = myJson;
     if (field === "hashtags") {
       return getPlotlyJsonCloud(myJson, hashtagsGet, mainKey);
