@@ -4,6 +4,27 @@ import {generateGraphs} from "./twitterSnaGraphs.js";
  * Javascript used by twitter service
  */
 //import {customSlideToggle} from './html-generate.js'
+
+
+/**
+ * @func Date is valid
+ */
+function dateIsValide(d){
+    return d instanceof Date && isFinite(d);
+}
+
+/**
+ * @func Dates are valid
+ */
+function datesAreValid(from, until)
+{
+    let fromDate =  new Date(from);
+    let untilDate = new Date(until);
+    if (!dateIsValide(fromDate) || !dateIsValide(untilDate))
+        return false;
+    return fromDate < untilDate;
+}
+
 /**
  *
  * @func Make the json string from fields
@@ -35,6 +56,13 @@ function formToJsonCollectRequest() {
         alert(json_lang_translate[global_language]["twitterStatsErrorMessage"]);
         return null;
     }
+
+    if (!datesAreValid(from, until))
+    {
+        alert(json_lang_translate[global_language]["DatesAreWrong"]);
+        return null;
+    }
+
 
     let and_list, or_list, not_list = null;
 
@@ -251,9 +279,28 @@ if (form) {
     });
 }
 
-
 /* Add dates picker facility */
 $(document).ready(function () {
-    $("#twitterStats-from-date").datepicker({ dateFormat: 'yy-mm-dd' });
-    $("#twitterStats-to-date").datepicker({ dateFormat: 'yy-mm-dd' });
+    $("#twitterStats-from-date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function(dateText, inst) {
+            let untilInput = document.getElementById("twitterStats-to-date");
+            let untilDate = new Date(untilInput.value);
+            let newDate = new Date (dateText);
+            if (untilInput.value != "" && newDate < untilDate)
+                return;
+            newDate.setDate(newDate.getDate() + 1);
+            untilInput.value = newDate.toISOString().slice(0,10);
+        }});
+    $("#twitterStats-to-date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function(dateText, inst) {
+            let fromInput = document.getElementById("twitterStats-from-date");
+            let fromDate = new Date(fromInput.value);
+            let newDate = new Date (dateText);
+            if (fromInput.value != "" && newDate > fromDate)
+                return;
+            newDate.setDate(newDate.getDate() - 1);
+            fromInput.value = newDate.toISOString().slice(0,10);
+        }});
 });
