@@ -1004,7 +1004,7 @@ function updateHomeTutorial(lang)
 	tutorial_items.style.textAlign = "center";
 	tutorial_items.style.margin = "0 auto";
 	var classname = "";
-	for( var i = 1; i <= 5; i++ ) {
+	for( var i = 1; i <= 3; i++ ) {
 		if( json_lang_translate[lang]["home_tutorial_image_"+i] != "" ) {
 			var main_div = document.createElement("div");
 			main_div.id = "tutorial_item_"+i;
