@@ -3,7 +3,6 @@ import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHisto
 
 function getNbTweets(param, givenFrom, givenUntil){
     generateTweetCount(param["session"], givenFrom,givenUntil).then(res => {
-        console.log(res.value);
         let counter = document.createElement("div");
         counter.setAttribute("id", "counter_number");
         let nb_text = document.createTextNode(res.value);
