@@ -29,8 +29,8 @@ function showEssidHistogram(param, givenFrom, givenUntil){
                 range: [givenFrom, givenUntil],
                 rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
             },
-
-            width: 1200,
+            autosize: true
+           // width: 1200,
         };
 
 
