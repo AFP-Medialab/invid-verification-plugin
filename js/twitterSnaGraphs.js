@@ -23,7 +23,7 @@ function getNbTweets(param, givenFrom, givenUntil){
 function showEssidHistogram(param, givenFrom, givenUntil){
     generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
         var layout = {
-            title: "<b>Propagation Timeline</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
+            title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             xaxis: {
                 range: [givenFrom, givenUntil],
@@ -45,7 +45,7 @@ function showEssidHistogram(param, givenFrom, givenUntil){
         Plotly.newPlot('user_time_chart', plotlyJson,  layout, config);
         displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
 
-        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
     });
 }
 
@@ -73,7 +73,7 @@ function mostRetweetPie(param, givenFrom, givenUntil){
         Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
 
-        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
     });
 }
@@ -100,7 +100,7 @@ function mostLikePie(param, givenFrom, givenUntil) {
         Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
 
-        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
     });
 }
@@ -129,7 +129,7 @@ function mostTweetPie(param, givenFrom, givenUntil){
         Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
 
-        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
     });
 }
@@ -163,7 +163,7 @@ function topHashtagPie(param, givenFrom, givenUntil) {
         });
 
 
-        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
 
     });
