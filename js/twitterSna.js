@@ -136,7 +136,7 @@ function submit_sna_form() {
         waitStatusDone(jsonResponse["session"])
         .then((param) =>
         {
-         //   document.getElementById('exportButton').addEventListener('click', () => exportPDF('twitterStats-Graphs', param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
+           document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
             console.log(param);
             if (param == null) {
                 console.log("error : timeout, or invalid request");
@@ -166,44 +166,144 @@ function submit_sna_form() {
     });
 
 }
-
-function exportPDF(div, name)
-{	
-
-    document.getElementById("user_time_chart_content").style.height = "297mm";
-   
-    if(!$("#user_time").is(":visible"))
-        $("#user_time").slideToggle();
-
-   
-    document.getElementById("hashtags_chart_content").style.height = "297mm";
-    if(!$("#hashtag_cloud_chart_content").is(":visible"))
-        $("#hashtag_cloud_chart_content").slideToggle();
-
-   
-    document.getElementById("likes_chart_content").style.height = "297mm";
-    if(!$("#most_liked").is(":visible"))
-        $("#most_liked").slideToggle();
-
-    
-    document.getElementById("retweets_chart_content").style.height = "297mm";
-    if(!$("#most_retweeted").is(":visible"))
-        $("#most_retweeted").slideToggle();
   
-    document.getElementById("retweets_chart_content").style.height = "297mm";
-    if(!$("#top_users_content").is(":visible"))
-        $("#top_users_content").slideToggle();
-
-    let elt = document.getElementById('user_time_chart_title').innerHTML;
+   /* let elt = document.getElementById(div).innerHTML;
     var opt = {
         filename:     name,
         image:        { type: 'jpeg', quality: 1 },
         jsPDF:        { unit: 'in', format: 'a4', orientation: 'p'}
       };
+*/  
+var  
+    form = $('#twitterStats-Graphs'),  
+    cache_width = document.getElementById("user_time_chart_content").style.width,  
+    a4 = [595.28, 841.89]; // for a4 size paper width and height  
 
-      html2pdf(elt).save();
-     
-}
+    function exportPDF (name) {  
+      
+      //  $('#exportButton').on('click', function () {  
+            //document.getElementById("user_time_chart_content").style.height = a4[1];
+   
+            //sdocument.getElementById("user_time_chart_content").style.width = a4[0];
+            if(!$("#user_time").is(":visible"))
+                $("#user_time").slideToggle();
+           
+           // document.getElementById("hashtags_chart_content").style.height = "297mm";
+           // if(!$("#hashtag_cloud_chart_content").is(":visible"))
+                $("#hashtag_cloud_chart_content").slideToggle();
+        
+           
+            //document.getElementById("likes_chart_content").style.height = "297mm";
+            if(!$("#most_liked").is(":visible"))
+                $("#most_liked").slideToggle();
+        
+            
+          //  document.getElementById("retweets_chart_content").style.height = "297mm";
+            if(!$("#most_retweeted").is(":visible"))
+                $("#most_retweeted").slideToggle();
+          
+          //  document.getElementById("retweets_chart_content").style.height = "297mm";
+            if(!$("#top_users_content").is(":visible"))
+                $("#top_users_content").slideToggle();
+        
+            $('body').scrollTop(0);  
+            createPDF([$('#user_time_chart_content'), $("#retweets_chart_content")]);  
+      //  });  
+        //create pdf  
+        function createPDF(forms) {  
+            var doc = new jsPDF({  
+                unit: 'px',  
+                format: 'a4'  
+            });  
+            var i = 0;
+            getCanvas(forms[0]).then(function (canvas) {  
+                var  
+                 img = canvas.toDataURL("image/png"),
+                 img2;
+                 getCanvas(forms[1]).then(canva => {
+                     img2 = canva.toDataURL("image/png");
+
+                     doc.addImage(img, 'JPEG', 20, 20); 
+                    doc.addPage();
+                    doc.addImage(img2, 'JPEG', 20, 20);  
+
+                    doc.save(name); 
+            })
+               // form.width(cache_width);  
+            });   
+
+        }  
+  
+        // create canvas object  
+        function getCanvas(form) {  
+            return html2canvas(form, {  
+                imageTimeout: 2000,  
+                removeContainer: true  
+            });  
+        }  
+  
+    };
+    (function ($) {  
+        $.fn.html2canvas = function (options) {  
+            var date = new Date(),  
+            $message = null,  
+            timeoutTimer = false,  
+            timer = date.getTime();  
+            html2canvas.logging = options && options.logging;  
+            html2canvas.preload(this[0], $.extend({  
+                complete: function (images) {  
+                    var queue = html2canvas.Parse(this[0], images, options),  
+                    $canvas = $(html2canvas.Renderer(queue, options)),  
+                    finishTime = new Date();  
+  
+                    $canvas.css({ position: 'absolute', left: 0, top: 0 }).appendTo(document.body);  
+                    $canvas.siblings().toggle();  
+  
+                    $(window).click(function () {  
+                        if (!$canvas.is(':visible')) {  
+                            $canvas.toggle().siblings().toggle();  
+                            throwMessage("Canvas Render visible");  
+                        } else {  
+                            $canvas.siblings().toggle();  
+                            $canvas.toggle();  
+                            throwMessage("Canvas Render hidden");  
+                        }  
+                    });  
+                    throwMessage('Screenshot created in ' + ((finishTime.getTime() - timer) / 1000) + " seconds<br />", 4000);  
+                }  
+            }, options));  
+  
+            function throwMessage(msg, duration) {  
+                window.clearTimeout(timeoutTimer);  
+                timeoutTimer = window.setTimeout(function () {  
+                    $message.fadeOut(function () {  
+                        $message.remove();  
+                    });  
+                }, duration || 2000);  
+                if ($message)  
+                    $message.remove();  
+                $message = $('<div ></div>').html(msg).css({  
+                    margin: 0,  
+                    padding: 10,  
+                    background: "#000",  
+                    opacity: 0.7,  
+                    position: "fixed",  
+                    top: 10,  
+                    right: 10,  
+                    fontFamily: 'Tahoma',  
+                    color: '#fff',  
+                    fontSize: 12,  
+                    borderRadius: 12,  
+                    width: 'auto',  
+                    height: 'auto',  
+                    textAlign: 'center',  
+                    textDecoration: 'none'  
+                }).hide().fadeIn().appendTo('body');  
+            }  
+        };  
+    })(jQuery); 
+   //   printJS('user_time_chart', 'image');
+
 
 
 /**
