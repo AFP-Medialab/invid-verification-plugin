@@ -307,3 +307,26 @@ $(document).ready(function () {
             fromInput.value = newDate.toISOString().slice(0,10);
         }});
 });
+
+/**
+ *
+ * Toggle functions for twitter sna features
+ */
+function customSlideToggle(button_id, div_to_toggle_id, lang) {
+        $("#" + button_id).click(function () {
+            if ($("#" + div_to_toggle_id).is(":visible"))
+                setInnerHtml(button_id, "▼ " + json_lang_translate[lang][button_id]);
+            else
+                setInnerHtml(button_id, "▲ " + json_lang_translate[lang][button_id]);
+            $("#" + div_to_toggle_id).slideToggle(250);
+        });
+}
+
+$(document).ready(customSlideToggle("user_time_chart_title","user_time", global_language));
+$(document).ready(customSlideToggle("tweetCounter_title","tweetCounter_contents", global_language));
+$(document).ready(customSlideToggle("retweets_cloud_chart_title","most_retweeted", global_language));
+$(document).ready(customSlideToggle("likes_cloud_chart_title","most_liked", global_language));
+$(document).ready(customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart_content", global_language));
+$(document).ready(customSlideToggle("top_users_pie_chart_title","top_users_content", global_language));
+
+
