@@ -23,20 +23,29 @@ function getNbTweets(param, givenFrom, givenUntil){
 function showEssidHistogram(param, givenFrom, givenUntil){
     generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
         var layout = {
+            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
-            // margin: {l: 0, r: 0, b: 50, t: 50},
             xaxis: {
                 range: [givenFrom, givenUntil],
                 rangeslider: {range: [param["query"]["from"],  param["query"]["until"]]},
             },
             autosize: true
-           // width: 1200,
         };
 
+        var config = {
+            toImageButtonOptions: {
+              format: 'png', // one of png, svg, jpeg, webp
+              filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Timeline",
+              scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+            },
+            modeBarButtons: [[ "toImage" ]], displaylogo: false
+          };
 
         let plot = document.getElementById("user_time_chart");
-        Plotly.newPlot('user_time_chart', plotlyJson, layout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
+        Plotly.newPlot('user_time_chart', plotlyJson,  layout, config);
         displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
+
+        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
     });
 }
 
@@ -44,17 +53,27 @@ function showEssidHistogram(param, givenFrom, givenUntil){
 function mostRetweetPie(param, givenFrom, givenUntil){
     generateCloudQuery(param["session"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
+            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
         };
 
+        var config = {
+            toImageButtonOptions: {
+              format: 'png', // one of png, svg, jpeg, webp
+              filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Retweets",
+              scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+            },
+            modeBarButtons: [[ "toImage" ]], displaylogo: false
+          };
 
 
         var plot = document.getElementById("retweets_cloud_chart");
-        Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
+        Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
 
+        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
     });
 }
@@ -62,16 +81,26 @@ function mostRetweetPie(param, givenFrom, givenUntil){
 function mostLikePie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
+            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
         };
 
+        var config = {
+            toImageButtonOptions: {
+              format: 'png', // one of png, svg, jpeg, webp
+              filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Likes",
+              scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+            },
+            modeBarButtons: [[ "toImage" ]], displaylogo: false
+          };
 
         let plot = document.getElementById("likes_cloud_chart");
-        Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout,{modeBarButtons: [[ "toImage" ]], displaylogo: false});
+        Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
 
+        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
     });
 }
@@ -80,15 +109,27 @@ function mostTweetPie(param, givenFrom, givenUntil){
     //Utilisateurs les actifs
     generateCloudQuery(param["session"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
+            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
         };
 
+        var config = {
+            toImageButtonOptions: {
+              format: 'png', // one of png, svg, jpeg, webp
+              filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Tweets",
+              scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+            },
+            modeBarButtons: [[ "toImage" ]], displaylogo: false
+          };
+
+
         var plot = document.getElementById("top_users_pie_chart");
-        Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, {modeBarButtons: [[ "toImage" ]], displaylogo: false});
+        Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
 
+        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
     });
 }
@@ -96,17 +137,23 @@ function mostTweetPie(param, givenFrom, givenUntil){
 function topHashtagPie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
+            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
         };
 
+        var config = {
+            toImageButtonOptions: {
+              format: 'png', // one of png, svg, jpeg, webp
+              filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Hashtags",
+              scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+            },
+            modeBarButtons: [[ "toImage" ]], displaylogo: false
+          };
 
         let plot = document.getElementById("hashtag_cloud_chart");
-        Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, {
-            modeBarButtons: [["toImage"]],
-            displaylogo: false
-        });
+        Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
         plot.on('plotly_click', data => {
             //  document.getElementById("twitterStats-search").value = data.points[0].label;
             // document.getElementById("twitterStats-Graphs").style.display = "none";
@@ -115,10 +162,13 @@ function topHashtagPie(param, givenFrom, givenUntil) {
 
         });
 
+
+        Array.from(document.getElementsByClassName("infolayer")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
 
-
     });
+
+
 }
 
 function urlArray(param, givenFrom, givenUntil){
@@ -242,7 +292,6 @@ function unrotateMainHashtag(search)
             let newTransform = "";
             translates.forEach(translate => newTransform += translate);
             slice.setAttribute("transform", newTransform);
-
         }
     })
 }

@@ -1,5 +1,5 @@
 import {generateGraphs} from "./twitterSnaGraphs.js";
-
+//import "html2pdf"
 /**
  * Javascript used by twitter service
  */
@@ -136,14 +136,14 @@ function submit_sna_form() {
         waitStatusDone(jsonResponse["session"])
         .then((param) =>
         {
-           // document.getElementById('exportButton').addEventListener('click', () => exportPDF('twitterStats-Graphs', search + '_' + from + '_' + until + '.pdf', 'l'));
-       
+         //   document.getElementById('exportButton').addEventListener('click', () => exportPDF('twitterStats-Graphs', param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
+            console.log(param);
             if (param == null) {
                 console.log("error : timeout, or invalid request");
                 alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
                 return;
             }
-            else if (param["statsu"] === "Error"){
+            else if (param["status"] === "Error"){
                 alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
                 return;
             }
@@ -194,13 +194,15 @@ function exportPDF(div, name)
     if(!$("#top_users_content").is(":visible"))
         $("#top_users_content").slideToggle();
 
-    let elt = document.getElementById(div);
+    let elt = document.getElementById('user_time_chart_title').innerHTML;
     var opt = {
         filename:     name,
         image:        { type: 'jpeg', quality: 1 },
         jsPDF:        { unit: 'in', format: 'a4', orientation: 'p'}
       };
-    html2pdf().set(opt).from(elt).save();
+
+      html2pdf(elt).save();
+     
 }
 
 
