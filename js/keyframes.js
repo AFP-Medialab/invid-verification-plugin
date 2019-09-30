@@ -159,14 +159,14 @@ function display_result(data, video_id)
 
 
 			// Keyframes of each scenes
-			for(keyframe in data.scenes[scene].keyframes) {
+			for(shot in data.scenes[scene].shots) {
 				let column = document.createElement("h2");
 				column.setAttribute("class", "column");
 				let a = document.createElement("a");
 				a.class = "mouse-preview";
 
 				let img = document.createElement("img");
-				img.src = data.scenes[scene].keyframes[keyframe].url + "?dl=0";
+				img.src = data.scenes[scene].shots[shot].keyframes[1].url + "?dl=0";
 				img.style = "width: 100%; height: auto; cursor:pointer; ";
 				img.onclick = function () {
 					// window.location.href = "/"+page_name+"?img="+this.src;
@@ -179,7 +179,6 @@ function display_result(data, video_id)
 			document.getElementById("Keyframe_simple_content").appendChild(scene_keyframe);
 
 			// shots of each scenes
-
 			let scene_detailed = document.createElement("div");
 			scene_detailed.setAttribute("id", "scene_detailed");
 			scene_detailed.setAttribute("class", "row");
