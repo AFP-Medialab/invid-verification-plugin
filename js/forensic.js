@@ -152,12 +152,12 @@ function create_card_slider(title, imgs, desc)
 		img_front.src = imgs[i];
 		img_front.id = "img_" + title + "_" + i;
 		var modal = document.createElement("div");
-		modal.setAttribute("class", "modal");
+		modal.setAttribute("class", "forensic-modal-class");
 		var close = document.createElement("span");
-		close.setAttribute("class", "close-modal");
+		close.setAttribute("class", "forensic-close-modal-class");
 		close.innerHTML = "&times;";
 		var img_modal = document.createElement("img");
-		img_modal.setAttribute("class", "modal-content");
+		img_modal.setAttribute("class", "forensic-modal-content-class");
 		img_modal.src = img_front.src;
 		if (i == 0) {
 			img_front.style.display = "";
