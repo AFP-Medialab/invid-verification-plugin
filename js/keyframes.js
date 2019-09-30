@@ -322,3 +322,22 @@ function callKeyframes(url)
 	document.getElementById("keyframes_input").value = url;
 	document.getElementById("keyframe_submit").click();
 }
+
+
+/**
+ * Toggle detail/Minimal view
+ */
+$(document).ready(function() {
+	$("#Keyframe_title").click(function () {
+		if ($("#Keyframe_datailed_content").is(":visible")) {
+			$("#Keyframe_datailed_content").hide();
+			$("#Keyframe_simple_content").show();
+			setInnerHtml("Keyframe_title", json_lang_translate[global_language]["keyframe_title_get_detail"]);
+		}
+		else {
+			$("#Keyframe_simple_content").hide();
+			$("#Keyframe_datailed_content").show();
+			setInnerHtml("Keyframe_title", json_lang_translate[global_language]["keyframe_title_get_simple"]);
+		}
+	});
+});

@@ -128,20 +128,6 @@ function update_keyframes(lang)
 
 	$("#Keyframe_datailed_content").hide();
 	setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_detail"]);
-	$(document).ready(function() {
-		$("#Keyframe_title").click(function () {
-			if ($("#Keyframe_datailed_content").is(":visible")) {
-				$("#Keyframe_datailed_content").hide();
-				$("#Keyframe_simple_content").show();
-				setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_detail"]);
-			}
-			else {
-				$("#Keyframe_simple_content").hide();
-				$("#Keyframe_datailed_content").show();
-				setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_simple"]);
-			}
-		});
-	});
 }
 
 /**
@@ -245,36 +231,13 @@ function update_twitter_sna(lang)
 
 
 	//Toggle views
-	customSlideToggle("user_time_chart_title","user_time", lang);
 	$("#tweetCounter_contents").hide();
-	customSlideToggle("tweetCounter_title","tweetCounter_contents", lang);
 	$("#most_retweeted").hide();
-	customSlideToggle("retweets_cloud_chart_title","most_retweeted", lang);
 	$("#most_liked").hide();
-	customSlideToggle("likes_cloud_chart_title","most_liked", lang);
 	$("#hashtag_cloud_chart_content").hide();
-	customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart_content", lang);
 	$("#top_users_content").hide();
-	customSlideToggle("top_users_pie_chart_title","top_users_content", lang);
 
 }
-
-/**
- * @func slide toggle for a div
- *
- */
-function customSlideToggle(button_id, div_to_toggle_id, lang) {
-	$(document).ready(function () {
-		$("#" + button_id).click(function () {
-			if ($("#" + div_to_toggle_id).is(":visible"))
-				setInnerHtml(button_id, "▼ " + json_lang_translate[lang][button_id]);
-			else
-				setInnerHtml(button_id, "▲ " + json_lang_translate[lang][button_id]);
-			$("#" + div_to_toggle_id).slideToggle(250);
-		});
-	});
-}
-
 
 
 /**
