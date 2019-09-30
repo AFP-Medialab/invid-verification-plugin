@@ -23,7 +23,7 @@ function getNbTweets(param, givenFrom, givenUntil){
 function showEssidHistogram(param, givenFrom, givenUntil){
     generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
         var layout = {
-            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
+            title: "<b>Propagation Timeline</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             xaxis: {
                 range: [givenFrom, givenUntil],
@@ -53,7 +53,7 @@ function showEssidHistogram(param, givenFrom, givenUntil){
 function mostRetweetPie(param, givenFrom, givenUntil){
     generateCloudQuery(param["session"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
-            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
+            title: "<b>Most retweeted users</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
@@ -81,7 +81,7 @@ function mostRetweetPie(param, givenFrom, givenUntil){
 function mostLikePie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
-            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
+            title: "<b>Most liked users</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
@@ -109,7 +109,7 @@ function mostTweetPie(param, givenFrom, givenUntil){
     //Utilisateurs les actifs
     generateCloudQuery(param["session"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
-            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
+            title:"<b>Most active users</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
@@ -137,7 +137,7 @@ function mostTweetPie(param, givenFrom, givenUntil){
 function topHashtagPie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
-            title: param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
+            title: "<b>Most associated hashtags</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
             width: 500,
             height: 500,
