@@ -128,20 +128,6 @@ function update_keyframes(lang)
 
 	$("#Keyframe_datailed_content").hide();
 	setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_detail"]);
-	$(document).ready(function() {
-		$("#Keyframe_title").click(function () {
-			if ($("#Keyframe_datailed_content").is(":visible")) {
-				$("#Keyframe_datailed_content").hide();
-				$("#Keyframe_simple_content").show();
-				setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_detail"]);
-			}
-			else {
-				$("#Keyframe_simple_content").hide();
-				$("#Keyframe_datailed_content").show();
-				setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_simple"]);
-			}
-		});
-	});
 }
 
 /**
