@@ -137,7 +137,7 @@ function submit_sna_form() {
         .then((param) =>
         {
            document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
-            console.log(param);
+
             if (param == null) {
                 console.log("error : timeout, or invalid request");
                 alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
@@ -153,11 +153,10 @@ function submit_sna_form() {
 
             $("#twitterStats-loader").css("display", "none");
             $("#twitterStats-Graphs").css("display", "block");
+
             $("#exportButton").css("display", "block");
 
-
             generateGraphs(param);
-
             if (document.getElementById("twitterStats-user").value != ""){
                 $("#retweets_chart_content").hide();
                 $("#likes_chart_content").hide();
@@ -177,24 +176,43 @@ function submit_sna_form() {
 */  
 var  
     form = $('#twitterStats-Graphs'),  
-    cache_width = document.getElementById("user_time_chart_content").style.width,  
-    a4 = [595.28, 841.89]; // for a4 size paper width and height  
+    cache_user_time_style = document.getElementById("user_time_chart_content").style,
+    cache_retweet_chart_style = document.getElementById("retweets_chart_content").style,
+    cache_like_chart_style = document.getElementById("likes_chart_content").style,
+    a4 = [210, 297], // for a4 size paper width and height  
+    time_img;
 
-    function exportPDF (name) {  
+    function exportPDF (name) { 
+        
+       time_img = Plotly.toImage(document.getElementById("user_time_chart"));
+       console.log(time_img);
+        $("#user_time_chart_content").css("width", a4[0]); 
+        Plotly.relayout('user_time_chart', {width: a4[0]});
         var buttons = document.getElementsByClassName("modebar-group");
         Array.from(buttons).forEach(button => button.style = "display: none");
+
+        var contents = document.getElementsByClassName("chart_content");
+        Array.from(contents).forEach(content => content.style = "width: 210mm; margin: 0")
         if(!$("#user_time").is(":visible"))
             $("#user_time").slideToggle();
         
-        if(!$("#hashtag_cloud_chart_content").is(":visible"))
-            $("#hashtag_cloud_chart_content").slideToggle();
-        
-        if(!$("#most_liked").is(":visible"))
-            $("#most_liked").slideToggle();
-    
+       // document.getElementById("retweets_chart_content").style = "";
+      //  $("#retweets_chart_content").css("height", a4[1]);
         if(!$("#most_retweeted").is(":visible"))
             $("#most_retweeted").slideToggle();
         
+
+       // $("#likes_chart_content").css("width", a4[0]);
+        if(!$("#most_liked").is(":visible"))
+            $("#most_liked").slideToggle();
+    
+
+      //  $("#hashtags_chart_content").css("width", a4[0]);
+        if(!$("#hashtag_cloud_chart_content").is(":visible"))
+            $("#hashtag_cloud_chart_content").slideToggle();
+        
+
+      //  $("#top_users_chart_content").css("width", a4[0]);
         if(!$("#top_users_content").is(":visible"))
             $("#top_users_content").slideToggle();
     
@@ -204,38 +222,49 @@ var
         //create pdf  
         function createPDF() {  
             var doc = new jsPDF({  
-                unit: 'px',  
+                unit: 'mm',  
                 format: 'a4'  
             });  
 
+            $("#exportButton").css("display", "none");
             $("#twitterStats-loader").css("display", "block");
-            getCanvas($('#user_time_chart_content'))
-            .then(canvas=> {  
-                let img = canvas.toDataURL("image/png");
-                doc.addImage(img, 'JPEG', 20, 20);
+                time_img.then(img => {
+                doc.addImage(img, 'JPEG', 10, 10);
+
+                }).finally(() => { 
                 getCanvas($("#retweets_chart_content")).then(canvas => {
                     let img = canvas.toDataURL("image/png");
-                    console.log("ADD PAGE TO doc");
                     doc.addPage();
-                    doc.addImage(img, 'JPEG', 20, 20);  
-                // form.width(cache_width);   
+                    doc.addImage(img, 'PNG', 0 , 10);
+                    getCanvas($("#retweets_chart_content")).then(canvas => {
+                        let img = canvas.toDataURL("image/png");
+                        doc.addPage();
+                        doc.addImage(img, 'PNG', 0 , 10);
+                        doc.deletePage(2);
+                    })
                     getCanvas($('#likes_chart_content')).then(canvas => {
                         let img = canvas.toDataURL("image/png");
                         doc.addPage();
-                        doc.addImage(img, 'JPEG', 20, 20);   
+                        doc.addImage(img, 'JPEG', 0 , 10);  
+                    }).finally(() => { 
                         getCanvas($("#hashtags_chart_content")).then(canvas => {
                             let img = canvas.toDataURL("image/png");
                             doc.addPage();
-                            doc.addImage(img, 'JPEG', 20, 20);   
+                            doc.addImage(img, 'JPEG', 0 , 10);
+                        }).finally(() => {  
                             getCanvas($("#top_users_chart_content")).then(canvas => {
                                 let img = canvas.toDataURL("image/png");
                                 doc.addPage();
-                                doc.addImage(img, 'JPEG', 20, 20);   
-                            })
-                            .finally(() => {
+                                doc.addImage(img, 'JPEG', 0, 10);   
+                            }).finally(() => {
+                                document.getElementById("retweets_chart_content").style = cache_retweet_chart_style; 
+                                document.getElementById("user_time_chart_content").style = cache_user_time_style;
+                                Plotly.relayout('user_time_chart', {width: cache_user_time_style.width});
+                                document.getElementById("likes_chart_content").style = cache_like_chart_style;
                                 doc.save(name);
                                 $("#twitterStats-loader").css("display", "none");
                             });
+                            
                         })
                     })
                 })
@@ -245,9 +274,11 @@ var
   
         // create canvas object  
         function getCanvas(form) {  
-            return html2canvas(form, {  
-                imageTimeout: 2000,  
-                removeContainer: true  
+            return html2canvas(form, {
+             //   height: a4[1],
+               // width: a4[0],
+                imageTimeout: 2000,
+                removeContainer: false
             });  
         }  
   

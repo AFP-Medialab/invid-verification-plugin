@@ -1081,6 +1081,8 @@ third-parties-menu div figure:hover{
 	border-radius:5px;
 	cursor:pointer;
 	font-size:20px;
+	width: 595.28px;
+	margin: auto;
 }
 
 #twitterStats-Graphs {

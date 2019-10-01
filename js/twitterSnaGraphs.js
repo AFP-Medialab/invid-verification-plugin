@@ -21,6 +21,7 @@ function getNbTweets(param, givenFrom, givenUntil){
 
 
 function showEssidHistogram(param, givenFrom, givenUntil){
+    var res =
     generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
@@ -38,15 +39,21 @@ function showEssidHistogram(param, givenFrom, givenUntil){
               filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Timeline",
               scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
-            modeBarButtons: [[ "toImage" ]], displaylogo: false
+
+            responsive: true,
+            modeBarButtons: [[ "toImage" ]],
+            displaylogo: false
           };
 
         let plot = document.getElementById("user_time_chart");
-        Plotly.newPlot('user_time_chart', plotlyJson,  layout, config);
+        let res_in = Plotly.react('user_time_chart', plotlyJson,  layout, config);
         displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+
+        return res_in;
     });
+    return res;
 }
 
 
@@ -182,13 +189,14 @@ export function generateGraphs(param){
     let givenFrom = document.getElementById("twitterStats-from-date").value;
     let givenUntil = document.getElementById("twitterStats-to-date").value;
 
-    showEssidHistogram(param, givenFrom, givenUntil);
+    var plot = showEssidHistogram(param, givenFrom, givenUntil);
     getNbTweets(param, givenFrom, givenUntil);
     mostRetweetPie(param, givenFrom, givenUntil);
     mostLikePie(param, givenFrom, givenUntil);
     mostTweetPie(param, givenFrom, givenUntil);
     topHashtagPie(param, givenFrom, givenUntil);
     urlArray(param, givenFrom, givenUntil);
+    return plot;
 }
 
 function displayTweetsOfDate(plot, place, button)
