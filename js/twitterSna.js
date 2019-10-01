@@ -153,6 +153,7 @@ function submit_sna_form() {
 
             $("#twitterStats-loader").css("display", "none");
             $("#twitterStats-Graphs").css("display", "block");
+            $("#exportButton").css("display", "block");
 
 
             generateGraphs(param);
@@ -207,7 +208,7 @@ var
                 $("#top_users_content").slideToggle();
         
             $('body').scrollTop(0);  
-            createPDF([$('#user_time_chart_content'), $("#retweets_chart_content")]);  
+            createPDF([, ]);  
       //  });  
         //create pdf  
         function createPDF(forms) {  
@@ -215,22 +216,39 @@ var
                 unit: 'px',  
                 format: 'a4'  
             });  
-            var i = 0;
-            getCanvas(forms[0]).then(function (canvas) {  
-                var  
-                 img = canvas.toDataURL("image/png"),
-                 img2;
-                 getCanvas(forms[1]).then(canva => {
-                     img2 = canva.toDataURL("image/png");
 
-                     doc.addImage(img, 'JPEG', 20, 20); 
+            $("#twitterStats-loader").css("display", "block");
+            getCanvas($('#user_time_chart_content'))
+            .then(canvas=> {  
+                let img = canvas.toDataURL("image/png");
+                doc.addImage(img, 'JPEG', 20, 20);
+                getCanvas($("#retweets_chart_content")).then(canvas => {
+                    let img = canvas.toDataURL("image/png");
+                    console.log("ADD PAGE TO doc");
                     doc.addPage();
-                    doc.addImage(img2, 'JPEG', 20, 20);  
-
-                    doc.save(name); 
+                    doc.addImage(img, 'JPEG', 20, 20);  
+                // form.width(cache_width);   
+                    getCanvas($('#likes_chart_content')).then(canvas => {
+                        let img = canvas.toDataURL("image/png");
+                        doc.addPage();
+                        doc.addImage(img, 'JPEG', 20, 20);   
+                        getCanvas($("#hashtags_chart_content")).then(canvas => {
+                            let img = canvas.toDataURL("image/png");
+                            doc.addPage();
+                            doc.addImage(img, 'JPEG', 20, 20);   
+                            getCanvas($("#top_users_chart_content")).then(canvas => {
+                                let img = canvas.toDataURL("image/png");
+                                doc.addPage();
+                                doc.addImage(img, 'JPEG', 20, 20);   
+                            })
+                            .finally(() => {
+                                doc.save(name);
+                                $("#twitterStats-loader").css("display", "none");
+                            });
+                        })
+                    })
+                })
             })
-               // form.width(cache_width);  
-            });   
 
         }  
   
