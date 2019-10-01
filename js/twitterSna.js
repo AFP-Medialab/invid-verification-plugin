@@ -125,7 +125,7 @@ function submit_sna_form() {
 
     $("#twitterStats-loader").css("display", "block");
 
-    let url = "http://localhost:8080/twitter-gateway/collect";
+    let url = "http://185.249.140.38/twitter-gateway/collect";
 
     let response = postRequest(jsonCollectRequest, url);
     if (response == null)
@@ -251,7 +251,7 @@ function getRequest(url)
 }
 
 async function waitStatusDone(session){
-    let url = "http://localhost:8080/twitter-gateway/status/" + session;
+    let url = "http://185.249.140.38/twitter-gateway/status/" + session;
     let res = null;
     let cpt = 2100;
     while (cpt > 0)
