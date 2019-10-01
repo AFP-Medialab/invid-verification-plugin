@@ -181,37 +181,28 @@ var
     a4 = [595.28, 841.89]; // for a4 size paper width and height  
 
     function exportPDF (name) {  
-      
-      //  $('#exportButton').on('click', function () {  
-            //document.getElementById("user_time_chart_content").style.height = a4[1];
-   
-            //sdocument.getElementById("user_time_chart_content").style.width = a4[0];
-            if(!$("#user_time").is(":visible"))
-                $("#user_time").slideToggle();
-           
-           // document.getElementById("hashtags_chart_content").style.height = "297mm";
-           // if(!$("#hashtag_cloud_chart_content").is(":visible"))
-                $("#hashtag_cloud_chart_content").slideToggle();
+        var buttons = document.getElementsByClassName("modebar-group");
+        Array.from(buttons).forEach(button => button.style = "display: none");
+        if(!$("#user_time").is(":visible"))
+            $("#user_time").slideToggle();
         
-           
-            //document.getElementById("likes_chart_content").style.height = "297mm";
-            if(!$("#most_liked").is(":visible"))
-                $("#most_liked").slideToggle();
+        if(!$("#hashtag_cloud_chart_content").is(":visible"))
+            $("#hashtag_cloud_chart_content").slideToggle();
         
-            
-          //  document.getElementById("retweets_chart_content").style.height = "297mm";
-            if(!$("#most_retweeted").is(":visible"))
-                $("#most_retweeted").slideToggle();
-          
-          //  document.getElementById("retweets_chart_content").style.height = "297mm";
-            if(!$("#top_users_content").is(":visible"))
-                $("#top_users_content").slideToggle();
+        if(!$("#most_liked").is(":visible"))
+            $("#most_liked").slideToggle();
+    
+        if(!$("#most_retweeted").is(":visible"))
+            $("#most_retweeted").slideToggle();
         
-            $('body').scrollTop(0);  
-            createPDF([, ]);  
+        if(!$("#top_users_content").is(":visible"))
+            $("#top_users_content").slideToggle();
+    
+        $('body').scrollTop(0);  
+        createPDF();  
       //  });  
         //create pdf  
-        function createPDF(forms) {  
+        function createPDF() {  
             var doc = new jsPDF({  
                 unit: 'px',  
                 format: 'a4'  
