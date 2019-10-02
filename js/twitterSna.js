@@ -179,11 +179,15 @@ var
     cache_user_time_style = document.getElementById("user_time_chart_content").style,
     cache_retweet_chart_style = document.getElementById("retweets_chart_content").style,
     cache_like_chart_style = document.getElementById("likes_chart_content").style,
+    cache_hashtag_chart_style = document.getElementById("hashtags_chart_content").style,
+    cache_top_user_chart_style = document.getElementById("top_users_chart_content").style,
     a4 = [210, 297], // for a4 size paper width and height  
     time_img;
 
     function exportPDF (name) { 
         
+        $("#exportButton").css("display", "none");
+        $("#twitterStats-loader").css("display", "block");
        time_img = Plotly.toImage(document.getElementById("user_time_chart"));
        console.log(time_img);
         $("#user_time_chart_content").css("width", a4[0]); 
@@ -226,8 +230,6 @@ var
                 format: 'a4'  
             });  
 
-            $("#exportButton").css("display", "none");
-            $("#twitterStats-loader").css("display", "block");
                 time_img.then(img => {
                 doc.addImage(img, 'JPEG', 10, 10);
 
@@ -259,9 +261,13 @@ var
                             }).finally(() => {
                                 document.getElementById("retweets_chart_content").style = cache_retweet_chart_style; 
                                 document.getElementById("user_time_chart_content").style = cache_user_time_style;
+                                document.getElementById("hashtags_chart_content").style = cache_hashtag_chart_style; 
+                                document.getElementById("top_users_chart_content").style = cache_top_user_chart_style; 
                                 Plotly.relayout('user_time_chart', {width: cache_user_time_style.width});
                                 document.getElementById("likes_chart_content").style = cache_like_chart_style;
-                                doc.save(name);
+                                doc.addPage();
+                                doc.autoTableHtmlToJson(document.getElementById("url_array"));
+                                
                                 $("#twitterStats-loader").css("display", "none");
                             });
                             
