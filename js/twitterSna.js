@@ -136,7 +136,7 @@ function submit_sna_form() {
         waitStatusDone(jsonResponse["session"])
         .then((param) =>
         {
-           document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
+          // document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
             console.log(param);
             if (param == null) {
                 console.log("error : timeout, or invalid request");
