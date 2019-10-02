@@ -371,7 +371,7 @@ export function generateURLArray(sessid, startDate, endDate) {
 
         array.forEach(row => {
             arrayStr += '<tr>' +
-                '<td><a href="' + row.url + '">' + row.url + '</a></td>' +
+                '<td><a href="' + row.url + '" target="_blank">' + row.url + '</a></td>' +
                 '<td>' + row.count + '</td></tr>';
         });
         arrayStr += '</table>';
