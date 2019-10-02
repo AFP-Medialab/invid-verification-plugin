@@ -21,7 +21,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
     };
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch('http://185.249.140.38/elk/twinttweets/_search', {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
@@ -104,7 +104,7 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
         }
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch('http://185.249.140.38/elk/twinttweets/_search', {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
@@ -165,7 +165,7 @@ export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endD
         }
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch('http://185.249.140.38/elk/twinttweets/_search', {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
@@ -233,7 +233,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
                 };
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch('http://185.249.140.38/elk/twinttweets/_search', {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
@@ -312,7 +312,7 @@ function getNbTweets(sessid, startDate, endDate) {
 
 export function generateTweetCount(session, startDate, endDate) {
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch('http://185.249.140.38/elk/twinttweets/_search', {
             method: 'POST',
             body: JSON.stringify(getNbTweets(session, startDate, endDate)),
             headers: {
@@ -350,7 +350,7 @@ export function generateURLArray(sessid, startDate, endDate) {
     };
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch('http://185.249.140.38/elk/twinttweets/_search', {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
