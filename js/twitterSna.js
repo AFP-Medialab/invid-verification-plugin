@@ -140,10 +140,12 @@ function submit_sna_form() {
                 if (param == null) {
                     console.log("error : timeout, or invalid request");
                     alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                    $("#twitterStats-loading").css("display", "none");
                     return;
                 }
                 else if (param["status"] === "Error") {
                     alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                    $("#twitterStats-loading").css("display", "none");
                     return;
                 }
                 else {
