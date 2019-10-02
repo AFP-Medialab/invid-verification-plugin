@@ -51,6 +51,7 @@ function showEssidHistogram(param, givenFrom, givenUntil){
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
 
+        $("#exportButton").css("display", "block");
         return res_in;
     });
     return res;
@@ -196,7 +197,6 @@ export function generateGraphs(param){
     mostTweetPie(param, givenFrom, givenUntil);
     topHashtagPie(param, givenFrom, givenUntil);
     urlArray(param, givenFrom, givenUntil);
-    return plot;
 }
 
 function displayTweetsOfDate(plot, place, button)

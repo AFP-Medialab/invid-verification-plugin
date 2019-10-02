@@ -154,9 +154,9 @@ function submit_sna_form() {
             $("#twitterStats-loader").css("display", "none");
             $("#twitterStats-Graphs").css("display", "block");
 
-            $("#exportButton").css("display", "block");
 
             generateGraphs(param);
+
             if (document.getElementById("twitterStats-user").value != ""){
                 $("#retweets_chart_content").hide();
                 $("#likes_chart_content").hide();
