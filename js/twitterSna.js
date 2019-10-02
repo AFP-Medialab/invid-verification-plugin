@@ -1,4 +1,6 @@
-import {generateGraphs} from "./twitterSnaGraphs.js";
+import { generateGraphs, getNbTweets } from "./twitterSnaGraphs.js";
+
+
 //import "html2pdf"
 /**
  * Javascript used by twitter service
@@ -9,16 +11,15 @@ import {generateGraphs} from "./twitterSnaGraphs.js";
 /**
  * @func Date is valid
  */
-function dateIsValide(d){
+function dateIsValide(d) {
     return d instanceof Date && isFinite(d);
 }
 
 /**
  * @func Dates are valid
  */
-function datesAreValid(from, until)
-{
-    let fromDate =  new Date(from);
+function datesAreValid(from, until) {
+    let fromDate = new Date(from);
     let untilDate = new Date(until);
     if (!dateIsValide(fromDate) || !dateIsValide(untilDate))
         return false;
@@ -39,8 +40,8 @@ function formToJsonCollectRequest() {
     document.getElementById('tweets_arr_user_time_place').innerHTML = "";
 
     let search = document.getElementById("twitterStats-search").value;
-    let search_and  = document.getElementById("twitterStats-search-and").value;
-    let search_or  = document.getElementById("twitterStats-search-or").value;
+    let search_and = document.getElementById("twitterStats-search-and").value;
+    let search_or = document.getElementById("twitterStats-search-or").value;
     let search_not = document.getElementById("twitterStats-search-not").value;
 
     let formLang = document.getElementById("twitterStats-lang").value;
@@ -58,8 +59,7 @@ function formToJsonCollectRequest() {
         return null;
     }
 
-    if (!datesAreValid(from, until))
-    {
+    if (!datesAreValid(from, until)) {
         alert(json_lang_translate[global_language]["DatesAreWrong"]);
         return null;
     }
@@ -76,9 +76,9 @@ function formToJsonCollectRequest() {
 
     let searchObj = {
         "search": search,
-        "and" : and_list,
-        "or" : or_list,
-        "not" : not_list
+        "and": and_list,
+        "or": or_list,
+        "not": not_list
     }
 
     let CollectRequest = {
@@ -91,7 +91,7 @@ function formToJsonCollectRequest() {
         "media": media,
         "retweetsHandling": retweetsHandling
     };
-    let res =  JSON.stringify(CollectRequest, (key, value) => {
+    let res = JSON.stringify(CollectRequest, (key, value) => {
         if (value !== null && value !== "")
             return value
     });
@@ -125,7 +125,7 @@ function submit_sna_form() {
 
     $("#twitterStats-loader").css("display", "block");
 
-    let url = "http://localhost:8080/twitter-gateway/collect";
+    let url = "http://185.249.140.38/twitter-gateway/collect";
 
     let response = postRequest(jsonCollectRequest, url);
     if (response == null)
@@ -134,46 +134,44 @@ function submit_sna_form() {
     response().then((jsonResponse) => {
 
         waitStatusDone(jsonResponse["session"])
-        .then((param) =>
-        {
-           document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
 
-            if (param == null) {
-                console.log("error : timeout, or invalid request");
-                alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
-                return;
-            }
-            else if (param["status"] === "Error"){
-                alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
-                return;
-            }
-            else{
-                console.log("Finished successfully")
-            }
+            .then((param) => {
+                 document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf'));
 
-            $("#twitterStats-loader").css("display", "none");
-            $("#twitterStats-Graphs").css("display", "block");
+                if (param == null) {
+                    console.log("error : timeout, or invalid request");
+                    alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                    $("#twitterStats-loading").css("display", "none");
+                    return;
+                }
+                else if (param["status"] === "Error") {
+                    alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                    $("#twitterStats-loading").css("display", "none");
+                    return;
+                }
+                else {
+                    console.log("Finished successfully")
+                }
+
+                $("#twitterStats-loader").css("display", "none");
+                $("#twitterStats-Graphs").css("display", "block");
 
 
-            generateGraphs(param);
-
-            if (document.getElementById("twitterStats-user").value != ""){
-                $("#retweets_chart_content").hide();
-                $("#likes_chart_content").hide();
-                $("#top_users_chart_content").hide();
-            }
-        });
+                generateGraphs(param);
+                let givenFrom = document.getElementById("twitterStats-from-date").value;
+                let givenUntil = document.getElementById("twitterStats-to-date").value;
+                getNbTweets(param, givenFrom, givenUntil);
+                if (document.getElementById("twitterStats-user").value != "") {
+                    $("#retweets_chart_content").hide();
+                    $("#likes_chart_content").hide();
+                    $("#top_users_chart_content").hide();
+                }
+            });
     });
 
 }
-  
-   /* let elt = document.getElementById(div).innerHTML;
-    var opt = {
-        filename:     name,
-        image:        { type: 'jpeg', quality: 1 },
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'p'}
-      };
-*/  
+
+
 var  
     form = $('#twitterStats-Graphs'),  
     cache_user_time_style = document.getElementById("user_time_chart_content").style,
@@ -189,7 +187,6 @@ var
         $("#exportButton").css("display", "none");
         $("#twitterStats-loader").css("display", "block");
        time_img = Plotly.toImage(document.getElementById("user_time_chart"));
-       console.log(time_img);
         $("#user_time_chart_content").css("width", a4[0]); 
         Plotly.relayout('user_time_chart', {width: a4[0]});
         var buttons = document.getElementsByClassName("modebar-group");
@@ -289,68 +286,69 @@ var
                 removeContainer: false
             });  
         }  
-  
+
+};
+
+(function ($) {
+    $.fn.html2canvas = function (options) {
+        var date = new Date(),
+            $message = null,
+            timeoutTimer = false,
+            timer = date.getTime();
+        html2canvas.logging = options && options.logging;
+        html2canvas.preload(this[0], $.extend({
+            complete: function (images) {
+                var queue = html2canvas.Parse(this[0], images, options),
+                    $canvas = $(html2canvas.Renderer(queue, options)),
+                    finishTime = new Date();
+
+                $canvas.css({ position: 'absolute', left: 0, top: 0 }).appendTo(document.body);
+                $canvas.siblings().toggle();
+
+                $(window).click(function () {
+                    if (!$canvas.is(':visible')) {
+                        $canvas.toggle().siblings().toggle();
+                        throwMessage("Canvas Render visible");
+                    } else {
+                        $canvas.siblings().toggle();
+                        $canvas.toggle();
+                        throwMessage("Canvas Render hidden");
+                    }
+                });
+                throwMessage('Screenshot created in ' + ((finishTime.getTime() - timer) / 1000) + " seconds<br />", 4000);
+            }
+        }, options));
+
+        function throwMessage(msg, duration) {
+            window.clearTimeout(timeoutTimer);
+            timeoutTimer = window.setTimeout(function () {
+                $message.fadeOut(function () {
+                    $message.remove();
+                });
+            }, duration || 2000);
+            if ($message)
+                $message.remove();
+            $message = $('<div ></div>').html(msg).css({
+                margin: 0,
+                padding: 10,
+                background: "#000",
+                opacity: 0.7,
+                position: "fixed",
+                top: 10,
+                right: 10,
+                fontFamily: 'Tahoma',
+                color: '#fff',
+                fontSize: 12,
+                borderRadius: 12,
+                width: 'auto',
+                height: 'auto',
+                textAlign: 'center',
+                textDecoration: 'none'
+            }).hide().fadeIn().appendTo('body');
+        }
     };
-    (function ($) {  
-        $.fn.html2canvas = function (options) {  
-            var date = new Date(),  
-            $message = null,  
-            timeoutTimer = false,  
-            timer = date.getTime();  
-            html2canvas.logging = options && options.logging;  
-            html2canvas.preload(this[0], $.extend({  
-                complete: function (images) {  
-                    var queue = html2canvas.Parse(this[0], images, options),  
-                    $canvas = $(html2canvas.Renderer(queue, options)),  
-                    finishTime = new Date();  
-  
-                    $canvas.css({ position: 'absolute', left: 0, top: 0 }).appendTo(document.body);  
-                    $canvas.siblings().toggle();  
-  
-                    $(window).click(function () {  
-                        if (!$canvas.is(':visible')) {  
-                            $canvas.toggle().siblings().toggle();  
-                            throwMessage("Canvas Render visible");  
-                        } else {  
-                            $canvas.siblings().toggle();  
-                            $canvas.toggle();  
-                            throwMessage("Canvas Render hidden");  
-                        }  
-                    });  
-                    throwMessage('Screenshot created in ' + ((finishTime.getTime() - timer) / 1000) + " seconds<br />", 4000);  
-                }  
-            }, options));  
-  
-            function throwMessage(msg, duration) {  
-                window.clearTimeout(timeoutTimer);  
-                timeoutTimer = window.setTimeout(function () {  
-                    $message.fadeOut(function () {  
-                        $message.remove();  
-                    });  
-                }, duration || 2000);  
-                if ($message)  
-                    $message.remove();  
-                $message = $('<div ></div>').html(msg).css({  
-                    margin: 0,  
-                    padding: 10,  
-                    background: "#000",  
-                    opacity: 0.7,  
-                    position: "fixed",  
-                    top: 10,  
-                    right: 10,  
-                    fontFamily: 'Tahoma',  
-                    color: '#fff',  
-                    fontSize: 12,  
-                    borderRadius: 12,  
-                    width: 'auto',  
-                    height: 'auto',  
-                    textAlign: 'center',  
-                    textDecoration: 'none'  
-                }).hide().fadeIn().appendTo('body');  
-            }  
-        };  
-    })(jQuery); 
-   //   printJS('user_time_chart', 'image');
+})(jQuery);
+//   printJS('user_time_chart', 'image');
 
 
 
@@ -359,8 +357,7 @@ var
  * @function make a Post request and wait for result
  *
  * */
-function postRequest(jsonRequest, url)
-{
+function postRequest(jsonRequest, url) {
     return async () => {
         const response = await
             fetch(url, {
@@ -383,8 +380,7 @@ function postRequest(jsonRequest, url)
  * @function make a Get request and wait for result
  *
  * */
-function getRequest(url)
-{
+function getRequest(url) {
     return async () => {
         const response = await
             fetch(url, {
@@ -398,22 +394,28 @@ function getRequest(url)
     };
 }
 
-async function waitStatusDone(session){
-    let url = "http://localhost:8080/twitter-gateway/status/" + session;
+async function waitStatusDone(session) {
+    let url = "http://185.249.140.38/twitter-gateway/status/" + session;
     let res = null;
     let cpt = 2100;
-    while (cpt > 0)
-    {
+    while (cpt > 0) {
         const response = getRequest(url);
         await response().then(json => {
-            if (json["status"] === "Done" || json["status"] === "Error")
-                res = json;
-            else if(json == null)
+            if (json == null)
                 return null;
+            else if (json["status"] === "Done" || json["status"] === "Error")
+                res = json;
+            else {
+
+                $("#twitterStats-Graphs").css("display", "block");
+                generateGraphs(json);
+                document.getElementById("tweetCounter_contents").innerHTML = "<br><br><b>Please wait while you request isn't finished"
+
+            }
         });
         if (res !== null)
             return res;
-        await delay(5000);
+        await delay(2000);
         cpt--;
     }
     return null;
@@ -436,26 +438,28 @@ if (form) {
 $(document).ready(function () {
     $("#twitterStats-from-date").datepicker({
         dateFormat: 'yy-mm-dd',
-        onSelect: function(dateText, inst) {
+        onSelect: function (dateText, inst) {
             let untilInput = document.getElementById("twitterStats-to-date");
             let untilDate = new Date(untilInput.value);
-            let newDate = new Date (dateText);
+            let newDate = new Date(dateText);
             if (untilInput.value != "" && newDate < untilDate)
                 return;
             newDate.setDate(newDate.getDate() + 1);
-            untilInput.value = newDate.toISOString().slice(0,10);
-        }});
+            untilInput.value = newDate.toISOString().slice(0, 10);
+        }
+    });
     $("#twitterStats-to-date").datepicker({
         dateFormat: 'yy-mm-dd',
-        onSelect: function(dateText, inst) {
+        onSelect: function (dateText, inst) {
             let fromInput = document.getElementById("twitterStats-from-date");
             let fromDate = new Date(fromInput.value);
-            let newDate = new Date (dateText);
+            let newDate = new Date(dateText);
             if (fromInput.value != "" && newDate > fromDate)
                 return;
             newDate.setDate(newDate.getDate() - 1);
-            fromInput.value = newDate.toISOString().slice(0,10);
-        }});
+            fromInput.value = newDate.toISOString().slice(0, 10);
+        }
+    });
 });
 
 /**
@@ -463,20 +467,20 @@ $(document).ready(function () {
  * Toggle functions for twitter sna features
  */
 function customSlideToggle(button_id, div_to_toggle_id, lang) {
-        $("#" + button_id).click(function () {
-            if ($("#" + div_to_toggle_id).is(":visible"))
-                setInnerHtml(button_id, "▼ " + json_lang_translate[lang][button_id]);
-            else
-                setInnerHtml(button_id, "▲ " + json_lang_translate[lang][button_id]);
-            $("#" + div_to_toggle_id).slideToggle(250);
-        });
+    $("#" + button_id).click(function () {
+        if ($("#" + div_to_toggle_id).is(":visible"))
+            setInnerHtml(button_id, "▼ " + json_lang_translate[lang][button_id]);
+        else
+            setInnerHtml(button_id, "▲ " + json_lang_translate[lang][button_id]);
+        $("#" + div_to_toggle_id).slideToggle(250);
+    });
 }
 
-$(document).ready(customSlideToggle("user_time_chart_title","user_time", global_language));
-$(document).ready(customSlideToggle("tweetCounter_title","tweetCounter_contents", global_language));
-$(document).ready(customSlideToggle("retweets_cloud_chart_title","most_retweeted", global_language));
-$(document).ready(customSlideToggle("likes_cloud_chart_title","most_liked", global_language));
-$(document).ready(customSlideToggle("hashtag_cloud_chart_title","hashtag_cloud_chart_content", global_language));
-$(document).ready(customSlideToggle("top_users_pie_chart_title","top_users_content", global_language));
+$(document).ready(customSlideToggle("user_time_chart_title", "user_time", global_language));
+$(document).ready(customSlideToggle("tweetCounter_title", "tweetCounter_contents", global_language));
+$(document).ready(customSlideToggle("retweets_cloud_chart_title", "most_retweeted", global_language));
+$(document).ready(customSlideToggle("likes_cloud_chart_title", "most_liked", global_language));
+$(document).ready(customSlideToggle("hashtag_cloud_chart_title", "hashtag_cloud_chart_content", global_language));
+$(document).ready(customSlideToggle("top_users_pie_chart_title", "top_users_content", global_language));
 
 

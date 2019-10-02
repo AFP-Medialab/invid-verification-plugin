@@ -1,5 +1,6 @@
 var json = {};
 
+var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
 //var sessid = "sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc"
 export function generatePieChartQuery(sessid, startDate, endDate) {
     let chartInfo = {
@@ -21,7 +22,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
     };
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
@@ -57,6 +58,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
     }
     return (userAction());
 }
+
 
 export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate, colors) {
 
@@ -104,7 +106,7 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
         }
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
@@ -113,13 +115,16 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
             } //*/
         });
         const myJson = await response.json();
-
-        if (myJson !== null)
+       
+        if (myJson["error"] === undefined)
+        {
             if (retweets)
                 return getPlotlyJsonHisto(myJson, retweetsGet);
             else
                 return getPlotlyJsonHisto(myJson, usersGet);
-
+        }
+        else
+            window.alert("There was a problem calling elastic search");
     }
     return userAction();
 }
@@ -165,7 +170,7 @@ export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endD
         }
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
@@ -233,7 +238,7 @@ export function generateCloudQuery(sessid, field, startDate, endDate, mainKey) {
                 };
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
@@ -312,7 +317,7 @@ function getNbTweets(sessid, startDate, endDate) {
 
 export function generateTweetCount(session, startDate, endDate) {
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body: JSON.stringify(getNbTweets(session, startDate, endDate)),
             headers: {
@@ -350,7 +355,7 @@ export function generateURLArray(sessid, startDate, endDate) {
     };
 
     const userAction = async () => {
-        const response = await fetch('http:localhost:9200/twinttweets/_search', {
+        const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
                 JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
@@ -494,11 +499,13 @@ function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
     var parents = [];
     var value = [];
 
+    
     let keys = json["aggregations"]["2"]["buckets"];
 
+    if (keys.length === 0)
+        return null;
     let mainKey = keys[0];
 
-    console.log(keys);
     if (mainKey["key"].charAt(0) === '#') {
         labels.push(mainKey["key"]);
         keys.shift();
