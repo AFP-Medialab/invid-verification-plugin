@@ -77,7 +77,7 @@ function mostRetweetPie(param, givenFrom, givenUntil){
 
 
         var plot = document.getElementById("retweets_cloud_chart");
-        Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
@@ -104,7 +104,7 @@ function mostLikePie(param, givenFrom, givenUntil) {
           };
 
         let plot = document.getElementById("likes_cloud_chart");
-        Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('likes_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
@@ -133,7 +133,7 @@ function mostTweetPie(param, givenFrom, givenUntil){
 
 
         var plot = document.getElementById("top_users_pie_chart");
-        Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('top_users_pie_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
@@ -160,7 +160,7 @@ function topHashtagPie(param, givenFrom, givenUntil) {
           };
 
         let plot = document.getElementById("hashtag_cloud_chart");
-        Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
         plot.on('plotly_click', data => {
             //  document.getElementById("twitterStats-search").value = data.points[0].label;
             // document.getElementById("twitterStats-Graphs").style.display = "none";

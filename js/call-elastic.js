@@ -363,7 +363,7 @@ export function generateURLArray(sessid, startDate, endDate) {
 
         let array = getURLArray(myJson);
 
-        let arrayStr = '<table>' +
+        let arrayStr = '<table id="url_table">' +
             '<tr>' +
             '<td>url</td>' +
             '<td>count</td>' +
@@ -498,6 +498,7 @@ function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
 
     let mainKey = keys[0];
 
+    console.log(keys);
     if (mainKey["key"].charAt(0) === '#') {
         labels.push(mainKey["key"]);
         keys.shift();

@@ -266,8 +266,10 @@ var
                                 Plotly.relayout('user_time_chart', {width: cache_user_time_style.width});
                                 document.getElementById("likes_chart_content").style = cache_like_chart_style;
                                 doc.addPage();
-                                doc.autoTableHtmlToJson(document.getElementById("url_array"));
-                                
+                                let res = doc.autoTableHtmlToJson(document.getElementById("url_table"));
+
+                                doc.autoTable(res.columns, res.data, {margin: {top: 8}});
+                                doc.save(name);
                                 $("#twitterStats-loader").css("display", "none");
                             });
                             
