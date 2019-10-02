@@ -540,7 +540,7 @@ home_tutorial_display	1	1	1
 lang_code	EN	FR	ES
 lang_label	English	Français	Español
 twitterStatsErrorMessage2	Keyword, Since or Until dates are empty	Mot clé, Depuis ou jusqu'à non précisé	Los campos Palabra clave, Desde o Hasta estén vacíos
-twitter_sna_title	Twitter Social network analysis	Analyse des réseaux sociaux sur Twitter	Twitter Análisis de redes sociales
+twitter_sna_title	Twitter Social network analysis	Analyse du réseau social Twitter	Análisis del red social Twitter
 twitter_sna_local_time	Local time	Heure locale	Hora local
 twitter_sna_gmt	GMT	GMT	GMT
 twitter_sna_search	＊Keyword or #	＊Mot clé ou #	＊Palabra clave o #
