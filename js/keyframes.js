@@ -160,21 +160,23 @@ function display_result(data, video_id)
 
 			// Keyframes of each scenes
 			for(shot in data.scenes[scene].shots) {
-				let column = document.createElement("h2");
-				column.setAttribute("class", "column");
-				let a = document.createElement("a");
-				a.class = "mouse-preview";
+				for (image in data.scenes[scene].shots[shot].keyframes) {
+					let column = document.createElement("div");
+					column.setAttribute("class", "column");
+					let a = document.createElement("a");
+					a.class = "mouse-preview";
 
-				let img = document.createElement("img");
-				img.src = data.scenes[scene].shots[shot].keyframes[1].url + "?dl=0";
-				img.style = "width: 100%; height: auto; cursor:pointer; ";
-				img.onclick = function () {
-					// window.location.href = "/"+page_name+"?img="+this.src;
-					reverseImgSearch('google', this.src);
-				};
-				a.appendChild(img);
-				column.appendChild(a);
-				scene_keyframe.appendChild(column);
+					let img = document.createElement("img");
+					img.src = data.scenes[scene].shots[shot].keyframes[image].url + "?dl=0";
+					img.style = "width: 100%; height: auto; cursor:pointer; ";
+					img.onclick = function () {
+						// window.location.href = "/"+page_name+"?img="+this.src;
+						reverseImgSearch('google', this.src);
+					};
+					a.appendChild(img);
+					column.appendChild(a);
+					scene_keyframe.appendChild(column);
+				}
 			}
 			document.getElementById("Keyframe_simple_content").appendChild(scene_keyframe);
 
@@ -193,22 +195,23 @@ function display_result(data, video_id)
 			}
 
 			for (shot in data.scenes[scene].shots) {
-				for (image in data.scenes[scene].shots[shot].keyframes) {
-					let column = document.createElement("div");
-					column.setAttribute("class", "column");
-					let a = document.createElement("a");
-					a.class = "mouse-preview";
-
-					let img = document.createElement("img");
-					img.src = data.scenes[scene].shots[shot].keyframes[image].url + "?dl=0";
-					img.style = "width: 100%; height: auto; cursor:pointer; ";
-					img.onclick = function () {
-						// window.location.href = "/"+page_name+"?img="+this.src;
-						reverseImgSearch('google', this.src);
-					};
-					a.appendChild(img);
-					column.appendChild(a);
-					scene_detailed.appendChild(column);
+				for (subshot in data.scenes[scene].shots[shot].subshots) {
+					for (image in data.scenes[scene].shots[shot].subshots[subshot].keyframes) {
+						let column = document.createElement("div");
+						column.setAttribute("class", "column");
+						let a = document.createElement("a");
+						a.class = "mouse-preview";
+						let img = document.createElement("img");
+						img.src = data.scenes[scene].shots[shot].subshots[subshot].keyframes[image].url + "?dl=0";
+						img.style = "width: 100%; height: auto; cursor:pointer; ";
+						img.onclick = function () {
+							// window.location.href = "/"+page_name+"?img="+this.src;
+							reverseImgSearch('google', this.src);
+						};
+						a.appendChild(img);
+						column.appendChild(a);
+						scene_detailed.appendChild(column);
+					}
 				}
 			}
 			document.getElementById("Keyframe_datailed_content").appendChild(scene_detailed);
