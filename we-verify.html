@@ -585,13 +585,15 @@
                             <br>
                             <br>
                             <input type="submit" value="Submit" class="button" id="submitSna"/>
+                            <br><br><br>
+
+                            <input id="exportButton" type="button" class="button" value="Export" style="display: none; margin: auto"></input> 
                             <br>
                             <div id="twitterStats-loader" class="loader"></div>
                             <br>
-                            <!--	<input id="exportButton" type="button" class="button" value="export"></input> -->
                             <div id="twitterStats-Graphs" style="display: none;">
 
-                                <div id="user_time_chart_content" class="chart_content">
+                                <div id="user_time_chart_content" class="chart_content" style="margin: auto">
                                     <div id="user_time_chart_title" class="title_custom"></div>
 
 
@@ -610,7 +612,7 @@
                                     <div id="tweetCounter_contents"></div>
                                 </div>
                                 <br>
-                                <div id='retweets_chart_content' class="chart_content">
+                                <div id='retweets_chart_content' class="chart_content" style="margin: 0 auto">
                                     <div id="retweets_cloud_chart_title" class="title_custom"></div>
                                     <div id="most_retweeted">
                                         <div id="retweets_cloud_chart"></div>
@@ -621,7 +623,7 @@
                                     </div>
                                     <br>
                                 </div>
-                                <div id='likes_chart_content' class="chart_content">
+                                <div id='likes_chart_content' class="chart_content" style="margin: 0 auto">
                                     <div id="likes_cloud_chart_title" class="title_custom"></div>
                                     <div id="most_liked">
                                         <div id="likes_cloud_chart"></div>
@@ -633,7 +635,7 @@
                                     <br>
                                 </div>
 
-                                <div id='hashtags_chart_content' class="chart_content">
+                                <div id='hashtags_chart_content' class="chart_content" style="margin: 0 auto">
 
                                     <div id="hashtag_cloud_chart_title" class="title_custom"></div>
                                     <div id="hashtag_cloud_chart_content">
@@ -641,7 +643,7 @@
                                     </div>
                                     <br>
                                 </div>
-                                <div id='top_users_chart_content' class="chart_content">
+                                <div id='top_users_chart_content' class="chart_content" style="margin: 0 auto">
                                     <div id="top_users_pie_chart_title" class="title_custom"></div>
                                     <div id="top_users_content">
                                         <div id="top_users"></div>
@@ -1094,7 +1096,7 @@
 <script type="module" src="js/call-elastic.js"></script>
 <script type="module" src="js/twitterSnaGraphs.js"></script>
 <script type="module" src="js/twitterSna.js"></script>
-<script src="Print.js-1.0.61/print.min.js"></script>
+//<script src="Print.js-1.0.61/print.min.js"></script>
 <!-- For feedback -->
 <script src="js/jquery.feedback_me.js"></script>
 <!-- For google analysis -->
@@ -1106,6 +1108,7 @@
 
 
 <!--<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> 
+<script src="js/jspdf.min.js"></script> 
+<script src="js/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>

@@ -20,8 +20,7 @@ export function getNbTweets(param, givenFrom, givenUntil){
     })
 }
 
-
-export function showEssidHistogram(param, givenFrom, givenUntil){
+function showEssidHistogram(param, givenFrom, givenUntil){
     generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
@@ -39,7 +38,10 @@ export function showEssidHistogram(param, givenFrom, givenUntil){
               filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Timeline",
               scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
-            modeBarButtons: [[ "toImage" ]], displaylogo: false
+
+            responsive: true,
+            modeBarButtons: [[ "toImage" ]],
+            displaylogo: false
           };
 
           if (plotlyJson.length !== 0)
@@ -51,6 +53,8 @@ export function showEssidHistogram(param, givenFrom, givenUntil){
           }
        
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+
+        $("#exportButton").css("display", "block");
     });
 }
 
@@ -75,7 +79,7 @@ export function mostRetweetPie(param, givenFrom, givenUntil){
 
 
         var plot = document.getElementById("retweets_cloud_chart");
-        Plotly.newPlot('retweets_cloud_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
@@ -102,7 +106,7 @@ export function mostLikePie(param, givenFrom, givenUntil) {
           };
 
         let plot = document.getElementById("likes_cloud_chart");
-        Plotly.newPlot('likes_cloud_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('likes_cloud_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
@@ -131,7 +135,7 @@ export function mostTweetPie(param, givenFrom, givenUntil){
 
 
         var plot = document.getElementById("top_users_pie_chart");
-        Plotly.newPlot('top_users_pie_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('top_users_pie_chart', plotlyJson, cloudlayout, config);
         displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
@@ -158,7 +162,7 @@ export function topHashtagPie(param, givenFrom, givenUntil) {
           };
 
         let plot = document.getElementById("hashtag_cloud_chart");
-        Plotly.newPlot('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
+        Plotly.react('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
         plot.on('plotly_click', data => {
             //  document.getElementById("twitterStats-search").value = data.points[0].label;
             // document.getElementById("twitterStats-Graphs").style.display = "none";
@@ -217,8 +221,6 @@ function displayTweetsOfDate(plot, place, button)
                 {
                     var pointDate = new Date(point.x);
                     var objDate = new Date(tweetObj._source.date);
-                    console.log(pointDate);
-                    console.log(objDate);
                     if ((((pointDate.getDate() === objDate.getDate()
                         && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() +2)))
                         || (pointDate.getDate() === objDate.getDate() +1 && objDate.getHours() >= 22 && pointDate.getHours() <= 2))

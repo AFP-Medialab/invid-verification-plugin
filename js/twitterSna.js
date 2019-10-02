@@ -1,4 +1,4 @@
-import { generateGraphs, showEssidHistogram, getNbTweets, mostRetweetPie, mostLikePie, mostTweetPie, topHashtagPie, urlArray } from "./twitterSnaGraphs.js";
+import { generateGraphs, getNbTweets } from "./twitterSnaGraphs.js";
 
 
 //import "html2pdf"
@@ -134,8 +134,9 @@ function submit_sna_form() {
     response().then((jsonResponse) => {
 
         waitStatusDone(jsonResponse["session"])
+
             .then((param) => {
-                // document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf', 'l'));
+                 document.getElementById('exportButton').addEventListener('click', () => exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf'));
 
                 if (param == null) {
                     console.log("error : timeout, or invalid request");
@@ -170,82 +171,124 @@ function submit_sna_form() {
 
 }
 
-/* let elt = document.getElementById(div).innerHTML;
- var opt = {
-     filename:     name,
-     image:        { type: 'jpeg', quality: 1 },
-     jsPDF:        { unit: 'in', format: 'a4', orientation: 'p'}
-   };
-*/
-var
-    form = $('#twitterStats-Graphs'),
-    cache_width = document.getElementById("user_time_chart_content").style.width,
-    a4 = [595.28, 841.89]; // for a4 size paper width and height  
 
-function exportPDF(name) {
+var  
+    form = $('#twitterStats-Graphs'),  
+    cache_user_time_style = document.getElementById("user_time_chart_content").style,
+    cache_retweet_chart_style = document.getElementById("retweets_chart_content").style,
+    cache_like_chart_style = document.getElementById("likes_chart_content").style,
+    cache_hashtag_chart_style = document.getElementById("hashtags_chart_content").style,
+    cache_top_user_chart_style = document.getElementById("top_users_chart_content").style,
+    a4 = [210, 297], // for a4 size paper width and height  
+    time_img;
 
-    //  $('#exportButton').on('click', function () {  
-    //document.getElementById("user_time_chart_content").style.height = a4[1];
+    function exportPDF (name) { 
+        
+        $("#exportButton").css("display", "none");
+        $("#twitterStats-loader").css("display", "block");
+       time_img = Plotly.toImage(document.getElementById("user_time_chart"));
+        $("#user_time_chart_content").css("width", a4[0]); 
+        Plotly.relayout('user_time_chart', {width: a4[0]});
+        var buttons = document.getElementsByClassName("modebar-group");
+        Array.from(buttons).forEach(button => button.style = "display: none");
 
-    //sdocument.getElementById("user_time_chart_content").style.width = a4[0];
-    if (!$("#user_time").is(":visible"))
-        $("#user_time").slideToggle();
+        var contents = document.getElementsByClassName("chart_content");
+        Array.from(contents).forEach(content => content.style = "width: 210mm; margin: 0")
+        if(!$("#user_time").is(":visible"))
+            $("#user_time").slideToggle();
+        
+       // document.getElementById("retweets_chart_content").style = "";
+      //  $("#retweets_chart_content").css("height", a4[1]);
+        if(!$("#most_retweeted").is(":visible"))
+            $("#most_retweeted").slideToggle();
+        
 
-    // document.getElementById("hashtags_chart_content").style.height = "297mm";
-    // if(!$("#hashtag_cloud_chart_content").is(":visible"))
-    $("#hashtag_cloud_chart_content").slideToggle();
+       // $("#likes_chart_content").css("width", a4[0]);
+        if(!$("#most_liked").is(":visible"))
+            $("#most_liked").slideToggle();
+    
 
+      //  $("#hashtags_chart_content").css("width", a4[0]);
+        if(!$("#hashtag_cloud_chart_content").is(":visible"))
+            $("#hashtag_cloud_chart_content").slideToggle();
+        
 
-    //document.getElementById("likes_chart_content").style.height = "297mm";
-    if (!$("#most_liked").is(":visible"))
-        $("#most_liked").slideToggle();
+      //  $("#top_users_chart_content").css("width", a4[0]);
+        if(!$("#top_users_content").is(":visible"))
+            $("#top_users_content").slideToggle();
+    
+        $('body').scrollTop(0);  
+        createPDF();  
+      //  });  
+        //create pdf  
+        function createPDF() {  
+            var doc = new jsPDF({  
+                unit: 'mm',  
+                format: 'a4'  
+            });  
 
+                time_img.then(img => {
+                doc.addImage(img, 'JPEG', 10, 10);
 
-    //  document.getElementById("retweets_chart_content").style.height = "297mm";
-    if (!$("#most_retweeted").is(":visible"))
-        $("#most_retweeted").slideToggle();
+                }).finally(() => { 
+                getCanvas($("#retweets_chart_content")).then(canvas => {
+                    let img = canvas.toDataURL("image/png");
+                    doc.addPage();
+                    doc.addImage(img, 'PNG', 0 , 10);
+                    getCanvas($("#retweets_chart_content")).then(canvas => {
+                        let img = canvas.toDataURL("image/png");
+                        doc.addPage();
+                        doc.addImage(img, 'PNG', 0 , 10);
+                        doc.deletePage(2);
+                    })
+                    getCanvas($('#likes_chart_content')).then(canvas => {
+                        let img = canvas.toDataURL("image/png");
+                        doc.addPage();
+                        doc.addImage(img, 'JPEG', 0 , 10);  
+                    }).finally(() => { 
+                        getCanvas($("#hashtags_chart_content")).then(canvas => {
+                            let img = canvas.toDataURL("image/png");
+                            doc.addPage();
+                            doc.addImage(img, 'JPEG', 0 , 10);
+                        }).finally(() => {  
+                            getCanvas($("#top_users_chart_content")).then(canvas => {
+                                let img = canvas.toDataURL("image/png");
+                                doc.addPage();
+                                doc.addImage(img, 'JPEG', 0, 10);   
+                            }).finally(() => {
+                                document.getElementById("retweets_chart_content").style = cache_retweet_chart_style; 
+                                document.getElementById("user_time_chart_content").style = cache_user_time_style;
+                                document.getElementById("hashtags_chart_content").style = cache_hashtag_chart_style; 
+                                document.getElementById("top_users_chart_content").style = cache_top_user_chart_style; 
+                                Plotly.relayout('user_time_chart', {width: cache_user_time_style.width});
+                                document.getElementById("likes_chart_content").style = cache_like_chart_style;
+                                doc.addPage();
+                                let res = doc.autoTableHtmlToJson(document.getElementById("url_table"));
 
-    //  document.getElementById("retweets_chart_content").style.height = "297mm";
-    if (!$("#top_users_content").is(":visible"))
-        $("#top_users_content").slideToggle();
-
-    $('body').scrollTop(0);
-    createPDF([$('#user_time_chart_content'), $("#retweets_chart_content")]);
-    //  });  
-    //create pdf  
-    function createPDF(forms) {
-        var doc = new jsPDF({
-            unit: 'px',
-            format: 'a4'
-        });
-        var i = 0;
-        getCanvas(forms[0]).then(function (canvas) {
-            var
-                img = canvas.toDataURL("image/png"),
-                img2;
-            getCanvas(forms[1]).then(canva => {
-                img2 = canva.toDataURL("image/png");
-
-                doc.addImage(img, 'JPEG', 20, 20);
-                doc.addPage();
-                doc.addImage(img2, 'JPEG', 20, 20);
-
-                doc.save(name);
+                                doc.autoTable(res.columns, res.data, {margin: {top: 8}});
+                                doc.save(name);
+                                $("#twitterStats-loader").css("display", "none");
+                            });
+                            
+                        })
+                    })
+                })
             })
-            // form.width(cache_width);  
-        });
 
-    }
-
-    // create canvas object  
-    function getCanvas(form) {
-        return html2canvas(form, {
-            imageTimeout: 2000,
-            removeContainer: true
-        });
-    }
+        }  
+  
+        // create canvas object  
+        function getCanvas(form) {  
+            return html2canvas(form, {
+             //   height: a4[1],
+               // width: a4[0],
+                imageTimeout: 2000,
+                removeContainer: false
+            });  
+        }  
 
 };
+
 (function ($) {
     $.fn.html2canvas = function (options) {
         var date = new Date(),

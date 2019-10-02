@@ -115,7 +115,6 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
             } //*/
         });
         const myJson = await response.json();
-       // console.log(myJson)
        
         if (myJson["error"] === undefined)
         {
@@ -369,7 +368,7 @@ export function generateURLArray(sessid, startDate, endDate) {
 
         let array = getURLArray(myJson);
 
-        let arrayStr = '<table>' +
+        let arrayStr = '<table id="url_table">' +
             '<tr>' +
             '<td>url</td>' +
             '<td>count</td>' +
@@ -377,7 +376,7 @@ export function generateURLArray(sessid, startDate, endDate) {
 
         array.forEach(row => {
             arrayStr += '<tr>' +
-                '<td><a href="' + row.url + '">' + row.url + '</a></td>' +
+                '<td><a href="' + row.url + '" target="_blank">' + row.url + '</a></td>' +
                 '<td>' + row.count + '</td></tr>';
         });
         arrayStr += '</table>';
