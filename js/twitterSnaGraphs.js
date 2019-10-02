@@ -1,8 +1,9 @@
 import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray, getTweets, generateTweetCount} from './call-elastic.js';
 
 
-function getNbTweets(param, givenFrom, givenUntil){
+export function getNbTweets(param, givenFrom, givenUntil){
     generateTweetCount(param["session"], givenFrom,givenUntil).then(res => {
+        document.getElementById("tweetCounter_contents").innerHTML = "";
         let counter = document.createElement("div");
         counter.setAttribute("id", "counter_number");
         let nb_text = document.createTextNode(res.value);
@@ -20,7 +21,7 @@ function getNbTweets(param, givenFrom, givenUntil){
 }
 
 
-function showEssidHistogram(param, givenFrom, givenUntil){
+export function showEssidHistogram(param, givenFrom, givenUntil){
     generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
@@ -41,16 +42,20 @@ function showEssidHistogram(param, givenFrom, givenUntil){
             modeBarButtons: [[ "toImage" ]], displaylogo: false
           };
 
-        let plot = document.getElementById("user_time_chart");
-        Plotly.newPlot('user_time_chart', plotlyJson,  layout, config);
-        displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
+          if (plotlyJson.length !== 0)
+          {
+                let plot = document.getElementById("user_time_chart");
+                Plotly.newPlot('user_time_chart', plotlyJson,  layout, config);
+                displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
 
+          }
+       
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
     });
 }
 
 
-function mostRetweetPie(param, givenFrom, givenUntil){
+export function mostRetweetPie(param, givenFrom, givenUntil){
     generateCloudQuery(param["session"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
             title: "<b>Most retweeted users</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
@@ -78,7 +83,7 @@ function mostRetweetPie(param, givenFrom, givenUntil){
     });
 }
 
-function mostLikePie(param, givenFrom, givenUntil) {
+export function mostLikePie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most liked users</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
@@ -105,7 +110,7 @@ function mostLikePie(param, givenFrom, givenUntil) {
     });
 }
 
-function mostTweetPie(param, givenFrom, givenUntil){
+export function mostTweetPie(param, givenFrom, givenUntil){
     //Utilisateurs les actifs
     generateCloudQuery(param["session"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
@@ -134,7 +139,7 @@ function mostTweetPie(param, givenFrom, givenUntil){
     });
 }
 
-function topHashtagPie(param, givenFrom, givenUntil) {
+export function topHashtagPie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most associated hashtags</b><br>" + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
@@ -171,7 +176,7 @@ function topHashtagPie(param, givenFrom, givenUntil) {
 
 }
 
-function urlArray(param, givenFrom, givenUntil){
+export function urlArray(param, givenFrom, givenUntil){
     generateURLArray(param["session"], givenFrom, givenUntil).then(arrayStr => {
         document.getElementById('url_array').innerHTML = arrayStr;
     });
@@ -183,7 +188,7 @@ export function generateGraphs(param){
     let givenUntil = document.getElementById("twitterStats-to-date").value;
 
     showEssidHistogram(param, givenFrom, givenUntil);
-    getNbTweets(param, givenFrom, givenUntil);
+   // getNbTweets(param, givenFrom, givenUntil);
     mostRetweetPie(param, givenFrom, givenUntil);
     mostLikePie(param, givenFrom, givenUntil);
     mostTweetPie(param, givenFrom, givenUntil);

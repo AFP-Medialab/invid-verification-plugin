@@ -59,6 +59,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
     return (userAction());
 }
 
+
 export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate, colors) {
 
     let matchPhrase =
@@ -114,13 +115,17 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
             } //*/
         });
         const myJson = await response.json();
-
-        if (myJson !== null)
+       // console.log(myJson)
+       
+        if (myJson["error"] === undefined)
+        {
             if (retweets)
                 return getPlotlyJsonHisto(myJson, retweetsGet);
             else
                 return getPlotlyJsonHisto(myJson, usersGet);
-
+        }
+        else
+            window.alert("There was a problem calling elastic search");
     }
     return userAction();
 }
@@ -495,8 +500,11 @@ function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
     var parents = [];
     var value = [];
 
+    
     let keys = json["aggregations"]["2"]["buckets"];
 
+    if (keys.length === 0)
+        return null;
     let mainKey = keys[0];
 
     if (mainKey["key"].charAt(0) === '#') {
