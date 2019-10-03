@@ -3,7 +3,7 @@ import { generateGraphs, getNbTweets } from "./twitterSnaGraphs.js";
 var collect_url = "http://185.249.140.38/twitter-gateway/collect";
 var status_url = "http://185.249.140.38/twitter-gateway/status/";
 
-let dev = true;
+let dev = false;
 if (dev) {
     collect_url = "http://localhost:8080/twitter-gateway/collect";
     status_url = "http://localhost:8080/twitter-gateway/status/"
@@ -144,7 +144,10 @@ function submit_sna_form() {
 
             .then((param) => {
                 if (isFirst)
-                    document.getElementById('exportButton').addEventListener('click', () => { exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf'); isFirst = false});
+                    document.getElementById('exportButton').addEventListener('click', () => {
+                        exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
+                        isFirst = false
+                    });
 
                 if (param == null) {
                     console.log("error : timeout, or invalid request");
@@ -169,14 +172,14 @@ function submit_sna_form() {
                 let givenFrom = document.getElementById("twitterStats-from-date").value;
                 let givenUntil = document.getElementById("twitterStats-to-date").value;
                 getNbTweets(param, givenFrom, givenUntil);
-                
+
                 if (document.getElementById("twitterStats-user").value != "") {
                     $("#retweets_chart_content").hide();
                     $("#likes_chart_content").hide();
                     $("#top_users_chart_content").hide();
                 }
-                
-                (async() => { await delay(2000); $("#exportButton").css("display", "block");})();
+
+                (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
             });
     });
 
@@ -185,92 +188,86 @@ function submit_sna_form() {
 
 var cache_user_time_style = document.getElementById("user_time").style;
 var cache_user_chart_width = $("#user_time_chart").width;
-    function exportPDF () { 
-        
-        $("#exportButton").css("display", "none");
-        $("#submitSna").css("visibility", "hidden");
-        $("#twitterStats-loader").css("display", "block");
-        $("#user_time").css("margin-left", -100);
-        
-        Plotly.relayout('user_time_chart', {width: 610});
-        var buttons = document.getElementsByClassName("modebar-group");
-        Array.from(buttons).forEach(button => button.style = "display: none");
-        
-        for(var i = 0; i < 14; i++)
-        {
-            var br = document.createElement("br");
-            br.className = "toRemove";
-            document.getElementById("twitterStats-radios-time").appendChild(br);
-        }
-        var contents = document.getElementsByClassName("chart_content");
-        if(!$("#user_time").is(":visible"))
-            $("#user_time").slideToggle();
-        $("#user_time").css("padding", 0);
+function exportPDF() {
 
-        for(var i = 0; i < 4; i++)
-        {
-            var br = document.createElement("br");
-            br.className = "toRemove";
-            document.getElementById("user_time_chart_content").appendChild(br);
-        }
-        if(!$("#tweetCounter_contents").is(":visible"))
-            $("#tweetCounter_contents").slideToggle();
-       
-            for(var i = 0; i < 15; i++)
-            {
-                var br = document.createElement("br");
-                br.className = "toRemove";
-                document.getElementById("tweetCounter_contents").appendChild(br);
-            }
-        if(!$("#most_retweeted").is(":visible"))
-            $("#most_retweeted").slideToggle();
-        
-        if(!$("#most_liked").is(":visible"))
-            $("#most_liked").slideToggle();
-    
-        for(var i = 0; i <2; i++)
-        {
-            var br = document.createElement("br");
-            br.className = "toRemove";
-            document.getElementById("most_liked").appendChild(br);
-        }
-            
-        if(!$("#hashtag_cloud_chart_content").is(":visible"))
-            $("#hashtag_cloud_chart_content").slideToggle();
-            
-        if(!$("#top_users_content").is(":visible"))
-            $("#top_users_content").slideToggle();
+    $("#exportButton").css("display", "none");
+    $("#submitSna").css("visibility", "hidden");
+    $("#twitterStats-loader").css("display", "block");
+    $("#user_time").css("margin-left", -100);
 
-        for(var i = 0; i <3; i++)
-        {
-            var br = document.createElement("br");
-            br.className = "toRemove";
-            document.getElementById("top_users_content").appendChild(br);
-        }
+    Plotly.relayout('user_time_chart', { width: 610 });
+    var buttons = document.getElementsByClassName("modebar-group");
+    Array.from(buttons).forEach(button => button.style = "display: none");
 
-        $("#url_array").css("margin-left", -100);
-        ctrlP().then(() => 
-        { 
-            document.getElementById("user_time").style = cache_user_time_style;
-            Plotly.relayout('user_time_chart', {width: cache_user_chart_width});
-        
-            Array.from(document.getElementsByClassName("toRemove")).forEach(br => br.remove());
-            $("#submitSna").css("visibility", "visible");
+    for (var i = 0; i < 14; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("twitterStats-radios-time").appendChild(br);
+    }
+    var contents = document.getElementsByClassName("chart_content");
+    if (!$("#user_time").is(":visible"))
+        $("#user_time").slideToggle();
+    $("#user_time").css("padding", 0);
 
-            $("#exportButton").css("display", "block");
-            $("#url_array").css("margin-left", 0);
-        });
+    for (var i = 0; i < 4; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("user_time_chart_content").appendChild(br);
+    }
+    if (!$("#tweetCounter_contents").is(":visible"))
+        $("#tweetCounter_contents").slideToggle();
 
-        async function ctrlP() {
-            await delay(500);
-            $("#twitterStats-loader").css("display", "none");
-            
-            window.print();
+    for (var i = 0; i < 15; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("tweetCounter_contents").appendChild(br);
+    }
+    if (!$("#most_retweeted").is(":visible"))
+        $("#most_retweeted").slideToggle();
+
+    if (!$("#most_liked").is(":visible"))
+        $("#most_liked").slideToggle();
+
+    for (var i = 0; i < 2; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("most_liked").appendChild(br);
+    }
+
+    if (!$("#hashtag_cloud_chart_content").is(":visible"))
+        $("#hashtag_cloud_chart_content").slideToggle();
+
+    if (!$("#top_users_content").is(":visible"))
+        $("#top_users_content").slideToggle();
+
+    for (var i = 0; i < 3; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("top_users_content").appendChild(br);
+    }
+
+    $("#url_array").css("margin-left", -100);
+    ctrlP().then(() => {
+        document.getElementById("user_time").style = cache_user_time_style;
+        Plotly.relayout('user_time_chart', { width: cache_user_chart_width });
+
+        Array.from(document.getElementsByClassName("toRemove")).forEach(br => br.remove());
+        $("#submitSna").css("visibility", "visible");
+
+        $("#exportButton").css("display", "block");
+        $("#url_array").css("margin-left", 0);
+    });
+
+    async function ctrlP() {
+        await delay(500);
+        $("#twitterStats-loader").css("display", "none");
+
+        window.print();
 
 
-           
-           
-        }
+
+
+    }
 
 };
 
@@ -379,7 +376,7 @@ function getRequest(url) {
     };
 }
 
-async function waitStatusDone(session){
+async function waitStatusDone(session) {
     let url = status_url + session;
     let res = null;
     let cpt = 2100;
@@ -449,7 +446,7 @@ $(document).ready(function () {
 });
 */
 let datetimePicker_format = {
-    dateFormat:"yy-mm-dd",
+    dateFormat: "yy-mm-dd",
     timeFormat: "HH:mm:ss"
 
 }

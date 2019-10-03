@@ -2,7 +2,7 @@ var json = {};
 
 var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
 
-let dev = true;
+let dev = false;
 if (dev) {
     elasticSearch_url = 'http://localhost:8080/elk/twinttweets/_search';
 }
@@ -69,7 +69,19 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
 }
 
 
-export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate, colors) {
+export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate) {
+
+    let dateEnd = new Date(endDate);
+    let dateStart = new Date(startDate);
+
+    console.log(dateStart);
+    console.log(dateEnd);
+    let diff = (dateEnd - dateStart) / (1000 * 3600 * 24);
+    let interval = "";
+    if (diff > 14)
+        interval = "1d";
+    else
+        interval = "1h";
 
     let matchPhrase =
         {
@@ -85,7 +97,7 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
         {
             "date_histogram": {
                 "field": "date",
-                "calendar_interval": "1h",
+                "calendar_interval": interval,
                 "time_zone": "Europe/Paris",
                 "min_doc_count": 1
             },
@@ -279,12 +291,12 @@ function getNbTweets(sessid, startDate, endDate) {
             "*"
         ],
         "script_fields": {},
-        "docvalue_fields": [
+      /*  "docvalue_fields": [
             {
                 "field": "date",
                 "format": "date_time"
             }
-        ],
+        ],*/
         "query": {
             "bool": {
                 "must": [
@@ -308,7 +320,7 @@ function getNbTweets(sessid, startDate, endDate) {
                     {
                         "range": {
                             "date": {
-                                "format": "strict_date_optional_time",
+                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
                                 "gte": startDate,
                                 "lte": endDate
                             }
@@ -408,12 +420,12 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
             "*"
         ],
         "script_fields": {},
-        "docvalue_fields": [
+       /* "docvalue_fields": [
             {
                 "field": "date",
                 "format": "date_time"
             }
-        ],
+        ],*/
         "query": {
             "bool": {
                 "must": [
@@ -431,7 +443,7 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
                     {
                         "range": {
                             "date": {
-                                "format": "strict_date_optional_time",
+                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
                                 "gte": startDate,
                                 "lte": endDate
                             }
