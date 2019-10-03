@@ -34,6 +34,16 @@ function datesAreValid(from, until) {
     return fromDate < untilDate;
 }
 
+function stringToList(string){
+    let newStr = string.replace(/@/g, " ");
+    let res = newStr.split(" ");
+    let res2 = res.filter(function (el) {
+        return el != "";
+    });
+    return res2;
+
+}
+
 /**
  *
  * @func Make the json string from fields
@@ -92,7 +102,7 @@ function formToJsonCollectRequest() {
     let CollectRequest = {
         "search": searchObj,
         "lang": formLang,
-        "user": user,
+        "user_list": stringToList(user),
         "from": from,
         "until": until,
         "verified": verified,
