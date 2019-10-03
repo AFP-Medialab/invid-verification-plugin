@@ -142,6 +142,7 @@ export function mostTweetPie(param, givenFrom, givenUntil){
     });
 }
 
+var firstTopUsers = true;
 export function topHashtagPie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
@@ -162,13 +163,16 @@ export function topHashtagPie(param, givenFrom, givenUntil) {
 
         let plot = document.getElementById("hashtag_cloud_chart");
         Plotly.react('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
-        plot.on('plotly_click', data => {
-            //  document.getElementById("twitterStats-search").value = data.points[0].label;
-            // document.getElementById("twitterStats-Graphs").style.display = "none";
-            //  Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
-            let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
+        if (firstTopUsers)
+            plot.on('plotly_click', data => {
+                //  document.getElementById("twitterStats-search").value = data.points[0].label;
+                // document.getElementById("twitterStats-Graphs").style.display = "none";
+                //  Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
+                let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
 
-        });
+                firstTopUsers = false;
+            });
+
 
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
@@ -199,10 +203,13 @@ export function generateGraphs(param){
     urlArray(param, givenFrom, givenUntil);
 }
 
+var firstHisto = true;
 function displayTweetsOfDate(plot, place, button)
 {
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
+
+    if (firstHisto)
     plot.on('plotly_click', data =>
     {
 
@@ -226,7 +233,8 @@ function displayTweetsOfDate(plot, place, button)
                         && pointDate.getMonth() === objDate.getMonth()
                         && pointDate.getFullYear() === objDate.getFullYear())
                     {
-                        let date = new Date(tweetObj.fields.date[0]);
+                        console.log(tweetObj);
+                        let date = new Date(tweetObj._source.date[0]);
                         tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
                             date.getHours() + 'h' + date.getMinutes() + '</td>' +
                             '<td>' + tweetObj._source.tweet + '</td>' +
@@ -239,6 +247,7 @@ function displayTweetsOfDate(plot, place, button)
         tweetPlace.style.display = "block";
         visibilityButton.style.display = "block";
 
+        firstHisto = false
     })
 
     visibilityButton.onclick = e => {
@@ -247,11 +256,13 @@ function displayTweetsOfDate(plot, place, button)
     }
 }
 
+var firstUser = true;
 function displayTweetsOfUser(plot, place, button)
 {
 
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
+    if (firstUser)
     plot.on('plotly_click', data => {
         var json = getTweets();
         var tweetArr ='<table>' +
@@ -263,7 +274,7 @@ function displayTweetsOfUser(plot, place, button)
         json.hits.hits.forEach(tweetObj => {
             if (tweetObj._source.username === data.points[0].label)
             {
-                let date = new Date(tweetObj.fields.date[0]);
+                let date = new Date(tweetObj._source.date[0]);
                 tweetArr += '<tr><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
                     date.getHours() + 'h' + date.getMinutes() + '</td>' +
                     '<td>' + tweetObj._source.tweet + '</td>' +
@@ -279,7 +290,10 @@ function displayTweetsOfUser(plot, place, button)
         //   plotlyJson.labels.array.forEach(label => {
 
         // });
+
+        firstUser = false;
     });
+
 
     visibilityButton.onclick = e => {
         tweetPlace.style.display = "none";

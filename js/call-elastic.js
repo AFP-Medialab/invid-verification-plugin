@@ -42,6 +42,7 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
         const myJson = await response.json(); //extract JSON from the http response
         // do something with myJson
 
+
         let vals = [];
         let keys = [];
         let buckets = myJson["aggregations"]["2"]["buckets"];
@@ -74,8 +75,6 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
     let dateEnd = new Date(endDate);
     let dateStart = new Date(startDate);
 
-    console.log(dateStart);
-    console.log(dateEnd);
     let diff = (dateEnd - dateStart) / (1000 * 3600 * 24);
     let interval = "";
     if (diff > 14)

@@ -149,49 +149,52 @@ function submit_sna_form() {
     if (response == null)
         alert("Bad request");
     response().then((jsonResponse) => {
+        if (jsonResponse !== null){
+            waitStatusDone(jsonResponse["session"])
 
-        waitStatusDone(jsonResponse["session"])
+                .then((param) => {
+                    if (isFirst)
+                        document.getElementById('exportButton').addEventListener('click', () => {
+                            exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
+                            isFirst = false
+                        });
 
-            .then((param) => {
-                if (isFirst)
-                    document.getElementById('exportButton').addEventListener('click', () => {
-                        exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
-                        isFirst = false
-                    });
+                    if (param == null) {
+                        console.log("error : timeout, or invalid request");
+                        $("#twitterStats-loader").css("display", "none");
+                        alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                        return;
+                    }
+                    else if (param["status"] === "Error") {
+                        $("#twitterStats-loader").css("display", "none");
+                        alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
+                        return;
+                    }
+                    else {
+                        console.log("Finished successfully")
+                    }
 
-                if (param == null) {
-                    console.log("error : timeout, or invalid request");
                     $("#twitterStats-loader").css("display", "none");
-                    alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
-                    return;
-                }
-                else if (param["status"] === "Error") {
-                    $("#twitterStats-loader").css("display", "none");
-                    alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
-                    return;
-                }
-                else {
-                    console.log("Finished successfully")
-                }
-
-                $("#twitterStats-loader").css("display", "none");
-                $("#twitterStats-Graphs").css("display", "block");
+                    $("#twitterStats-Graphs").css("display", "block");
 
 
-                generateGraphs(param);
-                let givenFrom = document.getElementById("twitterStats-from-date").value;
-                let givenUntil = document.getElementById("twitterStats-to-date").value;
-                getNbTweets(param, givenFrom, givenUntil);
+                    generateGraphs(param);
+                    let givenFrom = document.getElementById("twitterStats-from-date").value;
+                    let givenUntil = document.getElementById("twitterStats-to-date").value;
+                    getNbTweets(param, givenFrom, givenUntil);
 
-                if (document.getElementById("twitterStats-user").value != "") {
-                    $("#retweets_chart_content").hide();
-                    $("#likes_chart_content").hide();
-                    $("#top_users_chart_content").hide();
-                }
+                    if (document.getElementById("twitterStats-user").value != "") {
+                        $("#retweets_chart_content").hide();
+                        $("#likes_chart_content").hide();
+                        $("#top_users_chart_content").hide();
+                    }
 
-                (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
-            });
-    });
+                    (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
+                });
+            }
+            else
+                window.alert("Thers was a problem with Twint");
+        });
 
 }
 
