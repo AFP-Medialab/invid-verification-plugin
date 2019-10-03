@@ -79,7 +79,7 @@ function formToJsonCollectRequest() {
         "and": and_list,
         "or": or_list,
         "not": not_list
-    }
+    };
 
     let CollectRequest = {
         "search": searchObj,
@@ -435,6 +435,7 @@ if (form) {
 }
 
 /* Add dates picker facility */
+/*
 $(document).ready(function () {
     $("#twitterStats-from-date").datepicker({
         dateFormat: 'yy-mm-dd',
@@ -461,6 +462,16 @@ $(document).ready(function () {
         }
     });
 });
+*/
+let datetimePicker_format = {
+    dateFormat:"yy-mm-dd",
+    timeFormat: "HH:mm:ss"
+
+}
+
+$("#twitterStats-from-date").datetimepicker(datetimePicker_format);
+$("#twitterStats-to-date").datetimepicker(datetimePicker_format);
+
 
 /**
  *
