@@ -179,46 +179,95 @@ var
     cache_like_chart_style = document.getElementById("likes_chart_content").style,
     cache_hashtag_chart_style = document.getElementById("hashtags_chart_content").style,
     cache_top_user_chart_style = document.getElementById("top_users_chart_content").style,
+    cache_submit_btn_style = document.getElementById("submitSna").style,
     a4 = [210, 297], // for a4 size paper width and height  
     time_img;
 
     function exportPDF (name) { 
         
         $("#exportButton").css("display", "none");
+        $("#submitSna").css("visibility", "hidden");
         $("#twitterStats-loader").css("display", "block");
-       time_img = Plotly.toImage(document.getElementById("user_time_chart"));
-        $("#user_time_chart_content").css("width", a4[0]); 
-        Plotly.relayout('user_time_chart', {width: a4[0]});
+      // time_img = Plotly.toImage(document.getElementById("user_time_chart"));
+       // $("#user_time_chart_content").css("width", a4[0]); 
+        //Plotly.relayout('user_time_chart', {width: a4[0]});
+     //  $("#user_time_chart_content").css("height", 2000);
+      //  $("#twitterStats_form").css("height", a4[1]);
         var buttons = document.getElementsByClassName("modebar-group");
         Array.from(buttons).forEach(button => button.style = "display: none");
 
         var contents = document.getElementsByClassName("chart_content");
-        Array.from(contents).forEach(content => content.style = "width: 210mm; margin: 0")
+        //Array.from(contents).forEach(content => content.style = "width: 210mm; margin: 0")
         if(!$("#user_time").is(":visible"))
             $("#user_time").slideToggle();
-        
+        $("#user_time").css("padding", 0);
+        for(var i = 0; i <13; i++)
+        {
+            var br = document.createElement("br");
+            br.className = "toRemove";
+            document.getElementById("user_time").appendChild(br);
+        }
+    
+        if(!$("#tweetCounter_contents").is(":visible"))
+            $("#tweetCounter_contents").slideToggle();
        // document.getElementById("retweets_chart_content").style = "";
       //  $("#retweets_chart_content").css("height", a4[1]);
         if(!$("#most_retweeted").is(":visible"))
             $("#most_retweeted").slideToggle();
         
+      //  document.getElementById("retweets_chart_content").style.height = a4[1];
 
        // $("#likes_chart_content").css("width", a4[0]);
         if(!$("#most_liked").is(":visible"))
             $("#most_liked").slideToggle();
     
+            for(var i = 0; i <15; i++)
+            {
+                var br = document.createElement("br");
+                br.className = "toRemove";
+                document.getElementById("most_liked").appendChild(br);
+            }
+        
+       // document.getElementById("likes_chart_content").style.height = a4[1];
 
       //  $("#hashtags_chart_content").css("width", a4[0]);
         if(!$("#hashtag_cloud_chart_content").is(":visible"))
             $("#hashtag_cloud_chart_content").slideToggle();
-        
+       // document.getElementById("hashtags_chart_content").style.height = a4[1];
 
       //  $("#top_users_chart_content").css("width", a4[0]);
         if(!$("#top_users_content").is(":visible"))
             $("#top_users_content").slideToggle();
-    
-        $('body').scrollTop(0);  
-        createPDF();  
+
+        for(var i = 0; i <20; i++)
+        {
+            var br = document.createElement("br");
+            br.className = "toRemove";
+            document.getElementById("top_users_content").appendChild(br);
+        }
+       // document.getElementById("top_users_chart_content").style.height = a4[1];
+        ctrlP();
+
+        async function ctrlP() {
+           // $('body').scrollTop(0); 
+            await delay(2000);
+            $("#twitterStats-loader").css("display", "none");
+            
+            window.print();
+
+
+            document.getElementById("retweets_chart_content").style = cache_retweet_chart_style; 
+            document.getElementById("user_time_chart_content").style = cache_user_time_style;
+            document.getElementById("hashtags_chart_content").style = cache_hashtag_chart_style; 
+            document.getElementById("top_users_chart_content").style = cache_top_user_chart_style; 
+            Plotly.relayout('user_time_chart', {width: cache_user_time_style.width});
+            document.getElementById("likes_chart_content").style = cache_like_chart_style;
+            document.getElementById("submitSna").style = cache_submit_btn_style;
+            Array.from(document.getElementsByClassName("toRemove")).forEach(br => br.remove());
+            $("#submitSna").css("visibility", "visible");
+           
+        }
+       // createPDF();  
       //  });  
         //create pdf  
         function createPDF() {  
@@ -256,12 +305,6 @@ var
                                 doc.addPage();
                                 doc.addImage(img, 'JPEG', 0, 10);   
                             }).finally(() => {
-                                document.getElementById("retweets_chart_content").style = cache_retweet_chart_style; 
-                                document.getElementById("user_time_chart_content").style = cache_user_time_style;
-                                document.getElementById("hashtags_chart_content").style = cache_hashtag_chart_style; 
-                                document.getElementById("top_users_chart_content").style = cache_top_user_chart_style; 
-                                Plotly.relayout('user_time_chart', {width: cache_user_time_style.width});
-                                document.getElementById("likes_chart_content").style = cache_like_chart_style;
                                 doc.addPage();
                                 let res = doc.autoTableHtmlToJson(document.getElementById("url_table"));
 
