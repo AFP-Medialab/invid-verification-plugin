@@ -1,5 +1,13 @@
 import { generateGraphs, getNbTweets } from "./twitterSnaGraphs.js";
 
+var collect_url = "http://185.249.140.38/twitter-gateway/collect";
+var status_url = "http://185.249.140.38/twitter-gateway/status/";
+
+let dev = true;
+if (dev) {
+    collect_url = "http://localhost:8080/twitter-gateway/collect";
+    status_url = "http://localhost:8080/twitter-gateway/status/"
+}
 
 //import "html2pdf"
 /**
@@ -126,9 +134,8 @@ function submit_sna_form() {
 
     $("#twitterStats-loader").css("display", "block");
 
-    let url = "http://185.249.140.38/twitter-gateway/collect";
 
-    let response = postRequest(jsonCollectRequest, url);
+    let response = postRequest(jsonCollectRequest, collect_url);
     if (response == null)
         alert("Bad request");
     response().then((jsonResponse) => {
@@ -141,13 +148,13 @@ function submit_sna_form() {
 
                 if (param == null) {
                     console.log("error : timeout, or invalid request");
+                    $("#twitterStats-loader").css("display", "none");
                     alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
-                    $("#twitterStats-loading").css("display", "none");
                     return;
                 }
                 else if (param["status"] === "Error") {
+                    $("#twitterStats-loader").css("display", "none");
                     alert(json_lang_translate[global_language]["twitterSnaErrorMessage"]);
-                    $("#twitterStats-loading").css("display", "none");
                     return;
                 }
                 else {
@@ -372,8 +379,8 @@ function getRequest(url) {
     };
 }
 
-async function waitStatusDone(session) {
-    let url = "http://185.249.140.38/twitter-gateway/status/" + session;
+async function waitStatusDone(session){
+    let url = status_url + session;
     let res = null;
     let cpt = 2100;
     while (cpt > 0) {
