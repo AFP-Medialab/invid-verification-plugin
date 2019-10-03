@@ -54,7 +54,6 @@ function showEssidHistogram(param, givenFrom, givenUntil){
        
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
 
-        $("#exportButton").css("display", "block");
     });
 }
 
