@@ -102,7 +102,7 @@ function formToJsonCollectRequest() {
     let CollectRequest = {
         "search": searchObj,
         "lang": formLang,
-        "user": stringToList(user),
+        "user_list": stringToList(user),
         "from": from,
         "until": until,
         "verified": verified,
