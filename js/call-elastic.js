@@ -1,7 +1,15 @@
 var json = {};
 
-//var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
-var elasticSearch_url = 'http://localhost:8080/elk/twinttweets/_search';
+var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
+
+let dev = true;
+if (dev) {
+    elasticSearch_url = 'http://localhost:8080/elk/twinttweets/_search';
+}
+
+
+
+
 //var sessid = "sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc"
 export function generatePieChartQuery(sessid, startDate, endDate) {
     let chartInfo = {
