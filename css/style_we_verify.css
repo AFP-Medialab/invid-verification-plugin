@@ -1102,21 +1102,19 @@ third-parties-menu div figure:hover{
 }
 
 .username_col {
-	background-color: #dfe2e6;
-	width: 20%;
+	width: 20%!important;
 }
 
 .date_col {
-	width: 15%;
+	width: 15%!important;
 }
 
 .tweet_col {
-	background-color: #dfe2e6;
 	overflow: hidden;
 	}
 
 .nb_tweet_col {
-	width: 10%;
+	width: 10%!important;
 }
 colgroup td col {
 	display:inline-block;
@@ -1125,5 +1123,19 @@ colgroup td col {
 table.tweet_view {
 
 	border-collapse: collapse;
-	table-layout:fixed;
+	table-layout: fixed;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+	
+bottom: .5em;
 }

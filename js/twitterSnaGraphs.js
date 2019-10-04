@@ -215,7 +215,7 @@ function displayTweetsOfDate(plot, place, button)
     {
         var json = getTweets();
 
-        var tweetArr ='<table class="tweet_view">' +
+        var tweetArr ='<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">' +
             '<colgroup>' +
                 '<col span=1 class="username_col" />' +
                 '<col span=1 class="date_col" />' +
@@ -223,7 +223,7 @@ function displayTweetsOfDate(plot, place, button)
                 '<col span=1 class="nb_tweet_col" />' +
             '</colgroup>';
 
-        tweetArr += '<tr><th scope="col">Username</th><th scope="col">Date</th><th scope="col">Tweet</th><th scope="col">Nb of retweets</th></tr><tbody>';
+        tweetArr += '<thead><tr><th>Username</th><th>Date</th><th>Tweet</th><th>Nb of retweets</th></tr></thead><tbody>';
 
         let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
        
@@ -245,10 +245,20 @@ function displayTweetsOfDate(plot, place, button)
             }
         });
     });
-        tweetArr += "</tbody></table>"
+        tweetArr += "</tbody><tfoot></tfoot></table>"
         tweetPlace.innerHTML = tweetArr;
         tweetPlace.style.display = "block";
         visibilityButton.style.display = "block";
+       
+           
+     //   $(document).ready(function () {
+            $('#tweet_view_histo').DataTable({
+                "columnDefs": [
+            { "orderable": false, "targets": 2 }
+            ]
+              });
+            $('.dataTables_length').addClass('bs-select');
+     //   });
 
         firstHisto = false
     })
@@ -258,7 +268,6 @@ function displayTweetsOfDate(plot, place, button)
         visibilityButton.style.display = 'none';
     }
 }
-
 var firstUser = true;
 function displayTweetsOfUser(plot, place, button, nb_type)
 {
