@@ -7,69 +7,6 @@ if (dev) {
     elasticSearch_url = 'http://localhost:9200twinttweets/_search';
 }
 
-
-
-
-//var sessid = "sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc"
-export function generatePieChartQuery(sessid, startDate, endDate) {
-    let chartInfo = {
-        "terms": {
-            "field": "username",
-            "order": {
-                "_count": "desc"
-            },
-            "size": 10
-        }
-    };
-
-    let matchPhrase = {
-        "match_phrase": {
-            "essid": {
-                "query": sessid
-            }
-        }
-    };
-
-    const userAction = async () => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body:
-                JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
-            headers: {
-                'Content-Type': 'application/json'
-            } //*/
-        });
-        const myJson = await response.json(); //extract JSON from the http response
-        // do something with myJson
-
-
-        let vals = [];
-        let keys = [];
-        let buckets = myJson["aggregations"]["2"]["buckets"];
-        var i = 0;
-        var tot = 0;
-        buckets.forEach(elt => {
-
-            if (i++ < 10) {
-                vals.push(elt["doc_count"]);
-                keys.push(elt["key"]);
-            } else
-                tot += elt["doc_count"];
-        });
-        vals.push(tot);
-        keys.push("OTHERS");
-
-        let plotlyJson = [{
-            values: vals,
-            labels: keys,
-            type: 'pie'
-        }];
-        return plotlyJson;
-    }
-    return (userAction());
-}
-
-
 export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate) {
 
     let dateEnd = new Date(endDate);
@@ -145,66 +82,6 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
         }
         else
             window.alert("There was a problem calling elastic search");
-    }
-    return userAction();
-}
-
-
-export function generateHashtagHistogramQuery(hashtag, retweets, startDate, endDate) {
-
-    let matchPhrase =
-        {
-            "match_phrase":
-                {
-                    "hashtags": {
-                        "query": hashtag
-                    }
-                }
-        }
-
-    let fieldInfo =
-        {
-            "date_histogram": {
-                "field": "date",
-                "calendar_interval": "1d",
-                "time_zone": "Europe/Paris",
-                "min_doc_count": 1
-            },
-            "aggs": {
-                "3": {
-                    "terms": {
-                        "field": "username",
-                        "order": {
-                            "_count": "desc"
-                        },
-                        "size": 5
-                    }
-                },
-                "1": {
-                    "sum": {
-                        "field": "nretweets"
-                    }
-
-                }
-            }
-        }
-
-    const userAction = async () => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body:
-                JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
-            headers: {
-                'Content-Type': 'application/json'
-            } //*/
-        });
-        const myJson = await response.json();
-
-        if (myJson != null)
-            if (retweets)
-                return getPlotlyJsonHisto(myJson, retweetsGet);
-            else
-                return getPlotlyJsonHisto(myJson, usersGet);
     }
     return userAction();
 }
@@ -290,12 +167,6 @@ function getNbTweets(sessid, startDate, endDate) {
             "*"
         ],
         "script_fields": {},
-      /*  "docvalue_fields": [
-            {
-                "field": "date",
-                "format": "date_time"
-            }
-        ],*/
         "query": {
             "bool": {
                 "must": [
@@ -419,12 +290,6 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
             "*"
         ],
         "script_fields": {},
-       /* "docvalue_fields": [
-            {
-                "field": "date",
-                "format": "date_time"
-            }
-        ],*/
         "query": {
             "bool": {
                 "must": [
