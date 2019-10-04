@@ -1100,3 +1100,30 @@ third-parties-menu div figure:hover{
 	padding: 10px 50px 40px;
 	font-size: 60pt;
 }
+
+.username_col {
+	background-color: #dfe2e6;
+	width: 20%;
+}
+
+.date_col {
+	width: 15%;
+}
+
+.tweet_col {
+	background-color: #dfe2e6;
+	overflow: hidden;
+	}
+
+.nb_tweet_col {
+	width: 10%;
+}
+colgroup td col {
+	display:inline-block;
+}
+
+table.tweet_view {
+
+	border-collapse: collapse;
+	table-layout:fixed;
+}

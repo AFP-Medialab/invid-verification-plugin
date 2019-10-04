@@ -34,7 +34,7 @@ function datesAreValid(from, until) {
     return fromDate < untilDate;
 }
 
-function stringToList(string){
+function stringToList(string) {
     let newStr = string.replace(/@/g, " ");
     let res = newStr.split(" ");
     let res2 = res.filter(function (el) {
@@ -149,7 +149,7 @@ function submit_sna_form() {
     if (response == null)
         alert("Bad request");
     response().then((jsonResponse) => {
-        if (jsonResponse !== null){
+        if (jsonResponse !== null) {
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
@@ -191,10 +191,10 @@ function submit_sna_form() {
 
                     (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
                 });
-            }
-            else
-                window.alert("Thers was a problem with Twint");
-        });
+        }
+        else
+            window.alert("Thers was a problem with Twint");
+    });
 
 }
 
@@ -410,7 +410,7 @@ async function waitStatusDone(session) {
         });
         if (res !== null)
             return res;
-        await delay(2000);
+        await delay(10000);
         cpt--;
     }
     return null;

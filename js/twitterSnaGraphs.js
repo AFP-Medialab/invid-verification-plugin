@@ -214,13 +214,15 @@ function displayTweetsOfDate(plot, place, button)
     {
 
         var json = getTweets();
-        var tweetArr ='<table>' +
-            '<tr>' +
-            '<td>Username</td>' +
-            '<td>Date</td>' +
-            '<td>Tweet</td>' +
-            '<td>Nb of retweets</td>' +
-            '</tr>';
+        var tweetArr ='<table class="tweet_view">' +
+            '<colgroup>' +
+                '<col span=1 class="username_col" />' +
+                '<col span=1 class="date_col" />' +
+                '<col span=1 class="tweet_col" />' +
+                '<col span=1 class="nb_tweet_col" />' +
+            '</colgroup>';
+
+            tweetArr += '<tr><th scope="col">Username</th><th scope="col">Date</th><th scope="col">Tweet</th><th scope="col">Nb of retweets</th></tr><tbody>';
         data.points.forEach(point => {
             json.hits.hits.forEach(tweetObj => {
                 if (tweetObj._source.username === point.data.name)
@@ -233,9 +235,9 @@ function displayTweetsOfDate(plot, place, button)
                         && pointDate.getMonth() === objDate.getMonth()
                         && pointDate.getFullYear() === objDate.getFullYear())
                     {
-                        console.log(tweetObj);
                         let date = new Date(tweetObj._source.date[0]);
-                        tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                        tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' + 
+                        '<td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
                             date.getHours() + 'h' + date.getMinutes() + '</td>' +
                             '<td>' + tweetObj._source.tweet + '</td>' +
                             '<td>' + tweetObj._source.nretweets + '</td></tr>';
@@ -243,6 +245,7 @@ function displayTweetsOfDate(plot, place, button)
                 }
             });
         });
+        tweetArr += "</tbody></table>"
         tweetPlace.innerHTML = tweetArr;
         tweetPlace.style.display = "block";
         visibilityButton.style.display = "block";
@@ -265,12 +268,13 @@ function displayTweetsOfUser(plot, place, button)
     if (firstUser)
     plot.on('plotly_click', data => {
         var json = getTweets();
-        var tweetArr ='<table>' +
-            '<tr>' +
-            '<td>Date</td>' +
-            '<td>Tweet</td>' +
-            '<td>Nb of retweets</td>' +
-            '</tr>';
+        var tweetArr ='<table class="tweet_view">' +
+        '<colgroup>' +
+            '<col span=1 class="date_col" />' +
+            '<col span=1 class="tweet_col" />' +
+            '<col span=1 class="nb_tweet_col" />' +
+        '</colgroup>';
+        tweetArr += '<tr><th scope="col">Date</th><th scope="col">Tweet</th><th scope="col">Nb of retweets</th></tr><tbody>';
         json.hits.hits.forEach(tweetObj => {
             if (tweetObj._source.username === data.points[0].label)
             {
@@ -283,6 +287,7 @@ function displayTweetsOfUser(plot, place, button)
             }
         });
 
+        tweetArr += "</tbody></table>"
         tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">'
             + data.points[0].label+ "</a><br><br>" +  tweetArr;
         tweetPlace.style.display = "block";
