@@ -181,7 +181,7 @@ function submit_sna_form() {
                     generateGraphs(param);
                     let givenFrom = document.getElementById("twitterStats-from-date").value;
                     let givenUntil = document.getElementById("twitterStats-to-date").value;
-                    getNbTweets(param, givenFrom, givenUntil);
+                    //getNbTweets(param, givenFrom, givenUntil);
 
                     if (document.getElementById("twitterStats-user").value != "") {
                         $("#retweets_chart_content").hide();

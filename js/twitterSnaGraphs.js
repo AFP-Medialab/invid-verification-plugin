@@ -195,7 +195,7 @@ export function generateGraphs(param){
     let givenUntil = document.getElementById("twitterStats-to-date").value;
 
     showEssidHistogram(param, givenFrom, givenUntil);
-   // getNbTweets(param, givenFrom, givenUntil);
+    getNbTweets(param, givenFrom, givenUntil);
     mostRetweetPie(param, givenFrom, givenUntil);
     mostLikePie(param, givenFrom, givenUntil);
     mostTweetPie(param, givenFrom, givenUntil);
