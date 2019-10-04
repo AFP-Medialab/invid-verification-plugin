@@ -79,7 +79,7 @@ export function mostRetweetPie(param, givenFrom, givenUntil){
 
         var plot = document.getElementById("retweets_cloud_chart");
         Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
-        displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility');
+        displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
@@ -106,7 +106,7 @@ export function mostLikePie(param, givenFrom, givenUntil) {
 
         let plot = document.getElementById("likes_cloud_chart");
         Plotly.react('likes_cloud_chart', plotlyJson, cloudlayout, config);
-        displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility');
+        displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
@@ -135,7 +135,7 @@ export function mostTweetPie(param, givenFrom, givenUntil){
 
         var plot = document.getElementById("top_users_pie_chart");
         Plotly.react('top_users_pie_chart', plotlyJson, cloudlayout, config);
-        displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility");
+        displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
@@ -260,7 +260,7 @@ function displayTweetsOfDate(plot, place, button)
 }
 
 var firstUser = true;
-function displayTweetsOfUser(plot, place, button)
+function displayTweetsOfUser(plot, place, button, nb_type)
 {
 
     var visibilityButton = document.getElementById(button);
@@ -268,26 +268,48 @@ function displayTweetsOfUser(plot, place, button)
     if (firstUser)
     plot.on('plotly_click', data => {
         var json = getTweets();
-        var tweetArr ='<table class="tweet_view">' +
+        var tweetArr = '<table class="tweet_view">' +
         '<colgroup>' +
             '<col span=1 class="date_col" />' +
             '<col span=1 class="tweet_col" />' +
-            '<col span=1 class="nb_tweet_col" />' +
-        '</colgroup>';
-        tweetArr += '<tr><th scope="col">Date</th><th scope="col">Tweet</th><th scope="col">Nb of retweets</th></tr><tbody>';
+            '<col span=1 class="nb_tweet_col" />';
+             
+            if (nb_type === 'tweets')
+                tweetArr += '<col span=1 class="nb_tweet_col" />';
+
+
+            console.log(tweetArr);
+        tweetArr += '</colgroup>';
+
+        tweetArr += '<tr><th scope="col">Date</th><th scope="col">Tweet</th>';
+        if (nb_type !== "retweets")
+            tweetArr += '<th scope="col">Nb of likes</th>';
+        if (nb_type !== "likes")
+            tweetArr += '<th scope="col">Nb of retweets</th>';
+
+        tweetArr += '</tr><tbody>';
         json.hits.hits.forEach(tweetObj => {
             if (tweetObj._source.username === data.points[0].label)
             {
+                let nb;
+                if (nb_type === "retweets")
+                    nb = tweetObj._source.nretweets;
+                else
+                    nb = tweetObj._source.nlikes;
                 let date = new Date(tweetObj._source.date[0]);
                 tweetArr += '<tr><td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
                     date.getHours() + 'h' + date.getMinutes() + '</td>' +
                     '<td>' + tweetObj._source.tweet + '</td>' +
-                    '<td>' + tweetObj._source.nretweets + '</td></tr>';
+                    '<td>' + nb + '</td>';
+                if (nb_type === "tweets")
+                    tweetArr += '<td>' + tweetObj._source.nretweets + '</td>';
+
+                tweetArr += '</tr>';
 
             }
         });
 
-        tweetArr += "</tbody></table>"
+        tweetArr += "</tbody></table>";
         tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">'
             + data.points[0].label+ "</a><br><br>" +  tweetArr;
         tweetPlace.style.display = "block";
