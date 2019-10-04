@@ -1,4 +1,4 @@
-import {generatePieChartQuery, generateEssidHistogramQuery, generateHashtagHistogramQuery, generateCloudQuery, generateURLArray, getTweets, generateTweetCount} from './call-elastic.js';
+import {generateEssidHistogramQuery, generateCloudQuery, generateURLArray, getTweets, generateTweetCount} from './call-elastic.js';
 
 
 export function getNbTweets(param, givenFrom, givenUntil){
