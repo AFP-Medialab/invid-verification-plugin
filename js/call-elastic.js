@@ -4,7 +4,7 @@ var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
 
 let dev = false;
 if (dev) {
-    elasticSearch_url = 'http://localhost:8080/elk/twinttweets/_search';
+    elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
 }
 
 
