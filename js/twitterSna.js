@@ -1,4 +1,4 @@
-import { generateGraphs, getNbTweets } from "./twitterSnaGraphs.js";
+import { generateGraphs, getNbTweets, setFirstHisto } from "./twitterSnaGraphs.js";
 
 var collect_url = "http://185.249.140.38/twitter-gateway/collect";
 var status_url = "http://185.249.140.38/twitter-gateway/status/";
@@ -138,6 +138,7 @@ var isFirst = true;
 function submit_sna_form() {
 
 
+    setFirstHisto(true);
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
@@ -179,9 +180,6 @@ function submit_sna_form() {
 
 
                     generateGraphs(param);
-                    let givenFrom = document.getElementById("twitterStats-from-date").value;
-                    let givenUntil = document.getElementById("twitterStats-to-date").value;
-
                     if (document.getElementById("twitterStats-user").value != "") {
                         $("#retweets_chart_content").hide();
                         $("#likes_chart_content").hide();
@@ -283,68 +281,6 @@ function exportPDF() {
 
 };
 
-/*(function ($) {
-    $.fn.html2canvas = function (options) {
-        var date = new Date(),
-            $message = null,
-            timeoutTimer = false,
-            timer = date.getTime();
-        html2canvas.logging = options && options.logging;
-        html2canvas.preload(this[0], $.extend({
-            complete: function (images) {
-                var queue = html2canvas.Parse(this[0], images, options),
-                    $canvas = $(html2canvas.Renderer(queue, options)),
-                    finishTime = new Date();
-
-                $canvas.css({ position: 'absolute', left: 0, top: 0 }).appendTo(document.body);
-                $canvas.siblings().toggle();
-
-                $(window).click(function () {
-                    if (!$canvas.is(':visible')) {
-                        $canvas.toggle().siblings().toggle();
-                        throwMessage("Canvas Render visible");
-                    } else {
-                        $canvas.siblings().toggle();
-                        $canvas.toggle();
-                        throwMessage("Canvas Render hidden");
-                    }
-                });
-                throwMessage('Screenshot created in ' + ((finishTime.getTime() - timer) / 1000) + " seconds<br />", 4000);
-            }
-        }, options));
-
-        function throwMessage(msg, duration) {
-            window.clearTimeout(timeoutTimer);
-            timeoutTimer = window.setTimeout(function () {
-                $message.fadeOut(function () {
-                    $message.remove();
-                });
-            }, duration || 2000);
-            if ($message)
-                $message.remove();
-            $message = $('<div ></div>').html(msg).css({
-                margin: 0,
-                padding: 10,
-                background: "#000",
-                opacity: 0.7,
-                position: "fixed",
-                top: 10,
-                right: 10,
-                fontFamily: 'Tahoma',
-                color: '#fff',
-                fontSize: 12,
-                borderRadius: 12,
-                width: 'auto',
-                height: 'auto',
-                textAlign: 'center',
-                textDecoration: 'none'
-            }).hide().fadeIn().appendTo('body');
-        }
-    };
-})(jQuery);
-//   printJS('user_time_chart', 'image');
-*/
-
 
 /**
  *
@@ -396,6 +332,7 @@ async function waitStatusDone(session) {
         const response = getRequest(url);
         await response().then(json => {
             if (json == null)
+
                 return null;
             else if (json["status"] === "Done" || json["status"] === "Error")
                 res = json;
@@ -403,7 +340,6 @@ async function waitStatusDone(session) {
 
                 $("#twitterStats-Graphs").css("display", "block");
                 generateGraphs(json);
-                document.getElementById("tweetCounter_contents").innerHTML = "<br><br><b>Please wait while you request isn't finished"
 
             }
         });

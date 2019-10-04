@@ -21,7 +21,7 @@ export function getNbTweets(param, givenFrom, givenUntil){
 }
 
 function showEssidHistogram(param, givenFrom, givenUntil){
-    generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"]).then(plotlyJson => {
+    generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil).then(plotlyJson => {
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " +  param["query"]["from"] + " " +  param["query"]["until"],
             automargin: true,
@@ -187,7 +187,11 @@ export function urlArray(param, givenFrom, givenUntil){
     });
 }
 
-
+var firstHisto = true;
+export function setFirstHisto(first)
+{
+    firstHisto = first
+}
 export function generateGraphs(param){
     let givenFrom = document.getElementById("twitterStats-from-date").value;
     let givenUntil = document.getElementById("twitterStats-to-date").value;
@@ -201,7 +205,6 @@ export function generateGraphs(param){
     urlArray(param, givenFrom, givenUntil);
 }
 
-var firstHisto = true;
 function displayTweetsOfDate(plot, place, button)
 {
     var visibilityButton = document.getElementById(button);
@@ -210,8 +213,6 @@ function displayTweetsOfDate(plot, place, button)
     if (firstHisto)
     plot.on('plotly_click', data =>
     {
-
-        console.log(data);
         var json = getTweets();
 
         var tweetArr ='<table class="tweet_view">' +
@@ -223,17 +224,13 @@ function displayTweetsOfDate(plot, place, button)
             '</colgroup>';
 
         tweetArr += '<tr><th scope="col">Username</th><th scope="col">Date</th><th scope="col">Tweet</th><th scope="col">Nb of retweets</th></tr><tbody>';
-        console.log(json);
+
         let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
        
         data.points.forEach(point => {
-           // console.log(point);
         json.hits.hits.forEach(tweetObj => {
-           // console.log(tweetObj._source.username);
-            //console.log(point.data.name);
             if (tweetObj._source.username === point.data.name)
             {
-                console.log(tweetObj);
                 var pointDate = new Date(point.x);
                 var objDate = new Date(tweetObj._source.date);
                 if (isInRange(pointDate, objDate, isDays))
@@ -346,7 +343,6 @@ function unrotateMainHashtag(search)
 
 function isInRange(pointDate, objDate, isDays)
 {
-    console.log(isDays);
     if (!isDays)
         return ((((pointDate.getDate() === objDate.getDate()
                 && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() +2)))

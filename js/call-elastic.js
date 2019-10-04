@@ -72,16 +72,23 @@ export function generatePieChartQuery(sessid, startDate, endDate) {
 
 export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate) {
 
-    let dateEnd = new Date(endDate);
-    let dateStart = new Date(startDate);
+    let dateEndQuery = new Date(queryEnd);
+    let dateStartQuery = new Date(queryStart);
 
-    let diff = (dateEnd - dateStart) / (1000 * 3600 * 24);
+    let dateGivenFrom = new Date(givenFrom);
+    let dateGivenUntil = new Date(givenUntil);
+
+    var reProcess = false;
+    let diff = (dateEndQuery - dateStartQuery) / (1000 * 3600 * 24);
     let interval = "";
     if (diff > 14)
+    {
         interval = "1d";
+        if ((dateGivenUntil - dateGivenFrom) / (1000 * 3600 * 24) < 14)
+            reProcess = true;
+    }
     else
         interval = "1h";
-
     let matchPhrase =
         {
             "match_phrase":
@@ -125,7 +132,7 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
             }
         }
 
-    const userAction = async () => {
+    const userAction = async (startDate, endDate) => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
@@ -146,7 +153,57 @@ export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate
         else
             window.alert("There was a problem calling elastic search");
     }
-    return userAction();
+    return userAction(queryStart, queryEnd).then(plotlyJSON =>
+        {
+
+            if (reProcess)
+            {
+                fieldInfo =
+                {
+                    "date_histogram": {
+                        "field": "date",
+                        "calendar_interval": "1h",
+                        "time_zone": "Europe/Paris",
+                        "min_doc_count": 1
+                    },
+                    "aggs": {
+                        "3": {
+                            "terms": {
+                                "field": "username",
+                                "order": {
+                                    "1": "desc"
+                                },
+                                "size": 5
+                            },
+                            "aggs": {
+                                "1": {
+                                    "sum": {
+                                        "field": "nretweets"
+                                    }
+                                }
+                            }
+                        },
+                        "1": {
+                            "sum": {
+                                "field": "nretweets"
+                            }
+                        }
+                    }
+                }
+                
+                return userAction(givenFrom, givenUntil).then(plotlyJSON2 =>
+                    {
+
+
+                        plotlyJSON2.forEach(plot => plotlyJSON.push(plot));
+                        return plotlyJSON;
+                    });
+
+            }
+            else
+                return plotlyJSON;
+           
+        });
 }
 
 
@@ -350,10 +407,6 @@ export function generateTweetCount(session, startDate, endDate) {
     return userAction();
 }
 
-export function getTweets() {
-    return json
-}
-
 export function generateURLArray(sessid, startDate, endDate) {
     let matchPhrase =
         {
@@ -457,7 +510,6 @@ function getQuery(matchPhrase, chartInfo, startDate, endDate) {
     }
 }
 
-
 function mostTweetsGet(key, values, labels, parents, mainKey) {
     if (key["doc_count"] > 0) {
         values.push(key["doc_count"]);
@@ -474,6 +526,55 @@ function getURLArray(json) {
         urlArray.push({url: bucket["key"], count: bucket["doc_count"]});
     });
     return urlArray;
+}
+
+function getNbTweets(sessid, startDate, endDate) {
+    return {
+        "aggs": {},
+        "size": 0,
+        "_source": {
+            "excludes": []
+        },
+        "stored_fields": [
+            "*"
+        ],
+        "script_fields": {},
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "query_string": {
+                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
+                            "analyze_wildcard": true,
+                            "time_zone": "Europe/Paris"
+                        }
+                    },
+                    {
+                        "match_all": {}
+                    },
+                    {
+                        "match_phrase": {
+                            "essid": {
+                                "query": sessid
+                            }
+                        }
+                    },
+                    {
+                        "range": {
+                            "date": {
+                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+                                "gte": startDate,
+                                "lte": endDate
+                            }
+                        }
+                    }
+                ],
+                "filter": [],
+                "should": [],
+                "must_not": []
+            }
+        }
+    };
 }
 
 function usersGet(dateObj, infos) {
@@ -602,16 +703,10 @@ function getPlotlyJsonHisto(json, specificGet) {
     return lines;
 }
 
-function getRandomColor(colors, index) {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    if (colors != null && index > colors.size)
-        return colors[index];
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+export function getTweets() {
+    return json
 }
+
 
 /*
             else if (hashtag !== null)
