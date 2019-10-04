@@ -44,14 +44,12 @@ function showEssidHistogram(param, givenFrom, givenUntil){
             displaylogo: false
           };
 
+          let plot = document.getElementById("user_time_chart");
           if (plotlyJson.length !== 0)
-          {
-                let plot = document.getElementById("user_time_chart");
                 Plotly.newPlot('user_time_chart', plotlyJson,  layout, config);
-                displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
+               
+          displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
 
-          }
-       
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
 
     });
@@ -213,7 +211,9 @@ function displayTweetsOfDate(plot, place, button)
     plot.on('plotly_click', data =>
     {
 
+        console.log(data);
         var json = getTweets();
+
         var tweetArr ='<table class="tweet_view">' +
             '<colgroup>' +
                 '<col span=1 class="username_col" />' +
@@ -222,29 +222,32 @@ function displayTweetsOfDate(plot, place, button)
                 '<col span=1 class="nb_tweet_col" />' +
             '</colgroup>';
 
-            tweetArr += '<tr><th scope="col">Username</th><th scope="col">Date</th><th scope="col">Tweet</th><th scope="col">Nb of retweets</th></tr><tbody>';
+        tweetArr += '<tr><th scope="col">Username</th><th scope="col">Date</th><th scope="col">Tweet</th><th scope="col">Nb of retweets</th></tr><tbody>';
+        console.log(json);
+        let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
+       
         data.points.forEach(point => {
-            json.hits.hits.forEach(tweetObj => {
-                if (tweetObj._source.username === point.data.name)
+           // console.log(point);
+        json.hits.hits.forEach(tweetObj => {
+           // console.log(tweetObj._source.username);
+            //console.log(point.data.name);
+            if (tweetObj._source.username === point.data.name)
+            {
+                console.log(tweetObj);
+                var pointDate = new Date(point.x);
+                var objDate = new Date(tweetObj._source.date);
+                if (isInRange(pointDate, objDate, isDays))
                 {
-                    var pointDate = new Date(point.x);
-                    var objDate = new Date(tweetObj._source.date);
-                    if ((((pointDate.getDate() === objDate.getDate()
-                        && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() +2)))
-                        || (pointDate.getDate() === objDate.getDate() +1 && objDate.getHours() >= 22 && pointDate.getHours() <= 2))
-                        && pointDate.getMonth() === objDate.getMonth()
-                        && pointDate.getFullYear() === objDate.getFullYear())
-                    {
-                        let date = new Date(tweetObj._source.date[0]);
-                        tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' + 
-                        '<td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
-                            date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                            '<td>' + tweetObj._source.tweet + '</td>' +
-                            '<td>' + tweetObj._source.nretweets + '</td></tr>';
-                    }
+                    let date = new Date(tweetObj._source.date);
+                    tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' + 
+                    '<td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                        date.getHours() + 'h' + date.getMinutes() + '</td>' +
+                        '<td>' + tweetObj._source.tweet + '</td>' +
+                        '<td>' + tweetObj._source.nretweets + '</td></tr>';
                 }
-            });
+            }
         });
+    });
         tweetArr += "</tbody></table>"
         tweetPlace.innerHTML = tweetArr;
         tweetPlace.style.display = "block";
@@ -277,8 +280,6 @@ function displayTweetsOfUser(plot, place, button, nb_type)
             if (nb_type === 'tweets')
                 tweetArr += '<col span=1 class="nb_tweet_col" />';
 
-
-            console.log(tweetArr);
         tweetArr += '</colgroup>';
 
         tweetArr += '<tr><th scope="col">Date</th><th scope="col">Tweet</th>';
@@ -341,4 +342,19 @@ function unrotateMainHashtag(search)
             slice.setAttribute("transform", newTransform);
         }
     })
+}
+
+function isInRange(pointDate, objDate, isDays)
+{
+    console.log(isDays);
+    if (!isDays)
+        return ((((pointDate.getDate() === objDate.getDate()
+                && (pointDate.getHours() >= objDate.getHours() -2 && pointDate.getHours() <= objDate.getHours() +2)))
+                || (pointDate.getDate() === objDate.getDate() +1 && objDate.getHours() >= 22 && pointDate.getHours() <= 2))
+                && pointDate.getMonth() === objDate.getMonth()
+                && pointDate.getFullYear() === objDate.getFullYear())
+    else
+        return (pointDate.getDate() === objDate.getDate() 
+            &&  pointDate.getMonth() === objDate.getMonth()
+            &&  pointDate.getFullYear() === objDate.getFullYear());
 }
