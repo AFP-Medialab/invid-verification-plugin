@@ -857,7 +857,7 @@ function update_quiz(lang)
 		quiz_toggle_items( "1" );
 	});
 
-	var quiz_all = document.createElement("div");
+	let quiz_all = document.createElement("div");
 	quiz_all.id = "quiz_all";
 	quiz_all.style.overflow = "hidden";
 	quiz_all.appendChild(quiz_prev);
@@ -865,6 +865,22 @@ function update_quiz(lang)
 	quiz_all.appendChild(quiz_next);
 
 	quiz_tab.appendChild(quiz_all);
+
+	let footer_img = document.createElement("div");
+	footer_img.style.textAlign = "center";
+	let image = document.createElement("img");
+	image.src = "img/you-check.png";
+	image.style.maxWidth = "20%";
+	image.style.marginTop = "20px";
+	image.style.height = "auto";
+	footer_img.appendChild(image);
+	quiz_all.appendChild(footer_img);
+
+	let footer = document.createElement("div");
+	footer.className = "footer_quiz";
+	footer.innerHTML = json_lang_translate[lang]["footer_quiz"];
+	quiz_all.appendChild(footer);
+
 }
 
 /**
