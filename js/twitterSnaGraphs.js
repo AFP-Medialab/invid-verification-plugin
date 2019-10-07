@@ -215,15 +215,15 @@ function displayTweetsOfDate(plot, place, button)
     {
         var json = getTweets();
 
-        var tweetArr ='<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">' +
+        var tweetArr ='<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">' /* +
             '<colgroup>' +
-                '<col span=1 class="username_col" />' +
-                '<col span=1 class="date_col" />' +
-                '<col span=1 class="tweet_col" />' +
-                '<col span=1 class="nb_tweet_col" />' +
-            '</colgroup>';
+                '<col width="20%"/>' +
+                '<col width="15%" />' +
+                '<col width="45%"/>' +
+                '<col  width="10%" />' +
+            '</colgroup>';*/
 
-        tweetArr += '<thead><tr><th>Username</th><th>Date</th><th>Tweet</th><th>Nb of retweets</th></tr></thead><tbody>';
+        tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th></tr></thead><tbody>';
 
         let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
        
@@ -236,11 +236,11 @@ function displayTweetsOfDate(plot, place, button)
                 if (isInRange(pointDate, objDate, isDays))
                 {
                     let date = new Date(tweetObj._source.date);
-                    tweetArr += '<tr><td><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' + 
-                    '<td>' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                    tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' + 
+                    '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + '<br /> ' +
                         date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                        '<td>' + tweetObj._source.tweet + '</td>' +
-                        '<td>' + tweetObj._source.nretweets + '</td></tr>';
+                        '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                        '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td></tr>';
                 }
             }
         });
@@ -251,13 +251,16 @@ function displayTweetsOfDate(plot, place, button)
         visibilityButton.style.display = "block";
        
            
-     //   $(document).ready(function () {
             $('#tweet_view_histo').DataTable({
+                autoWidth: false,
+                fixedColumns: true,
                 "columnDefs": [
-            { "orderable": false, "targets": 2 }
-            ]
-              });
+                    { "orderable": false, "targets": 2 },
+                ],
+               
+            }).columns.adjust();
             $('.dataTables_length').addClass('bs-select');
+           
      //   });
 
         firstHisto = false
