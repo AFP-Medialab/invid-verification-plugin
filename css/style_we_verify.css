@@ -1100,32 +1100,62 @@ third-parties-menu div figure:hover{
 	padding: 10px 50px 40px;
 	font-size: 60pt;
 }
-
+/*
 .username_col {
-	width: 20%!important;
+	width: fit-content;
 }
 
 .date_col {
-	width: 15%!important;
+	width: fit-content;
 }
 
-.tweet_col {
-	overflow: hidden;
-	}
 
 .nb_tweet_col {
-	width: 10%!important;
+	width: fit-content;
 }
+*/
+
 colgroup td col {
-	display:inline-block;
+	display: block;
 }
 
+.tweet_arr {
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	min-width: 3px;
+	max-width:10%;
+}
 table.tweet_view {
 
 	border-collapse: collapse;
 	table-layout: fixed;
+	width: 100%;
 }
 
+.tweets_arr_user_time_place {
+	width: 100%
+}
+
+.tweet_arr_nretweet {
+	width: 10%;
+}
+
+.tweet_arr_users {
+	max-width: 30%;
+	width: fit-content;
+}
+
+.tweet_arr_tweets {
+	max-width: 40%;
+	width: auto;
+}
+.tweet_arr_date
+{
+	max-width: 20%;
+	white-space: nowrap;
+	width: fit-content;
+}
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:after,
