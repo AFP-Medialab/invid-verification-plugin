@@ -1156,6 +1156,10 @@ table.tweet_view {
 	width: fit-content;
 }
 
+.dropdown-toggle::after
+{
+	vertical-align: .7em;
+}
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:after,
