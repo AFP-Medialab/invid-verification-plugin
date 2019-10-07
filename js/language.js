@@ -56,6 +56,7 @@ function updateAllTranslations( language )
 	updateHomeTutorial(language);
 }
 
+
 /**
 * @func place current language in a cookie
 * @lang wanted language code (fr, en)

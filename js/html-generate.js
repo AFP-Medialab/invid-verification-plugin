@@ -380,23 +380,28 @@ function update_about(lang)
 	// Creates a list of all languages existing in the .tsv file.
 
 	let languages_item = "";
+	let list = document.getElementById('lang_list');
 	for(let lang_symb in all_lang) {
-		let list = document.createElement('li');
+		console.log(lang_symb);
 		let link = document.createElement('a');
-		link.type = "button";
+		//link.type = "button";
 		link.setAttribute('data-lang', lang_symb);
 		if (lang == lang_symb)
 			link.setAttribute("class", "dropdown-item on");
 		else
 			link.setAttribute("class", "dropdown-item");
-		link.text =  json_lang_translate[lang_symb]["lang_label"];
+			
+		link.setAttribute("href", "#");
+		link.setAttribute("id", "languages-item")
+		link.innerHTML =  json_lang_translate[lang_symb]["lang_label"];
 		list.appendChild(link);
-		languages_item += list.outerHTML;
+	//languages_item += list.outerHTML;
 	};
-	setInnerHtml("lang_list", languages_item);
+	//setInnerHtml("lang_list", languages_item);
 
 	// set the on function for selector to update language
 	$("[name='language']").on("change", function(event) {
+
 		var language = $(this).val();
 		console.log(language + "change");
 		if( language != global_language ) {
@@ -407,8 +412,8 @@ function update_about(lang)
 		}
 	});
 	$(".languages-list a").on("click", function(event) {
+		Array.from(list.children).forEach(child => list.removeChild(child));
 		var language = $(this).attr("data-lang");
-		console.log(language + "click");
 		if( language != global_language ) {
 			updateLanguageText(language);
 			updateAllTranslations( language );
