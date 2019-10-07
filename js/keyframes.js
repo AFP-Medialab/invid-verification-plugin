@@ -137,8 +137,7 @@ function display_result(data, video_id)
 	document.getElementById("Keyframe_datailed_content").innerHTML = "";
 
 
-	console.log(data);
-	if( data.scenes && data.scenes.length > 0 ) 
+	if( data.scenes && data.scenes.length > 0 )
 	{
 		let scene_count = data.scenes.length;
 		for(scene in data.scenes)
