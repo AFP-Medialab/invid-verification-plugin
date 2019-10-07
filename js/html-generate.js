@@ -397,7 +397,7 @@ function update_about(lang)
 
 	// set the on function for selector to update language
 	$("[name='language']").on("change", function(event) {
-		let language = $(this).val();
+		var language = $(this).val();
 		console.log(language + "change");
 		if( language != global_language ) {
 			updateLanguageText(language);
@@ -407,7 +407,7 @@ function update_about(lang)
 		}
 	});
 	$(".languages-list a").on("click", function(event) {
-		let language = $(this).attr("data-lang");
+		var language = $(this).attr("data-lang");
 		if( language != global_language ) {
 			updateLanguageText(language);
 			updateAllTranslations( language );
@@ -417,8 +417,8 @@ function update_about(lang)
 	});
 
 
-	for (let i = 0; i < arr_trans.length; ++i) {
-		let p = document.createElement("p");
+	for (var i = 0; i < arr_trans.length; ++i) {
+		var p = document.createElement("p");
 		p.innerHTML = arr_trans[i];
 		about_tab.appendChild(p);
 	}
