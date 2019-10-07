@@ -203,13 +203,13 @@ function exportPDF() {
     $("#exportButton").css("display", "none");
     $("#submitSna").css("visibility", "hidden");
     $("#twitterStats-loader").css("display", "block");
-    $("#user_time").css("margin-left", -100);
+    $("#user_time").css("margin-left", -120);
 
-    Plotly.relayout('user_time_chart', { width: 610 });
+    Plotly.relayout('user_time_chart', { width: 1000});
     var buttons = document.getElementsByClassName("modebar-group");
     Array.from(buttons).forEach(button => button.style = "display: none");
 
-    for (var i = 0; i < 14; i++) {
+    for (var i = 0; i < 30; i++) {
         var br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("twitterStats-radios-time").appendChild(br);
@@ -227,7 +227,7 @@ function exportPDF() {
     if (!$("#tweetCounter_contents").is(":visible"))
         $("#tweetCounter_contents").slideToggle();
 
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 30; i++) {
         var br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("tweetCounter_contents").appendChild(br);
@@ -238,7 +238,7 @@ function exportPDF() {
     if (!$("#most_liked").is(":visible"))
         $("#most_liked").slideToggle();
 
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 20; i++) {
         var br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("most_liked").appendChild(br);
@@ -250,7 +250,7 @@ function exportPDF() {
     if (!$("#top_users_content").is(":visible"))
         $("#top_users_content").slideToggle();
 
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 20; i++) {
         var br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("top_users_content").appendChild(br);
