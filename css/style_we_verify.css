@@ -1141,21 +1141,21 @@ table.tweet_view {
 	width: 10%;
 }
 
+.tweet_arr_tweets {
+	word-break: break-word;
+}
 .tweet_arr_users {
 	max-width: 30%;
 	width: fit-content;
 }
 
-.tweet_arr_tweets {
-	max-width: 40%;
-	width: auto;
-}
 .tweet_arr_date
 {
 	max-width: 20%;
 	white-space: nowrap;
 	width: fit-content;
 }
+
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:after,
@@ -1166,6 +1166,5 @@ table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_desc:before,
 table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
-	
 bottom: .5em;
 }
