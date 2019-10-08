@@ -7,6 +7,38 @@ if (dev) {
     elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
 }
 
+export function generateWordCloud(sessid)
+{
+    let matchPhrase =
+    {
+        "match_phrase":
+            {
+                "essid": {
+                    "query": sessid
+                }
+            }
+    }
+
+    let fieldInfo = {}
+
+    const userAction = async () => {
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body:
+                JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
+            headers: {
+                'Content-Type': 'application/json'
+            } //*/
+        });
+        const myJson = await response.json();
+        return myJson;
+
+    }
+    return userAction();
+
+
+}
+
 export function generateEssidHistogramQuery(sessid, retweets, queryStart, queryEnd, givenFrom, givenUntil) {
 
     let dateEndQuery = new Date(queryEnd);
