@@ -1160,6 +1160,7 @@ table.tweet_view {
 {
 	vertical-align: .7em;
 }
+
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:after,
@@ -1171,4 +1172,10 @@ table.dataTable thead .sorting_desc:before,
 table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
+}
+
+
+.non-optionnal-fields {
+	display: inline;
+	width: 40%!important;
 }

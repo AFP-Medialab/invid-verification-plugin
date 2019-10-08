@@ -493,6 +493,179 @@
                     <div id="footer_twitter" class="footer"></div>
                 </div>
 
+                <!-- TWITTER SNA VIEW -->
+
+                <div id="twitterSna" class="form-action hide">
+                    <div id="twitterStats_title"></div>
+                    <form id="twitterStats_form">
+                        <div style="padding-left:0;">
+                            <br>
+                             <div>
+                                <span style="display: inline-block; color: red; width:2%"><b>*</b></span>
+                                <input type="text" id="twitterStats-search" name="search"  style="width:37%;"/>
+                                
+                                <input type="text" id="twitterStats-search-and" name="search-and" style="width:40%;"/>
+                                <input type="text" id="twitterStats-search-or" name="search-or" style="width:40%;"/>
+                                <input type="text" id="twitterStats-search-not" name="search-not" style="width:40%;"/>
+                            </div>
+                            <br>
+
+                            <input type="text" id="twitterStats-user" name="user" style="width: 81%; margin-right: -10px">
+                            <br>
+                            <div id="twitterStats-fromto-content">
+                                    <span style="display: inline-block; color: red; width: 2%"><b>*</b></span>
+                                    <input type="text" id="twitterStats-from-date" style="width:37%;">
+                                    <span style="display: inline-block; color: red; width: 2%"><b>*</b></span>
+                                    <input type="text" id="twitterStats-to-date" style="width:37%;">
+                            </div>
+                            <br>
+                            <div>
+                                <span id="lang_choices"></span>
+                                <select id="twitterStats-lang">
+                                    <option id="lang_all" value=""/>
+                                    <option id="lang_en" value="en"/>
+                                    <option id="lang_fr" value="fr"/>
+                                    <option id="lang_es" value="es"/>
+                                    <option id="lang_ar" value="ar"/>
+                                    <option id="lang_da" value="da"/>
+                                    <option id="lang_de" value="de"/>
+                                    <option id="lang_fa" value="fa"/>
+                                    <option id="lang_fi" value="fi"/>
+                                    <option id="lang_he" value="he"/>
+                                    <option id="lang_hi" value="hi"/>
+                                    <option id="lang_hu" value="hu"/>
+                                    <option id="lang_id" value="id"/>
+                                    <option id="lang_it" value="it"/>
+                                    <option id="lang_ko" value="ko"/>
+                                    <option id="lang_nl" value="nl"/>
+                                    <option id="lang_no" value="no"/>
+                                    <option id="lang_pl" value="pl"/>
+                                    <option id="lang_pt" value="pt"/>
+                                    <option id="lang_ru" value="ru"/>
+                                    <option id="lang_sv" value="sv"/>
+                                    <option id="lang_th" value="th"/>
+                                    <option id="lang_tr" value="tr"/>
+                                    <option id="lang_ur" value="ur"/>
+                                </select>
+                            </div>
+                            <br>
+                            <div id="twitterStats-radios-media">
+                                <span type="text" id="twitterStats-media"></span>
+
+                                <input type="radio" id="twitterStats-radio_none" name="media" checked/>
+                                <span id="twitterStats_media_none"></span>
+
+                                <input type="radio" id="twitterStats-radio-images" name="media" translate="no"/>
+                                <span id="twitterStats_media_images"></span>
+
+                                <input type="radio" id="twitterStats-radio-videos" name="media" translate="no"/>
+                                <span id="twitterStats_media_videos"></span>
+
+                                <input type="radio" id="twitterStats-radio-both" name="media" translate="no"/>
+                                <span id="twitterStats_media_both"></span>
+                            </div>
+                            <br>
+                            <div id="twitterStats-radios-verified">
+                                <span id="twitterStats-verified"></span>
+                                <input type="radio" id="twitterStats-radio-no" name="verified" checked/>
+                                <span id="twitterStats_verified_no"></span>
+
+                                <input type="radio" id="twitterStats-radio_yes" name="verified" translate="no"/>
+                                <span id="twitterStats_verified_yes"></span>
+                            </div>
+
+                            <br>
+                            <div id="twitterStats-radios-time">
+                                <input type="radio" id="twitterStats-radio_local_time" name="time" checked/>
+                                <span id="twitterStats_local_time"></span>
+
+                                <input type="radio" id="twitterStats-radio-gmt" name="time" translate="no"/>
+                                <span id="twitterStats_gmt"></span>
+                            </div>
+                            <br>
+                            <br>
+                            <input type="submit" value="Submit" class="button" id="submitSna"/>
+                            <br><br><br>
+
+                            <input id="exportButton" type="button" class="button" value="Export" style="display: none; margin: auto"></input> 
+                            <br>
+                            <div id="twitterStats-loader" class="loader"></div>
+                            <br>
+                            <div id="twitterStats-Graphs" style="display: none;">
+
+                                <div id="user_time_chart_content" class="chart_content" style="margin: auto">
+                                    <div id="user_time_chart_title" class="title_custom"></div>
+
+
+                                    <div id='user_time'>
+                                        <div id="user_time_chart"></div>
+                                        <input type="button" class="button toggleVisibility"
+                                               id="user_time_tweets_toggle_visibility" value="hide"
+                                               style="display: none; float: right;"></input>
+                                        <div id="tweets_arr_user_time_place" class="toggleVisibility"></div>
+                                    </div>
+
+                                    <br>
+                                </div>
+                                <div id="tweetCounter_div">
+                                    <div id="tweetCounter_title" class="title_custom"></div>
+                                    <div id="tweetCounter_contents"></div>
+                                </div>
+                                <br>
+                                <div id='retweets_chart_content' class="chart_content" style="margin: 0 auto">
+                                    <div id="retweets_cloud_chart_title" class="title_custom"></div>
+                                    <div id="most_retweeted">
+                                        <div id="retweets_cloud_chart"></div>
+                                        <input type="button" class="button toggleVisibility"
+                                               id="most_retweeted_tweets_toggle_visibility" value="hide"
+                                               style="display: none; float: right;"></input>
+                                        <div id="tweets_arr_retweet_place" class="toggleVisibility"></div>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div id='likes_chart_content' class="chart_content" style="margin: 0 auto">
+                                    <div id="likes_cloud_chart_title" class="title_custom"></div>
+                                    <div id="most_liked">
+                                        <div id="likes_cloud_chart"></div>
+                                        <input type="button" class="button toggleVisibility"
+                                               id="most_liked_tweets_toggle_visibility" value="hide"
+                                               style="display: none; float: right;"></input>
+                                        <div id="tweets_arr_like_place" class="toggleVisibility"></div>
+                                    </div>
+                                    <br>
+                                </div>
+
+                                <div id='hashtags_chart_content' class="chart_content" style="margin: 0 auto">
+
+                                    <div id="hashtag_cloud_chart_title" class="title_custom"></div>
+                                    <div id="hashtag_cloud_chart_content">
+                                        <div id="hashtag_cloud_chart"></div>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div id='top_users_chart_content' class="chart_content" style="margin: 0 auto">
+                                    <div id="top_users_pie_chart_title" class="title_custom"></div>
+                                    <div id="top_users_content">
+                                        <div id="top_users"></div>
+
+                                        <div id="top_users_pie_chart"></div>
+                                        <input type="button" class="button toggleVisibility"
+                                               id="top_users_tweets_toggle_visibility" value="hide"
+                                               style="display: none; float: right;"></input>
+
+                                        <div id="tweets_arr_place" class="toggleVisibility"></div>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div id="url_array"></div>
+                            </div>
+                        </div>
+
+                        </ul>
+                    </form>
+                    <div id="twitterStats-footer" class="footer"></div>
+                </div>
+
                 <!-- MAGNIFIER VIEW -->
 
                 <div id="magnifier" class="form-action hide">
