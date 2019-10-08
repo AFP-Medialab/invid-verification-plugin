@@ -7,70 +7,39 @@ if (dev) {
     elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
 }
 
-
-
-
-//var sessid = "sess-080f5dae-f7f1-499f-abba-7c34cb7b63dc"
-export function generatePieChartQuery(sessid, startDate, endDate) {
-    let chartInfo = {
-        "terms": {
-            "field": "username",
-            "order": {
-                "_count": "desc"
-            },
-            "size": 10
-        }
-    };
-
-    let matchPhrase = {
-        "match_phrase": {
-            "essid": {
-                "query": sessid
+export function generateWordCloud(sessid)
+{
+    let matchPhrase =
+    {
+        "match_phrase":
+            {
+                "essid": {
+                    "query": sessid
+                }
             }
-        }
-    };
+    }
+
+    let fieldInfo = {}
 
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
-                JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)),
+                JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
             headers: {
                 'Content-Type': 'application/json'
             } //*/
         });
-        const myJson = await response.json(); //extract JSON from the http response
-        // do something with myJson
+        const myJson = await response.json();
+        return myJson;
 
-
-        let vals = [];
-        let keys = [];
-        let buckets = myJson["aggregations"]["2"]["buckets"];
-        var i = 0;
-        var tot = 0;
-        buckets.forEach(elt => {
-
-            if (i++ < 10) {
-                vals.push(elt["doc_count"]);
-                keys.push(elt["key"]);
-            } else
-                tot += elt["doc_count"];
-        });
-        vals.push(tot);
-        keys.push("OTHERS");
-
-        let plotlyJson = [{
-            values: vals,
-            labels: keys,
-            type: 'pie'
-        }];
-        return plotlyJson;
     }
-    return (userAction());
+    return userAction();
+
+
 }
 
-
-export function generateEssidHistogramQuery(sessid, retweets, startDate, endDate) {
+export function generateEssidHistogramQuery(sessid, retweets, queryStart, queryEnd, givenFrom, givenUntil) {
 
     let dateEndQuery = new Date(queryEnd);
     let dateStartQuery = new Date(queryStart);

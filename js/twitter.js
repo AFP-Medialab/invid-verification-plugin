@@ -110,6 +110,7 @@ if(form){
 	});
 }
 
+
 /* Add dates picker facility */
 $(document).ready( function() {
 	$( "#from-date" ).datetimepicker();
