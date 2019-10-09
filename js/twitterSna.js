@@ -250,6 +250,11 @@ function exportPDF() {
     if (!$("#top_users_content").is(":visible"))
         $("#top_users_content").slideToggle();
 
+
+    if (!$("#top_words_content").is(":visible"))
+        $("#top_words_content").slideToggle();
+
+
     for (var i = 0; i < 20; i++) {
         var br = document.createElement("br");
         br.className = "toRemove";
@@ -422,5 +427,6 @@ $(document).ready(customSlideToggle("retweets_cloud_chart_title", "most_retweete
 $(document).ready(customSlideToggle("likes_cloud_chart_title", "most_liked", global_language));
 $(document).ready(customSlideToggle("hashtag_cloud_chart_title", "hashtag_cloud_chart_content", global_language));
 $(document).ready(customSlideToggle("top_users_pie_chart_title", "top_users_content", global_language));
+$(document).ready(customSlideToggle("top_words_cloud_chart_title", "top_words_content", global_language));
 
 

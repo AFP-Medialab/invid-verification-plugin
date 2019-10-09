@@ -56,11 +56,11 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
     });
 }
 
-var stopwords = ["le", "la", "bonjour", "vient", "https", "http", "cela", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", " ", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", " ", "", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"]
+var stopwords = ["le", "la", "bonjour", "vient", "été", "jour", "h", "the", "jamais", "aucune", "fr", "eu", "org", "gouv", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "point", "https", "http", "cela", "surtout", "of", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", " ", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", " ", "", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"]
 function getOccurences(tweet)
 {
                     //Remove ponctuation & numbers
-    var counts = tweet.replace(/[\.\(\)0-9\!\?\'\"\:\,\_\-\/\\\%]/g, " ")
+    var counts = tweet.replace(/[\.\(\)0-9\!\?\'\"\:\,\_\-\/\\\%\>\<\«\»]/g, " ")
                     //Remove spare spaces
                    //   .replace(/(\ )+/, ' ')
                     //Remove hashtags
@@ -112,21 +112,29 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
                               .size([500, 500])
                               .words(
                                    words_arr.map(word => {
-                                      return {text: word, size: final_map.get(word), test: "haha"};
+                                      return {text: word, size: final_map.get(word), color: (word[0] === '@')?'#2874A6':'#A63D28'};
                                    }))
                             /*[
                             "Hello", "world", "normally", "you", "want", "more", "words",
                             "than", "this"]*/
                             
                               .padding(5)
-                              .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                              .rotate(function() { return (~~(Math.random() * 6) - 3) * 30;})
+                              .spiral("archimedean")
                               .font("Impact")
                               .fontSize(function(d) { return d.size; })
                               .on("end", draw);
     
         layout.start();
+        function fillColor(d){
+            return d.color;
+        }
+        function openTwitter(word)
+        {
+            window.open("https://twitter.com/search?q=" + word, '_blank');
+        }
         function draw(words) {
-            d3.select("body").append("svg")
+            d3.select("#top_words_cloud_chart").append("svg")
                 .attr("width", layout.size()[0])
                 .attr("height", layout.size()[1])
               .append("g")
@@ -140,7 +148,13 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
                 .attr("transform", function(d) {
                   return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
                 })
-                .text(function(d) { return d.text; });
+                .text(function(d) { return d.text; })
+                .style("fill", fillColor)
+                .style("cursor", "default")
+                .on("click", function(d) { openTwitter(d.text) })
+                .append("svg:title")
+                    .text(function(d) { return ("Used " + d.size + " times"); });
+
           }
     });
   
