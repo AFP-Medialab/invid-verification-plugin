@@ -332,7 +332,6 @@ async function waitStatusDone(session) {
         const response = getRequest(url);
         await response().then(json => {
             if (json == null)
-
                 return null;
             else if (json["status"] === "Done" || json["status"] === "Error")
                 res = json;

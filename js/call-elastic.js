@@ -7,25 +7,14 @@ if (dev) {
     elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
 }
 
-export function generateWordCloud(sessid)
+export function generateWordCloud(sessid, startDate, endDate)
 {
-    let matchPhrase =
-    {
-        "match_phrase":
-            {
-                "essid": {
-                    "query": sessid
-                }
-            }
-    }
-
-    let fieldInfo = {}
 
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
-                JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)),
+                JSON.stringify(getNbTweets(sessid, startDate, endDate, 10000)),
             headers: {
                 'Content-Type': 'application/json'
             } //*/
@@ -365,7 +354,7 @@ export function generateTweetCount(session, startDate, endDate) {
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
-            body: JSON.stringify(getNbTweets(session, startDate, endDate)),
+            body: JSON.stringify(getNbTweets(session, startDate, endDate, 0)),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -497,10 +486,10 @@ function getURLArray(json) {
     return urlArray;
 }
 
-function getNbTweets(sessid, startDate, endDate) {
+function getNbTweets(sessid, startDate, endDate, size) {
     return {
         "aggs": {},
-        "size": 0,
+        "size": size,
         "_source": {
             "excludes": []
         },

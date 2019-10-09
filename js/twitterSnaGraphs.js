@@ -56,43 +56,100 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
     });
 }
 
+var stopwords = ["le", "la", "bonjour", "vient", "https", "http", "cela", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", " ", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", " ", "", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"]
+function getOccurences(tweet)
+{
+                    //Remove ponctuation & numbers
+    var counts = tweet.replace(/[\.\(\)0-9\!\?\'\"\:\,\_\-\/\\\%]/g, " ")
+                    //Remove spare spaces
+                   //   .replace(/(\ )+/, ' ')
+                    //Remove hashtags
+                      .replace(/\#(.)*|/g, '')
+                      .replace(/\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, '')
+                      .split(' ') //=> Array of words
+                    //Put the tweet in lower case
+                      .map(word => word.toLowerCase())
+                    //Remove the stop words
+                      .filter(word => !stopwords.includes(word))
+                    //Count the number of occurence of each word & return the associated map
+                      .reduce(function(map, word)
+                      {
+                          map[word] = (map[word]||0)+1;
+                          return map;
+                      }, Object.create(null));
+                      
+    return counts
+}
+
+function getnMax(map, n)
+{
+    const mapSort = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
+    return (new Map([...mapSort.entries()].splice(0, n)));
+   
+}
+
 function mostUsedWordsCloud(param, givenFrom, givenUntil) {
-    var layout = d3.layout.cloud()
-      .size([500, 500])
-      .words([
-        "Hello", "world", "normally", "you", "want", "more", "words",
-        "than", "this"].map(function(d) {
-        return {text: d, size: 10 + Math.random() * 90, test: "haha"};
-      }))
-      .padding(5)
-      .rotate(function() { return ~~(Math.random() * 2) * 90; })
-      .font("Impact")
-      .fontSize(function(d) { return d.size; })
-      .on("end", draw);
+    var words_map = new Map();
+    generateWordCloud(param["session"], givenFrom, givenUntil).then(json => {
+       Array.from(json.hits.hits).forEach(hit => 
+        {
+            var map = getOccurences(hit._source.tweet); 
+            //console.log(map);
+            for (var word in map){
+
+               // console.log(map[word]);
+                if (words_map.get(word) != undefined)
+                    words_map.set(word, words_map.get(word) + map[word]);
+                else
+                    words_map.set(word, map[word]);
+
+            }
+        });
+        var final_map =  getnMax(words_map, 100);
+        var words_arr = Array.from(final_map.keys());
+       // var val_arr = final_map.values();
+        var layout = d3.layout.cloud()
+                              .size([500, 500])
+                              .words(
+                                   words_arr.map(word => {
+                                      return {text: word, size: final_map.get(word), test: "haha"};
+                                   }))
+                            /*[
+                            "Hello", "world", "normally", "you", "want", "more", "words",
+                            "than", "this"]*/
+                            
+                              .padding(5)
+                              .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                              .font("Impact")
+                              .fontSize(function(d) { return d.size; })
+                              .on("end", draw);
+    
+        layout.start();
+        function draw(words) {
+            d3.select("body").append("svg")
+                .attr("width", layout.size()[0])
+                .attr("height", layout.size()[1])
+              .append("g")
+                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+              .selectAll("text")
+                .data(words)
+              .enter().append("text")
+                .style("font-size", function(d) { return d.size + "px"; })
+                .style("font-family", "Impact")
+                .attr("text-anchor", "middle")
+                .attr("transform", function(d) {
+                  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function(d) { return d.text; });
+          }
+    });
   
-  layout.start();
+
   
-  function draw(words) {
-    d3.select("body").append("svg")
-        .attr("width", layout.size()[0])
-        .attr("height", layout.size()[1])
-      .append("g")
-        .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-      .selectAll("text")
-        .data(words)
-      .enter().append("text")
-        .style("font-size", function(d) { return d.size + "px"; })
-        .style("font-family", "Impact")
-        .attr("text-anchor", "middle")
-        .attr("transform", function(d) {
-          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-        })
-        .text(function(d) { return d.text; });
-  }
+ 
   
       
 }
-mostUsedWordsCloud();
 
 export function mostRetweetPie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -240,6 +297,8 @@ export function generateGraphs(param) {
     mostTweetPie(param, givenFrom, givenUntil);
     topHashtagPie(param, givenFrom, givenUntil);
     urlArray(param, givenFrom, givenUntil);
+    if (firstHisto)
+        mostUsedWordsCloud(param, givenFrom, givenUntil);
 }
 
 function displayTweetsOfDate(plot, place, button) {
