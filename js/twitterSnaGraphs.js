@@ -4,7 +4,8 @@ import "../js/d3.js"
 //import { Module } from "../js/d3-cloud/build/d3.layout.cloud.js"
 
 export function getNbTweets(param, givenFrom, givenUntil) {
-    generateTweetCount(param["session"], givenFrom, givenUntil).then(res => {
+    console.log(param);
+    generateTweetCount(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(res => {
         document.getElementById("tweetCounter_contents").innerHTML = "";
         let counter = document.createElement("div");
         counter.setAttribute("id", "counter_number");
@@ -23,7 +24,7 @@ export function getNbTweets(param, givenFrom, givenUntil) {
 }
 
 function showEssidHistogram(param, givenFrom, givenUntil) {
-    generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil).then(plotlyJson => {
+    generateEssidHistogramQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil).then(plotlyJson => {
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -187,7 +188,7 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
 }
 
 export function mostRetweetPie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
             title: "<b>Most retweeted users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -215,7 +216,7 @@ export function mostRetweetPie(param, givenFrom, givenUntil) {
 }
 
 export function mostLikePie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most liked users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -243,7 +244,7 @@ export function mostLikePie(param, givenFrom, givenUntil) {
 
 export function mostTweetPie(param, givenFrom, givenUntil) {
     //Utilisateurs les actifs
-    generateCloudQuery(param["session"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
             title: "<b>Most active users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -272,7 +273,7 @@ export function mostTweetPie(param, givenFrom, givenUntil) {
 
 var firstTopUsers = true;
 export function topHashtagPie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most associated hashtags</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -312,7 +313,7 @@ export function topHashtagPie(param, givenFrom, givenUntil) {
 }
 
 export function urlArray(param, givenFrom, givenUntil) {
-    generateURLArray(param["session"], givenFrom, givenUntil).then(arrayStr => {
+    generateURLArray(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(arrayStr => {
         document.getElementById('url_array').innerHTML = arrayStr;
     });
 }

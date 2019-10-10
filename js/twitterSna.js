@@ -85,6 +85,7 @@ function formToJsonCollectRequest() {
 
     let and_list, or_list, not_list = null;
 
+    console.log("AND 1 : ", search_and);
     if (search_and !== "")
         and_list = search_and.trim().split(" ");
     if (search_or !== "")
@@ -92,6 +93,7 @@ function formToJsonCollectRequest() {
     if (search_not !== "")
         not_list = search_not.trim().split(" ");
 
+        console.log("AND list : ", and_list);
     let searchObj = {
         "search": search,
         "and": and_list,
@@ -113,6 +115,7 @@ function formToJsonCollectRequest() {
         if (value !== null && value !== "")
             return value
     });
+    console.log("RES: ",  res);
     return res;
 }
 
@@ -154,6 +157,7 @@ function submit_sna_form() {
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
+                    console.log("Param1 : ", param);
                     if (isFirst)
                         document.getElementById('exportButton').addEventListener('click', () => {
                             exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
