@@ -59,7 +59,7 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
 
 var stopwords = {
     "fr": ["rt","le", "la", "bonjour", "vient", "été", "jour", "nest", "jamais", "aucune", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "cela", "surtout", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
-    "en": ["rt", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "com", "need", "ourselves", "you", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now"]
+    "en": ["see", "much", "like", "didn", "must", "ever", "never", "got", "see", "would", "call", "many", "big", "also", "another", "really", "always", "rt", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "com", "need", "ourselves", "you", "want", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "could", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now", "said", "say"]
 }
 function isEnglish(text)
 {
@@ -83,13 +83,10 @@ function isEnglish(text)
     return (percentEnglish > percentFrench);
 }
 function getOccurences(tweet) {
-        var b = tweet.includes("http");
         //remove URLS
     var treatedTweet = tweet.replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
                             //.replace(/https.*(\ |\Z)/g, '')
                             .replace(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/)
-    if (b)
-        console.log(treatedTweet)
         //Remove ponctuation & numbers
         treatedTweet = treatedTweet.replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\_\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+/g, " ")
         //Remove emoticones
@@ -97,8 +94,6 @@ function getOccurences(tweet) {
         if (treatedTweet === "")
             return [];
             
-    if (!isEnglish(treatedTweet))
-        console.log(treatedTweet);
     var counts = treatedTweet
         .split(' ') //=> Array of words
         //Put the tweet in lower case
@@ -127,6 +122,7 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
             var map = getOccurences(hit._source.tweet);
             for (var word in map) {
 
+                if(word.length > 1)
                     words_map.set(word, (words_map.get(word)|| 0) + map[word]);
             }
 
