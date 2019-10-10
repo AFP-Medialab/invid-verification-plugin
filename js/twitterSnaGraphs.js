@@ -58,8 +58,8 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
 }
 
 var stopwords = {
-    "fr": ["le", "la", "bonjour", "vient", "été", "jour", "h", "the", "nest", "jamais", "aucune", "fr", "eu", "org", "gouv", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "point", "https", "http", "cela", "surtout", "of", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", " ", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", " ", "", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
-    "en": ["i", "me", "my", "myself", "we", "our", "https", "bit", "ours", "com", "ourselves", "you", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now"]
+    "fr": ["rt","le", "la", "bonjour", "vient", "été", "jour", "nest", "jamais", "aucune", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "cela", "surtout", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
+    "en": ["rt", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "com", "need", "ourselves", "you", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now"]
 }
 function isEnglish(text)
 {
@@ -69,26 +69,36 @@ function isEnglish(text)
     var frenchLenght = stopwords["fr"].length;
 
     stopwords["en"].forEach(stopword => {
-        if (text.includes(stopword))
-            percentEnglish += 100/englishLenght
+        if (text.includes(" " + stopword + " "))
+            percentEnglish += 1;
     })
     stopwords["fr"].forEach(stopword => {
-        if (text.includes(stopword))
-            percentFrench += 100/frenchLenght;
+        if (text.includes(" " + stopword + " "))
+            percentFrench += 1;
     })
+
+    percentEnglish = percentEnglish / englishLenght * 100;
+    percentFrench = percentFrench / frenchLenght * 100;
 
     return (percentEnglish > percentFrench);
 }
 function getOccurences(tweet) {
-        //Remove hashtags
-    var treatedTweet = tweet.replace(/pic\.(.)*/g, '')
+        var b = tweet.includes("http");
+        //remove URLS
+    var treatedTweet = tweet.replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
+                            //.replace(/https.*(\ |\Z)/g, '')
+                            .replace(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/)
+    if (b)
+        console.log(treatedTweet)
         //Remove ponctuation & numbers
-        .replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\_\/\\\%\>\<\«\»\'\#\ ]+/g, " ")
+        treatedTweet = treatedTweet.replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\_\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+/g, " ")
         //Remove emoticones
         .replace(/\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, '');
         if (treatedTweet === "")
             return [];
             
+    if (!isEnglish(treatedTweet))
+        console.log(treatedTweet);
     var counts = treatedTweet
         .split(' ') //=> Array of words
         //Put the tweet in lower case
@@ -124,7 +134,6 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
 
         var final_map = getnMax(words_map, 100);
 
-        console.log(final_map);
         var words_arr = Array.from(final_map.keys());
          var val_arr = Array.from(final_map.values());
 
@@ -174,7 +183,7 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
                 .style("cursor", "default")
                 .on("click", function (d) { displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility") })
                 .append("svg:title")
-                .text(function (d) { console.log(d); return ("Used " +final_map.get(d.text) + " times"); });
+                .text(function (d) {return ("Used " +final_map.get(d.text) + " times"); });
 
         }
     });
