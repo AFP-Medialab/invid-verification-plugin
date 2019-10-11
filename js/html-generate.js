@@ -6,7 +6,7 @@
 /**
 * @func clear all navbar and menu items text
 */
-function clearNavbarAndMenuItems() 
+function clearNavbarAndMenuItems()
 {
 	cleanId("navbar_analysis");
 	cleanId("navbar_tools");
@@ -28,7 +28,7 @@ function clearNavbarAndMenuItems()
 * @func update the content of the navbar in function of language
 * @lang actual lang to display
 */
-function update_navbar(lang) 
+function update_navbar(lang)
 {
 	// clear navbar and menu items
 	clearNavbarAndMenuItems();
@@ -45,7 +45,7 @@ function update_navbar(lang)
 * @func update the content of the tools menu in function of language
 * @lang actual lang to display
 */
-function update_tools_menu(lang) 
+function update_tools_menu(lang)
 {
 	setInnerHtml("menu_api_tit",				json_lang_translate[lang]["navbar_analysis"]);
 	setInnerHtml("menu_key_tit",				json_lang_translate[lang]["navbar_keyframes"]);
@@ -55,6 +55,8 @@ function update_tools_menu(lang)
 	setInnerHtml("menu_met_tit",				json_lang_translate[lang]["navbar_metadata"]);
 	setInnerHtml("menu_vid_tit",				json_lang_translate[lang]["navbar_rights"]);
 	setInnerHtml("menu_for_tit",				json_lang_translate[lang]["navbar_forensic"]);
+	setInnerHtml("menu_sna_tit", 				json_lang_translate[lang]["navbar_twitter_sna"]);
+
 	setTitle("menu_api_dsc",					json_lang_translate[lang]["api_title"]);
 	setTitle("menu_key_dsc",					json_lang_translate[lang]["keyframes_title"]);
 	setTitle("menu_thu_dsc",					json_lang_translate[lang]["youtube_title"]);
@@ -63,13 +65,14 @@ function update_tools_menu(lang)
 	setTitle("menu_met_dsc",					json_lang_translate[lang]["metadata_title"]);
 	setTitle("menu_vid_dsc",					json_lang_translate[lang]["copyright_title"]);
 	setTitle("menu_for_dsc",					json_lang_translate[lang]["forensic_title"]);
+	setTitle("menu_sna_dsk",					json_lang_translate[lang]["twitter_sna_title"])
 }
 
 /**
 * @func update the content of the tools menu in function of language
 * @lang actual lang to display
 */
-function update_third_parties_menu(lang) 
+function update_third_parties_menu(lang)
 {
 	setInnerHtml("third_parties_title",			json_lang_translate[lang]["third_parties_title"]);
 	for( var i = 1; i <= 6; i ++ ) {
@@ -88,7 +91,7 @@ function update_third_parties_menu(lang)
 * @func update the content of the api tab in function of language
 * @lang actual lang to display
 */
-function update_api(lang) 
+function update_api(lang)
 {
 	// add translation to items needed from api tab
 	setInnerHtml("api_title",					"<h1>" + json_lang_translate[lang]["api_title"] + "</h1>");
@@ -109,7 +112,7 @@ function update_api(lang)
 * @func update the translations of keyframes tab in function of language
 * @lang actual lang to display
 */
-function update_keyframes(lang) 
+function update_keyframes(lang)
 {
 	// add translations to item needed
 	setInnerHtml("keyframes_title",				"<h1>" + json_lang_translate[lang]["keyframes_title"] + "</h1>");
@@ -121,13 +124,17 @@ function update_keyframes(lang)
 	setInnerHtml("keyframes_download_subshots",	json_lang_translate[lang]["keyframes_download"]);
 	setInnerHtml("footer_keyframes",			json_lang_translate[lang]["footer_keyframes"]);
 	setPlaceholder("keyframes_input",			json_lang_translate[lang]["keyframes_input"]);
+
+
+	$("#Keyframe_datailed_content").hide();
+	setInnerHtml("Keyframe_title", json_lang_translate[lang]["keyframe_title_get_detail"]);
 }
 
 /**
 * @func update the translations of YouTube thumbnails tab in function of language
 * @lang actual lang to display
 */
-function update_thumbnails(lang) 
+function update_thumbnails(lang)
 {
 	// add translations to item needed
 	setInnerHtml("youtube_title",				"<h1>" + json_lang_translate[lang]["youtube_title"] + "</h1>");
@@ -139,13 +146,14 @@ function update_thumbnails(lang)
 * @func update the translations of twitter search tab in function of language
 * @lang actual lang to display
 */
-function update_twitter(lang) 
+function update_twitter(lang)
 {
 	// add translations to item needed
 	setInnerHtml("twitter_title",				"<h1>" + json_lang_translate[lang]["twitter_title"] + "</h1>");
 	setInnerHtml("twitter_local_time",			json_lang_translate[lang]["twitter_local_time"]);
 	setInnerHtml("twitter_gmt",					json_lang_translate[lang]["twitter_gmt"]);
 	setInnerHtml("footer_twitter",				json_lang_translate[lang]["footer_twitter"]);
+
 	setPlaceholder("termbox",					json_lang_translate[lang]["twitter_termbox"]);
 	setPlaceholder("tw-account",				json_lang_translate[lang]["twitter_tw-account"]);
 	setPlaceholder("filter",					json_lang_translate[lang]["twitter_filter"]);
@@ -158,10 +166,85 @@ function update_twitter(lang)
 }
 
 /**
+ * @func update the translations of twitter sna tab in function of language
+ * @lang actual lang to display
+ */
+function update_twitter_sna(lang)
+{
+	// add translations to item needed
+	setInnerHtml("twitterStats_title",				"<h1>" + json_lang_translate[lang]["twitter_sna_title"] + "</h1>");
+	setInnerHtml("twitterStats_local_time",			json_lang_translate[lang]["twitter_sna_local_time"]);
+	setInnerHtml("twitterStats_gmt",				json_lang_translate[lang]["twitter_sna_gmt"]);
+	setInnerHtml("twitterStats-footer",				json_lang_translate[lang]["footer_twitter"]);
+	setInnerHtml("twitterStats-media",				json_lang_translate[lang]["twitter_sna_media"]);
+	setInnerHtml("twitterStats_media_none",			json_lang_translate[lang]["twitterStats_media_none"]);
+	setInnerHtml("twitterStats_media_images",		json_lang_translate[lang]["twitterStats_media_images"]);
+	setInnerHtml("twitterStats_media_videos",		json_lang_translate[lang]["twitterStats_media_videos"]);
+	setInnerHtml("twitterStats_media_both",			json_lang_translate[lang]["twitterStats_media_both"]);
+	setInnerHtml("twitterStats-verified",			json_lang_translate[lang]["twitter_sna_verified"]);
+	setInnerHtml("twitterStats_verified_no",		json_lang_translate[lang]["twitterStats_verified_no"]);
+	setInnerHtml("twitterStats_verified_yes",		json_lang_translate[lang]["twitterStats_verified_yes"]);
+
+
+	setPlaceholder("twitterStats-search",			json_lang_translate[lang]["twitter_sna_search"]);
+	setPlaceholder("twitterStats-search-and",		json_lang_translate[lang]["twitter_sna_and"]);
+	setPlaceholder("twitterStats-search-or",		json_lang_translate[lang]["twitter_sna_or"]);
+	setPlaceholder("twitterStats-search-not",		json_lang_translate[lang]["twitter_sna_not"]);
+	setPlaceholder("twitterStats-user",				json_lang_translate[lang]["twitter_sna_user"]);
+	setPlaceholder("twitterStats-from-date",		json_lang_translate[lang]["twitter_sna_from_date"]);
+	setPlaceholder("twitterStats-to-date",			json_lang_translate[lang]["twitter_sna_until_date"]);
+
+	//langauges list
+	setInnerHtml("lang_choices",					json_lang_translate[lang]["lang_choices"]);
+	setInnerHtml("lang_all",						json_lang_translate[lang]["lang_all"]);
+	setInnerHtml("lang_en",							json_lang_translate[lang]["lang_en"]);
+	setInnerHtml("lang_fr",							json_lang_translate[lang]["lang_fr"]);
+	setInnerHtml("lang_es",							json_lang_translate[lang]["lang_es"]);
+	setInnerHtml("lang_ar",							json_lang_translate[lang]["lang_ar"]);
+	setInnerHtml("lang_da",							json_lang_translate[lang]["lang_da"]);
+	setInnerHtml("lang_de",							json_lang_translate[lang]["lang_de"]);
+	setInnerHtml("lang_fa",							json_lang_translate[lang]["lang_fa"]);
+	setInnerHtml("lang_fi",							json_lang_translate[lang]["lang_fi"]);
+	setInnerHtml("lang_he",							json_lang_translate[lang]["lang_he"]);
+	setInnerHtml("lang_hi",							json_lang_translate[lang]["lang_hi"]);
+	setInnerHtml("lang_hu",							json_lang_translate[lang]["lang_hu"]);
+	setInnerHtml("lang_id",							json_lang_translate[lang]["lang_id"]);
+	setInnerHtml("lang_it",							json_lang_translate[lang]["lang_it"]);
+	setInnerHtml("lang_ko",							json_lang_translate[lang]["lang_ko"]);
+	setInnerHtml("lang_nl",							json_lang_translate[lang]["lang_nl"]);
+	setInnerHtml("lang_no",							json_lang_translate[lang]["lang_no"]);
+	setInnerHtml("lang_pl",							json_lang_translate[lang]["lang_pl"]);
+	setInnerHtml("lang_pt",							json_lang_translate[lang]["lang_pt"]);
+	setInnerHtml("lang_ru",							json_lang_translate[lang]["lang_ru"]);
+	setInnerHtml("lang_sv",							json_lang_translate[lang]["lang_sv"]);
+	setInnerHtml("lang_th",							json_lang_translate[lang]["lang_th"]);
+	setInnerHtml("lang_tr",							json_lang_translate[lang]["lang_tr"]);
+	setInnerHtml("lang_ur",							json_lang_translate[lang]["lang_ur"]);
+
+	//Chart titles
+	setInnerHtml("user_time_chart_title",			"▲ " + json_lang_translate[lang]["user_time_chart_title"]);
+	setInnerHtml("tweetCounter_title", "▼ " + json_lang_translate[lang]["tweetCounter_title"]);
+	setInnerHtml("hashtag_cloud_chart_title",		"▼ " + json_lang_translate[lang]["hashtag_cloud_chart_title"]);
+	setInnerHtml("retweets_cloud_chart_title",		"▼ " + json_lang_translate[lang]["retweets_cloud_chart_title"]);
+	setInnerHtml("likes_cloud_chart_title",			"▼ " + json_lang_translate[lang]["likes_cloud_chart_title"]);
+	setInnerHtml("top_users_pie_chart_title",		"▼ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
+
+
+	//Toggle views
+	$("#tweetCounter_contents").hide();
+	$("#most_retweeted").hide();
+	$("#most_liked").hide();
+	$("#hashtag_cloud_chart_content").hide();
+	$("#top_users_content").hide();
+
+}
+
+
+/**
 * @func update the translations of magnifier tab in function of language
 * @lang actual lang to display
 */
-function update_magnifier(lang) 
+function update_magnifier(lang)
 {
 	// add translations to item needed
 	setInnerHtml("magnifier_title",				"<h1>" + json_lang_translate[lang]["magnifier_title"] + "</h1>");
@@ -190,7 +273,7 @@ function update_magnifier(lang)
 * @func update the translations of metadata tab in function of language
 * @lang actual lang to display
 */
-function update_metadata(lang) 
+function update_metadata(lang)
 {
 	// add translations to item needed
 	setInnerHtml("metadata_content_title",		"<h1>" + json_lang_translate[lang]["metadata_content_title"] + "</h1>");
@@ -205,7 +288,7 @@ function update_metadata(lang)
 * @func update the translations of copyright tab in function of language
 * @lang actual lang to display
 */
-function update_copyright(lang) 
+function update_copyright(lang)
 {
 	// add translations to item needed
 	setInnerHtml("copyright_title",				"<h1>" + json_lang_translate[lang]["copyright_title"] + "</h1>");
@@ -217,7 +300,7 @@ function update_copyright(lang)
 * @func update the translations of forensic tab in function of language
 * @lang actual lang to display
 */
-function update_forensic(lang) 
+function update_forensic(lang)
 {
 	// add translations to item needed
 	setInnerHtml("forensic_title",				"<h1>" + json_lang_translate[lang]["forensic_title"] + "</h1>");
@@ -253,7 +336,7 @@ function update_submit(lang)
 * @func update the content of about tab in function of language
 * @lang actual language to display
 */
-function update_about(lang) 
+function update_about(lang)
 {
 	// clean about tab
 	var about_tab = document.getElementById("about");
@@ -289,9 +372,38 @@ function update_about(lang)
 	var br = document.createElement("hr");
 	// about_tab.appendChild(br);
 
+
+	setInnerHtml("lang_code", json_lang_translate[lang]["lang_code"] );
+	let all_lang = json_lang_translate;
+
+
+	// Creates a list of all languages existing in the .tsv file.
+
+	let languages_item = "";
+	let list = document.getElementById('lang_list');
+	for(let lang_symb in all_lang) {
+		console.log(lang_symb);
+		let link = document.createElement('a');
+		//link.type = "button";
+		link.setAttribute('data-lang', lang_symb);
+		if (lang == lang_symb)
+			link.setAttribute("class", "dropdown-item on");
+		else
+			link.setAttribute("class", "dropdown-item");
+			
+		link.setAttribute("href", "#");
+		link.setAttribute("id", "languages-item")
+		link.innerHTML =  json_lang_translate[lang_symb]["lang_label"];
+		list.appendChild(link);
+	//languages_item += list.outerHTML;
+	};
+	//setInnerHtml("lang_list", languages_item);
+
 	// set the on function for selector to update language
 	$("[name='language']").on("change", function(event) {
+
 		var language = $(this).val();
+		console.log(language + "change");
 		if( language != global_language ) {
 			updateLanguageText(language);
 			updateAllTranslations( language );
@@ -300,6 +412,7 @@ function update_about(lang)
 		}
 	});
 	$(".languages-list a").on("click", function(event) {
+		Array.from(list.children).forEach(child => list.removeChild(child));
 		var language = $(this).attr("data-lang");
 		if( language != global_language ) {
 			updateLanguageText(language);
@@ -308,6 +421,7 @@ function update_about(lang)
 		}
 		select_current_language( language );
 	});
+
 
 	for (var i = 0; i < arr_trans.length; ++i) {
 		var p = document.createElement("p");
@@ -378,7 +492,7 @@ function update_about(lang)
 	input.setAttribute("name", "unlock_explanations");
 	input.setAttribute("id", "checkbox_explain");
 	input.checked = ( cookie_value( "unlock" ) == "1" ? true : false );
-	
+
 	input.addEventListener("change", function () {
 		var date = new Date();
 		date.setTime( date.getTime() + ( 3*365*24*60*60*1000 ) );
@@ -419,7 +533,7 @@ function update_about(lang)
 * @func update the content of tuto tab in function of language
 * @lang actual language to display
 */
-function update_tuto(lang) 
+function update_tuto(lang)
 {
 	// clean tutorial tab
 	var tuto_tab = document.getElementById("tutorial");
@@ -499,7 +613,7 @@ function update_tuto(lang)
 * @func update the content of classroom tab in function of language
 * @lang actual language to display
 */
-function update_classroom(lang) 
+function update_classroom(lang)
 {
 	// main title
 	setInnerHtml( "classroom_title", json_lang_translate[lang]["classroom_title"] );
@@ -608,7 +722,7 @@ function update_classroom(lang)
 * @func update the content of about tab in function of language
 * @lang actual language to display
 */
-function update_quiz(lang) 
+function update_quiz(lang)
 {
 	// clean quiz tab
 	var quiz_tab = document.getElementById("quiz");
@@ -678,14 +792,14 @@ function update_quiz(lang)
 			} else {
 				typ = "video";
 				var frm = document.createElement("iframe");
-				frm.id = 'quiz_iframe_'+i; 
+				frm.id = 'quiz_iframe_'+i;
 				frm.src = src;
 				frm.border = "0";
 				frm.width = "625";
 				frm.height = "450";
 				frm.style.marginTop = "40px";
 				frm.style.marginBottom = "20px";
-				main_div.appendChild(frm); 
+				main_div.appendChild(frm);
 			}
 			if( typ == "image" ) {
 				// SIMILARITY search
@@ -742,7 +856,7 @@ function update_quiz(lang)
 						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
 							var youtube_url = $("#quiz_iframe_"+i).attr("src");
 							var video_url = page_name+"?imgkey=";
-							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=' ) );
+							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=') );
 							window.location.href = video_url;
 							break;
 						}
@@ -860,7 +974,7 @@ function updateHomeTutorial(lang)
 	tutorial_items.style.textAlign = "center";
 	tutorial_items.style.margin = "0 auto";
 	var classname = "";
-	for( var i = 1; i <= 5; i++ ) {
+	for( var i = 1; i <= 3; i++ ) {
 		if( json_lang_translate[lang]["home_tutorial_image_"+i] != "" ) {
 			var main_div = document.createElement("div");
 			main_div.id = "tutorial_item_"+i;

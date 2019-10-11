@@ -104,7 +104,7 @@ function rebuild(img_url)
 */
 function ValidURL(str) 
 {
-    var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+    var regex = /(http|https|blob:chrome-extension):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
     return regex.test(str);
 }
 
@@ -137,11 +137,16 @@ function submit_img()
         if( ! ValidURL(img_url) ) {
             document.getElementById("lst_search_btn").setAttribute("style", "display: none");
             document.getElementById("magnifier-content").style.display = (histo.local_path) ? "" : "none";
+            console.log(histo.local_path)
         }
         else {
             document.getElementById("lst_search_btn").setAttribute("style", "display: inline");
             document.getElementById("magnifier-content").style.display = "";
         }
+    }
+    else
+    {
+        document.getElementById("magnifier-content").style.display = "none";
     }
 }
 
@@ -282,7 +287,7 @@ if( form){
     form.addEventListener("submit", apply_filter, false);
     form.addEventListener("submit", function(e) {
         e.preventDefault();
-    });    
+    });
 }
 
 /**
@@ -332,7 +337,7 @@ $('#file-input').change( function(event) {
 
     /* Verification button : Image Verification Assistant */
     document.getElementById("img_verif_btn").onclick = function() {
-        openTab("http://reveal-mklab.iti.gr/reveal/?image=" + histo.getHistory());
+        openTab("https://reveal-mklab.iti.gr/reveal/?image=" + histo.getHistory());
     };
 })();
 

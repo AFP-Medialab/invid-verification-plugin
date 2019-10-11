@@ -1060,21 +1060,122 @@ third-parties-menu div figure:hover{
 	cursor:pointer;
 }
 
-.languages-list{
-	margin:-5px 20px 0  0;
-}
-.languages-list a{
-	padding:5px;
-	opacity:0.25;
-	font-size:12px;
-	text-decoration:none;
-}
 .languages-list a:hover,
 .languages-list a.on{
 	opacity:1.0;
 }
+
 .languages-list a.on{
-	background-color:#21a5b4;
-	color:#fff;
+	color:#21a5b4;
 	border-radius:3px;
+}
+
+/* Twitter sna */
+.js-plotly-plot .plotly, .js-plotly-plot .plotly div{
+	margin: auto!important;
+}
+
+.title_custom{
+	background-color:#f8f8f8;
+	padding:5px;
+	border-radius:5px;
+	cursor:pointer;
+	font-size:20px;
+	width: 595.28px;
+	margin: auto;
+}
+
+#twitterStats-Graphs {
+	display: none;
+	margin: 30px auto 15px;
+	padding: 10px 50px 40px;
+	border: 2px solid #F8F8F8;
+	border-radius: 4px;
+	text-align: center;
+	line-height: 22px;
+}
+
+#counter_number {
+	margin: 30px auto 15px;
+	padding: 10px 50px 40px;
+	font-size: 60pt;
+}
+/*
+.username_col {
+	width: fit-content;
+}
+
+.date_col {
+	width: fit-content;
+}
+
+
+.nb_tweet_col {
+	width: fit-content;
+}
+*/
+
+colgroup td col {
+	display: block;
+}
+
+.tweet_arr {
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	min-width: 3px;
+	max-width:10%;
+}
+table.tweet_view {
+
+	border-collapse: collapse;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.tweets_arr_user_time_place {
+	width: 100%
+}
+
+.tweet_arr_nretweet {
+	width: 10%;
+}
+
+.tweet_arr_tweets {
+	word-break: break-word;
+}
+.tweet_arr_users {
+	max-width: 30%;
+	width: fit-content;
+}
+
+.tweet_arr_date
+{
+	max-width: 20%;
+	white-space: nowrap;
+	width: fit-content;
+}
+
+.dropdown-toggle::after
+{
+	vertical-align: .7em;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+
+
+.non-optionnal-fields {
+	display: inline;
+	width: 40%!important;
 }

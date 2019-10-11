@@ -58,9 +58,9 @@ function add_thumbnails(lst_url)
 */
 function submit_form()
 {
-	var url = $("[name=video_url]").val();
+	let url = $("[name=video_url]").val().replace("?rel=0", "");
 	if( url != "" && isYtUrl(url) ) {
-		var lst = get_images(url);
+		let lst = get_images(url);
 		add_thumbnails(lst);
 		clickThumbnails();
 		reverseImgSearch(thumbnail_engine, lst);

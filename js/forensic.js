@@ -3,7 +3,7 @@
 */
 
 // @base_url_forensic where to send all get or post requests
-var base_url_forensic = "http://reveal-mklab.iti.gr/";
+var base_url_forensic = "https://reveal-mklab.iti.gr/";
 
 // @datas order of analysis type to display, depending on image width or height
 var datas_height = ["dqReport", "elaReport", "medianNoiseReport", "gridsReport", "gridsInversedReport", "dwNoiseReport", "blockingReport"];
@@ -152,12 +152,12 @@ function create_card_slider(title, imgs, desc)
 		img_front.src = imgs[i];
 		img_front.id = "img_" + title + "_" + i;
 		var modal = document.createElement("div");
-		modal.setAttribute("class", "modal");
+		modal.setAttribute("class", "forensic-modal-class");
 		var close = document.createElement("span");
-		close.setAttribute("class", "close-modal");
+		close.setAttribute("class", "forensic-close-modal-class");
 		close.innerHTML = "&times;";
 		var img_modal = document.createElement("img");
-		img_modal.setAttribute("class", "modal-content");
+		img_modal.setAttribute("class", "forensic-modal-content-class");
 		img_modal.src = img_front.src;
 		if (i == 0) {
 			img_front.style.display = "";

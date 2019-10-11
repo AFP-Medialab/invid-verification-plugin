@@ -41,6 +41,7 @@ function updateAllTranslations( language )
 	update_keyframes(language);
 	update_thumbnails(language);
 	update_twitter(language);
+	update_twitter_sna(language);
 	update_magnifier(language);
 	update_metadata(language);
 	update_copyright(language);
@@ -54,6 +55,7 @@ function updateAllTranslations( language )
 	updateTableLanguageForensic(language);
 	updateHomeTutorial(language);
 }
+
 
 /**
 * @func place current language in a cookie
