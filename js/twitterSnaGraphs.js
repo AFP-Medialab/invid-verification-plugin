@@ -145,7 +145,7 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
             "than", "this"]*/
 
             .padding(5)
-            .rotate(function () { return (~~(Math.random() * 6) - 3) * 30; })
+            .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
             .spiral("archimedean")
             .font("Impact")
             .fontSize(function (d) { return (final_map.get(d.text) / val_arr[0]) * 140 + 10; })
