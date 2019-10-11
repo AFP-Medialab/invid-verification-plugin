@@ -28,7 +28,36 @@ export function generateWordCloud(sessid, startDate, endDate)
 
 }
 
-export function generateEssidHistogramQuery(sessid, retweets, queryStart, queryEnd, givenFrom, givenUntil) {
+function constructAndQuery(andArgs)
+{
+    var match_phrases = "";
+    andArgs.forEach(arg => {
+        if (arg[0] === '#')
+        {
+            match_phrases +=  '{'+
+                '"match_phrase": {' +
+                    '"hashtags": {' +
+                        '"query":' + arg +
+                    '}' +
+                '}' +
+            '}'
+        }
+        else
+        {
+            match_phrases +=  '{' +
+                '"match_phrase": {' +
+                '"tweet": {' +
+                  '"query":' + arg +
+                '}'
+              '}'
+            '}'
+        }
+    })
+    return match_phrases
+   
+
+}
+export function generateEssidHistogramQuery(sessid, andArgs, retweets, queryStart, queryEnd, givenFrom, givenUntil) {
 
     let dateEndQuery = new Date(queryEnd);
     let dateStartQuery = new Date(queryStart);
@@ -58,14 +87,8 @@ export function generateEssidHistogramQuery(sessid, retweets, queryStart, queryE
         }
 
 
-    let matchHashTag = (andArgs != null)?
-        {
-            "match_phrase": {
-              "hashtags": {
-                "query": andArgs[0]
-              }
-            }
-          }:{}
+    let matchHashTag = (andArgs != null) ?
+        constructAndQuery(andArgs) : {}
     let fieldInfo =
         {
             "date_histogram": {
@@ -517,9 +540,6 @@ function getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate) {
                             "analyze_wildcard": true,
                             "time_zone": "Europe/Paris"
                         }
-                    },
-                    {
-                        "match_all": {}
                     },
                     {
                         "match_all": {}
