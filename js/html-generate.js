@@ -223,11 +223,12 @@ function update_twitter_sna(lang)
 
 	//Chart titles
 	setInnerHtml("user_time_chart_title",			"▲ " + json_lang_translate[lang]["user_time_chart_title"]);
-	setInnerHtml("tweetCounter_title", "▼ " + json_lang_translate[lang]["tweetCounter_title"]);
+	setInnerHtml("tweetCounter_title", 				"▼ " + json_lang_translate[lang]["tweetCounter_title"]);
 	setInnerHtml("hashtag_cloud_chart_title",		"▼ " + json_lang_translate[lang]["hashtag_cloud_chart_title"]);
 	setInnerHtml("retweets_cloud_chart_title",		"▼ " + json_lang_translate[lang]["retweets_cloud_chart_title"]);
 	setInnerHtml("likes_cloud_chart_title",			"▼ " + json_lang_translate[lang]["likes_cloud_chart_title"]);
 	setInnerHtml("top_users_pie_chart_title",		"▼ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
+	setInnerHtml("top_words_cloud_chart_title",		"▼ " + "Most used words in tweets");
 
 
 	//Toggle views
@@ -236,6 +237,7 @@ function update_twitter_sna(lang)
 	$("#most_liked").hide();
 	$("#hashtag_cloud_chart_content").hide();
 	$("#top_users_content").hide();
+	$("#top_words_content").hide();
 
 }
 

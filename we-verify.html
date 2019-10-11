@@ -670,6 +670,20 @@
                                     </div>
                                     <br>
                                 </div>
+                                <div id='top_words_chart_content' class="chart_content" style="margin: 0 auto">
+                                    <div id="top_words_cloud_chart_title" class="title_custom"></div>
+                                    <div id="top_words_content">
+                                        <div id="top_words"></div>
+
+                                        <div id="top_words_cloud_chart"></div>
+                                        -<input type="button" class="button toggleVisibility"
+                                               id="top_words_tweets_toggle_visibility" value="hide"
+                                               style="display: none; float: right;"></input>
+
+                                        <div id="tweets_word_arr_place" class="toggleVisibility"></div>
+                                    </div>
+                                    <br>
+                                </div>
                                 <div id="url_array"></div>
                             </div>
                         </div>
@@ -1098,7 +1112,10 @@
 <!-- For Google maps-->
 <!-- <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=createGoogleMaps"></script> -->
 <!-- For d3.js graphics -->
-<script src="js/d3.js"></script>
+<script type="module" src="js/d3.min.js"></script>
+<script type="module" src="js/d3-dispatch.js"></script>
+<script type="module" src="js/d3-cloud/build/d3.layout.cloud.js"></script>
+
 <!-- For Youtube thumbnails reverse search -->
 <script src="js/video.js"></script>
 <!-- For Metadata -->
