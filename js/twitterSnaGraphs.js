@@ -4,7 +4,8 @@ import "../js/d3.js"
 //import { Module } from "../js/d3-cloud/build/d3.layout.cloud.js"
 
 export function getNbTweets(param, givenFrom, givenUntil) {
-    generateTweetCount(param["session"], givenFrom, givenUntil).then(res => {
+    console.log(givenFrom + " -> " + givenUntil);
+    generateTweetCount(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(res => {
         document.getElementById("tweetCounter_contents").innerHTML = "";
         let counter = document.createElement("div");
         counter.setAttribute("id", "counter_number");
@@ -23,7 +24,7 @@ export function getNbTweets(param, givenFrom, givenUntil) {
 }
 
 function showEssidHistogram(param, givenFrom, givenUntil) {
-    generateEssidHistogramQuery(param["session"], false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil).then(plotlyJson => {
+    generateEssidHistogramQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil).then(plotlyJson => {
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -58,8 +59,8 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
 }
 
 var stopwords = {
-    "fr": ["rt","le", "la", "bonjour", "vient", "été", "jour", "nest", "jamais", "aucune", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "cela", "surtout", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
-    "en": ["see", "much", "like", "didn", "must", "ever", "never", "got", "see", "would", "call", "many", "big", "also", "another", "really", "always", "rt", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "com", "need", "ourselves", "you", "want", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "could", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now", "said", "say"]
+    "fr": ["rt", "undefined", "le", "la", "bonjour", "vient", "été", "jour", "nest", "jamais", "aucune", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "cela", "surtout", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "com", "depuis", "soir", "entre", "aura", "hui", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "rt", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "pic", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
+    "en": ["see", "much",  "undefined", "like", "didn", "must", "ever", "never", "got", "see", "would", "call", "many", "big", "also", "another", "really", "always", "rt", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "com", "need", "ourselves", "you", "want", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "could", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now", "said", "say"]
 }
 function isEnglish(text)
 {
@@ -117,7 +118,7 @@ function getnMax(map, n) {
 
 function mostUsedWordsCloud(param, givenFrom, givenUntil) {
     var words_map = new Map();
-    generateWordCloud(param["session"], givenFrom, givenUntil).then(json => {
+    generateWordCloud(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(json => {
         Array.from(json.hits.hits).forEach(hit => {
             var map = getOccurences(hit._source.tweet);
             for (var word in map) {
@@ -131,7 +132,7 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
         var final_map = getnMax(words_map, 100);
 
         var words_arr = Array.from(final_map.keys());
-         var val_arr = Array.from(final_map.values());
+        var val_arr = Array.from(final_map.values());
 
         var layout = d3.layout.cloud()
             .size([500, 500])
@@ -151,7 +152,6 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
             .on("end", draw);
 
         layout.start();
-        console.log((final_map.get("") /val_arr[0]) * (150 - 10) + 10)
         function fillColor(d) {
             return d.color;
         }
@@ -187,7 +187,7 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
 }
 
 export function mostRetweetPie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
             title: "<b>Most retweeted users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -215,7 +215,7 @@ export function mostRetweetPie(param, givenFrom, givenUntil) {
 }
 
 export function mostLikePie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most liked users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -243,7 +243,7 @@ export function mostLikePie(param, givenFrom, givenUntil) {
 
 export function mostTweetPie(param, givenFrom, givenUntil) {
     //Utilisateurs les actifs
-    generateCloudQuery(param["session"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         var cloudlayout = {
             title: "<b>Most active users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -272,7 +272,7 @@ export function mostTweetPie(param, givenFrom, givenUntil) {
 
 var firstTopUsers = true;
 export function topHashtagPie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most associated hashtags</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -312,7 +312,7 @@ export function topHashtagPie(param, givenFrom, givenUntil) {
 }
 
 export function urlArray(param, givenFrom, givenUntil) {
-    generateURLArray(param["session"], givenFrom, givenUntil).then(arrayStr => {
+    generateURLArray(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(arrayStr => {
         document.getElementById('url_array').innerHTML = arrayStr;
     });
 }
