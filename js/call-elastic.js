@@ -26,6 +26,36 @@ export function generateWordCloud(sessid, andArgs, startDate, endDate) {
 
 
 }
+
+function constructAndQuery(andArgs)
+{
+    var match_phrases = "";
+    andArgs.forEach(arg => {
+        if (arg[0] === '#')
+        {
+            match_phrases +=  '{'+
+                '"match_phrase": {' +
+                    '"hashtags": {' +
+                        '"query":' + arg +
+                    '}' +
+                '}' +
+            '}'
+        }
+        else
+        {
+            match_phrases +=  '{' +
+                '"match_phrase": {' +
+                '"tweet": {' +
+                  '"query":' + arg +
+                '}'
+              '}'
+            '}'
+        }
+    })
+    return match_phrases
+   
+
+}
 export function generateEssidHistogramQuery(sessid, andArgs, retweets, queryStart, queryEnd, givenFrom, givenUntil) {
 
     let dateEndQuery = new Date(queryEnd);
@@ -56,13 +86,7 @@ export function generateEssidHistogramQuery(sessid, andArgs, retweets, queryStar
 
 
     let matchHashTag = (andArgs != null) ?
-        {
-            "match_phrase": {
-                "hashtags": {
-                    "query": andArgs[0]
-                }
-            }
-        } : {}
+        constructAndQuery(andArgs) : {}
     let fieldInfo =
     {
         "date_histogram": {
@@ -177,13 +201,7 @@ export function generateCloudQuery(sessid, andArgs, field, startDate, endDate, m
     }
     let
         matchHashTag = (andArgs != null) ?
-            {
-                "match_phrase": {
-                    "hashtags": {
-                        "query": andArgs[0]
-                    }
-                }
-            } : {}
+           constructAndQuery(andArgs) : {}
     let fieldInfo =
         (field === "hashtags") ?
             {
@@ -272,13 +290,7 @@ export function generateURLArray(sessid, andArgs, startDate, endDate) {
     };
     let
         matchHashTag = (andArgs != null) ?
-            {
-                "match_phrase": {
-                    "hashtags": {
-                        "query": andArgs[0]
-                    }
-                }
-            } : {}
+            constructAndQuery(andArgs) : {}
     let chartInfo = {
         "terms": {
             "field": "urls",
@@ -394,9 +406,6 @@ function getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate) {
                     {
                         "match_all": {}
                     },
-                    {
-                        "match_all": {}
-                    },
                     matchHashTag,
                     matchPhrase,
                     {
@@ -415,7 +424,8 @@ function getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate) {
             }
         }
     }
-    console.log(query)
+    console.log(JSON.stringify(query));
+    console.log(query);
     return query;
 }
 
