@@ -415,6 +415,7 @@ function getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate) {
             }
         }
     }
+    console.log(query)
     return query;
 }
 
