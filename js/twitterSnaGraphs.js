@@ -2,7 +2,6 @@ import { generateEssidHistogramQuery, generateCloudQuery, generateURLArray, getT
 
 
 export function getNbTweets(param, givenFrom, givenUntil) {
-    console.log(param);
     generateTweetCount(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(res => {
         document.getElementById("tweetCounter_contents").innerHTML = "";
         let counter = document.createElement("div");
@@ -49,7 +48,8 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
         if (plotlyJson.length !== 0)
             Plotly.newPlot('user_time_chart', plotlyJson, layout, config);
 
-        displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
+        if (firstHisto)
+            displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
 
@@ -78,7 +78,9 @@ export function mostRetweetPie(param, givenFrom, givenUntil) {
 
         var plot = document.getElementById("retweets_cloud_chart");
         Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
-        displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets");
+
+        if (firstHisto)
+            displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
@@ -105,7 +107,9 @@ export function mostLikePie(param, givenFrom, givenUntil) {
 
         let plot = document.getElementById("likes_cloud_chart");
         Plotly.react('likes_cloud_chart', plotlyJson, cloudlayout, config);
-        displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes");
+
+        if (firstHisto)
+            displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
@@ -134,7 +138,9 @@ export function mostTweetPie(param, givenFrom, givenUntil) {
 
         var plot = document.getElementById("top_users_pie_chart");
         Plotly.react('top_users_pie_chart', plotlyJson, cloudlayout, config);
-        displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets");
+
+        if (firstHisto)
+            displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["query"]["search"]["search"]);
@@ -162,7 +168,7 @@ export function topHashtagPie(param, givenFrom, givenUntil) {
 
         let plot = document.getElementById("hashtag_cloud_chart");
         Plotly.react('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
-        if (firstTopUsers)
+        if (firstHisto)
             plot.on('plotly_click', data => {
                 //  document.getElementById("twitterStats-search").value = data.points[0].label;
                 // document.getElementById("twitterStats-Graphs").style.display = "none";
@@ -203,13 +209,13 @@ export function generateGraphs(param) {
     mostTweetPie(param, givenFrom, givenUntil);
     topHashtagPie(param, givenFrom, givenUntil);
     urlArray(param, givenFrom, givenUntil);
+ //   firstHisto = false;
 }
 
 function displayTweetsOfDate(plot, place, button) {
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
 
-    if (firstHisto)
         plot.on('plotly_click', data => {
             var json = getTweets();
 
@@ -259,7 +265,6 @@ function displayTweetsOfDate(plot, place, button) {
 
             //   });
 
-            firstHisto = false
         })
 
     visibilityButton.onclick = e => {
@@ -267,15 +272,14 @@ function displayTweetsOfDate(plot, place, button) {
         visibilityButton.style.display = 'none';
     }
 }
-var firstUser = true;
+
 function displayTweetsOfUser(plot, place, button, nb_type) {
 
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
-    if (firstUser)
         plot.on('plotly_click', data => {
             var json = getTweets();
-            var tweetArr = '<table id="tweet_view" class="table" cellspacing="0" style="width: 100%">' /*+
+            var tweetArr = '<table id="tweet_view_' + nb_type + '" class="table" cellspacing="0" style="width: 100%">' /*+
                 '<colgroup>' +
                 '<col span=1 class="date_col" />' +
                 '<col span=1 class="tweet_col" />' +
@@ -322,8 +326,7 @@ function displayTweetsOfUser(plot, place, button, nb_type) {
 
             // });
 
-            $('#tweet_view').DataTable({
-                searching: false,
+            $('#tweet_view_' + nb_type).DataTable({
                 autoWidth: false,
                 fixedColumns: true,
                 "columnDefs": [
@@ -332,8 +335,6 @@ function displayTweetsOfUser(plot, place, button, nb_type) {
 
             }).columns.adjust();
             $('.dataTables_length').addClass('bs-select');
-
-            firstUser = false;
         });
 
 

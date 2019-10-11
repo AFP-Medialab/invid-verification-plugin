@@ -1,12 +1,12 @@
 import { generateGraphs, getNbTweets, setFirstHisto } from "./twitterSnaGraphs.js";
 
-var collect_url = "http://185.249.140.38/twitter-gateway/collect";
-var status_url = "http://185.249.140.38/twitter-gateway/status/";
+var collect_url = "http://185.249.140.38/twint-wrapper/collect";
+var status_url = "http://185.249.140.38/twint-wrapper/status/";
 
 let dev = false;
 if (dev) {
-    collect_url = "http://localhost:8080/twitter-gateway/collect";
-    status_url = "http://localhost:8080/twitter-gateway/status/"
+    collect_url = "http://localhost:8080/twint-wrapper/collect";
+    status_url = "http://localhost:8080/twint-wrapper/status/"
 }
 
 //import "html2pdf"
@@ -85,7 +85,6 @@ function formToJsonCollectRequest() {
 
     let and_list, or_list, not_list = null;
 
-    console.log("AND 1 : ", search_and);
     if (search_and !== "")
         and_list = search_and.trim().split(" ");
     if (search_or !== "")
@@ -93,7 +92,6 @@ function formToJsonCollectRequest() {
     if (search_not !== "")
         not_list = search_not.trim().split(" ");
 
-        console.log("AND list : ", and_list);
     let searchObj = {
         "search": search,
         "and": and_list,
@@ -115,7 +113,6 @@ function formToJsonCollectRequest() {
         if (value !== null && value !== "")
             return value
     });
-    console.log("RES: ",  res);
     return res;
 }
 
@@ -141,7 +138,6 @@ var isFirst = true;
 function submit_sna_form() {
 
 
-    setFirstHisto(true);
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
@@ -329,6 +325,7 @@ function getRequest(url) {
 }
 
 async function waitStatusDone(session) {
+    
     let url = status_url + session;
     let res = null;
     let cpt = 2100;
@@ -336,22 +333,30 @@ async function waitStatusDone(session) {
         const response = getRequest(url);
         await response().then(json => {
             if (json == null)
-
+            {
+                setFirstHisto(true);
                 return null;
-            else if (json["status"] === "Done" || json["status"] === "Error")
+            }
+          else if (json["status"] === "Done" || json["status"] === "Error")
                 res = json;
             else {
 
                 $("#twitterStats-Graphs").css("display", "block");
                 generateGraphs(json);
 
+                setFirstHisto(false);
             }
         });
         if (res !== null)
+        {
+            setFirstHisto(true);
             return res;
+        }
         await delay(10000);
         cpt--;
     }
+
+    setFirstHisto(true);
     return null;
 }
 /*
