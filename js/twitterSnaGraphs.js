@@ -373,7 +373,7 @@ function displayTweetsOfDate(plot, place, button) {
                         if (isInRange(pointDate, objDate, isDays)) {
                             let date = new Date(tweetObj._source.date);
                             tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' +
-                                '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + '<br /> ' +
+                                '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
                                 date.getHours() + 'h' + date.getMinutes() + '</td>' +
                                 '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
                                 '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td></tr>';
@@ -431,7 +431,7 @@ function displayTweetsOfUser(plot, place, button, nb_type) {
                     else
                         nb = tweetObj._source.nlikes;
                     let date = new Date(tweetObj._source.date[0]);
-                    tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + ' ' +
+                    tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + ' ' +
                         date.getHours() + 'h' + date.getMinutes() + '</td>' +
                         '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
                         '<td class="tweet_arr tweet_arr_nretweet">' + nb + '</td>';
@@ -486,7 +486,7 @@ function displayTweetsOfWord(word, place, button) {
             var date = new Date(tweetObj._source.date);
           
                 tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + tweetObj._source.username + '" target="_blank">' + tweetObj._source.username + '</a></td>' +
-                    '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear() + '<br /> ' +
+                    '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
                     date.getHours() + 'h' + date.getMinutes() + '</td>' +
                     '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
                     '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>' +
