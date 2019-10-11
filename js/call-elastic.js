@@ -424,8 +424,6 @@ function getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate) {
             }
         }
     }
-    console.log(JSON.stringify(query));
-    console.log(query);
     return query;
 }
 
@@ -520,13 +518,7 @@ function getNbTweets(sessid, andArgs, startDate, endDate, size) {
                         {
                             "match_all": {}
                         },
-                        {
-                            "match_phrase": {
-                                "hashtags": {
-                                    "query": andArgs[0]
-                                }
-                            }
-                        },
+                        constructAndQuery(andArgs),
                         {
                             "match_phrase": {
                                 "essid": {
