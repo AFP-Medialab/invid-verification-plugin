@@ -154,10 +154,15 @@ function submit_sna_form() {
 
                 .then((param) => {
                     if (isFirst)
-                        document.getElementById('exportButton').addEventListener('click', () => {
+                     {   document.getElementById('exportButton').addEventListener('click', () => {
                             exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
                             isFirst = false
                         });
+                        document.getElementById('exportWordsCloud').addEventListener('click', () => {
+                            exportJPG(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
+                            isFirst = false
+                        });
+                    }
 
                     if (param == null) {
                         console.log("error : timeout, or invalid request");
@@ -194,6 +199,33 @@ function submit_sna_form() {
 
 }
 
+
+function exportJPG() {
+    console.log("ENDED")
+
+        var toExport = $('#top_words_cloud_chart');
+        console.log(toExport[0]);
+        var imgageData;
+        html2canvas(toExport[0], {
+            onrendered: canvas => {
+                console.log()
+                //imgageData = canvas.toDataURL("image/png");
+                toExport.remove();
+            }
+        }).then(canvas => {
+            var imgageData = canvas.toDataURL("image/png");
+            console.log(canvas);
+            document.getElementById("top_words_cloud_chart").appendChild(canvas);
+
+            
+            // Now browser starts downloading it instead of just showing it
+            var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+            $("#exportWordsCloud").attr("download", "export.png").attr("href", newData);
+            });
+   
+   
+
+}
 
 var cache_user_time_style = document.getElementById("user_time").style;
 var cache_user_chart_width = $("#user_time_chart").width;
