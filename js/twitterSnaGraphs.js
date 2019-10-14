@@ -24,7 +24,11 @@ export function getNbTweets(param, givenFrom, givenUntil) {
 }
 
 function showEssidHistogram(param, givenFrom, givenUntil) {
-    generateEssidHistogramQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil).then(plotlyJson => {
+    generateEssidHistogramQuery(param["session"], 
+                               (param["query"]["search"]["and"] === undefined)? null : param["query"]["search"]["and"], 
+                               false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil)
+                                    .then(plotlyJson => {
+        console.log(plotlyJson)
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -47,6 +51,7 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
             displaylogo: false
         };
 
+        console.log(plotlyJson);
         let plot = document.getElementById("user_time_chart");
         if (plotlyJson.length !== 0)
             Plotly.newPlot('user_time_chart', plotlyJson, layout, config);
