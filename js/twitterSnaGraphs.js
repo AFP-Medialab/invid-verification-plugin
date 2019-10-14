@@ -1,6 +1,8 @@
 import { generateEssidHistogramQuery, generateWordCloud, generateCloudQuery, generateURLArray, getTweets, generateTweetCount } from './call-elastic.js';
 import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
+import "../js/FileSaver.js"
+import "../js/canvas-toBlob.js"
 
 export function getNbTweets(param, givenFrom, givenUntil) {
     generateTweetCount(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(res => {
@@ -160,7 +162,7 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
         }
         function draw(words) {
             document.getElementById("top_words_cloud_chart").innerHTML = "";
-            d3.select("#top_words_cloud_chart").append("svg")
+            var svg = d3.select("#top_words_cloud_chart").append("svg")
                 .attr("width", layout.size()[0])
                 .attr("height", layout.size()[1])
                 .append("g")
@@ -180,16 +182,63 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
                 .on("click", function (d) { displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility") })
                 .append("svg:title")
                 .text(function (d) {return ("Used " +final_map.get(d.text) + " times"); });
-                   
-        }
 
-        function exportCloud() {
-          
+            var width = 300, height = 300;
+            d3.select('#exportWordsCloud').on('click', () => {
+                //var svgString = getSVGString(svg.node());;
+                svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
+        
+                function save(dataBlob, filesize) {
+                    console.log(dataBlob);
+                  saveAs(dataBlob, 'WordCloud_' + param.query.search.search + "_" + param.query.from + "_" + param.query.until + '.png'); // FileSaver.js function
+                }
+            })
+                   
         }
     });
 
 
 }
+
+  function svgString2Image(svg, width, height, format, callback) {
+    var format = format ? format : 'png';
+
+    svg.style.backgroundColor = "white";
+    var serializer = new XMLSerializer();
+    var svgString = serializer.serializeToString(svg);
+    console.log(svgString);
+
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    var DOMURL = self.URL || self.webkitURL || self;
+
+      var svg = new Blob([svgString], {
+      type: 'image/svg+xml;charset=utf-8'
+    });
+    
+    var url = DOMURL.createObjectURL(svg);
+    var image = new Image();
+    image.addEventListener('load', function() {  
+        context.clearRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
+
+        canvas.toBlob(function(blob) {
+            var filesize = Math.round(blob.length / 1024) + ' KB';
+            if (callback) callback(blob, filesize);
+        });
+    });
+
+    image.setAttribute("src", url);
+
+    console.log(image)
+    image.onerror = () => alert("IMG ERROR");
+ 
+  }
+
 
 export function mostRetweetPie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {

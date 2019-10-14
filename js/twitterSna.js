@@ -159,7 +159,7 @@ function submit_sna_form() {
                             isFirst = false
                         });
                         document.getElementById('exportWordsCloud').addEventListener('click', () => {
-                            exportJPG(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
+                           // exportJPG(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
                             isFirst = false
                         });
                     }
