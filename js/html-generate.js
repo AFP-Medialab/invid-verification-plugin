@@ -384,7 +384,6 @@ function update_about(lang)
 	let languages_item = "";
 	let list = document.getElementById('lang_list');
 	for(let lang_symb in all_lang) {
-		console.log(lang_symb);
 		let link = document.createElement('a');
 		//link.type = "button";
 		link.setAttribute('data-lang', lang_symb);
