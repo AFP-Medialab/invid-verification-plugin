@@ -138,6 +138,7 @@ var isFirst = true;
 function submit_sna_form() {
 
 
+    isFirst = true;
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
@@ -156,7 +157,8 @@ function submit_sna_form() {
                     console.log("Param1 : ", param);
                     if (isFirst)
                      {   document.getElementById('exportButton').addEventListener('click', () => {
-                            exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
+                         console.log(param["query"]["user_list"]);
+                            exportPDF(param["query"]["user_list"] !== undefined);
                             isFirst = false
                         });
                         document.getElementById('exportWordsCloud').addEventListener('click', () => {
@@ -201,36 +203,10 @@ function submit_sna_form() {
 }
 
 
-function exportJPG() {
-    console.log("ENDED")
-
-        var toExport = $('#top_words_cloud_chart');
-        console.log(toExport[0]);
-        var imgageData;
-        html2canvas(toExport[0], {
-            onrendered: canvas => {
-                console.log()
-                //imgageData = canvas.toDataURL("image/png");
-                toExport.remove();
-            }
-        }).then(canvas => {
-            var imgageData = canvas.toDataURL("image/png");
-            console.log(canvas);
-            document.getElementById("top_words_cloud_chart").appendChild(canvas);
-
-            
-            // Now browser starts downloading it instead of just showing it
-            var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
-            $("#exportWordsCloud").attr("download", "export.png").attr("href", newData);
-            });
-   
-   
-
-}
 
 var cache_user_time_style = document.getElementById("user_time").style;
 var cache_user_chart_width = $("#user_time_chart").width;
-function exportPDF() {
+function exportPDF(hasUser) {
 
     $("#exportButton").css("display", "none");
     $("#submitSna").css("visibility", "hidden");
@@ -270,10 +246,20 @@ function exportPDF() {
     if (!$("#most_liked").is(":visible"))
         $("#most_liked").slideToggle();
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 17; i++) {
         var br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("most_liked").appendChild(br);
+    }
+
+    var max = 2;
+    if (hasUser)
+        max = 15;
+
+    for (var i = 0; i < max; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("top_words_content").appendChild(br);
     }
 
     if (!$("#hashtag_cloud_chart_content").is(":visible"))
