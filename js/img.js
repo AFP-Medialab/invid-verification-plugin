@@ -362,7 +362,7 @@ document.getElementById("copy_url_img_magnifier").addEventListener("click", func
         text = Filters.filterImage(document.getElementById("test"), "none", 1);
 	}
     copyText(text);
-    this.innerHTML = "URL copied";
+    this.innerHTML = json_lang_translate[global_language]["magnifier_google"];
     openTab("https://www.google.com/searchbyimage?&image_url=")
 });
 
