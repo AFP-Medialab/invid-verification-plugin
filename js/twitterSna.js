@@ -138,7 +138,6 @@ var isFirst = true;
 function submit_sna_form() {
 
 
-    isFirst = true;
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
