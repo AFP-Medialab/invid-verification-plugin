@@ -1,7 +1,6 @@
 import { generateEssidHistogramQuery, generateWordCloud, generateCloudQuery, generateURLArray, getTweets, generateTweetCount } from './call-elastic.js';
 import "../js/d3.js"
-//import { isEnglish } from "../js/is-english/is-english.js"
-//import { Module } from "../js/d3-cloud/build/d3.layout.cloud.js"
+import "../js/html2canvas/dist/html2canvas.js"
 
 export function getNbTweets(param, givenFrom, givenUntil) {
     generateTweetCount(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(res => {
@@ -160,9 +159,6 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
         function fillColor(d) {
             return d.color;
         }
-        function openTwitter(word) {
-            window.open("https://twitter.com/search?q=" + word, '_blank');
-        }
         function draw(words) {
             document.getElementById("top_words_cloud_chart").innerHTML = "";
             d3.select("#top_words_cloud_chart").append("svg")
@@ -185,9 +181,14 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
                 .on("click", function (d) { displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility") })
                 .append("svg:title")
                 .text(function (d) {return ("Used " +final_map.get(d.text) + " times"); });
+                   
+        }
 
+        function exportCloud() {
+          
         }
     });
+
 
 }
 

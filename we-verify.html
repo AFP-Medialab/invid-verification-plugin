@@ -665,11 +665,12 @@
                                 </div>
                                 <div id='top_words_chart_content' class="chart_content" style="margin: 0 auto">
                                     <div id="top_words_cloud_chart_title" class="title_custom"></div>
+                                    <input id="exportWordsCloud" type="button" class="button" value="Export" style="margin-right: 0"></input>
                                     <div id="top_words_content">
                                         <div id="top_words"></div>
 
                                         <div id="top_words_cloud_chart"></div>
-                                        -<input type="button" class="button toggleVisibility"
+                                        <input type="button" class="button toggleVisibility"
                                                id="top_words_tweets_toggle_visibility" value="hide"
                                                style="display: none; float: right;"></input>
 
@@ -1123,6 +1124,8 @@
 <script type="module" src="js/d3.min.js"></script>
 <script type="module" src="js/d3-dispatch.js"></script>
 <script type="module" src="js/d3-cloud/build/d3.layout.cloud.js"></script>
+
+<script src="js/html2canvas/dist/html2canvas.js"></script>
 
 <!-- For Youtube thumbnails reverse search -->
 <script src="js/video.js"></script>
