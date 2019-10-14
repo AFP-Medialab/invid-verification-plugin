@@ -228,7 +228,7 @@ function update_twitter_sna(lang)
 	setInnerHtml("retweets_cloud_chart_title",		"▼ " + json_lang_translate[lang]["retweets_cloud_chart_title"]);
 	setInnerHtml("likes_cloud_chart_title",			"▼ " + json_lang_translate[lang]["likes_cloud_chart_title"]);
 	setInnerHtml("top_users_pie_chart_title",		"▼ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
-	setInnerHtml("top_words_cloud_chart_title",		"▼ " + "Most used words in tweets");
+	setInnerHtml("top_words_cloud_chart_title",		"▼ " + json_lang_translate[lang]["top_words_cloud_chart_title"]);
 
 
 	//Toggle views
