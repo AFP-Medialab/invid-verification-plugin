@@ -239,19 +239,19 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
  
   }
 
-    $("#top_words_content").on("mouseenter", event => {
-        $("#exportWordsCloud").css({"opacity": 0.33});
-    })
+$("#top_words_content").on("mouseenter", event => {
+    $("#exportWordsCloud").css({"opacity": 0.33});
+})
 
-    $("#top_words_content").on("mouseleave", event => {
-        $("#exportWordsCloud").css({"opacity": 0, "cursor": "normal"});
-    })
-    $("#exportWordsCloud").on("mouseenter", event => {
-        $("#exportWordsCloud").css({"opacity": 0.66, "cursor": "pointer"});
-    });
-    $("#exportWordsCloud").on("mouseleave", event => {
-        $("#exportWordsCloud").css({"opacity": 0.33});
-    });
+$("#top_words_content").on("mouseleave", event => {
+    $("#exportWordsCloud").css({"opacity": 0, "cursor": "normal"});
+})
+$("#exportWordsCloud").on("mouseenter", event => {
+    $("#exportWordsCloud").css({"opacity": 0.66, "cursor": "pointer"});
+});
+$("#exportWordsCloud").on("mouseleave", event => {
+    $("#exportWordsCloud").css({"opacity": 0.33});
+});
 
 export function mostRetweetPie(param, givenFrom, givenUntil) {
     generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
@@ -394,6 +394,7 @@ var firstHisto = true;
 export function setFirstHisto(first) {
     firstHisto = first
 }
+
 export function generateGraphs(param) {
     let givenFrom = document.getElementById("twitterStats-from-date").value;
     let givenUntil = document.getElementById("twitterStats-to-date").value;
