@@ -109,6 +109,14 @@ function ValidURL(str)
 }
 
 /**
+ * @func ValidOnlineUrl()
+ */
+function ValidOnlineUrl(str) {
+    var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+    return regex.test(str);
+}
+
+/**
 * @func Submit image url
 */
 function submit_img()
@@ -134,10 +142,16 @@ function submit_img()
         }
         document.getElementById("place-crop").style.display = "none";
         document.getElementById("copy_url_img_magnifier").style.display = (histo.local_path) ? "" : "none";
-        if( ! ValidURL(img_url) ) {
-            document.getElementById("lst_search_btn").setAttribute("style", "display: none");
-            document.getElementById("magnifier-content").style.display = (histo.local_path) ? "" : "none";
-            console.log(histo.local_path)
+        if (ValidURL(img_url)) {
+
+            if (!ValidOnlineUrl(img_url)) {
+                document.getElementById("lst_search_btn").setAttribute("style", "display: none");
+                document.getElementById("magnifier-content").style.display = (histo.local_path) ? "" : "none";
+                console.log(histo.local_path)
+            } else {
+                document.getElementById("lst_search_btn").setAttribute("style", "display: inline");
+                document.getElementById("magnifier-content").style.display = "";
+            }
         }
         else {
             document.getElementById("lst_search_btn").setAttribute("style", "display: inline");
