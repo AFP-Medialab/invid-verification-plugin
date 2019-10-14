@@ -461,6 +461,9 @@ function customSlideToggle(button_id, div_to_toggle_id, lang) {
             setInnerHtml(button_id, "▲ " + json_lang_translate[lang][button_id]);
         $("#" + div_to_toggle_id).slideToggle(250);
     });
+/*
+    if ( div_to_toggle_id === "top_words_content")
+        document.getElementById("exportWordsClous").style.display = "block";*/
 }
 
 $(document).ready(customSlideToggle("user_time_chart_title", "user_time", global_language));
