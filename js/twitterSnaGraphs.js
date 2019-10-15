@@ -66,10 +66,11 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
 }
 
 var stopwords = {
-    "glob": ["undefined", "rt"],
+    "glob": ["undefined", "rt", "twitter"],
     "fr": [ "le", "la", "bonjour", "vient", "été", "jour", "nest", "jamais", "aucune", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "cela", "surtout", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "depuis", "soir", "entre", "aura", "hui", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
     "en": ["see", "much", "like", "didn", "must", "ever", "never", "got", "see", "would", "call", "many", "big", "also", "another", "really", "always", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "need", "ourselves", "you", "want", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "could", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now", "said", "say"]
 }
+
 function isEnglish(text)
 {
     var percentEnglish = 0.00;
@@ -95,13 +96,11 @@ function getOccurences(tweet) {
     console.log("get occruences start")
         //remove URLS
     var treatedTweet = tweet.text;
-    treatedTweet = treatedTweet.toLowerCase().replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
+    treatedTweet = treatedTweet.toLowerCase().replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
                             //.replace(/https.*(\ |\Z)/g, '')
-                            .replace(/pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/)
         //Remove ponctuation & numbers
-        treatedTweet = treatedTweet.replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+/g, " ")
+        treatedTweet = treatedTweet.replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, " ")
         //Remove emoticones
-        .replace(/\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, '');
         if (treatedTweet === "")
             return [];
             
@@ -111,15 +110,18 @@ function getOccurences(tweet) {
         //Put the tweet in lower case
        // .map(word => {return word.toLowerCase();})
         //Remove the stop words
-        .filter(word => !stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
+       // .filter(word => !stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
         //Count the number of occurence of each word & return the associated map
-        .reduce(function (map, word) {
+    console.log("words filters")
+     counts = counts.reduce(function (map, word) {
+         if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
             map[word] = (map[word] || 0) + 1;
-            return map;
+            
+        return map;
         }, Object.create(null));
 
        // console.log(tweet.text);
-    return counts
+    return counts;
 }
 
 function getnMax(map, n) {
@@ -151,19 +153,22 @@ function call_tweetIE(tweet) {
         tweetIE_JSON[':Location'].forEach(location => {
             let loc = tweet_tmp.substring(location.start, location.end);
             tweet.text = tweet.text.replace(loc, loc.replace(' ', '_'));
-            locations = [...locations, loc.toLowerCase()];
+            if (!locations.includes(loc.toLowerCase()))
+                locations = [...locations, loc.toLowerCase()];
         })
 
         tweetIE_JSON[':Organization'].forEach(organisation => {
             let orga = tweet_tmp.substring(organisation.start, organisation.end);
             tweet.text = tweet.text.replace(orga, orga.replace(' ', '_'));
-            organisations = [...organisations, orga.toLowerCase()];
+            if (!organisations.includes(orga.toLowerCase()))
+                organisations = [...organisations, orga.toLowerCase()];
         })
 
         tweetIE_JSON[':Person'].forEach(person => {
             if (person['features'].firstName !== undefined && person['features'].surname !== undefined)
             {
                 tweet.text = tweet.text.replace(person['features'].firstName + ' ' + person['features'].surname, person['features'].firstName + '_' + person['features'].surname);
+                if (!persons.includes(person['features'].firstName.toLowerCase() + '_' + person['features'].surname.toLowerCase()))
                 persons = [...persons, person['features'].firstName.toLowerCase() + '_' + person['features'].surname.toLowerCase()];
             }
             else if (person['features'].firstName !== undefined)
@@ -180,7 +185,7 @@ function call_tweetIE(tweet) {
         }
         return tokens_JSON;
     }
-    return tweetIEcall().then(tokens => {return tokens});
+    return tweetIEcall();
 }
 
 function getColor(word, tokens_JSON)
@@ -198,7 +203,7 @@ function getColor(word, tokens_JSON)
         return '35347B';
 }
 
-function mostUsedWordsCloud(param, givenFrom, givenUntil) {
+async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
     stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["search"].split(' ')];
 
     if (param["query"]["search"]["and"] !== undefined)
@@ -297,7 +302,6 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
             })
                    
         }
-
     });
     });
 
@@ -501,6 +505,8 @@ export function generateGraphs(param) {
     let givenFrom = document.getElementById("twitterStats-from-date").value;
     let givenUntil = document.getElementById("twitterStats-to-date").value;
 
+    if (firstHisto)
+        mostUsedWordsCloud(param, givenFrom, givenUntil);
     showEssidHistogram(param, givenFrom, givenUntil);
     getNbTweets(param, givenFrom, givenUntil);
     mostRetweetPie(param, givenFrom, givenUntil);
@@ -508,8 +514,6 @@ export function generateGraphs(param) {
     mostTweetPie(param, givenFrom, givenUntil);
     topHashtagPie(param, givenFrom, givenUntil);
     urlArray(param, givenFrom, givenUntil);
-    if (firstHisto)
-        mostUsedWordsCloud(param, givenFrom, givenUntil);
 }
 
 function displayTweetsOfDate(plot, place, button) {
