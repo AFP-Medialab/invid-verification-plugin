@@ -569,6 +569,7 @@ function update_classroom(lang)
 		$("#lesson_modal_title").html(json_lang_translate[global_language]["classroom_title"]);
 		// ID of lesson (1 to 5)
 		var id = $(this).parent().next().html();
+		ga("send", "event", "lesson", 'click', id);
 		// Lesson name
 		$("#lesson_modal_description").html(json_lang_translate[global_language]["classroom_title_"+id]);
 		// Lesson embed
@@ -603,6 +604,7 @@ function update_classroom(lang)
 		$("#lesson_modal_description").hide();
 		// Lesson iframe
 		var embed = $(this).parent().prev().find("input").val();
+		ga("send", "event", "lesson", 'click', embed);
 		var is_iframe = ( embed.substr(0, 7) == "<iframe" ? true : false );
 		if( is_iframe ) {
 			// Lesson embed iframe
