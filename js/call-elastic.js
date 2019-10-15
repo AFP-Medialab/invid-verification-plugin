@@ -183,14 +183,12 @@ export function generateEssidHistogramQuery(sessid, andArgs, retweets, queryStar
                     if (i++ > 1) {
                         plotlyJSON.forEach(plot2 => {
 
-                        console.log(plot2);
                              if (plot.name === plot2.name) 
                              {
                                 plot2.x = [...plot2.x, ...plot.x];
                                 plot2.y = [...plot2.y, ...plot.y];
                             }
 
-                        console.log(plot2);
                         });
                     }
             });
