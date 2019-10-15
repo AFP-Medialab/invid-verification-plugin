@@ -124,9 +124,10 @@ function getnMax(map, n) {
 }
 
 function mostUsedWordsCloud(param, givenFrom, givenUntil) {
-    stopwords["glob"].push(param["query"]["search"]["search"]);
+    stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["search"].split(' ')];
+    console.log(stopwords["glob"]);
 
-    stopwords["glob"].push(param["query"]["search"]["and"]);
+    stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["and"]];
     var words_map = new Map();
     generateWordCloud(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(json => {
         Array.from(json.hits.hits).forEach(hit => {
@@ -150,9 +151,6 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
                 words_arr.map(word => {
                     return { text: word, size: final_map.get(word), color: (word[0] === '@') ? '#2874A6' : '#A63D28' };
                 }))
-            /*[
-            "Hello", "world", "normally", "you", "want", "more", "words",
-            "than", "this"]*/
 
             .padding(5)
             .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
