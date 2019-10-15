@@ -737,6 +737,7 @@ function update_quiz(lang)
 						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
 							var image_url = "https://www.google.com/searchbyimage?image_url=";
 							image_url+= $("#quiz_image_"+i).attr("src");
+							ga("send", "Interactive", "similaritySearch", 'click', i);
 							openTab( image_url );
 							break;
 						}
@@ -757,6 +758,7 @@ function update_quiz(lang)
 							var image_url = page_name+"?imgforen=";
 							image_url+= encodeURIComponent( $("#quiz_image_"+i).attr("src") );
 							window.location.href = image_url;
+							ga("send", "Interactive", "forensic", 'click', i);
 							break;
 						}
 					}
@@ -779,6 +781,7 @@ function update_quiz(lang)
 							var video_url = page_name+"?imgkey=";
 							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=') );
 							window.location.href = video_url;
+							ga("send", "Interactive", "keyframes", 'click', i);
 							break;
 						}
 					}
@@ -799,6 +802,7 @@ function update_quiz(lang)
 				var d = document.getElementById("quiz_explanation_"+this.index).className;
 				var cook_val = cookie_value( "unlock" );
 				var locked;
+				ga("send", "Interactive", "explanation", 'click', this.index);
 				//Hack for firefox addon that do not support cookies
 				if(!cook_val){
 					locked = (document.getElementById("checkbox_explain").checked)? false : true ;
