@@ -28,7 +28,6 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
                                (param["query"]["search"]["and"] === undefined)? null : param["query"]["search"]["and"], 
                                false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil)
                                     .then(plotlyJson => {
-        console.log(plotlyJson)
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
@@ -51,7 +50,6 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
             displaylogo: false
         };
 
-        console.log(plotlyJson);
         let plot = document.getElementById("user_time_chart");
         if (plotlyJson.length !== 0)
             Plotly.newPlot('user_time_chart', plotlyJson, layout, config);
@@ -127,7 +125,8 @@ function mostUsedWordsCloud(param, givenFrom, givenUntil) {
     stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["search"].split(' ')];
     console.log(stopwords["glob"]);
 
-    stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["and"]];
+    if (param["query"]["search"]["and"] !== undefined)
+        stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["and"].split(' ')];
     var words_map = new Map();
     generateWordCloud(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(json => {
         Array.from(json.hits.hits).forEach(hit => {
