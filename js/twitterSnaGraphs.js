@@ -5,7 +5,7 @@ import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
 import "../js/canvas-toBlob.js"
 
-var tweetIE_URL = 'https://cloud-api.gate.ac.uk/process-document/annie-named-entity-recognizer?annotations=:Person,:UserID,:Location,:Organization'//'http://localhost:8081/process?annotations=:Person,:UserID,:Location,:Organization'
+var tweetIE_URL = 'http://localhost:8081/process?annotations=:Person,:UserID,:Location,:Organization'; //'https://cloud-api.gate.ac.uk/process-document/annie-named-entity-recognizer?annotations=:Person,:UserID,:Location,:Organization'//
 
 export function getNbTweets(param, givenFrom, givenUntil) {
     generateTweetCount(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(res => {
@@ -93,7 +93,6 @@ function isEnglish(text)
     return (percentEnglish > percentFrench);
 }
 function getOccurences(tweet) {
-    console.log("get occruences start")
         //remove URLS
     var treatedTweet = tweet.text;
     treatedTweet = treatedTweet.toLowerCase().replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
@@ -104,7 +103,6 @@ function getOccurences(tweet) {
         if (treatedTweet === "")
             return [];
             
-    console.log("get occruences replaced")
     var counts = treatedTweet
         .split(' ') //=> Array of words
         //Put the tweet in lower case
@@ -112,7 +110,6 @@ function getOccurences(tweet) {
         //Remove the stop words
        // .filter(word => !stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
         //Count the number of occurence of each word & return the associated map
-    console.log("words filters")
      counts = counts.reduce(function (map, word) {
          if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
             map[word] = (map[word] || 0) + 1;
@@ -120,13 +117,16 @@ function getOccurences(tweet) {
         return map;
         }, Object.create(null));
 
-       // console.log(tweet.text);
+       console.log("get occurence of : " + tweet.text);
     return counts;
 }
 
 function getnMax(map, n) {
-    const mapSort = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
-    return (new Map([...mapSort.entries()].splice(0, n)));
+    const mapSort = new Map([...map.entries()].filter(elt => elt[1] > 1).sort((a, b) => b[1] - a[1]));
+    console.log("RES SORTED FILTERED MAP : ")
+    let res_map = new Map([...mapSort.entries()].splice(0, n))
+    console.log(res_map);
+    return (res_map);
 
 }
 
@@ -143,38 +143,48 @@ function call_tweetIE(tweet) {
         });
         let tweet_tmp = tweet.text;
         const tweetIE_JSON1 = await response.json();
+
         const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
         var persons = [];
         var organisations = [];
         var userIDs = [];
         var locations = []
 
-        console.log(tweetIE_JSON)
+        if (tweetIE_JSON[':Location'] !== undefined)
         tweetIE_JSON[':Location'].forEach(location => {
             let loc = tweet_tmp.substring(location.start, location.end);
-            tweet.text = tweet.text.replace(loc, loc.replace(' ', '_'));
+            let loc_ = loc.replace(/ /g, '_').toLowerCase();
+            tweet.text = tweet.text.replace(loc, loc_);
             if (!locations.includes(loc.toLowerCase()))
-                locations = [...locations, loc.toLowerCase()];
+                locations = [...locations, loc_];
         })
 
+        if (tweetIE_JSON[':Organization'] !== undefined)
         tweetIE_JSON[':Organization'].forEach(organisation => {
             let orga = tweet_tmp.substring(organisation.start, organisation.end);
-            tweet.text = tweet.text.replace(orga, orga.replace(' ', '_'));
+            let orga_ = orga.replace(/ /g, '_').toLowerCase();
+            tweet.text = tweet.text.replace(orga, orga_);
             if (!organisations.includes(orga.toLowerCase()))
-                organisations = [...organisations, orga.toLowerCase()];
+                organisations = [...organisations, orga_];
         })
 
+        if (tweetIE_JSON[':Person'] !== undefined)
         tweetIE_JSON[':Person'].forEach(person => {
-            if (person['features'].firstName !== undefined && person['features'].surname !== undefined)
+            let firstname = person['features'].firstName;
+            let lastname = person['features'].surname;
+
+            if (firstname !== undefined && lastname !== undefined)
             {
-                tweet.text = tweet.text.replace(person['features'].firstName + ' ' + person['features'].surname, person['features'].firstName + '_' + person['features'].surname);
-                if (!persons.includes(person['features'].firstName.toLowerCase() + '_' + person['features'].surname.toLowerCase()))
-                persons = [...persons, person['features'].firstName.toLowerCase() + '_' + person['features'].surname.toLowerCase()];
+                let fullname = firstname.toLowerCase() + '_' + lastname.toLowerCase();
+                
+                tweet.text = tweet.text.replace(firstname + ' ' + lastname, fullname);
+                if (!persons.includes(fullname))
+                    persons = [...persons, fullname, lastname.toLowerCase()];
             }
-            else if (person['features'].firstName !== undefined)
-                persons = [...persons, person['features'].firstName.toLowerCase()];
-            else if (person['features'].surname !== undefined)
-                persons = [...persons, person['features'].surname.toLowerCase()];
+            else if (firstname !== undefined)
+                persons = [...persons, firstname.toLowerCase()];
+            else if (lastname !== undefined)
+                persons = [...persons, lastname.toLowerCase()];
         })
 
         const tokens_JSON = {
@@ -183,6 +193,8 @@ function call_tweetIE(tweet) {
             userIDs: userIDs,
             persons: persons,
         }
+
+        console.log("Tweety CALLED");
         return tokens_JSON;
     }
     return tweetIEcall();
@@ -193,7 +205,6 @@ function getColor(word, tokens_JSON)
     //console.log('"' + word + '"');
     //console.log(tokens_JSON);
 
-    console.log(tokens_JSON.persons.includes(word));
 
         if (tokens_JSON.persons.includes(word)) return '8242BB';
         if (tokens_JSON.organisations.includes(word)) return 'BB424F';
@@ -219,93 +230,117 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
         }
 
         var tweetIE = {text: ""};
-        Array.from(json.hits.hits).forEach(hit => {
-            tweetIE.text += ' ' + hit._source.tweet;
-        });
+        var tweetyCalls = [];
+        const forLoop = async () => {
+            console.log("start");
+            var hits = Array.from(json.hits.hits);
+            for (var i = 0; i < hits.length; i++) {
+                tweetIE.text = hits[i]._source.tweet;
+                
+                const json = await call_tweetIE(tweetIE)
+                console.log("JSON : ");
+                console.log(json);
+                console.log("Treated TWEET : ")
+                console.log(tweetIE);
+                
 
-        call_tweetIE(tweetIE).then(json => {
-            tokens_JSON.locations = [...tokens_JSON.locations, ...json.locations];
-            tokens_JSON.persons = [...tokens_JSON.persons, ...json.persons];
-            tokens_JSON.organisations = [...tokens_JSON.organisations, ...json.organisations];
-            tokens_JSON.userIDs = [...tokens_JSON.userIDs, ...json.userIDs];
-            console.log("AFTER tweetie call : " + tweetIE.text);
-            var map = getOccurences(tweetIE);
-            for (var word in map) {
+                tokens_JSON.locations = [...tokens_JSON.locations, ...json.locations];
+                tokens_JSON.persons = [...tokens_JSON.persons, ...json.persons];
+                tokens_JSON.organisations = [...tokens_JSON.organisations, ...json.organisations];
+                tokens_JSON.userIDs = [...tokens_JSON.userIDs, ...json.userIDs];
+                
+                var map = getOccurences(tweetIE);
+                for (var word in map) {
 
-                if(word.length > 1)
-                    words_map.set(word, (words_map.get(word)|| 0) + map[word]);
-            }
+                    if(word.length > 1)
+                        words_map.set(word, (words_map.get(word)|| 0) + map[word]);
+                }
+            
     
-            console.log("AFTER get occurences : " + tweetIE.text);
-            console.log(map);
+            };
+            console.log("END FOR LOOP")
+
+        }
+        forLoop().then(() => {
+        
+            console.log("AFTER FOR LOOP : map");
 
        
             var final_map = getnMax(words_map, 100);
+            console.log(final_map);
 
             var words_arr = Array.from(final_map.keys());
             var val_arr = Array.from(final_map.values());
-        console.log(tokens_JSON);
+        
+            console.log("TOKENIZED WORDS : ")
+            console.log(tokens_JSON);
 
-        var layout = d3.layout.cloud()
-                .size([500, 500])
-                .words(
-                    words_arr.map(word => {
-                    return { text: word, size: final_map.get(word), color: getColor(word, tokens_JSON) }; 
+            var words =  words_arr.map(word => {
+                let obj = { text: word, size: final_map.get(word), color: getColor(word, tokens_JSON) }; 
+                console.log(obj);
+                return obj;
+            });
+            var minSize = d3.min(words, d => d.size);
+            var maxSize = d3.max(words, d => d.size);
+            var fontScale = d3.scaleLinear().range([20, 120])
+                                            .domain([minSize, maxSize]);
+            var layout = d3.layout.cloud()
+                    .size([500, 500])
+                    .words(words)
+
+                    .padding(5)
+                    .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
+                // .spiral("archimedean")
+                    .font("Impact")
+                    .fontSize(d => fontScale(d.size))
+                       // console.log(d.text + " : " + (((final_map.get(d.text) / val_arr[0]) * 70) + 10));
+                        //return (final_map.get(d.text) / val_arr[0]) * (d.text.length > 14)?35:50 + 10; })
+                    .on("end", draw);
+            
+                    
+                layout.start();
+                console.log("END");
+            function fillColor(d) {
+                return d.color;
+            }
+            function draw(words) {
+                document.getElementById("top_words_cloud_chart").innerHTML = "";
+                var svg = d3.select("#top_words_cloud_chart").append("svg")
+                    .attr("width", layout.size()[0])
+                    .attr("height", layout.size()[1])
+                    .append("g")
+                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                    .selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", function (d) { return d.size + "px"; })
+                    .style("font-family", "Impact")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", function (d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
                     })
-                )
+                    .text(function (d) { return d.text; })
+                    .style("fill", fillColor)
+                    .style("cursor", "default")
+                    .on("click", function (d) { displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility") })
+                    .append("svg:title")
+                    .text(function (d) {return ("Used " +final_map.get(d.text) + " times"); });
 
-                .padding(5)
-                .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
-                .spiral("archimedean")
-                .font("Impact")
-                .fontSize(function (d) { return (final_map.get(d.text) / val_arr[0]) * 140 + 10; })
-                .on("end", draw);
-        
-                
-            layout.start();
-        function fillColor(d) {
-            return d.color;
-        }
-        function draw(words) {
-            document.getElementById("top_words_cloud_chart").innerHTML = "";
-            var svg = d3.select("#top_words_cloud_chart").append("svg")
-                .attr("width", layout.size()[0])
-                .attr("height", layout.size()[1])
-                .append("g")
-                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                .selectAll("text")
-                .data(words)
-                .enter().append("text")
-                .style("font-size", function (d) { return d.size + "px"; })
-                .style("font-family", "Impact")
-                .attr("text-anchor", "middle")
-                .attr("transform", function (d) {
-                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                var width = 300, height = 300;
+
+                $('.top_words_loader').css('display', "none");
+                d3.select('#exportWordsCloud').on('click', () => {
+                    //var svgString = getSVGString(svg.node());;
+                    svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
+            
+                    function save(dataBlob, filesize) {
+                    saveAs(dataBlob, 'WordCloud_' + param.query.search.search + "_" + param.query.from + "_" + param.query.until + '.png'); // FileSaver.js function
+                    }
                 })
-                .text(function (d) { return d.text; })
-                .style("fill", fillColor)
-                .style("cursor", "default")
-                .on("click", function (d) { displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility") })
-                .append("svg:title")
-                .text(function (d) {return ("Used " +final_map.get(d.text) + " times"); });
-
-            var width = 300, height = 300;
-
-            $('.top_words_loader').css('display', "none");
-            d3.select('#exportWordsCloud').on('click', () => {
-                //var svgString = getSVGString(svg.node());;
-                svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
-        
-                function save(dataBlob, filesize) {
-                  saveAs(dataBlob, 'WordCloud_' + param.query.search.search + "_" + param.query.from + "_" + param.query.until + '.png'); // FileSaver.js function
-                }
-            })
-                   
-        }
-    });
-    });
-
-
+                    
+            }
+        });
+    })
 }
 
   function svgString2Image(svg, width, height, format, callback) {
