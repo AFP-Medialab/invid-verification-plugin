@@ -152,14 +152,15 @@
 					}
 				}
 				var isEmpty = true;
-				promises
-				.then((response) => {
+				promises.forEach(promise => {
+				promise.then((response) => {
 					if (domText.innerHTML != "")
 						isEmpty = false;
 				})
 				.catch((err) => {
 					window.alert("ERROR: " + err);
 				})
+			})
 				if (isEmpty)
 				{
 					domText.innerHTML = nothing_found_msg;
