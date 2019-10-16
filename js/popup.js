@@ -96,11 +96,37 @@
 		domText.appendChild(document.createElement("br"));
 	}
 
+	function upImg(img) {
+		if (img.offsetLeft !== 0)
+			img.setAttribute("style", 
+				"height: 100px; width: 100px; background-color: inherit; position: absolute");
+		else
+			img.setAttribute("style", 
+				"height: 100px; width: 100px; background-color: inherit;");
+	}
+
 	function addImg(div, url) {
 		var img = document.createElement("img");
 		img.src = url;
 		img.setAttribute("style", "max-height: 50px; max-width: 50px;");
-		div.appendChild(img);
+
+		div.appendChild(img)
+
+		img.addEventListener('click', event => {
+			event.preventDefault();
+			chrome.tabs.create({url: url});
+		});
+		
+		img.addEventListener('mouseenter', event => {
+			event.preventDefault();
+			upImg(img);
+		});
+
+		img.addEventListener('mouseleave', event => {
+			event.preventDefault();
+			img.setAttribute("style", "max-height: 50px; max-width: 50px;");
+		});
+
 	}
 
 	function addIframe(divId) {
@@ -112,20 +138,35 @@
 			if (results && results.length && results[0] && results[0].length) {
 				if (domText.childNodes.length == 1)
 					domText.innerHTML = "";
+				var promises = [];
 				for (var url of results[0]) {
 					if (isYtUrl(url))
 						addUrl(domText, getYtUrl(url)); //getYtVideoUrl(getYtUrl(url)));
 					for (var extractor of window.extractors) {
-						if (extractor.validUrl(url))
+
+						if (extractor.validUrl(url)){
 							extractor.extract(url, function (urlRes) {
-								addUrl(domText, urlRes);
+								promises.push(new Promise(addUrl(domText, urlRes)));
 							});
+						}
 					}
 				}
-				if (domText.innerHTML == "")
+				var isEmpty = true;
+				promises.forEach(promise => {
+				promise.then((response) => {
+					if (domText.innerHTML != "")
+						isEmpty = false;
+				})
+				.catch((err) => {
+					window.alert("ERROR: " + err);
+				})
+			})
+				if (isEmpty)
+				{
 					domText.innerHTML = nothing_found_msg;
-			}
-		});
+				}
+		}
+	})
 	}
 
 	function getTabUrl(callback) {
