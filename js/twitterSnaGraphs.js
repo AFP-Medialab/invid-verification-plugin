@@ -4,7 +4,9 @@ import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
 import "../js/canvas-toBlob.js"
+import * as data from '../stopwords.js'
 
+var stopwords = data.default;
 var tweetIE_URL = 'http://localhost:8081/process?annotations=:Person,:UserID,:Location,:Organization'; //'https://cloud-api.gate.ac.uk/process-document/annie-named-entity-recognizer?annotations=:Person,:UserID,:Location,:Organization'//
 
 export function getNbTweets(param, givenFrom, givenUntil) {
@@ -22,7 +24,7 @@ export function getNbTweets(param, givenFrom, givenUntil) {
 
         document.getElementById("tweetCounter_contents").appendChild(counter);
         document.getElementById("tweetCounter_contents").appendChild(tweetDiv);
-
+        nb_tweets = res.value;
     })
 }
 
@@ -65,11 +67,11 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
     });
 }
 
-var stopwords = {
+/*var stopwords = {
     "glob": ["undefined", "rt", "twitter"],
     "fr": [ "le", "la", "bonjour", "vient", "été", "jour", "nest", "jamais", "aucune", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "cela", "surtout", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "depuis", "soir", "entre", "aura", "hui", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
-    "en": ["see", "much", "like", "didn", "must", "ever", "never", "got", "see", "would", "call", "many", "big", "also", "another", "really", "always", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "need", "ourselves", "you", "want", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "could", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now", "said", "say"]
-}
+    "en": ["see", "time", "going", "much", "may", "yet", "back", "way", "best", "doesn","put", "make", "made", "gone", "use", "get", "like", "didn", "must", "ever", "never", "got", "see", "would", "call", "many", "big", "also", "another", "really", "always", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "need", "ourselves", "you", "want", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "could", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now", "said", "say"]
+}*/
 
 function isEnglish(text)
 {
@@ -117,21 +119,20 @@ function getOccurences(tweet) {
         return map;
         }, Object.create(null));
 
-       console.log("get occurence of : " + tweet.text);
     return counts;
 }
 
 function getnMax(map, n) {
     const mapSort = new Map([...map.entries()].filter(elt => elt[1] > 1).sort((a, b) => b[1] - a[1]));
-    console.log("RES SORTED FILTERED MAP : ")
-    let res_map = new Map([...mapSort.entries()].splice(0, n))
-    console.log(res_map);
+    let res_map = new Map([...mapSort.entries()].splice(0, n));
     return (res_map);
 
 }
 
+var nb_treated, nb_tweets;
 function call_tweetIE(tweet) {
-    $('.top_words_loader').css('display', "block");
+
+    document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
     const tweetIEcall = async () => {
         const response = await fetch(tweetIE_URL, {
             method: 'POST',
@@ -187,14 +188,17 @@ function call_tweetIE(tweet) {
                 persons = [...persons, lastname.toLowerCase()];
         })
 
+        if (tweetIE_JSON[':UserID'] !== undefined)
+        tweetIE_JSON[':UserID'].forEach(user => {
+            userIDs.push(tweet.text.substring(user.start -1, user.end).toLowerCase());
+        })
+
         const tokens_JSON = {
             locations: locations,
             organisations: organisations,
             userIDs: userIDs,
             persons: persons,
         }
-
-        console.log("Tweety CALLED");
         return tokens_JSON;
     }
     return tweetIEcall();
@@ -202,16 +206,12 @@ function call_tweetIE(tweet) {
 
 function getColor(word, tokens_JSON)
 {
-    //console.log('"' + word + '"');
-    //console.log(tokens_JSON);
-
-
-        if (tokens_JSON.persons.includes(word)) return '8242BB';
-        if (tokens_JSON.organisations.includes(word)) return 'BB424F';
-        if (tokens_JSON.userIDs.includes(word)) return '42BB9E';
-        if (tokens_JSON.locations.includes(word)) return 'BB7042';
-        
-        return '35347B';
+    if (tokens_JSON.persons.includes(word)) return '8242BB';
+    if (tokens_JSON.organisations.includes(word)) return 'BB424F';
+    if (tokens_JSON.userIDs.includes(word)) return '42BB9E';
+    if (tokens_JSON.locations.includes(word)) return 'BB7042';
+    
+    return '35347B';
 }
 
 async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
@@ -222,6 +222,9 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
     var words_map = new Map();
     
     generateWordCloud(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(json => {
+        
+        $('.top_words_loader').css('display', "block");
+        nb_treated = 0;
         const tokens_JSON = {
             locations: [],
             organisations: [],
@@ -232,18 +235,12 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
         var tweetIE = {text: ""};
         var tweetyCalls = [];
         const forLoop = async () => {
-            console.log("start");
             var hits = Array.from(json.hits.hits);
             for (var i = 0; i < hits.length; i++) {
                 tweetIE.text = hits[i]._source.tweet;
-                
+                nb_treated++;
                 const json = await call_tweetIE(tweetIE)
-                console.log("JSON : ");
-                console.log(json);
-                console.log("Treated TWEET : ")
-                console.log(tweetIE);
                 
-
                 tokens_JSON.locations = [...tokens_JSON.locations, ...json.locations];
                 tokens_JSON.persons = [...tokens_JSON.persons, ...json.persons];
                 tokens_JSON.organisations = [...tokens_JSON.organisations, ...json.organisations];
@@ -258,85 +255,73 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
             
     
             };
-            console.log("END FOR LOOP")
 
         }
         forLoop().then(() => {
-        
-            console.log("AFTER FOR LOOP : map");
-
-       
+               
             var final_map = getnMax(words_map, 100);
-            console.log(final_map);
-
             var words_arr = Array.from(final_map.keys());
             var val_arr = Array.from(final_map.values());
-        
-            console.log("TOKENIZED WORDS : ")
-            console.log(tokens_JSON);
-
             var words =  words_arr.map(word => {
                 let obj = { text: word, size: final_map.get(word), color: getColor(word, tokens_JSON) }; 
-                console.log(obj);
                 return obj;
             });
             var minSize = d3.min(words, d => d.size);
             var maxSize = d3.max(words, d => d.size);
             var fontScale = d3.scaleLinear().range([20, 120])
                                             .domain([minSize, maxSize]);
-            var layout = d3.layout.cloud()
-                    .size([500, 500])
-                    .words(words)
+            var layout = d3.layout  .cloud()
+                                    .size([500, 500])
+                                    .words(words)
 
-                    .padding(5)
-                    .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
-                // .spiral("archimedean")
-                    .font("Impact")
-                    .fontSize(d => fontScale(d.size))
-                       // console.log(d.text + " : " + (((final_map.get(d.text) / val_arr[0]) * 70) + 10));
-                        //return (final_map.get(d.text) / val_arr[0]) * (d.text.length > 14)?35:50 + 10; })
-                    .on("end", draw);
+                                    .padding(5)
+                                    .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
+                                    .font("Impact")
+                                    .fontSize(d => fontScale(d.size))
+                                    .on("end", draw);
             
                     
-                layout.start();
-                console.log("END");
+            layout.start();
+
+
             function fillColor(d) {
                 return d.color;
             }
             function draw(words) {
                 document.getElementById("top_words_cloud_chart").innerHTML = "";
                 var svg = d3.select("#top_words_cloud_chart").append("svg")
-                    .attr("width", layout.size()[0])
-                    .attr("height", layout.size()[1])
-                    .append("g")
-                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                    .selectAll("text")
-                    .data(words)
-                    .enter().append("text")
-                    .style("font-size", function (d) { return d.size + "px"; })
-                    .style("font-family", "Impact")
-                    .attr("text-anchor", "middle")
-                    .attr("transform", function (d) {
-                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                    })
-                    .text(function (d) { return d.text; })
-                    .style("fill", fillColor)
-                    .style("cursor", "default")
-                    .on("click", function (d) { displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility") })
-                    .append("svg:title")
-                    .text(function (d) {return ("Used " +final_map.get(d.text) + " times"); });
+                            .attr("width", layout.size()[0])
+                            .attr("height", layout.size()[1])
+                            .append("g")
+                            .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                            .selectAll("text")
+                            .data(words)
+                            .enter().append("text")
+                            .style("font-size", function (d) { return d.size + "px"; })
+                            .style("font-family", "Impact")
+                            .attr("text-anchor", "middle")
+                            .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+                            .text(function (d) { return d.text; })
+                            .style("fill", fillColor)
+                            .style("cursor", "default")
+                            .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility"))
+                            .append("svg:title")
+                            .text(d => "Used " + final_map.get(d.text) + " times");
 
                 var width = 300, height = 300;
 
                 $('.top_words_loader').css('display', "none");
-                d3.select('#exportWordsCloud').on('click', () => {
-                    //var svgString = getSVGString(svg.node());;
-                    svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
-            
-                    function save(dataBlob, filesize) {
-                    saveAs(dataBlob, 'WordCloud_' + param.query.search.search + "_" + param.query.from + "_" + param.query.until + '.png'); // FileSaver.js function
-                    }
-                })
+                document.getElementById('progress_state_place').innerHTML = "";
+
+                d3  .select('#exportWordsCloud')
+                    .on('click', 
+                        () => {
+                            svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
+                    
+                            function save(dataBlob, filesize) {
+                                saveAs(dataBlob, 'WordCloud_' + param.query.search.search + "_" + param.query.from + "_" + param.query.until + '.png'); // FileSaver.js function
+                            }
+                    })
                     
             }
         });
@@ -429,8 +414,8 @@ export function mostLikePie(param, givenFrom, givenUntil) {
         let cloudlayout = {
             title: "<b>Most liked users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
             automargin: true,
-            width: 500,
-            height: 500,
+            width: 1000,
+            height: 1000,
         };
 
         var config = {
