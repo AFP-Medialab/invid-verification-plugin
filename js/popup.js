@@ -95,6 +95,7 @@
 		addCopy(domText, url);
 		domText.appendChild(document.createElement("br"));
 		console.log("IN ADD URL");
+<<<<<<< HEAD
 	}
 
 	function upImg(img) {
@@ -104,6 +105,8 @@
 		else
 			img.setAttribute("style", 
 				"height: 100px; width: 100px; background-color: inherit;");
+=======
+>>>>>>> vk-scrapper: fixed no data available async pb + add loader
 	}
 
 	function upImg(img) {
@@ -154,15 +157,30 @@
 					for (var extractor of window.extractors) {
 
 						if (extractor.validUrl(url)){
-							extractor.extract(url, function (urlRes) {
-								promises.push(new Promise(addUrl(domText, urlRes)));
+								extractor.extract(url, function (urlRes) {
+								addUrl(domText, urlRes);//promises.push(new Promise(addUrl(domText, urlRes)));
 							});
 						}
 					}
 				}
 			}
 
+
+
+			//	var isEmpty = true;
+			//	var forLoop = async function () {
+			//		var i = 0;
+				//	promises.forEach(promise => {
+				//		i++;
+				//		promise.then((response) => {
+				//			if (domText.innerHTML != "")
+				//				isEmpty = false;
+				//		})
+				//		.catch((err) => {
+				//			window.alert("ERROR: " + err);
+				//		})
 		})
+
 	}
 
 	function getTabUrl(callback) {
