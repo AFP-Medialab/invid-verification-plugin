@@ -7,7 +7,6 @@
 
 </head>
 <body>
-
 	<h1>InVID toolkit</h1>
 	<div id="invid-item" class="element-menu">
 		<h2><img src="img/InVID-logo.svg" class="logo"> Open InVID</h2>
@@ -16,13 +15,16 @@
 		<div id="video-button">
 			<h2>Video Urls</h2>
 		</div>
+
+
+		<div id="loader-popup-wrapper" style="width:100%; padding-bottom: 20px; display: none;"><div id="loader-popup" class="loader"></div></div>
 		<div id="video-content"></div>
 	</div>
 	<div class="element-menu">
 		<div id="image-button">
 			<h2>Images Urls</h2>
 		</div>
-		<div id="image-content"></div>
+		<div id="image-content" style="position: relative;"></div>
 	</div>
 	<!--<div class="element-menu">
 		<div id="link-button">
@@ -37,6 +39,7 @@
 	<script type="text/javascript" src="js/reddit_extractor.js"></script>
 	<script type="text/javascript" src="js/vimeo_extractor.js"></script>
 	<script type="text/javascript" src="js/youtube_extractor.js"></script>
+	<script type="text/javascript" src="js/vk-extractor.js"></script>
 	<script type="text/javascript" src="js/popup.js"></script>
 
 </body>

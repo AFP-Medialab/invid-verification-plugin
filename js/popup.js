@@ -84,8 +84,8 @@
 					addEltFunc(domText, url);
 				}
 			}
-			else
-				domText.innerHTML = nothing_found_msg;
+			//else
+			//	domText.innerHTML = nothing_found_msg;
 		});
 	}
 
@@ -94,13 +94,40 @@
 		domText.appendChild(document.createTextNode(" "));
 		addCopy(domText, url);
 		domText.appendChild(document.createElement("br"));
+		console.log("IN ADD URL");
+	}
+
+	function upImg(img) {
+		if (img.offsetLeft !== 0)
+			img.setAttribute("style", 
+				"height: 100px; width: 100px; background-color: inherit; position: absolute");
+		else
+			img.setAttribute("style", 
+				"height: 100px; width: 100px; background-color: inherit;");
 	}
 
 	function addImg(div, url) {
 		var img = document.createElement("img");
 		img.src = url;
 		img.setAttribute("style", "max-height: 50px; max-width: 50px;");
-		div.appendChild(img);
+
+		div.appendChild(img)
+
+		img.addEventListener('click', event => {
+			event.preventDefault();
+			chrome.tabs.create({url: url});
+		});
+		
+		img.addEventListener('mouseenter', event => {
+			event.preventDefault();
+			upImg(img);
+		});
+
+		img.addEventListener('mouseleave', event => {
+			event.preventDefault();
+			img.setAttribute("style", "max-height: 50px; max-width: 50px;");
+		});
+
 	}
 
 	function addIframe(divId) {
@@ -110,22 +137,43 @@
 		}, function callback(results) {
 			var domText = document.getElementById(divId);
 			if (results && results.length && results[0] && results[0].length) {
-				if (domText.childNodes.length == 1)
-					domText.innerHTML = "";
+				
+				//if (domText.childNodes.length == 1)
+				//	domText.innerHTML = "";
+
+
 				for (var url of results[0]) {
 					if (isYtUrl(url))
+					{
 						addUrl(domText, getYtUrl(url)); //getYtVideoUrl(getYtUrl(url)));
+					}
 					for (var extractor of window.extractors) {
-						if (extractor.validUrl(url))
-							extractor.extract(url, function (urlRes) {
-								addUrl(domText, urlRes);
+
+						if (extractor.validUrl(url)){
+								extractor.extract(url, function (urlRes) {
+								addUrl(domText, urlRes);//promises.push(new Promise(addUrl(domText, urlRes)));
 							});
+						}
 					}
 				}
-				if (domText.innerHTML == "")
-					domText.innerHTML = nothing_found_msg;
 			}
-		});
+
+
+
+			//	var isEmpty = true;
+			//	var forLoop = async function () {
+			//		var i = 0;
+				//	promises.forEach(promise => {
+				//		i++;
+				//		promise.then((response) => {
+				//			if (domText.innerHTML != "")
+				//				isEmpty = false;
+				//		})
+				//		.catch((err) => {
+				//			window.alert("ERROR: " + err);
+				//		})
+		})
+
 	}
 
 	function getTabUrl(callback) {
@@ -133,7 +181,7 @@
 			code: "document.location.href"
 		}, function (results) {
 			callback(results[0]);
-		});
+		})
 	}
 
 	function addCopy(domText, url) {
@@ -155,22 +203,29 @@
 	document.getElementById("video-button").addEventListener("click", function getImages() {
 		if (!activate("video-content"))
 			return;
-		addUrls("video-content", "video", "src", addUrl);
-		addIframe("video-content");
-		getTabUrl(function(urlPage) {
-			for (var extractor of window.extractors) {
-				if (extractor.validUrl(urlPage))
-					extractor.extract(urlPage, function (urlRes) {
-						addUrl(document.getElementById("video-content"), urlRes);
-					});
-			}
+		document.getElementById("loader-popup-wrapper").style.display = "block";
+			addUrls("video-content", "video", "src", addUrl);
+			addIframe("video-content");
+			getTabUrl(async function(urlPage) {
+				for (var extractor of window.extractors) {
+					if (extractor.validUrl(urlPage))
+						extractor.extract(urlPage, function (urlRes) {
+							addUrl(document.getElementById("video-content"), urlRes);
+						});
+				}
+			})
+			setTimeout(() => {
+				if (document.getElementById("video-content").innerHTML === "")
+					document.getElementById("video-content").innerHTML = nothing_found_msg;
+				
+				document.getElementById("loader-popup-wrapper").style.display = "none";
+			}, 1600);
 		})
 		/*getTabUrl(function (urlPage) {
 			if (isYtUrl(urlPage)) {
 				addUrl(document.getElementById("video-content"), getYtVideoUrl(getYtUrl(urlPage)));
 			}
 		});*/
-	});
 
 	/*document.getElementById("link-button").addEventListener("click", function getImages() {
 		if (!activate("link-content"))
