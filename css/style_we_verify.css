@@ -1069,3 +1069,34 @@ third-parties-menu div figure:hover{
 	color:#21a5b4;
 	border-radius:3px;
 }
+
+/* Twitter sna */
+.js-plotly-plot .plotly, .js-plotly-plot .plotly div{
+	margin: auto!important;
+}
+
+.title_custom{
+	background-color:#f8f8f8;
+	padding:5px;
+	border-radius:5px;
+	cursor:pointer;
+	font-size:20px;
+	width: 595.28px;
+	margin: auto;
+}
+
+#twitterStats-Graphs {
+	display: none;
+	margin: 30px auto 15px;
+	padding: 10px 50px 40px;
+	border: 2px solid #F8F8F8;
+	border-radius: 4px;
+	text-align: center;
+	line-height: 22px;
+}
+
+#counter_number {
+	margin: 30px auto 15px;
+	padding: 10px 50px 40px;
+	font-size: 60pt;
+}

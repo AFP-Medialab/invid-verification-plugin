@@ -32,15 +32,14 @@ $("#video_analysis_submit").on( "click", function ga_analysis_url(e) {
 
 /* Thumbnails */
 $("#video_form input[type='submit']")[0].addEventListener("click", function ga_thumbnail_search(e) {
-	var url = $(this).find("input[type='text']").val();
-	var engines = {
+	let engines = {
 		google: "#google_engine",
 		yandex: "#yandex_engine",
 		bing: "#bing_engine",
 		tineye: "#tineye_engine"
 	};
-	var engine = "google";
-	for (index in engines) {
+	let engine = "google";
+	for (let index in engines) {
 		if ($(engines[index]).checked) {
 			engine = index;
 			break;

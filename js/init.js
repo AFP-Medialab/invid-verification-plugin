@@ -122,12 +122,6 @@ $(document).ready( function() {
 		$("#help_modal_iframe").prop("src", "");
 	});
 
-	// Accordion of classroom lessons
-	$(".resources-title").on( "click", function() {
-		$(".resources-content").hide();
-		$(this).next().fadeIn(500);
-	});
-
 	// Manages params received in url for right button menu accesses
 	checkParam();
 

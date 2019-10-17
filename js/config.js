@@ -3,7 +3,7 @@
 */
 
 // Whether plugin is running in production mode or not
-var production = true;
+var production = false;
 
 // Main page name (to be added in manifest.json and menu.js too)
 var url_parser = document.createElement("a");
@@ -31,7 +31,7 @@ if( production )
 	var config_google_analytics_key = "to-do";
 
 	// URL of tsv file holding translation strings
-	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.70/InVIDTraductions.tsv"
+	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.71/InVIDTraductions.tsv"
 }
 else
 {
