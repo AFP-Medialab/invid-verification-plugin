@@ -134,74 +134,88 @@ function call_tweetIE(tweet) {
 
     document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
     const tweetIEcall = async () => {
-        const response = await fetch(tweetIE_URL, {
+        return await fetch(tweetIE_URL, {
             method: 'POST',
             body:
                 tweet.text,
             headers: {
                 'Content-Type': 'text/plain'
             } //*/
-        });
-        let tweet_tmp = tweet.text;
-        const tweetIE_JSON1 = await response.json();
-
-        const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
-        var persons = [];
-        var organisations = [];
-        var userIDs = [];
-        var locations = []
-
-        if (tweetIE_JSON[':Location'] !== undefined)
-        tweetIE_JSON[':Location'].forEach(location => {
-            let loc = tweet_tmp.substring(location.start, location.end);
-            let loc_ = loc.replace(/ /g, '_').toLowerCase();
-            tweet.text = tweet.text.replace(loc, loc_);
-            if (!locations.includes(loc.toLowerCase()))
-                locations = [...locations, loc_];
         })
+        .then (async response => {
+            var resp = await response.json();
 
-        if (tweetIE_JSON[':Organization'] !== undefined)
-        tweetIE_JSON[':Organization'].forEach(organisation => {
-            let orga = tweet_tmp.substring(organisation.start, organisation.end);
-            let orga_ = orga.replace(/ /g, '_').toLowerCase();
-            tweet.text = tweet.text.replace(orga, orga_);
-            if (!organisations.includes(orga.toLowerCase()))
-                organisations = [...organisations, orga_];
-        })
-
-        if (tweetIE_JSON[':Person'] !== undefined)
-        tweetIE_JSON[':Person'].forEach(person => {
-            let firstname = person['features'].firstName;
-            let lastname = person['features'].surname;
-
-            if (firstname !== undefined && lastname !== undefined)
-            {
-                let fullname = firstname.toLowerCase() + '_' + lastname.toLowerCase();
-                
-                tweet.text = tweet.text.replace(firstname + ' ' + lastname, fullname);
-                if (!persons.includes(fullname))
-                    persons = [...persons, fullname, lastname.toLowerCase()];
+            const tweetIE_JSON1 = resp; //.json();
+            if (!response.ok) {
+                console.log(resp);
+                throw Error(resp.error);
             }
-            else if (firstname !== undefined)
-                persons = [...persons, firstname.toLowerCase()];
-            else if (lastname !== undefined)
-                persons = [...persons, lastname.toLowerCase()];
-        })
+            let tweet_tmp = tweet.text;
 
-        if (tweetIE_JSON[':UserID'] !== undefined)
-        tweetIE_JSON[':UserID'].forEach(user => {
-            userIDs.push(tweet.text.substring(user.start -1, user.end).toLowerCase());
-        })
+            const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
+            var persons = [];
+            var organisations = [];
+            var userIDs = [];
+            var locations = []
 
-        const tokens_JSON = {
-            locations: locations,
-            organisations: organisations,
-            userIDs: userIDs,
-            persons: persons,
-        }
-        return tokens_JSON;
+            if (tweetIE_JSON[':Location'] !== undefined)
+            tweetIE_JSON[':Location'].forEach(location => {
+                let loc = tweet_tmp.substring(location.start, location.end);
+                let loc_ = loc.replace(/ /g, '_').toLowerCase();
+                tweet.text = tweet.text.replace(loc, loc_);
+                if (!locations.includes(loc.toLowerCase()))
+                    locations = [...locations, loc_];
+            })
+
+            if (tweetIE_JSON[':Organization'] !== undefined)
+            tweetIE_JSON[':Organization'].forEach(organisation => {
+                let orga = tweet_tmp.substring(organisation.start, organisation.end);
+                let orga_ = orga.replace(/ /g, '_').toLowerCase();
+                tweet.text = tweet.text.replace(orga, orga_);
+                if (!organisations.includes(orga.toLowerCase()))
+                    organisations = [...organisations, orga_];
+            })
+
+            if (tweetIE_JSON[':Person'] !== undefined)
+            tweetIE_JSON[':Person'].forEach(person => {
+                let firstname = person['features'].firstName;
+                let lastname = person['features'].surname;
+
+                if (firstname !== undefined && lastname !== undefined)
+                {
+                    let fullname = firstname.toLowerCase() + '_' + lastname.toLowerCase();
+                    
+                    tweet.text = tweet.text.replace(firstname + ' ' + lastname, fullname);
+                    if (!persons.includes(fullname))
+                        persons = [...persons, fullname, lastname.toLowerCase()];
+                }
+                else if (firstname !== undefined)
+                    persons = [...persons, firstname.toLowerCase()];
+                else if (lastname !== undefined)
+                    persons = [...persons, lastname.toLowerCase()];
+            })
+
+            if (tweetIE_JSON[':UserID'] !== undefined)
+            tweetIE_JSON[':UserID'].forEach(user => {
+                userIDs.push(tweet.text.substring(user.start -1, user.end).toLowerCase());
+            })
+
+            const tokens_JSON = {
+                locations: locations,
+                organisations: organisations,
+                userIDs: userIDs,
+                persons: persons,
+            }
+            return tokens_JSON;
+        })
+        .catch(error => {
+            window.alert("Failed building words cloud : " + error.message + "\nPlease refresh");
+        })
+    
     }
-    return tweetIEcall();
+    return tweetIEcall().then(res => res);
+   //console.log(res)
+   // return res;
 }
 
 function getColor(word, tokens_JSON)
@@ -215,7 +229,7 @@ function getColor(word, tokens_JSON)
 }
 
 async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
-    stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["search"].split(' ')];
+    stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["search"].split(' ').map(word => word.replace('#', ""))];
 
     if (param["query"]["search"]["and"] !== undefined)
         stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["and"].split(' ')];
@@ -225,7 +239,7 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
         
         $('.top_words_loader').css('display', "block");
         nb_treated = 0;
-        const tokens_JSON = {
+        var tokens_JSON = {
             locations: [],
             organisations: [],
             userIDs: [],
@@ -233,7 +247,7 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
         }
 
         var tweetIE = {text: ""};
-        var tweetyCalls = [];
+
         const forLoop = async () => {
             var hits = Array.from(json.hits.hits);
             for (var i = 0; i < hits.length; i++) {
