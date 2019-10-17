@@ -26,3 +26,33 @@ h2 {
 div .centerText {
 	text-align: center;
 }
+
+
+/* Loader */
+/* Center the loader */
+.loader {
+	position: relative;
+	top: 5%;
+	z-index: 1;
+	width: 150px;
+	height: 150px;
+	margin: 20px 0 0 -60px;
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid #21a5b4;
+	width: 120px;
+	height: 120px;
+	-webkit-animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+	width: 40px; height: 40px; margin: auto;
+}
+
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
