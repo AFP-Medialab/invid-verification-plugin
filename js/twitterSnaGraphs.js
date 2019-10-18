@@ -134,7 +134,7 @@ function call_tweetIE(tweet) {
 
     document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
     const tweetIEcall = async () => {
-        return await fetch(tweetIE_URL, {
+        const response = await fetch(tweetIE_URL, {
             method: 'POST',
             body:
                 tweet.text,
@@ -142,14 +142,14 @@ function call_tweetIE(tweet) {
                 'Content-Type': 'text/plain'
             } //*/
         })
-        .then (async response => {
-            var resp = await response.json();
-
-            const tweetIE_JSON1 = resp; //.json();
+            var resp = await response;
             if (!response.ok) {
-                console.log(resp);
-                throw Error(resp.error);
+                return {
+                   error: response.statusText
+                }
             }
+            const tweetIE_JSON1 = resp; //.json();
+           
             let tweet_tmp = tweet.text;
 
             const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
@@ -207,12 +207,7 @@ function call_tweetIE(tweet) {
                 persons: persons,
             }
             return tokens_JSON;
-        })
-        .catch(error => {
-            window.alert("Failed building words cloud : " + error.message + "\nPlease refresh");
-        })
-    
-    }
+        }
     return tweetIEcall().then(res => res);
    //console.log(res)
    // return res;
@@ -248,18 +243,28 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
 
         var tweetIE = {text: ""};
 
+        var serverDown = false;
         const forLoop = async () => {
             var hits = Array.from(json.hits.hits);
             for (var i = 0; i < hits.length; i++) {
                 tweetIE.text = hits[i]._source.tweet;
                 nb_treated++;
-                const json = await call_tweetIE(tweetIE)
-                
-                tokens_JSON.locations = [...tokens_JSON.locations, ...json.locations];
-                tokens_JSON.persons = [...tokens_JSON.persons, ...json.persons];
-                tokens_JSON.organisations = [...tokens_JSON.organisations, ...json.organisations];
-                tokens_JSON.userIDs = [...tokens_JSON.userIDs, ...json.userIDs];
-                
+                if (!serverDown)
+                {
+                    const json = await call_tweetIE(tweetIE)
+                    console.log(json);
+                    if (json.error !== undefined)
+                    {
+                        serverDown = true;
+                    }
+                    else
+                    {
+                        tokens_JSON.locations = [...tokens_JSON.locations, ...json.locations];
+                        tokens_JSON.persons = [...tokens_JSON.persons, ...json.persons];
+                        tokens_JSON.organisations = [...tokens_JSON.organisations, ...json.organisations];
+                        tokens_JSON.userIDs = [...tokens_JSON.userIDs, ...json.userIDs];
+                    }
+            }
                 var map = getOccurences(tweetIE);
                 for (var word in map) {
 
