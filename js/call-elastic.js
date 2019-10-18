@@ -8,35 +8,6 @@ if (dev) {
 }
 
 
-export function generateWordCloud(param) {
-
-   // var sessid = param["session"];
-   // var andArgs = (param["query"]["search"]["and"] === undefined)? null : param["query"]["search"]["and"];
-
-    var must = [
-        constructMatchPhrase(param)
-    ]
-
-    var query = JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
-    const userAction = async () => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body:
-                query,
-            headers: {
-                'Content-Type': 'application/json'
-            } //*/
-        });
-        const myJson = await response.json();
-        json = myJson;
-        return myJson;
-
-    }
-    return userAction();
-
-
-}
-
 function constructMatchPhrase(param, startDate, endDate)
 {
     if (startDate === undefined)
@@ -74,7 +45,7 @@ function constructMatchPhrase(param, startDate, endDate)
             match_phrases +=  ',{'+
                 '"match_phrase": {' +
                     '"hashtags": {' +
-                        '"query":' + arg +
+                        '"query":"' + arg + '"' +
                     '}' +
                 '}' +
             '}'
@@ -84,10 +55,10 @@ function constructMatchPhrase(param, startDate, endDate)
             match_phrases +=  ',{' +
                 '"match_phrase": {' +
                 '"tweet": {' +
-                  '"query":' + arg +
-                '}'
-              '}'
-            '}'
+                  '"query":"' + arg + '"' +
+                '}' +
+              '}' +
+            '}';
         }
     });
 
@@ -100,7 +71,7 @@ function constructMatchPhrase(param, startDate, endDate)
                 match_phrases += ',{' + 
                     '"match_phrase": {' +
                         '"username": {' + 
-                        '"query":' + user +
+                        '"query":"' + user + '"' +
                         '}' +
                     '}' +
                 '}';
@@ -208,6 +179,58 @@ function constructAggs(field)
         return fieldInfo;
 }
 
+function buildQuery(aggs, must) {
+    var query = {
+        "aggs": aggs,
+        "size": 10000,
+        "_source": {
+            "excludes": []
+        },
+        "stored_fields": [
+            "*"
+        ],
+        "script_fields": {},
+        "query": {
+            "bool": {
+                "must": must,
+                "filter": [],
+                "should": [],
+                "must_not": []
+            }
+        }
+    }
+    return query;
+}
+
+export function generateWordCloud(param) {
+
+   // var sessid = param["session"];
+   // var andArgs = (param["query"]["search"]["and"] === undefined)? null : param["query"]["search"]["and"];
+
+    var must = [
+        constructMatchPhrase(param)
+    ]
+
+    var query = JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    console.log(query);
+    const userAction = async () => {
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body:
+                query,
+            headers: {
+                'Content-Type': 'application/json'
+            } //*/
+        });
+        const myJson = await response.json();
+
+        return myJson;
+
+    }
+    return userAction();
+
+
+}
 
 export function generateEssidHistogramQuery(param, retweets, givenFrom, givenUntil) {
     var queryStart = param["from"];
@@ -333,6 +356,7 @@ export function generateTweetCount(param) {
         });
         const myJson = await response.json();
 
+        json = myJson;
         return myJson["hits"]["total"];
     };
     return userAction();
@@ -373,109 +397,6 @@ export function generateURLArray(param) {
     };
     return userAction();
 }
-/*
-"aggs": {
-    "2":
-        chartInfo
-},
-"must": [
-    {
-        "query_string": {
-            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-            "analyze_wildcard": true,
-            "time_zone": "Europe/Paris"
-        }
-    },
-    {
-        "match_all": {}
-    },
-    matchPhrase,
-    {
-        "range": {
-            "date": {
-                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                "gte": startDate,
-                "lte": endDate
-            }
-        }
-    }
-],
-*/
-
-function buildQuery(aggs, must/*, startDate, endDate*/) {
-    var query = {
-        "aggs": aggs,
-        "size": 10000,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": must,
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        }
-    }
-    return query;
-}
-
-/* GET QUERY AND
-
-function getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate) {
-    var query = {
-        "aggs": {
-            "2":
-                chartInfo
-        },
-        "size": 10000,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "query_string": {
-                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                            "analyze_wildcard": true,
-                            "time_zone": "Europe/Paris"
-                        }
-                    },
-                    {
-                        "match_all": {}
-                    },
-                    matchHashTag,
-                    matchPhrase,
-                    {
-                        "range": {
-                            "date": {
-                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                "gte": startDate,
-                                "lte": endDate
-                            }
-                        }
-                    }
-                ],
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        }
-    }
-    return query;
-}
-*/
-
 
 function mostTweetsGet(key, values, labels, parents, mainKey) {
     if (key["doc_count"] > 0) {
@@ -494,106 +415,6 @@ function getURLArray(json) {
     });
     return urlArray;
 }
-
-/* GET NB TWEETS
-function getNbTweets(sessid, andArgs, startDate, endDate, size) {
-
-    return (andArgs == null) ? {
-        "aggs": {},
-        "size": size,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "query_string": {
-                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                            "analyze_wildcard": true,
-                            "time_zone": "Europe/Paris"
-                        }
-                    },
-                    {
-                        "match_all": {}
-                    },
-                    {
-                        "match_phrase": {
-                            "essid": {
-                                "query": sessid
-                            }
-                        }
-                    },
-                    {
-                        "range": {
-                            "date": {
-                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                "gte": startDate,
-                                "lte": endDate
-                            }
-                        }
-                    }
-                ],
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        }
-    } : {
-            "aggs": {},
-            "size": size,
-            "_source": {
-                "excludes": []
-            },
-            "stored_fields": [
-                "*"
-            ],
-            "script_fields": {},
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "query_string": {
-                                "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                                "analyze_wildcard": true,
-                                "time_zone": "Europe/Paris"
-                            }
-                        },
-                        {
-                            "match_all": {}
-                        },
-                        constructMatchPhrase(andArgs),
-                        {
-                            "match_phrase": {
-                                "essid": {
-                                    "query": sessid
-                                }
-                            }
-                        },
-                        {
-                            "range": {
-                                "date": {
-                                    "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                    "gte": startDate,
-                                    "lte": endDate
-                                }
-                            }
-                        }
-                    ],
-                    "filter": [],
-                    "should": [],
-                    "must_not": []
-                }
-            }
-        };
-}
-*/
-
-
 
 function usersGet(dateObj, infos) {
 
@@ -724,9 +545,3 @@ function getPlotlyJsonHisto(json, specificGet) {
 export function getTweets() {
     return json
 }
-
-
-/*
-            else if (hashtag !== null)
-
-   // generateQuery().then((json) => responseJson = json);*/
