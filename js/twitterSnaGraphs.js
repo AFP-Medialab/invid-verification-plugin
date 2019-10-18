@@ -1,5 +1,5 @@
 
-import { generateEssidHistogramQuery, generateWordCloud, generateCloudQuery, generateURLArray, getTweets, generateTweetCount } from './call-elastic.js';
+import { generateEssidHistogramQuery, generateWordCloud, generateDonutQuery, generateURLArray, getTweets, generateTweetCount } from './call-elastic.js';
 import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
@@ -10,7 +10,7 @@ var stopwords = data.default;
 var tweetIE_URL = 'http://185.249.140.38/weverify-twitie/process?annotations=:Person,:UserID,:Location,:Organization'; //'https://cloud-api.gate.ac.uk/process-document/annie-named-entity-recognizer?annotations=:Person,:UserID,:Location,:Organization'//
 
 export function getNbTweets(param, givenFrom, givenUntil) {
-    generateTweetCount(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(res => {
+    generateTweetCount(param, givenFrom, givenUntil).then(res => {
         document.getElementById("tweetCounter_contents").innerHTML = "";
         let counter = document.createElement("div");
         counter.setAttribute("id", "counter_number");
@@ -29,16 +29,13 @@ export function getNbTweets(param, givenFrom, givenUntil) {
 }
 
 function showEssidHistogram(param, givenFrom, givenUntil) {
-    generateEssidHistogramQuery(param["session"], 
-                               (param["query"]["search"]["and"] === undefined)? null : param["query"]["search"]["and"], 
-                               false, param["query"]["from"], param["query"]["until"], givenFrom, givenUntil)
-                                    .then(plotlyJson => {
+    generateEssidHistogramQuery(param, false, givenFrom, givenUntil).then(plotlyJson => {
         var layout = {
-            title: "<b>Propagation Timeline</b> - " + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
+            title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
             xaxis: {
-                range: [givenFrom, givenUntil],
-                rangeslider: { range: [param["query"]["from"], param["query"]["until"]] },
+                range: [ param["from"], param["until"]],
+                rangeslider: { range: [givenFrom, givenUntil] },
             },
             autosize: true
         };
@@ -46,7 +43,7 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
         var config = {
             toImageButtonOptions: {
                 format: 'png', // one of png, svg, jpeg, webp
-                filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Timeline",
+                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Timeline",
                 scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
 
@@ -142,16 +139,17 @@ function call_tweetIE(tweet) {
                 'Content-Type': 'text/plain'
             } //*/
         })
-            var resp = await response;
+            var resp = await response.json();
             if (!response.ok) {
                 return {
                    error: response.statusText
                 }
             }
-            const tweetIE_JSON1 = resp; //.json();
+            const tweetIE_JSON1 = resp;
            
             let tweet_tmp = tweet.text;
 
+        
             const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
             var persons = [];
             var organisations = [];
@@ -223,14 +221,14 @@ function getColor(word, tokens_JSON)
     return '35347B';
 }
 
-async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
-    stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["search"].split(' ').map(word => word.replace('#', ""))];
+async function mostUsedWordsCloud(param) {
+    stopwords["glob"] = [...stopwords["glob"], ...param["search"]["search"].split(' ').map(word => word.replace('#', ""))];
 
-    if (param["query"]["search"]["and"] !== undefined)
-        stopwords["glob"] = [...stopwords["glob"], ...param["query"]["search"]["and"].split(' ')];
+    if (param["search"]["and"] !== undefined)
+        stopwords["glob"] = [...stopwords["glob"], ...param["search"]["and"]];
     var words_map = new Map();
     
-    generateWordCloud(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(json => {
+    generateWordCloud(param).then(json => {
         
         $('.top_words_loader').css('display', "block");
         nb_treated = 0;
@@ -252,7 +250,7 @@ async function mostUsedWordsCloud(param, givenFrom, givenUntil) {
                 if (!serverDown)
                 {
                     const json = await call_tweetIE(tweetIE)
-                    console.log(json);
+
                     if (json.error !== undefined)
                     {
                         serverDown = true;
@@ -398,10 +396,10 @@ $("#exportWordsCloud").on("mouseleave", event => {
     $("#exportWordsCloud").css({"opacity": 0.33});
 });
 
-export function mostRetweetPie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nretweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+export function mostRetweetPie(param) {
+    generateDonutQuery(param, "nretweets").then(plotlyJson => {
         var cloudlayout = {
-            title: "<b>Most retweeted users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
+            title: "<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
             width: 500,
             height: 500,
@@ -410,7 +408,7 @@ export function mostRetweetPie(param, givenFrom, givenUntil) {
         var config = {
             toImageButtonOptions: {
                 format: 'png', // one of png, svg, jpeg, webp
-                filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Retweets",
+                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets",
                 scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
             modeBarButtons: [["toImage"]], displaylogo: false
@@ -424,23 +422,23 @@ export function mostRetweetPie(param, givenFrom, givenUntil) {
             displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
-        unrotateMainHashtag(param["query"]["search"]["search"]);
+        unrotateMainHashtag(param["search"]["search"]);
     });
 }
 
-export function mostLikePie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "nlikes", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+export function mostLikePie(param) {
+    generateDonutQuery(param, "nlikes").then(plotlyJson => {
         let cloudlayout = {
-            title: "<b>Most liked users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
+            title: "<b>Most liked users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
-            width: 1000,
-            height: 1000,
+            width: 500,
+            height: 500,
         };
 
         var config = {
             toImageButtonOptions: {
                 format: 'png', // one of png, svg, jpeg, webp
-                filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Likes",
+                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Likes",
                 scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
             modeBarButtons: [["toImage"]], displaylogo: false
@@ -453,15 +451,15 @@ export function mostLikePie(param, givenFrom, givenUntil) {
             displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
-        unrotateMainHashtag(param["query"]["search"]["search"]);
+        unrotateMainHashtag(param["search"]["search"]);
     });
 }
 
-export function mostTweetPie(param, givenFrom, givenUntil) {
+export function mostTweetPie(param) {
     //Utilisateurs les actifs
-    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "ntweets", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+    generateDonutQuery(param, "ntweets").then(plotlyJson => {
         var cloudlayout = {
-            title: "<b>Most active users</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
+            title: "<b>Most active users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
             width: 500,
             height: 500,
@@ -470,7 +468,7 @@ export function mostTweetPie(param, givenFrom, givenUntil) {
         var config = {
             toImageButtonOptions: {
                 format: 'png', // one of png, svg, jpeg, webp
-                filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Tweets",
+                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Tweets",
                 scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
             modeBarButtons: [["toImage"]], displaylogo: false
@@ -484,15 +482,15 @@ export function mostTweetPie(param, givenFrom, givenUntil) {
             displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets");
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
-        unrotateMainHashtag(param["query"]["search"]["search"]);
+        unrotateMainHashtag(param["search"]["search"]);
     });
 }
 
-var firstTopUsers = true;
-export function topHashtagPie(param, givenFrom, givenUntil) {
-    generateCloudQuery(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], "hashtags", givenFrom, givenUntil, param["query"]["search"]["search"]).then(plotlyJson => {
+
+export function topHashtagPie(param) {
+    generateDonutQuery(param, "hashtags").then(plotlyJson => {
         let cloudlayout = {
-            title: "<b>Most associated hashtags</b><br>" + param["query"]["search"]["search"] + " " + param["query"]["from"] + " " + param["query"]["until"],
+            title: "<b>Most associated hashtags</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
             width: 500,
             height: 500,
@@ -501,7 +499,7 @@ export function topHashtagPie(param, givenFrom, givenUntil) {
         var config = {
             toImageButtonOptions: {
                 format: 'png', // one of png, svg, jpeg, webp
-                filename: param["query"]["search"]["search"] + "_" + param["query"]["from"] + "_" + param["query"]["until"] + "_Hashtags",
+                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Hashtags",
                 scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
             modeBarButtons: [["toImage"]], displaylogo: false
@@ -522,15 +520,15 @@ export function topHashtagPie(param, givenFrom, givenUntil) {
 
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
-        unrotateMainHashtag(param["query"]["search"]["search"]);
+        unrotateMainHashtag(param["search"]["search"]);
 
     });
 
 
 }
 
-export function urlArray(param, givenFrom, givenUntil) {
-    generateURLArray(param["session"], (param["query"]["search"]["and"] === undefined)?null:param["query"]["search"]["and"], givenFrom, givenUntil).then(arrayStr => {
+export function urlArray(param) {
+    generateURLArray(param).then(arrayStr => {
         document.getElementById('url_array').innerHTML = arrayStr;
     });
 }
@@ -541,18 +539,35 @@ export function setFirstHisto(first) {
 }
 
 export function generateGraphs(param) {
-    let givenFrom = document.getElementById("twitterStats-from-date").value;
-    let givenUntil = document.getElementById("twitterStats-to-date").value;
+    let givenFrom = param["query"]["from"];
+    let givenUntil = param["query"]["until"];
 
+    var entries = {
+        from: document.getElementById("twitterStats-from-date").value,
+        until: document.getElementById("twitterStats-to-date").value,
+        search: {
+            search: document.getElementById("twitterStats-search").value,
+            and : document.getElementById("twitterStats-search-and").value.split(' ')
+        },
+        user_list: document.getElementById("twitterStats-user").value.split(" "),
+        session: param.session
+    }
+   // console.log(entries);
+   // var param2 = param.query;
+   // param2["session"] = param["session"];
     if (firstHisto)
-        mostUsedWordsCloud(param, givenFrom, givenUntil);
-    showEssidHistogram(param, givenFrom, givenUntil);
-    getNbTweets(param, givenFrom, givenUntil);
-    mostRetweetPie(param, givenFrom, givenUntil);
-    mostLikePie(param, givenFrom, givenUntil);
-    mostTweetPie(param, givenFrom, givenUntil);
-    topHashtagPie(param, givenFrom, givenUntil);
-    urlArray(param, givenFrom, givenUntil);
+        mostUsedWordsCloud(entries);
+
+    showEssidHistogram(entries, givenFrom, givenUntil);
+    getNbTweets(entries);
+    if (entries.user_list[0] === "")
+    {
+        mostRetweetPie(entries);
+        mostLikePie(entries);
+        mostTweetPie(entries);
+    }
+    topHashtagPie(entries);
+    urlArray(entries);
 }
 
 function displayTweetsOfDate(plot, place, button) {
