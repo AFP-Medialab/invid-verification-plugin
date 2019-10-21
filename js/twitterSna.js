@@ -138,6 +138,7 @@ var isFirst = true;
 function submit_sna_form() {
 
 
+    setFirstHisto(true);
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
@@ -150,7 +151,6 @@ function submit_sna_form() {
         alert("Bad request");
     response().then((jsonResponse) => {
         if (jsonResponse !== null) {
-            setFirstHisto(true);
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
