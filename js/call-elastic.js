@@ -130,7 +130,6 @@ function constructAggs(field)
         })
     }
     else if (field.includes('1')) {
-        console.log(field)
         fieldInfo += JSON.stringify({
             "date_histogram": {
                 "field": "date",
@@ -212,7 +211,6 @@ export function generateWordCloud(param) {
     ]
 
     var query = JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
-    console.log(query);
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -236,7 +234,6 @@ export function generateEssidHistogramQuery(param, retweets, givenFrom, givenUnt
     var queryStart = param["from"];
     var queryEnd = param["until"];
 
-    console.log(givenUntil);
     let dateEndQuery = new Date(queryEnd);
     let dateStartQuery = new Date(queryStart);
 
@@ -459,6 +456,8 @@ export function generateTweetCount(param) {
         });
         const myJson = await response.json();
 
+        console.log("MY JSON");
+        console.log(myJson);
         json = myJson;
         return myJson["hits"]["total"];
     };

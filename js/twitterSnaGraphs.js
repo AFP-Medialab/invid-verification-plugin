@@ -130,6 +130,7 @@ var nb_treated, nb_tweets;
 function call_tweetIE(tweet) {
 
     document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
+  //  console.log(tweet.text);
     const tweetIEcall = async () => {
         const response = await fetch(tweetIE_URL, {
             method: 'POST',
@@ -207,8 +208,6 @@ function call_tweetIE(tweet) {
             return tokens_JSON;
         }
     return tweetIEcall().then(res => res);
-   //console.log(res)
-   // return res;
 }
 
 function getColor(word, tokens_JSON)
@@ -222,14 +221,13 @@ function getColor(word, tokens_JSON)
 }
 
 async function mostUsedWordsCloud(param) {
-    stopwords["glob"] = [...stopwords["glob"], ...param["search"]["search"].split(' ').map(word => word.replace('#', ""))];
+    stopwords["glob"] = [...stopwords["glob"], param["search"]["search"].replace(/ /g, "_"), ...param["search"]["search"].split(' ').map(word => word.replace('#', ""))];
 
     if (param["search"]["and"] !== undefined)
         stopwords["glob"] = [...stopwords["glob"], ...param["search"]["and"]];
     var words_map = new Map();
     
     generateWordCloud(param).then(json => {
-        
         $('.top_words_loader').css('display', "block");
         nb_treated = 0;
         var tokens_JSON = {
@@ -243,26 +241,27 @@ async function mostUsedWordsCloud(param) {
 
         var serverDown = false;
         const forLoop = async () => {
+            console.log(json);
             var hits = Array.from(json.hits.hits);
             for (var i = 0; i < hits.length; i++) {
                 tweetIE.text = hits[i]._source.tweet;
                 nb_treated++;
                 if (!serverDown)
                 {
-                    const json = await call_tweetIE(tweetIE)
+                    const tweetie_json = await call_tweetIE(tweetIE)
 
-                    if (json.error !== undefined)
+                    if (tweetie_json.error !== undefined)
                     {
                         serverDown = true;
                     }
                     else
                     {
-                        tokens_JSON.locations = [...tokens_JSON.locations, ...json.locations];
-                        tokens_JSON.persons = [...tokens_JSON.persons, ...json.persons];
-                        tokens_JSON.organisations = [...tokens_JSON.organisations, ...json.organisations];
-                        tokens_JSON.userIDs = [...tokens_JSON.userIDs, ...json.userIDs];
+                        tokens_JSON.locations = [...tokens_JSON.locations, ...tweetie_json.locations];
+                        tokens_JSON.persons = [...tokens_JSON.persons, ...tweetie_json.persons];
+                        tokens_JSON.organisations = [...tokens_JSON.organisations, ...tweetie_json.organisations];
+                        tokens_JSON.userIDs = [...tokens_JSON.userIDs, ...tweetie_json.userIDs];
                     }
-            }
+                }
                 var map = getOccurences(tweetIE);
                 for (var word in map) {
 
@@ -276,7 +275,8 @@ async function mostUsedWordsCloud(param) {
         }
         forLoop().then(() => {
                
-            var final_map = getnMax(words_map, 100);
+            var final_map = getnMax(words_map, 50);
+            console.log(final_map);
             var words_arr = Array.from(final_map.keys());
             var val_arr = Array.from(final_map.values());
             var words =  words_arr.map(word => {
@@ -285,10 +285,12 @@ async function mostUsedWordsCloud(param) {
             });
             var minSize = d3.min(words, d => d.size);
             var maxSize = d3.max(words, d => d.size);
-            var fontScale = d3.scaleLinear().range([20, 120])
-                                            .domain([minSize, maxSize]);
+            var fontScale = d3.scaleLinear()
+                                    .domain([0, d3.max(words, function(d) { return d.size} )])
+                                    .range([10, 95]);
+            
             var layout = d3.layout  .cloud()
-                                    .size([500, 500])
+                                    .size([800, 800])
                                     .words(words)
 
                                     .padding(5)
@@ -337,7 +339,6 @@ async function mostUsedWordsCloud(param) {
                             
                             svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
                     
-                            console.log(param)
                             function save(dataBlob, filesize) {
                                 saveAs(dataBlob, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.png'); // FileSaver.js function
                             }
@@ -355,45 +356,46 @@ async function mostUsedWordsCloud(param) {
     })
 }
 
-  function svgString2Image(svg, width, height, format, callback) {
-    var format = format ? format : 'png';
+function svgString2Image(svg, width, height, format, callback) {
+var format = format ? format : 'png';
 
-    svg.style.backgroundColor = "white";
-    var serializer = new XMLSerializer();
-    var svgString = serializer.serializeToString(svg);
+svg.style.backgroundColor = "white";
+var serializer = new XMLSerializer();
+var svgString = serializer.serializeToString(svg);
 
-    var canvas = document.createElement("canvas");
-    var context = canvas.getContext("2d");
+var canvas = document.createElement("canvas");
+var context = canvas.getContext("2d");
 
-    canvas.width = width;
-    canvas.height = height;
+canvas.width = width;
+canvas.height = height;
 
-    var DOMURL = self.URL || self.webkitURL || self;
+var DOMURL = self.URL || self.webkitURL || self;
 
-    var svg = new Blob([svgString], {
-      type: 'image/svg+xml;charset=utf-8'
+var svg = new Blob([svgString], {
+    type: 'image/svg+xml;charset=utf-8'
+});
+
+var url = DOMURL.createObjectURL(svg);
+var image = new Image();
+image.addEventListener('load', function() {  
+    context.clearRect(0, 0, width, height);
+    context.drawImage(image, 0, 0, width, height);
+
+    canvas.toBlob(function(blob) {
+        var filesize = Math.round(blob.length / 1024) + ' KB';
+        if (callback) callback(blob, filesize);
     });
-    
-    var url = DOMURL.createObjectURL(svg);
-    var image = new Image();
-    image.addEventListener('load', function() {  
-        context.clearRect(0, 0, width, height);
-        context.drawImage(image, 0, 0, width, height);
+});
 
-        canvas.toBlob(function(blob) {
-            var filesize = Math.round(blob.length / 1024) + ' KB';
-            if (callback) callback(blob, filesize);
-        });
-    });
+image.setAttribute("src", url);
 
-    image.setAttribute("src", url);
+image.onerror = error => {return alert("IMG ERROR: " + error);}
 
-    image.onerror = error => {console.log(error); return alert("IMG ERROR: " + error);}
- 
-  }
+}
 
-  function svgDownload(svgEl, name)
-  {
+function svgDownload(svgEl, name)
+{
+
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     var svgData = svgEl.outerHTML;
     var preface = '<?xml version="1.0" standalone="no"?>\r\n';
@@ -403,7 +405,7 @@ async function mostUsedWordsCloud(param) {
     downloadLink.href = svgUrl;
     downloadLink.download = name;
     downloadLink.click();
-  }
+}
 
 $("#top_words_content").on("mouseenter", event => {
     $(".export-icon").css({"opacity": 0.33});
@@ -415,6 +417,7 @@ $("#top_words_content").on("mouseleave", event => {
 $("#exportWordsCloudJpg").on("mouseenter", event => {
     $("#exportWordsCloudJpg").css({"opacity": 0.66, "cursor": "pointer"});
 });
+
 $("#exportWordsCloudJpg").on("mouseleave", event => {
     $("#exportWordsCloudJpg").css({"opacity": 0.33});
 });
@@ -424,6 +427,7 @@ $("#exportWordsCloudSvg").on("mouseenter", event => {
 $("#exportWordsCloudJpg").on("mouseleave", event => {
     $("#exportWordsCloudSvg").css({"opacity": 0.33});
 });
+
 export function mostRetweetPie(param) {
     generateDonutQuery(param, "nretweets").then(plotlyJson => {
         var cloudlayout = {
@@ -580,9 +584,7 @@ export function generateGraphs(param) {
         user_list: document.getElementById("twitterStats-user").value.split(" "),
         session: param.session
     }
-   // console.log(entries);
-   // var param2 = param.query;
-   // param2["session"] = param["session"];
+    
     if (firstHisto)
         mostUsedWordsCloud(entries);
 
@@ -737,7 +739,8 @@ function displayTweetsOfWord(word, place, button) {
 
     var json = getTweets();
 
-    var tweetArr = '<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">' 
+    word = word.replace(/_/g, " ");
+    var tweetArr = '<table id="tweet_view_wordcloud" class="table" cellspacing="0" style="width: 100%">' 
 
     tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th><th scope="col">Nb of likes</th></tr></thead><tbody>';
 

@@ -150,13 +150,13 @@ function submit_sna_form() {
         alert("Bad request");
     response().then((jsonResponse) => {
         if (jsonResponse !== null) {
+            setFirstHisto(true);
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
                     console.log("Param1 : ", param);
                     if (isFirst)
                      {   document.getElementById('exportButton').addEventListener('click', () => {
-                         console.log(param["query"]["user_list"]);
                             exportPDF(param["query"]["user_list"] !== undefined);
                             isFirst = false
                         });
@@ -356,7 +356,7 @@ async function waitStatusDone(session) {
         await response().then(json => {
             if (json == null)
             {
-                setFirstHisto(true);
+               // setFirstHisto(true);
                 return null;
             }
           else if (json["status"] === "Done" || json["status"] === "Error")
@@ -371,14 +371,14 @@ async function waitStatusDone(session) {
         });
         if (res !== null)
         {
-            setFirstHisto(true);
+           // setFirstHisto(true);
             return res;
         }
         await delay(10000);
         cpt--;
     }
 
-    setFirstHisto(true);
+   // setFirstHisto(true);
     return null;
 }
 /*
