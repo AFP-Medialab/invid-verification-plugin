@@ -91,6 +91,7 @@ function isEnglish(text)
 
     return (percentEnglish > percentFrench);
 }
+
 function getOccurences(tweet) {
         //remove URLS
     var treatedTweet = tweet.text;
@@ -110,9 +111,19 @@ function getOccurences(tweet) {
        // .filter(word => !stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
         //Count the number of occurence of each word & return the associated map
      counts = counts.reduce(function (map, word) {
+
          if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
+        {
             map[word] = (map[word] || 0) + 1;
+            if (word.includes('_'))
+            {
+                word.split('_').forEach(w => { 
+                    if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(w) && !stopwords["glob"].includes(w))
+                        map[w] = (map[w] || 0) + 1; 
+                })
+            }
             
+        }
         return map;
         }, Object.create(null));
 
@@ -130,7 +141,6 @@ var nb_treated, nb_tweets;
 function call_tweetIE(tweet) {
 
     document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
-  //  console.log(tweet.text);
     const tweetIEcall = async () => {
         const response = await fetch(tweetIE_URL, {
             method: 'POST',
@@ -221,7 +231,9 @@ function getColor(word, tokens_JSON)
 }
 
 async function mostUsedWordsCloud(param) {
-    stopwords["glob"] = [...stopwords["glob"], param["search"]["search"].replace(/ /g, "_"), ...param["search"]["search"].split(' ').map(word => word.replace('#', ""))];
+    let mainArr = param["search"]["search"].split(' ').map(word => word.replace('#', ""));
+    let mainWord = param["search"]["search"].replace(/ /g, "_");
+    stopwords["glob"] = [...stopwords["glob"], ...mainArr, mainWord];
 
     if (param["search"]["and"] !== undefined)
         stopwords["glob"] = [...stopwords["glob"], ...param["search"]["and"]];
@@ -241,7 +253,6 @@ async function mostUsedWordsCloud(param) {
 
         var serverDown = false;
         const forLoop = async () => {
-            console.log(json);
             var hits = Array.from(json.hits.hits);
             for (var i = 0; i < hits.length; i++) {
                 tweetIE.text = hits[i]._source.tweet;
@@ -275,8 +286,7 @@ async function mostUsedWordsCloud(param) {
         }
         forLoop().then(() => {
                
-            var final_map = getnMax(words_map, 50);
-            console.log(final_map);
+            var final_map = getnMax(words_map, 100);
             var words_arr = Array.from(final_map.keys());
             var val_arr = Array.from(final_map.values());
             var words =  words_arr.map(word => {
