@@ -160,7 +160,7 @@ function submit_sna_form() {
                             exportPDF(param["query"]["user_list"] !== undefined);
                             isFirst = false
                         });
-                        document.getElementById('exportWordsCloud').addEventListener('click', () => {
+                        document.getElementById('exportWordsCloudJpg').addEventListener('click', () => {
                            // exportJPG(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
                             isFirst = false
                         });
