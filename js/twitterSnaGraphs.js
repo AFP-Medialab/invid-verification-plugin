@@ -4,7 +4,7 @@ import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
 import "../js/canvas-toBlob.js"
-import * as data from '../stopwords.js'
+import * as data from '../js/stopwords.js'
 
 var stopwords = data.default;
 var tweetIE_URL = 'http://185.249.140.38/weverify-twitie/process?annotations=:Person,:UserID,:Location,:Organization'; //'https://cloud-api.gate.ac.uk/process-document/annie-named-entity-recognizer?annotations=:Person,:UserID,:Location,:Organization'//
@@ -330,15 +330,25 @@ async function mostUsedWordsCloud(param) {
                 $('.top_words_loader').css('display', "none");
                 document.getElementById('progress_state_place').innerHTML = "";
 
-                d3  .select('#exportWordsCloud')
+
+                d3  .select('#exportWordsCloudJpg')
                     .on('click', 
                         () => {
+                            
                             svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
                     
+                            console.log(param)
                             function save(dataBlob, filesize) {
-                                saveAs(dataBlob, 'WordCloud_' + param.query.search.search + "_" + param.query.from + "_" + param.query.until + '.png'); // FileSaver.js function
+                                saveAs(dataBlob, 'WordCloud_' + param.search.search + "_" + param.from + "_" + param.until + '.png'); // FileSaver.js function
                             }
-                    })
+                    });
+                d3  .select('#exportWordsCloudSvg')
+                    .on('click', 
+                        () => {
+                            var svgEl = document.getElementById("top_words_cloud_chart").children[0];
+                            svgDownload(svgEl);
+
+                        })
                     
             }
         });
@@ -360,7 +370,7 @@ async function mostUsedWordsCloud(param) {
 
     var DOMURL = self.URL || self.webkitURL || self;
 
-      var svg = new Blob([svgString], {
+    var svg = new Blob([svgString], {
       type: 'image/svg+xml;charset=utf-8'
     });
     
@@ -378,24 +388,42 @@ async function mostUsedWordsCloud(param) {
 
     image.setAttribute("src", url);
 
-    image.onerror = () => alert("IMG ERROR");
+    image.onerror = error => {console.log(error); return alert("IMG ERROR: " + error);}
  
   }
 
+  function svgDownload(svgEl)
+  {
+    svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    var svgData = svgEl.outerHTML;
+    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+    var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+    var svgUrl = URL.createObjectURL(svgBlob);
+    var downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = name;
+    downloadLink.click();
+  }
+
 $("#top_words_content").on("mouseenter", event => {
-    $("#exportWordsCloud").css({"opacity": 0.33});
+    $(".export-icon").css({"opacity": 0.33});
 })
 
 $("#top_words_content").on("mouseleave", event => {
-    $("#exportWordsCloud").css({"opacity": 0, "cursor": "normal"});
+    $(".export-icon").css({"opacity": 0, "cursor": "normal"});
 })
-$("#exportWordsCloud").on("mouseenter", event => {
-    $("#exportWordsCloud").css({"opacity": 0.66, "cursor": "pointer"});
+$("#exportWordsCloudJpg").on("mouseenter", event => {
+    $("#exportWordsCloudJpg").css({"opacity": 0.66, "cursor": "pointer"});
 });
-$("#exportWordsCloud").on("mouseleave", event => {
-    $("#exportWordsCloud").css({"opacity": 0.33});
+$("#exportWordsCloudJpg").on("mouseleave", event => {
+    $("#exportWordsCloudJpg").css({"opacity": 0.33});
 });
-
+$("#exportWordsCloudSvg").on("mouseenter", event => {
+    $("#exportWordsCloudSvg").css({"opacity": 0.66, "cursor": "pointer"});
+});
+$("#exportWordsCloudJpg").on("mouseleave", event => {
+    $("#exportWordsCloudSvg").css({"opacity": 0.33});
+});
 export function mostRetweetPie(param) {
     generateDonutQuery(param, "nretweets").then(plotlyJson => {
         var cloudlayout = {
