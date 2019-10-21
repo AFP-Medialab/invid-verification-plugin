@@ -100,7 +100,7 @@ function constructAggs(field)
 
     let fieldInfo = '{' +
             '"2":'
-    if (field === "hashtags" || field === "url") {
+    if (field === "hashtags" || field === "urls") {
         fieldInfo += JSON.stringify({
             "terms": {
                 "field": field,
@@ -364,13 +364,15 @@ export function generateTweetCount(param) {
 export function generateURLArray(param) {
 
     let must = [ constructMatchPhrase(param) ]
-    let aggs = constructAggs("url");
+    let aggs = constructAggs("urls");
 
+    let query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    console.log(query);
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
-                JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"), //ex getQueryAnd
+                query, //ex getQueryAnd
             headers: {
                 'Content-Type': 'application/json'
             } //*/
@@ -386,6 +388,7 @@ export function generateURLArray(param) {
             '<td>count</td>' +
             '</tr>';
 
+            console.log(array);
         array.forEach(row => {
             arrayStr += '<tr>' +
                 '<td><a href="' + row.url + '" target="_blank">' + row.url + '</a></td>' +
@@ -408,7 +411,7 @@ function mostTweetsGet(key, values, labels, parents, mainKey) {
 function getURLArray(json) {
     var urlArray = [];
     var buckets = json["aggregations"]["2"]["buckets"];
-
+    console.log(json);
     buckets.forEach(bucket => {
         urlArray.push({ url: bucket["key"], count: bucket["doc_count"] });
     });
