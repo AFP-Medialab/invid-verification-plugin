@@ -339,14 +339,14 @@ async function mostUsedWordsCloud(param) {
                     
                             console.log(param)
                             function save(dataBlob, filesize) {
-                                saveAs(dataBlob, 'WordCloud_' + param.search.search + "_" + param.from + "_" + param.until + '.png'); // FileSaver.js function
+                                saveAs(dataBlob, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.png'); // FileSaver.js function
                             }
                     });
                 d3  .select('#exportWordsCloudSvg')
                     .on('click', 
                         () => {
                             var svgEl = document.getElementById("top_words_cloud_chart").children[0];
-                            svgDownload(svgEl);
+                            svgDownload(svgEl, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.svg');
 
                         })
                     
@@ -392,7 +392,7 @@ async function mostUsedWordsCloud(param) {
  
   }
 
-  function svgDownload(svgEl)
+  function svgDownload(svgEl, name)
   {
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     var svgData = svgEl.outerHTML;
