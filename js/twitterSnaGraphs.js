@@ -29,7 +29,10 @@ export function getNbTweets(param, givenFrom, givenUntil) {
 }
 
 function showEssidHistogram(param, givenFrom, givenUntil) {
+    console.log(firstHisto);
     generateEssidHistogramQuery(param, false, givenFrom, givenUntil).then(plotlyJson => {
+
+        console.log(firstHisto);
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
@@ -94,6 +97,7 @@ function isEnglish(text)
 
 function getOccurences(tweet) {
         //remove URLS
+
     var treatedTweet = tweet.text;
     treatedTweet = treatedTweet.toLowerCase().replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
                             //.replace(/https.*(\ |\Z)/g, '')
@@ -140,7 +144,6 @@ function getnMax(map, n) {
 var nb_treated, nb_tweets;
 function call_tweetIE(tweet) {
 
-    document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
     const tweetIEcall = async () => {
         const response = await fetch(tweetIE_URL, {
             method: 'POST',
@@ -150,17 +153,16 @@ function call_tweetIE(tweet) {
                 'Content-Type': 'text/plain'
             } //*/
         })
-            var resp = await response.json();
+
             if (!response.ok) {
                 return {
-                   error: response.statusText
+                   error: response.status
                 }
             }
-            const tweetIE_JSON1 = resp;
+            const tweetIE_JSON1 = await response.json();
            
             let tweet_tmp = tweet.text;
 
-        
             const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
             var persons = [];
             var organisations = [];
@@ -230,6 +232,7 @@ function getColor(word, tokens_JSON)
     return '35347B';
 }
 
+var serverDown = false;
 async function mostUsedWordsCloud(param) {
     let mainArr = param["search"]["search"].split(' ').map(word => word.replace('#', ""));
     let mainWord = param["search"]["search"].replace(/ /g, "_");
@@ -251,7 +254,6 @@ async function mostUsedWordsCloud(param) {
 
         var tweetIE = {text: ""};
 
-        var serverDown = false;
         const forLoop = async () => {
             var hits = Array.from(json.hits.hits);
             for (var i = 0; i < hits.length; i++) {
@@ -263,7 +265,13 @@ async function mostUsedWordsCloud(param) {
 
                     if (tweetie_json.error !== undefined)
                     {
-                        serverDown = true;
+                        console.log(tweetie_json.error)
+                        console.log(tweetIE.text);
+                        if (tweetie_json.error === 500)
+                        {
+                           // document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were anable to fetch entities for colors</p>';
+                            serverDown = true;
+                        }
                     }
                     else
                     {
@@ -274,12 +282,13 @@ async function mostUsedWordsCloud(param) {
                     }
                 }
                 var map = getOccurences(tweetIE);
+
+                document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
                 for (var word in map) {
 
                     if(word.length > 1)
                         words_map.set(word, (words_map.get(word)|| 0) + map[word]);
                 }
-            
     
             };
 
@@ -300,7 +309,7 @@ async function mostUsedWordsCloud(param) {
                                     .range([10, 95]);
             
             var layout = d3.layout  .cloud()
-                                    .size([800, 800])
+                                    .size([500, 500])
                                     .words(words)
 
                                     .padding(5)
@@ -317,7 +326,11 @@ async function mostUsedWordsCloud(param) {
                 return d.color;
             }
             function draw(words) {
-                document.getElementById("top_words_cloud_chart").innerHTML = "";
+                if (!serverDown)
+                    document.getElementById("top_words_cloud_chart").innerHTML = "";
+                else
+                  document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were anable to fetch entities for colors</p>';
+
                 var svg = d3.select("#top_words_cloud_chart").append("svg")
                             .attr("width", layout.size()[0])
                             .attr("height", layout.size()[1])
@@ -438,7 +451,7 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
     $("#exportWordsCloudSvg").css({"opacity": 0.33});
 });
 
-export function mostRetweetPie(param) {
+ function mostRetweetPie(param) {
     generateDonutQuery(param, "nretweets").then(plotlyJson => {
         var cloudlayout = {
             title: "<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
@@ -468,7 +481,7 @@ export function mostRetweetPie(param) {
     });
 }
 
-export function mostLikePie(param) {
+ function mostLikePie(param) {
     generateDonutQuery(param, "nlikes").then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most liked users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
@@ -497,7 +510,7 @@ export function mostLikePie(param) {
     });
 }
 
-export function mostTweetPie(param) {
+ function mostTweetPie(param) {
     //Utilisateurs les actifs
     generateDonutQuery(param, "ntweets").then(plotlyJson => {
         var cloudlayout = {
@@ -529,7 +542,7 @@ export function mostTweetPie(param) {
 }
 
 
-export function topHashtagPie(param) {
+function topHashtagPie(param) {
     generateDonutQuery(param, "hashtags").then(plotlyJson => {
         let cloudlayout = {
             title: "<b>Most associated hashtags</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
@@ -569,7 +582,7 @@ export function topHashtagPie(param) {
 
 }
 
-export function urlArray(param) {
+function urlArray(param) {
     generateURLArray(param).then(arrayStr => {
         document.getElementById('url_array').innerHTML = arrayStr;
     });
@@ -594,20 +607,25 @@ export function generateGraphs(param) {
         user_list: document.getElementById("twitterStats-user").value.split(" "),
         session: param.session
     }
-    
-    if (firstHisto)
-        mostUsedWordsCloud(entries);
-
+console.log(firstHisto)
     showEssidHistogram(entries, givenFrom, givenUntil);
+    
     getNbTweets(entries);
-    if (entries.user_list[0] === "")
+    if (document.getElementById("twitterStats-user").value === "")
     {
+    
+        document.getElementById("retweets_chart_content").style.display = "block";
+        document.getElementById("likes_chart_content").style.display = "block";
+        document.getElementById("top_users_chart_content").style.display = "block";
+    }
         mostRetweetPie(entries);
         mostLikePie(entries);
         mostTweetPie(entries);
-    }
     topHashtagPie(entries);
     urlArray(entries);
+    if (firstHisto)
+        mostUsedWordsCloud(entries);
+
 }
 
 function displayTweetsOfDate(plot, place, button) {
@@ -617,6 +635,7 @@ function displayTweetsOfDate(plot, place, button) {
         plot.on('plotly_click', data => {
             var json = getTweets();
 
+            console.log("CLIKED")
             var tweetArr = '<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">' /* +
             '<colgroup>' +
                 '<col width="20%"/>' +
@@ -783,7 +802,7 @@ function displayTweetsOfWord(word, place, button) {
     $('.dataTables_length').addClass('bs-select');
 
 
-    firstHisto = false
+   // firstHisto = false
 
 
     visibilityButton.onclick = e => {

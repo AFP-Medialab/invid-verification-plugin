@@ -138,7 +138,7 @@ var isFirst = true;
 function submit_sna_form() {
 
 
-    setFirstHisto(true);
+    document.getElementById("top_words_cloud_chart").innerHTML = "";
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
@@ -150,18 +150,16 @@ function submit_sna_form() {
     if (response == null)
         alert("Bad request");
     response().then((jsonResponse) => {
+
         if (jsonResponse !== null) {
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
-                    console.log("Param1 : ", param);
+
+                    setFirstHisto(true);
                     if (isFirst)
                      {   document.getElementById('exportButton').addEventListener('click', () => {
                             exportPDF(param["query"]["user_list"] !== undefined);
-                            isFirst = false
-                        });
-                        document.getElementById('exportWordsCloudJpg').addEventListener('click', () => {
-                           // exportJPG(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
                             isFirst = false
                         });
                     }
@@ -185,18 +183,20 @@ function submit_sna_form() {
                     $("#twitterStats-Graphs").css("display", "block");
 
 
+                    console.log(param);
                     generateGraphs(param);
-                    if (document.getElementById("twitterStats-user").value != "") {
+                    //setFirstHisto(false);
+                   /* if (document.getElementById("twitterStats-user").value != "") {
                         $("#retweets_chart_content").hide();
                         $("#likes_chart_content").hide();
                         $("#top_users_chart_content").hide();
-                    }
+                    }*/
 
                     (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
                 });
         }
         else
-            window.alert("Thers was a problem with Twint");
+            window.alert("There was a problem with Twint");
     });
 
 }
@@ -253,7 +253,7 @@ function exportPDF(hasUser) {
 
     var max = 2;
     if (hasUser)
-        max = 15;
+        max = 20;
 
     for (var i = 0; i < max; i++) {
         var br = document.createElement("br");
@@ -356,7 +356,6 @@ async function waitStatusDone(session) {
         await response().then(json => {
             if (json == null)
             {
-               // setFirstHisto(true);
                 return null;
             }
           else if (json["status"] === "Done" || json["status"] === "Error")
@@ -371,14 +370,12 @@ async function waitStatusDone(session) {
         });
         if (res !== null)
         {
-           // setFirstHisto(true);
             return res;
         }
         await delay(10000);
         cpt--;
     }
 
-   // setFirstHisto(true);
     return null;
 }
 /*
