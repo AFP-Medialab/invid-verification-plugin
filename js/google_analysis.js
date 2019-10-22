@@ -3,7 +3,7 @@ $("#video_analysis_submit").on( "click", function ga_analysis_url(e) {
 	var url = $("#apibox").val();
 	var tmp = url.split( "facebook.com" );
 	$("#facebook_connect_for_analysis").hide();
-	if( tmp.length > 1 && fb_access_token == "" ) {
+	if( tmp.length > 1 && (fb_access_token === "" || fb_access_token === undefined)) {
 		$("#error-content").hide();
 		$("#api-content").hide();
 		$("#facebook_connect_iframe").prop("src", "https://caa.iti.gr/plugin_login_fb" );
@@ -11,6 +11,7 @@ $("#video_analysis_submit").on( "click", function ga_analysis_url(e) {
 		$("#facebook_connect_iframe").css("display","");
 		$("#facebook_connect_iframe").show();
 		e.preventDefault();
+		console.log("canceled");
 		return false;
 	}
 	ga("send", "event", "Url_provided", 'submit', url);
