@@ -107,7 +107,7 @@ function constructAggs(field)
                 "order": {
                     "_count": "desc"
                 },
-                "size": 14
+                "size": 20
             }
         })
     }
@@ -203,9 +203,6 @@ function buildQuery(aggs, must) {
 
 export function generateWordCloud(param) {
 
-   // var sessid = param["session"];
-   // var andArgs = (param["query"]["search"]["and"] === undefined)? null : param["query"]["search"]["and"];
-
     var must = [
         constructMatchPhrase(param)
     ]
@@ -218,7 +215,7 @@ export function generateWordCloud(param) {
                 query,
             headers: {
                 'Content-Type': 'application/json'
-            } //*/
+            }
         });
         const myJson = await response.json();
 
@@ -260,10 +257,10 @@ export function generateEssidHistogramQuery(param, retweets, givenFrom, givenUnt
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
-                str_query, //ex getQueryAnd
+                str_query,
             headers: {
                 'Content-Type': 'application/json'
-            } //*/
+            }
         });
         const myJson = await response.json();
         if (myJson["error"] === undefined) {
@@ -318,10 +315,10 @@ export function generateDonutQuery(param, field) {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
-                query, //ex getQueryAnd
+                query,
             headers: {
                 'Content-Type': 'application/json'
-            } //*/
+            }
         });
         const myJson = await response.json();
         if (field === "hashtags") {
@@ -337,16 +334,13 @@ export function generateDonutQuery(param, field) {
 
 
 export function generateTweetCount(param) {
-   // var sessid = param["session"];
-   // var andArgs = (param["query"]["search"]["and"] === undefined)? null : param["query"]["search"]["and"];
-
     var must = [
         constructMatchPhrase(param)
     ]
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
-            body: JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"), //ex getNbTweets
+            body: JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -369,10 +363,10 @@ export function generateURLArray(param) {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
-                query, //ex getQueryAnd
+                query, 
             headers: {
                 'Content-Type': 'application/json'
-            } //*/
+            }
         });
         const myJson = await response.json();
 
@@ -482,7 +476,6 @@ function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
         parents: parents,
         values: value,
         outsidetextfont: { size: 20, color: "#377eb8" },
-        //   leaf: { opacity: 0.4 }
     }];
     return obj;
 }
@@ -509,7 +502,6 @@ function getPlotlyJsonHisto(json, specificGet) {
     var i = 0;
     while (infos.length !== 0) {
 
-        //  var color = getRandomColor(colors, i++);
         let info = infos.pop();
         let date = info.date;
         let nb = info.nb;

@@ -29,10 +29,8 @@ export function getNbTweets(param, givenFrom, givenUntil) {
 }
 
 function showEssidHistogram(param, givenFrom, givenUntil) {
-    console.log(firstHisto);
     generateEssidHistogramQuery(param, false, givenFrom, givenUntil).then(plotlyJson => {
 
-        console.log(firstHisto);
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
@@ -60,18 +58,12 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
             Plotly.newPlot('user_time_chart', plotlyJson, layout, config);
 
         if (firstHisto)
-            displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility");
+            displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility", param["search"]["search"].replace(" ", '&').replace(/#/g, ""));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
 
     });
 }
-
-/*var stopwords = {
-    "glob": ["undefined", "rt", "twitter"],
-    "fr": [ "le", "la", "bonjour", "vient", "été", "jour", "nest", "jamais", "aucune", "sera", "toujours", "voir", "sous", "fois", "madame", "monsieur", "cela", "surtout", "quelle", "sert", "avez", "nom", "comment", "voilà", "parler", "mettre", "demain", "vos", "peu", "pendant", "très", "peut", "t", "veut", "avant", "toutes", "toute", "soit", "lui", "depuis", "soir", "entre", "aura", "hui", "aujourd", "cette", "êtes", "ceux", "veulent", "où", "déjà", "", "beaucoup", "là", "quoi", "ces", "aucun", "ça", "nos", "sans", "dites", "www", "après", "cest", "leurs", "leur", "ly", "tout", "quand", "être", "dire", "donc", "rien", "dit", "aussi", "les", "mais", "y", "pas", "qui", "contre", "par", "plus", "qu", "si", "va", "avec", "se", "faire", "faire", "pourquoi", "aux", "s", "faut", "fait", "comme", "j", "ont", "même", "tous", "doit", "trop", "du", "au", "que", "twitter", "c", "dans", "on", "sur", "ne", "non", "oui", "encore", "n", ".", "!", "?", ":", "suis", "es", "est", "a", "ai", "un", "une", "des", "à", "avoir", "ce", "alors", "en", "mes", "ses", "tes", "mon", "ma", "mes", "ta", "sa", "son", "pour", "ou", "et", "d", "de", "l", "je", "tu", "il", "elle", "nous", "vous", "ils", "elles", "notre", "votre", "sont"],
-    "en": ["see", "time", "going", "much", "may", "yet", "back", "way", "best", "doesn","put", "make", "made", "gone", "use", "get", "like", "didn", "must", "ever", "never", "got", "see", "would", "call", "many", "big", "also", "another", "really", "always", "i", "me", "my", "myself", "we", "our", "bit", "re", "ours", "even", "already", "need", "ourselves", "you", "want", "your", 'yours', "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by","for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "could", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don","should", "now", "said", "say"]
-}*/
 
 function isEnglish(text)
 {
@@ -96,40 +88,36 @@ function isEnglish(text)
 }
 
 function getOccurences(tweet) {
-        //remove URLS
 
     var treatedTweet = tweet.text;
-    treatedTweet = treatedTweet.toLowerCase().replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
-                            //.replace(/https.*(\ |\Z)/g, '')
-        //Remove ponctuation & numbers
-        treatedTweet = treatedTweet.replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, " ")
-        //Remove emoticones
-        if (treatedTweet === "")
-            return [];
-            
-    var counts = treatedTweet
-        .split(' ') //=> Array of words
-        //Put the tweet in lower case
-       // .map(word => {return word.toLowerCase();})
-        //Remove the stop words
-       // .filter(word => !stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
-        //Count the number of occurence of each word & return the associated map
-     counts = counts.reduce(function (map, word) {
 
-         if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
-        {
-            map[word] = (map[word] || 0) + 1;
-            if (word.includes('_'))
-            {
-                word.split('_').forEach(w => { 
-                    if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(w) && !stopwords["glob"].includes(w))
-                        map[w] = (map[w] || 0) + 1; 
-                })
-            }
+                               //Put the tweet in lower case
+    treatedTweet = treatedTweet.toLowerCase()
+                               //Remove URLS
+                               .replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
+                               //Remove ponctuation, numbers & emoticones
+                               .replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, " ")
+
+    if (treatedTweet === "")
+        return [];
             
-        }
-        return map;
-        }, Object.create(null));
+    var counts = treatedTweet.split(' ') //=> Array of words
+                            //Count the number of occurence of each word (except stopwords cf. js/stopwords.js) & return the associated map
+                             .reduce(function (map, word) {
+                                if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
+                                {
+                                    map[word] = (map[word] || 0) + 1;
+                                    if (word.includes('_'))
+                                    {
+                                        word.split('_').forEach(w => { 
+                                            if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(w) && !stopwords["glob"].includes(w))
+                                                map[w] = (map[w] || 0) + 1; 
+                                        })
+                                    }
+                                    
+                                }
+                                return map;
+                            }, Object.create(null));
 
     return counts;
 }
@@ -151,7 +139,7 @@ function call_tweetIE(tweet) {
                 tweet.text,
             headers: {
                 'Content-Type': 'text/plain'
-            } //*/
+            } 
         })
 
             if (!response.ok) {
@@ -265,13 +253,8 @@ async function mostUsedWordsCloud(param) {
 
                     if (tweetie_json.error !== undefined)
                     {
-                        console.log(tweetie_json.error)
-                        console.log(tweetIE.text);
-                        if (tweetie_json.error === 500)
-                        {
-                           // document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were anable to fetch entities for colors</p>';
+                        if (tweetie_json.error === 503)
                             serverDown = true;
-                        }
                     }
                     else
                     {
@@ -297,13 +280,11 @@ async function mostUsedWordsCloud(param) {
                
             var final_map = getnMax(words_map, 100);
             var words_arr = Array.from(final_map.keys());
-            var val_arr = Array.from(final_map.values());
             var words =  words_arr.map(word => {
                 let obj = { text: word, size: final_map.get(word), color: getColor(word, tokens_JSON) }; 
                 return obj;
             });
-            var minSize = d3.min(words, d => d.size);
-            var maxSize = d3.max(words, d => d.size);
+
             var fontScale = d3.scaleLinear()
                                     .domain([0, d3.max(words, function(d) { return d.size} )])
                                     .range([10, 95]);
@@ -360,10 +341,10 @@ async function mostUsedWordsCloud(param) {
                     .on('click', 
                         () => {
                             
-                            svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save); // passes Blob and filesize String to the callback
+                            svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save);
                     
                             function save(dataBlob, filesize) {
-                                saveAs(dataBlob, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.png'); // FileSaver.js function
+                                saveAs(dataBlob, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.png');
                             }
                     });
                 d3  .select('#exportWordsCloudSvg')
@@ -466,7 +447,7 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
                 filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets",
                 scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
-            modeBarButtons: [["toImage"]], displaylogo: false
+            modeBarButtons: [["toImage"],[]], displaylogo: false
         };
 
 
@@ -607,7 +588,6 @@ export function generateGraphs(param) {
         user_list: document.getElementById("twitterStats-user").value.split(" "),
         session: param.session
     }
-console.log(firstHisto)
     showEssidHistogram(entries, givenFrom, givenUntil);
     
     getNbTweets(entries);
@@ -628,47 +608,66 @@ console.log(firstHisto)
 
 }
 
-function displayTweetsOfDate(plot, place, button) {
+function displayTweetsOfDate(plot, place, button, search) {
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
-
+    var exportButton = document.getElementById("user_time_tweets_export");
+    var csvArr = "data:text/csv;charset=utf-8,";
+    var fullDate = "";
+    var json = getTweets();
+    var maxDate;
+    var minDate;
         plot.on('plotly_click', data => {
-            var json = getTweets();
 
-            console.log("CLIKED")
-            var tweetArr = '<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">' /* +
-            '<colgroup>' +
-                '<col width="20%"/>' +
-                '<col width="15%" />' +
-                '<col width="45%"/>' +
-                '<col  width="10%" />' +
-            '</colgroup>';*/
+            var tweetArr = '<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">';
 
             tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th></tr></thead><tbody>';
-
+            csvArr += "Username,Date,Tweet,Nb of retweets\n";
             let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
-
+            let i = 0;
             data.points.forEach(point => {
+                var pointDate = new Date(point.x);
                 json.hits.hits.forEach(tweetObj => {
                     if (tweetObj._source.username === point.data.name) {
-                        var pointDate = new Date(point.x);
                         var objDate = new Date(tweetObj._source.date);
                         if (isInRange(pointDate, objDate, isDays)) {
+                            if (minDate === undefined)
+                                minDate = objDate;
+                            if (maxDate === undefined)
+                                maxDate = objDate;
                             let date = new Date(tweetObj._source.date);
                             tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' +
                                 '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
                                 date.getHours() + 'h' + date.getMinutes() + '</td>' +
                                 '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
                                 '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td></tr>';
+                            csvArr += point.data.name + ',' + 
+                                      date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                                      tweetObj._source.tweet + '",' + tweetObj._source.nretweets + '\n';
+                        
+                            if (minDate > objDate)
+                            {
+                                console.log(tweetObj);
+                                minDate = objDate
+                            }
+                            if (maxDate < objDate)
+                            {
+                                maxDate = objDate;
+                            }
+                           
                         }
-                    }
+                    }  
                 });
+                i++;
             });
+            fullDate = minDate.getDate() + '.' + (minDate.getMonth()+1) + '.' + minDate.getFullYear() + '_' + minDate.getHours() + 'h' + minDate.getMinutes() + '_' +
+                       maxDate.getDate() + '.' + (maxDate.getMonth()+1) + '.' + maxDate.getFullYear() + '_' + maxDate.getHours() + 'h' + maxDate.getMinutes()
+            console.log(fullDate);
             tweetArr += "</tbody><tfoot></tfoot></table>"
             tweetPlace.innerHTML = tweetArr;
             tweetPlace.style.display = "block";
             visibilityButton.style.display = "block";
-
+            exportButton.style.display = "block";
 
             $('#tweet_view_histo').DataTable({
                 autoWidth: false,
@@ -679,14 +678,20 @@ function displayTweetsOfDate(plot, place, button) {
 
             }).columns.adjust();
             $('.dataTables_length').addClass('bs-select');
-
-            //   });
-
         })
 
     visibilityButton.onclick = e => {
         tweetPlace.style.display = "none";
         visibilityButton.style.display = 'none';
+        exportButton.style.display = "none";
+    }
+    exportButton.onclick = e => {
+        var encodedUri = encodeURI(csvArr);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "tweets_" + fullDate + "_" + search + ".csv");
+        document.body.appendChild(link); 
+        link.click();
     }
 }
 
@@ -731,9 +736,6 @@ function displayTweetsOfUser(plot, place, button, nb_type) {
                 + data.points[0].label + "</a><br><br>" + tweetArr;
             tweetPlace.style.display = "block";
             visibilityButton.style.display = "block";
-            //   plotlyJson.labels.array.forEach(label => {
-
-            // });
 
             $('#tweet_view_' + nb_type).DataTable({
                 autoWidth: false,
@@ -792,10 +794,6 @@ function displayTweetsOfWord(word, place, button) {
 
     }).columns.adjust();
     $('.dataTables_length').addClass('bs-select');
-
-
-   // firstHisto = false
-
 
     visibilityButton.onclick = e => {
         tweetPlace.style.display = "none";

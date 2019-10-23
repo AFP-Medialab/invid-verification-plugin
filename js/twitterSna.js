@@ -183,14 +183,7 @@ function submit_sna_form() {
                     $("#twitterStats-Graphs").css("display", "block");
 
 
-                    console.log(param);
                     generateGraphs(param);
-                    //setFirstHisto(false);
-                   /* if (document.getElementById("twitterStats-user").value != "") {
-                        $("#retweets_chart_content").hide();
-                        $("#likes_chart_content").hide();
-                        $("#top_users_chart_content").hide();
-                    }*/
 
                     (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
                 });
