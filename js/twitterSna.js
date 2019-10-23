@@ -1,4 +1,4 @@
-import { generateGraphs, getNbTweets, setFirstHisto } from "./twitterSnaGraphs.js";
+import { generateGraphs, exportTweets, setFirstHisto } from "./twitterSnaGraphs.js";
 
 var collect_url = "http://185.249.140.38/twint-wrapper/collect";
 var status_url = "http://185.249.140.38/twint-wrapper/status/";
@@ -158,9 +158,13 @@ function submit_sna_form() {
 
                     setFirstHisto(true);
                     if (isFirst)
-                     {   document.getElementById('exportButton').addEventListener('click', () => {
+                     {   
+                         document.getElementById('exportButton').addEventListener('click', () => {
                             exportPDF(param["query"]["user_list"] !== undefined);
                             isFirst = false
+                        }); 
+                        document.getElementById('tweets_export').addEventListener('click', () => {
+                            exportTweets(param["query"]["search"]["search"], new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
                         });
                     }
 
@@ -185,7 +189,7 @@ function submit_sna_form() {
 
                     generateGraphs(param);
 
-                    (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
+                    (async () => { await delay(2000); $("#exportButton").css("display", "block"); $("#tweets_export").css("display", "block");})();
                 });
         }
         else
@@ -201,6 +205,7 @@ var cache_user_chart_width = $("#user_time_chart").width;
 function exportPDF(hasUser) {
 
     $("#exportButton").css("display", "none");
+    $("#tweets_export").css("display", "none");
     $("#submitSna").css("visibility", "hidden");
     $("#twitterStats-loader").css("display", "block");
     $("#user_time").css("margin-left", -120);
@@ -280,6 +285,7 @@ function exportPDF(hasUser) {
         $("#submitSna").css("visibility", "visible");
 
         $("#exportButton").css("display", "block");
+        $("#tweets_export").css("display", "block");
         $("#url_array").css("margin-left", 0);
     });
 
