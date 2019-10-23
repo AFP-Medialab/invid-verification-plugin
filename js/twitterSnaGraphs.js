@@ -455,7 +455,7 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
         Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
 
         if (firstHisto)
-            displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets");
+            displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets", param["search"]["search"].replace(/ /g, "&"));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
@@ -484,7 +484,7 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
         Plotly.react('likes_cloud_chart', plotlyJson, cloudlayout, config);
 
         if (firstHisto)
-            displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes");
+            displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes", param["search"]["search"].replace(/ /g, "&"));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
@@ -515,7 +515,7 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
         Plotly.react('top_users_pie_chart', plotlyJson, cloudlayout, config);
 
         if (firstHisto)
-            displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets");
+            displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets", param["search"]["search"].replace(/ /g, "&"));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
@@ -647,7 +647,6 @@ function displayTweetsOfDate(plot, place, button, search) {
                         
                             if (minDate > objDate)
                             {
-                                console.log(tweetObj);
                                 minDate = objDate
                             }
                             if (maxDate < objDate)
@@ -662,7 +661,7 @@ function displayTweetsOfDate(plot, place, button, search) {
             });
             fullDate = minDate.getDate() + '.' + (minDate.getMonth()+1) + '.' + minDate.getFullYear() + '_' + minDate.getHours() + 'h' + minDate.getMinutes() + '_' +
                        maxDate.getDate() + '.' + (maxDate.getMonth()+1) + '.' + maxDate.getFullYear() + '_' + maxDate.getHours() + 'h' + maxDate.getMinutes()
-            console.log(fullDate);
+
             tweetArr += "</tbody><tfoot></tfoot></table>"
             tweetPlace.innerHTML = tweetArr;
             tweetPlace.style.display = "block";
@@ -695,30 +694,34 @@ function displayTweetsOfDate(plot, place, button, search) {
     }
 }
 
-function displayTweetsOfUser(plot, place, button, nb_type) {
+function displayTweetsOfUser(plot, place, button, nb_type, search) {
 
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
+
+    var exportButton = document.getElementById(place.replace("place", "export"));
+    console.log(place.replace("place", "export"));
+    var csvArr = "data:text/csv;charset=utf-8,";
+    var label;
         plot.on('plotly_click', data => {
+
             var json = getTweets();
-            var tweetArr = '<table id="tweet_view_' + nb_type + '" class="table" cellspacing="0" style="width: 100%">' /*+
-                '<colgroup>' +
-                '<col span=1 class="date_col" />' +
-                '<col span=1 class="tweet_col" />' +
-                '<col span=1 class="nb_tweet_col" />';
-
-            if (nb_type === 'tweets')
-                tweetArr += '<col span=1 class="nb_tweet_col" />';
-
-            tweetArr += '</colgroup>';*/
+            var tweetArr = '<table id="tweet_view_' + nb_type + '" class="table" cellspacing="0" style="width: 100%">'
 
             tweetArr += '<thead><tr><th scope="col">Date</th><th scope="col">Tweet</th>';
-            if (nb_type !== "retweets")
+            csvArr += "Date,Tweet";
+            if (nb_type !== "retweets") {
                 tweetArr += '<th scope="col">Nb of likes</th>';
-            if (nb_type !== "likes")
+                csvArr += ',Nb of likes';
+            }
+            if (nb_type !== "likes") {
                 tweetArr += '<th scope="col">Nb of retweets</th>';
+                csvArr += ',Nb of retweets';
+            }
 
             tweetArr += '</tr></thead><tbody>';
+            csvArr += "\n";
+
             json.hits.hits.forEach(tweetObj => {
                 if (tweetObj._source.username === data.points[0].label) {
                     let nb;
@@ -727,23 +730,31 @@ function displayTweetsOfUser(plot, place, button, nb_type) {
                     else
                         nb = tweetObj._source.nlikes;
                     let date = new Date(tweetObj._source.date[0]);
+
                     tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + ' ' +
                         date.getHours() + 'h' + date.getMinutes() + '</td>' +
                         '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
                         '<td class="tweet_arr tweet_arr_nretweet">' + nb + '</td>';
-                    if (nb_type === "tweets")
+                    
+                    csvArr += date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                              tweetObj._source.tweet + '",' + nb;
+          
+                    if (nb_type === "tweets") {
                         tweetArr += '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>';
-
+                        csvArr += ',' + tweetObj._source.nretweets;
+                    }
                     tweetArr += '</tr>';
-
+                    csvArr += '\n';
                 }
             });
 
             tweetArr += "</tbody><tfoot></tfoot></table>";
             tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">'
                 + data.points[0].label + "</a><br><br>" + tweetArr;
+            label = data.points[0].label;
             tweetPlace.style.display = "block";
             visibilityButton.style.display = "block";
+            exportButton.style.display = "block";
 
             $('#tweet_view_' + nb_type).DataTable({
                 autoWidth: false,
@@ -760,6 +771,16 @@ function displayTweetsOfUser(plot, place, button, nb_type) {
     visibilityButton.onclick = e => {
         tweetPlace.style.display = "none";
         visibilityButton.style.display = 'none';
+        exportButton.style.display = "none";
+    }
+
+    exportButton.onclick = e => {
+        var encodedUri = encodeURI(csvArr);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "tweets_" + label + "_" + search.replace(/#/g, '') + ".csv");
+        document.body.appendChild(link); 
+        link.click();
     }
 }
 
