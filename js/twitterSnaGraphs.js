@@ -611,6 +611,7 @@ export function generateGraphs(param) {
     showEssidHistogram(entries, givenFrom, givenUntil);
     
     getNbTweets(entries);
+    
     if (document.getElementById("twitterStats-user").value === "")
     {
     
