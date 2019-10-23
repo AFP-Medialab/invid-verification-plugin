@@ -568,9 +568,6 @@ function topHashtagPie(param) {
         Plotly.react('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
         if (firstHisto)
             plot.on('plotly_click', data => {
-                //  document.getElementById("twitterStats-search").value = data.points[0].label;
-                // document.getElementById("twitterStats-Graphs").style.display = "none";
-                //  Array.from(document.getElementsByClassName("toggleVisibility")).forEach(elt => elt.style.display = "none")
                 let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
 
                 firstTopUsers = false;
@@ -620,6 +617,12 @@ export function generateGraphs(param) {
         document.getElementById("retweets_chart_content").style.display = "block";
         document.getElementById("likes_chart_content").style.display = "block";
         document.getElementById("top_users_chart_content").style.display = "block";
+    }
+    else
+    {
+        document.getElementById("retweets_chart_content").style.display = "none";
+        document.getElementById("likes_chart_content").style.display = "none";
+        document.getElementById("top_users_chart_content").style.display = "none";
     }
         mostRetweetPie(entries);
         mostLikePie(entries);
