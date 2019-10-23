@@ -208,6 +208,7 @@ function exportPDF(hasUser) {
     v.forEach(elt => elt.style.display = "none");
     console.log(v);
     
+    Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "none");
     $("#tweets_export").css("display", "none");
     $("#submitSna").css("visibility", "hidden");
     $("#twitterStats-loader").css("display", "block");
@@ -252,9 +253,9 @@ function exportPDF(hasUser) {
         document.getElementById("most_liked").appendChild(br);
     }
 
-    var max = 35;
+    var max = 40;
     if (hasUser)
-        max = 10;
+        max = 15;
 
     for (var i = 0; i < max; i++) {
         var br = document.createElement("br");
@@ -297,6 +298,8 @@ function exportPDF(hasUser) {
         $("#exportButton").css("display", "block");
         $("#tweets_export").css("display", "block");
         $("#url_array").css("margin-left", 0);
+
+        Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "block");
     });
 
     async function ctrlP() {
