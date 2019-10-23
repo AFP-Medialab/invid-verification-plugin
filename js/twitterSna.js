@@ -204,7 +204,10 @@ var cache_user_time_style = document.getElementById("user_time").style;
 var cache_user_chart_width = $("#user_time_chart").width;
 function exportPDF(hasUser) {
 
-    $("#exportButton").css("display", "none");
+    var v = Array.from(document.getElementsByClassName("toggleVisibility"));
+    v.forEach(elt => elt.style.display = "none");
+    console.log(v);
+    
     $("#tweets_export").css("display", "none");
     $("#submitSna").css("visibility", "hidden");
     $("#twitterStats-loader").css("display", "block");
