@@ -160,7 +160,7 @@ function submit_sna_form() {
                     if (isFirst)
                      {   
                          document.getElementById('exportButton').addEventListener('click', () => {
-                            exportPDF(param["query"]["user_list"] !== undefined);
+                            exportPDF(document.getElementById("twitterStats-user").value !== "");
                             isFirst = false
                         }); 
                         document.getElementById('tweets_export').addEventListener('click', () => {
@@ -252,9 +252,9 @@ function exportPDF(hasUser) {
         document.getElementById("most_liked").appendChild(br);
     }
 
-    var max = 2;
+    var max = 35;
     if (hasUser)
-        max = 20;
+        max = 10;
 
     for (var i = 0; i < max; i++) {
         var br = document.createElement("br");
@@ -278,6 +278,13 @@ function exportPDF(hasUser) {
         br.className = "toRemove";
         document.getElementById("top_users_content").appendChild(br);
     }
+
+    /*if (!hasUser)
+    for (var i = 0; i < ; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("top_words_chart_content").appendChild(br);
+    }*/
 
     $("#url_array").css("margin-left", -100);
     ctrlP().then(() => {
