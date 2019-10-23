@@ -327,7 +327,7 @@ async function mostUsedWordsCloud(param) {
                             .text(function (d) { return d.text; })
                             .style("fill", fillColor)
                             .style("cursor", "default")
-                            .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility"))
+                            .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
                             .append("svg:title")
                             .text(d => "Used " + final_map.get(d.text) + " times");
 
@@ -700,9 +700,9 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
     var tweetPlace = document.getElementById(place);
 
     var exportButton = document.getElementById(place.replace("place", "export"));
-    console.log(place.replace("place", "export"));
     var csvArr = "data:text/csv;charset=utf-8,";
     var label;
+
         plot.on('plotly_click', data => {
 
             var json = getTweets();
@@ -729,7 +729,7 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
                         nb = tweetObj._source.nretweets;
                     else
                         nb = tweetObj._source.nlikes;
-                    let date = new Date(tweetObj._source.date[0]);
+                    let date = new Date(tweetObj._source.date);
 
                     tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + ' ' +
                         date.getHours() + 'h' + date.getMinutes() + '</td>' +
@@ -785,17 +785,20 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
 }
 
 
-function displayTweetsOfWord(word, place, button) {
+function displayTweetsOfWord(word, place, button, search) {
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
 
     var json = getTweets();
 
+    var exportButton = document.getElementById(place.replace("place", "export"));
+    var csvArr = "data:text/csv;charset=utf-8,";
+    
     word = word.replace(/_/g, " ");
     var tweetArr = '<table id="tweet_view_wordcloud" class="table" cellspacing="0" style="width: 100%">' 
 
     tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th><th scope="col">Nb of likes</th></tr></thead><tbody>';
-
+    csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
     json.hits.hits.forEach(tweetObj => {
         if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
             var date = new Date(tweetObj._source.date);
@@ -806,12 +809,17 @@ function displayTweetsOfWord(word, place, button) {
                     '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
                     '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>' +
                     '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nlikes + '</td></tr>';
+                csvArr += tweetObj._source.username  + ',' + 
+                            date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                            tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
             }
     });
     tweetArr += "</tbody><tfoot></tfoot></table>"
     tweetPlace.innerHTML = "Tweets containing : <b>" + word + "</b><br />" + tweetArr;
     tweetPlace.style.display = "block";
     visibilityButton.style.display = "block";
+    exportButton.style.display = "block";
+
 
 
     $('#tweet_view_histo').DataTable({
@@ -827,6 +835,15 @@ function displayTweetsOfWord(word, place, button) {
     visibilityButton.onclick = e => {
         tweetPlace.style.display = "none";
         visibilityButton.style.display = 'none';
+        exportButton.style.display = "none";
+    }
+    exportButton.onclick = e => {
+        var encodedUri = encodeURI(csvArr);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "tweets_" + word + "_" + search + ".csv");
+        document.body.appendChild(link); 
+        link.click();
     }
 }
 
