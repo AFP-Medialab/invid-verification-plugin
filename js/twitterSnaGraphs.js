@@ -411,6 +411,29 @@ function svgDownload(svgEl, name)
     downloadLink.click();
 }
 
+export function exportTweets(search, start, end)
+{
+    var csvArr = "data:text/csv;charset=utf-8,";
+    var json = getTweets();
+    csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
+
+    json.hits.hits.forEach(tweetObj => 
+    {        
+        var date = new Date(tweetObj._source.date);
+
+        csvArr += tweetObj._source.username  + ',' + 
+        date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
+    })  
+    
+        var encodedUri = encodeURI(csvArr);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
+        document.body.appendChild(link); 
+        link.click();
+
+}
 $("#top_words_content").on("mouseenter", event => {
     $(".export-icon").css({"opacity": 0.33});
 })
