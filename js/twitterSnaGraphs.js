@@ -612,7 +612,6 @@ export function generateGraphs(param) {
     
     return getNbTweets(entries).then(() => {
 
-        console.log(nb_tweets);
         if (nb_tweets === 0)
         {
             document.getElementById("retweets_chart_content").style.display = "none";
