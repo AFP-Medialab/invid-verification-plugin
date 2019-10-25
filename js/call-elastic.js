@@ -196,7 +196,10 @@ function buildQuery(aggs, must) {
                 "should": [],
                 "must_not": []
             }
-        }
+        },
+        "sort" : [
+            { "date" : {"order" : "asc"}}
+        ]
     }
     return query;
 }
@@ -395,11 +398,17 @@ async function completeJson(aggs, must, myJson)
         var arr = Array.from(myJson.hits.hits);
         var id_arr = arr.map(elt => elt._id);
         const myJson2 = await response.json();
+        console.log(myJson2.hits.total.value)
         Array.from(myJson2.hits.hits).forEach(hit => {
             if (!id_arr.includes(hit._id))
+            {
                 arr.push(hit);
+            }
+            else
+                console.log(hit);
         })
-        console.log(arr);
+        myJson["current_total_hits"] = myJson2.hits.total.value;
+        //console.log(arr);
         myJson.hits.hits = arr;
         myJson.hits.total.value = arr.length;
         return myJson;
@@ -414,17 +423,29 @@ async function getJson(param, aggs, must) {
         }
     });
     var myJson = await response.json();
-    console.log(myJson);
+
+    console.log(param["from"]);
+    console.log(param["until"]);
+  //  const truc = myJson
+    //console.log(truc);
     if (myJson["hits"]["total"]["value"] === 10000)
     {
-        console.log("CHANGING PARAMS")
-        param["until"] = myJson.hits.hits[9999]._source.date;
-        var must2 = [
-            constructMatchPhrase(param)
-        ]
-        myJson = await completeJson(aggs, must2, myJson);
+        do
+        {
+            console.log("CHANGING PARAMS")
+            var newparam = param;
+           // newparam["from"] = myJson.hits.hits[myJson.hits.hits.length-1]._source.date;
+          /*  console.log(param["from"]);
+            console.log(param["until"]);
+            console.log(myJson.hits.hits)*/
+            var must2 = [
+                constructMatchPhrase({"from": myJson.hits.hits[myJson.hits.hits.length-1]._source.date, "until": param["until"], "search": param.search, "session": param.session })
+            ]
+            myJson = await completeJson(aggs, must2, myJson);
+        }while(myJson.current_total_hits === 10000)
     }
     json = myJson;
+   // console.log(json)
     return myJson;
 };
 
