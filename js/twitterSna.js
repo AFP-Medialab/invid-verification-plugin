@@ -183,13 +183,15 @@ function submit_sna_form() {
                         console.log("Finished successfully")
                     }
 
-                    $("#twitterStats-loader").css("display", "none");
                     $("#twitterStats-Graphs").css("display", "block");
 
 
-                    generateGraphs(param);
+                    
+                      
+                    (async () => { await generateGraphs(param);  
+                     $("#exportButton").css("display", "block"); $("#tweets_export").css("display", "block");
 
-                    (async () => { await delay(2000); $("#exportButton").css("display", "block"); $("#tweets_export").css("display", "block");})();
+                    $("#twitterStats-loader").css("display", "none");})();
                 });
         }
         else

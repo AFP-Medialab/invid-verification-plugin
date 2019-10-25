@@ -219,6 +219,8 @@ export function generateWordCloud(param) {
         });
         const myJson = await response.json();
 
+        console.log("JSON!!!!!")
+        console.log(myJson);
         return myJson;
 
     }
@@ -391,10 +393,13 @@ async function completeJson(aggs, must, myJson)
             }
         });
         var arr = Array.from(myJson.hits.hits);
+        var id_arr = arr.map(elt => elt._id);
         const myJson2 = await response.json();
         Array.from(myJson2.hits.hits).forEach(hit => {
-            arr.push(hit);
+            if (!id_arr.includes(hit._id))
+                arr.push(hit);
         })
+        console.log(arr);
         myJson.hits.hits = arr;
         myJson.hits.total.value = arr.length;
         return myJson;
