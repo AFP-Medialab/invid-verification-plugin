@@ -9,8 +9,8 @@ import * as data from '../js/stopwords.js'
 var stopwords = data.default;
 var tweetIE_URL = 'http://185.249.140.38/weverify-twitie/process?annotations=:Person,:UserID,:Location,:Organization'; //'https://cloud-api.gate.ac.uk/process-document/annie-named-entity-recognizer?annotations=:Person,:UserID,:Location,:Organization'//
 
-export function getNbTweets(param, givenFrom, givenUntil) {
-    generateTweetCount(param, givenFrom, givenUntil).then(res => {
+function getNbTweets(param, givenFrom, givenUntil) {
+    return generateTweetCount(param, givenFrom, givenUntil).then(res => {
         document.getElementById("tweetCounter_contents").innerHTML = "";
         let counter = document.createElement("div");
         counter.setAttribute("id", "counter_number");
@@ -427,13 +427,14 @@ export function exportTweets(search, start, end)
     })  
     
         var encodedUri = encodeURI(csvArr);
-        var link = document.createElement("a");
+        let link = document.createElement("a");
         link.setAttribute("href", encodedUri);
         link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
-        document.body.appendChild(link); 
+      //  document.body.appendChild(link); 
         link.click();
 
 }
+
 $("#top_words_content").on("mouseenter", event => {
     $(".export-icon").css({"opacity": 0.33});
 })
@@ -608,30 +609,62 @@ export function generateGraphs(param) {
         user_list: document.getElementById("twitterStats-user").value.split(" "),
         session: param.session
     }
-    showEssidHistogram(entries, givenFrom, givenUntil);
     
-    getNbTweets(entries);
-    
-    if (document.getElementById("twitterStats-user").value === "")
-    {
-    
-        document.getElementById("retweets_chart_content").style.display = "block";
-        document.getElementById("likes_chart_content").style.display = "block";
-        document.getElementById("top_users_chart_content").style.display = "block";
-    }
-    else
-    {
-        document.getElementById("retweets_chart_content").style.display = "none";
-        document.getElementById("likes_chart_content").style.display = "none";
-        document.getElementById("top_users_chart_content").style.display = "none";
-    }
-        mostRetweetPie(entries);
-        mostLikePie(entries);
-        mostTweetPie(entries);
-    topHashtagPie(entries);
-    urlArray(entries);
-    if (firstHisto)
-        mostUsedWordsCloud(entries);
+    getNbTweets(entries).finally(() => {
+
+        console.log(nb_tweets);
+        if (nb_tweets === 0)
+        {
+            document.getElementById("retweets_chart_content").style.display = "none";
+            document.getElementById("likes_chart_content").style.display = "none";
+            document.getElementById("top_users_chart_content").style.display = "none";
+            document.getElementById("hashtags_chart_content").style.display = "none";
+            document.getElementById("top_words_chart_content").style.display = "none";
+            document.getElementById("user_time_chart_content").style.display = "none";
+            document.getElementById("tweetCounter_div").style.display = "none";
+            document.getElementById("url_array").style.display = "none";
+            if (firstHisto)
+            document.getElementById("noTweets").style.display = "block";
+            
+        }
+        else
+        {
+            document.getElementById("noTweets").style.display = "none";
+            
+            if (document.getElementById("twitterStats-user").value === "")
+            {
+            
+                document.getElementById("retweets_chart_content").style.display = "block";
+                document.getElementById("likes_chart_content").style.display = "block";
+                document.getElementById("top_users_chart_content").style.display = "block"; 
+                document.getElementById("hashtags_chart_content").style.display = "block";
+                document.getElementById("top_words_chart_content").style.display = "block";
+                document.getElementById("user_time_chart_content").style.display = "block";
+                document.getElementById("tweetCounter_div").style.display = "block";
+                document.getElementById("url_array").style.display = "block";
+            }
+            else
+            {
+                document.getElementById("retweets_chart_content").style.display = "none";
+                document.getElementById("likes_chart_content").style.display = "none";
+                document.getElementById("top_users_chart_content").style.display = "none"; 
+                document.getElementById("hashtags_chart_content").style.display = "block";
+                document.getElementById("top_words_chart_content").style.display = "block";
+                document.getElementById("user_time_chart_content").style.display = "block";
+                document.getElementById("tweetCounter_div").style.display = "block";
+                document.getElementById("url_array").style.display = "block";
+            }
+
+                showEssidHistogram(entries, givenFrom, givenUntil);
+                mostRetweetPie(entries);
+                mostLikePie(entries);
+                mostTweetPie(entries);
+            topHashtagPie(entries);
+            urlArray(entries);
+            if (firstHisto)
+                mostUsedWordsCloud(entries);
+        }
+    })
 
 }
 
@@ -686,9 +719,13 @@ function displayTweetsOfDate(plot, place, button, search) {
                 });
                 i++;
             });
+            if (minDate !== undefined)
+            {
             fullDate = minDate.getDate() + '.' + (minDate.getMonth()+1) + '.' + minDate.getFullYear() + '_' + minDate.getHours() + 'h' + minDate.getMinutes() + '_' +
                        maxDate.getDate() + '.' + (maxDate.getMonth()+1) + '.' + maxDate.getFullYear() + '_' + maxDate.getHours() + 'h' + maxDate.getMinutes()
-
+            }
+            
+            
             tweetArr += "</tbody><tfoot></tfoot></table>"
             tweetPlace.innerHTML = tweetArr;
             tweetPlace.style.display = "block";

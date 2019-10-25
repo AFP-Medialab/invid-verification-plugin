@@ -332,25 +332,54 @@ export function generateDonutQuery(param, field) {
     return userAction();
 }
 
+async function completeJson(aggs, must, myJson)
+{
+         console.log("COMPLETING REQUEST")
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        var arr = Array.from(myJson.hits.hits);
+        const myJson2 = await response.json();
+        Array.from(myJson2.hits.hits).forEach(hit => {
+            arr.push(hit);
+        })
+        myJson.hits.hits = arr;
+        myJson.hits.total.value = arr.length;
+        return myJson;
+}
+
+async function getJson(param, aggs, must) {
+    const response = await fetch(elasticSearch_url, {
+        method: 'POST',
+        body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    var myJson = await response.json();
+    console.log(myJson);
+    if (myJson["hits"]["total"]["value"] === 10000)
+    {
+        console.log("CHANGING PARAMS")
+        param["until"] = myJson.hits.hits[9999]._source.date;
+        var must2 = [
+            constructMatchPhrase(param)
+        ]
+        myJson = await completeJson(aggs, must2, myJson);
+    }
+    json = myJson;
+    return myJson;
+};
 
 export function generateTweetCount(param) {
     var must = [
         constructMatchPhrase(param)
     ]
-    const userAction = async () => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body: JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const myJson = await response.json();
-
-        json = myJson;
-        return myJson["hits"]["total"];
-    };
-    return userAction();
+    return getJson(param, {}, must).then( json => json["hits"]["total"]);
 }
 
 export function generateURLArray(param) {
