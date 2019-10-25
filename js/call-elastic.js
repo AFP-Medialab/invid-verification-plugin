@@ -380,80 +380,54 @@ export function generateDonutQuery(param, field) {
     return userAction();
 }
 
-function getNbTweets(sessid, startDate, endDate) {
-    return {
-        "aggs": {},
-        "size": 0,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-      /*  "docvalue_fields": [
-            {
-                "field": "date",
-                "format": "date_time"
+async function completeJson(aggs, must, myJson)
+{
+         console.log("COMPLETING REQUEST")
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+            headers: {
+                'Content-Type': 'application/json'
             }
-        ],*/
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "query_string": {
-                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                            "analyze_wildcard": true,
-                            "time_zone": "Europe/Paris"
-                        }
-                    },
-                    {
-                        "match_all": {}
-                    },
-                    {
-                        "match_phrase": {
-                            "essid": {
-                                "query": sessid
-                            }
-                        }
-                    },
-                    {
-                        "range": {
-                            "date": {
-                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                "gte": startDate,
-                                "lte": endDate
-                            }
-                        }
-                    }
-                ],
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        }
-    };
+        });
+        var arr = Array.from(myJson.hits.hits);
+        const myJson2 = await response.json();
+        Array.from(myJson2.hits.hits).forEach(hit => {
+            arr.push(hit);
+        })
+        myJson.hits.hits = arr;
+        myJson.hits.total.value = arr.length;
+        return myJson;
 }
 
+async function getJson(param, aggs, must) {
+    const response = await fetch(elasticSearch_url, {
+        method: 'POST',
+        body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    var myJson = await response.json();
+    console.log(myJson);
+    if (myJson["hits"]["total"]["value"] === 10000)
+    {
+        console.log("CHANGING PARAMS")
+        param["until"] = myJson.hits.hits[9999]._source.date;
+        var must2 = [
+            constructMatchPhrase(param)
+        ]
+        myJson = await completeJson(aggs, must2, myJson);
+    }
+    json = myJson;
+    return myJson;
+};
 
 export function generateTweetCount(param) {
     var must = [
         constructMatchPhrase(param)
     ]
-    const userAction = async () => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body: JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const myJson = await response.json();
-
-        json = myJson;
-        return myJson["hits"]["total"];
-    };
-    return userAction();
+    return getJson(param, {}, must).then( json => json["hits"]["total"]);
 }
 
 export function generateURLArray(param) {
