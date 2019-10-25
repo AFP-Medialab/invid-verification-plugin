@@ -28,8 +28,8 @@ function getNbTweets(param, givenFrom, givenUntil) {
     })
 }
 
-function showEssidHistogram(param, givenFrom, givenUntil) {
-    generateEssidHistogramQuery(param, false, givenFrom, givenUntil).then(plotlyJson => {
+async function showEssidHistogram(param, givenFrom, givenUntil) {
+    var plotlyJson = await generateEssidHistogramQuery(param, false, givenFrom, givenUntil)//.then(plotlyJson => {
 
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
@@ -61,8 +61,8 @@ function showEssidHistogram(param, givenFrom, givenUntil) {
             displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility", param["search"]["search"].replace(" ", '&').replace(/#/g, ""));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
-
-    });
+        return plotlyJson;
+   // });
 }
 
 function isEnglish(text)
@@ -253,7 +253,7 @@ async function mostUsedWordsCloud(param) {
 
                     if (tweetie_json.error !== undefined)
                     {
-                        if (tweetie_json.error === 503)
+                        if (tweetie_json.error >= 500)
                             serverDown = true;
                     }
                     else
@@ -610,7 +610,7 @@ export function generateGraphs(param) {
         session: param.session
     }
     
-    getNbTweets(entries).finally(() => {
+    return getNbTweets(entries).then(() => {
 
         console.log(nb_tweets);
         if (nb_tweets === 0)
@@ -655,7 +655,6 @@ export function generateGraphs(param) {
                 document.getElementById("url_array").style.display = "block";
             }
 
-                showEssidHistogram(entries, givenFrom, givenUntil);
                 mostRetweetPie(entries);
                 mostLikePie(entries);
                 mostTweetPie(entries);
@@ -663,6 +662,8 @@ export function generateGraphs(param) {
             urlArray(entries);
             if (firstHisto)
                 mostUsedWordsCloud(entries);
+              
+            return showEssidHistogram(entries, givenFrom, givenUntil);
         }
     })
 
