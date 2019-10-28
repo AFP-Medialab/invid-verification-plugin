@@ -476,7 +476,7 @@ async function getJson(param, aggs, must) {
 }
 async function completeJson(aggs, must, myJson)
 {
-         console.log("COMPLETING REQUEST")
+         console.log("ElasticSearch: Completing request");
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),

@@ -315,7 +315,7 @@ async function mostUsedWordsCloud(param) {
 
                     if (tweetie_json.error !== undefined)
                     {
-                        if (tweetie_json.error >= 500)
+                        if (tweetie_json.error > 500)
                             serverDown = true;
                     }
                     else
@@ -665,7 +665,7 @@ function svgDownload(svgEl, name)
     //Download tweets ad CSV
 export function exportTweets(search, start, end)
 {
-    var csvArr = "data:text/csv;charset=utf-8,";
+    var csvArr =  "";
     var json = getTweets();
     csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
 
@@ -678,12 +678,18 @@ export function exportTweets(search, start, end)
         tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
     })  
     
-        var encodedUri = encodeURI(csvArr);
+    var blob = new Blob([csvArr], { type: 'text/csv;charset=utf-8;' });
+
+       // var encodedUri = encodeURI(csvArr);
+       var url = URL.createObjectURL(blob);
         let link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
+        link.setAttribute("href", url);
         link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
-      //  document.body.appendChild(link); 
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+
 
 }
 
