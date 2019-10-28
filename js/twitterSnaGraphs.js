@@ -5,10 +5,10 @@ import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
 import "../js/canvas-toBlob.js"
 import * as data from '../js/stopwords.js'
+import "../js/cytoscape.js/dist/cytoscape.min.js"
 
 var stopwords = data.default;
 var tweetIE_URL = 'http://185.249.140.38/weverify-twitie/process?annotations=:Person,:UserID,:Location,:Organization'; //'https://cloud-api.gate.ac.uk/process-document/annie-named-entity-recognizer?annotations=:Person,:UserID,:Location,:Organization'//
-
 
 //For words cloud generation loader
 var nb_treated, nb_tweets;
@@ -88,6 +88,9 @@ export function generateGraphs(param) {
     })
 
 }
+
+
+
 
 
 //Functions building the charts
@@ -607,6 +610,12 @@ function unrotateMainHashtag(search) {
 }
 
 
+
+
+
+
+
+
 //Download functions
 
     //Download as PNG
@@ -697,6 +706,8 @@ var firstHisto = true;
 export function setFirstHisto(first) {
     firstHisto = first
 }
+
+
 
 
 
@@ -984,3 +995,80 @@ $("#exportWordsCloudSvg").on("mouseenter", event => {
 $("#exportWordsCloudJpg").on("mouseleave", event => {
     $("#exportWordsCloudSvg").css({"opacity": 0.33});
 });
+
+
+//GRAPHS TESTS
+
+var nodes = [{data: {id: 'MLP_officiel'}}]
+var edges = [];
+var fr = new FileReader();
+var followers = ["christi07127725", "Romane74807670", "ValentineALLAR5", "Abdulla83224674", "XgW4JUgvjCyJ63P", "kouassi_emery", "inkune_ricardo", "Rom1lerom1", "SoroMoh14984341"]
+followers.forEach(follower => {
+    nodes.push({data: {id: follower}});
+    edges.push({data: {id: follower + '-MLP_officiel', source: follower, target: "MLP_officiel"}})
+})
+var followings = ["ZirnheldBenjam1", "B_Paluteau", "AndreRougeOff", "ZinebElRhazoui", "MarcDeFleurian"];
+followings.forEach(following => {
+    nodes.push({data: {id: following}});
+    edges.push({data: {id:'MLP_officiel-' + following, source: "MLP_officiel", target: following}})
+})
+var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    
+
+    elements: {
+      nodes: nodes,
+      edges: edges
+    },
+  
+    layout: {
+        name: 'concentric',
+
+  fit: true, // whether to fit the viewport to the graph
+  padding: 10, // the padding on fit
+  startAngle: 3 / 2 * Math.PI, // where nodes start in radians
+  sweep: undefined, // how many radians should be between the first and last node (defaults to full circle)
+  clockwise: true, // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
+  equidistant: false, // whether levels have an equal radial distance betwen them, may cause bounding box overflow
+  minNodeSpacing: 50, // min spacing between outside of nodes (used for radius adjustment)
+  boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+  avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+  nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+  height: undefined, // height of layout area (overrides container height)
+  width: undefined, // width of layout area (overrides container width)
+  spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+  concentric: function( node ){ // returns numeric value for each node, placing higher nodes in levels towards the centre
+  return node.degree();
+  },
+  levelWidth: function( nodes ){ // the letiation of concentric values in each level
+  return nodes.maxDegree() / 4;
+  },
+  animate: false, // whether to transition the node positions
+  animationDuration: 500, // duration of animation in ms if enabled
+  animationEasing: undefined, // easing of animation if enabled
+  animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+  ready: undefined, // callback on layoutready
+  stop: undefined, // callback on layoutstop
+  transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts
+
+    },
+  
+    // so we can see the ids
+    style: [
+      {
+        selector: 'node',
+        style: {
+          'label': 'data(id)'
+        }
+      },
+      {
+        selector: 'edge',
+        css: {
+          'curve-style': 'bezier',
+          'target-arrow-shape': 'triangle'
+        }
+      }
+    ]
+  });
+
+console.log(cy)
