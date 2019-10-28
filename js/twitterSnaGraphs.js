@@ -372,7 +372,7 @@ async function mostUsedWordsCloud(param) {
                 if (!serverDown)
                     document.getElementById("top_words_cloud_chart").innerHTML = "";
                 else
-                  document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were anable to fetch entities for colors</p>';
+                  document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were unable to fetch named entities</p>';
 
                 var svg = d3.select("#top_words_cloud_chart").append("svg")
                             .attr("width", layout.size()[0])
