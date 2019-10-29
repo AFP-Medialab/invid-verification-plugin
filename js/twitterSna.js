@@ -136,15 +136,18 @@ var isFirst = true;
  * @func Submit search form
  */
 function submit_sna_form() {
-
-
     document.getElementById("top_words_cloud_chart").innerHTML = "";
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
 
     $("#twitterStats-loader").css("display", "block");
-
+    function export_all() {
+        exportPDF(document.getElementById("twitterStats-user").value !== "");
+    }
+    function export_tweets() {
+        exportTweets(param["query"]["search"]["search"], new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
+    }
 
     let response = postRequest(jsonCollectRequest, collect_url);
     if (response == null)
@@ -157,15 +160,10 @@ function submit_sna_form() {
                 .then((param) => {
 
                     setFirstHisto(true);
-                    if (isFirst)
+                    if (document.getElementById('exportButton').style.display === 'none')
                      {   
-                         document.getElementById('exportButton').addEventListener('click', () => {
-                            exportPDF(document.getElementById("twitterStats-user").value !== "");
-                            isFirst = false
-                        }); 
-                        document.getElementById('tweets_export').addEventListener('click', () => {
-                            exportTweets(param["query"]["search"]["search"], new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
-                        });
+                         document.getElementById('exportButton').addEventListener('click', export_all); 
+                        document.getElementById('tweets_export').addEventListener('click', export_tweets);
                     }
 
                     if (param == null) {
@@ -189,8 +187,7 @@ function submit_sna_form() {
                     
                       
                     (async () => { await generateGraphs(param);  
-                     $("#exportButton").css("display", "block"); $("#tweets_export").css("display", "block");
-
+                     
                     $("#twitterStats-loader").css("display", "none");})();
                 });
         }
@@ -204,7 +201,7 @@ function submit_sna_form() {
 
 var cache_user_time_style = document.getElementById("user_time").style;
 var cache_user_chart_width = $("#user_time_chart").width;
-function exportPDF(hasUser) {
+async function exportPDF(hasUser) {
 
     var v = Array.from(document.getElementsByClassName("toggleVisibility"));
     v.forEach(elt => elt.style.display = "none");
@@ -221,7 +218,7 @@ function exportPDF(hasUser) {
     Array.from(buttons).forEach(button => button.style = "display: none");
 
     for (var i = 0; i < 30; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("twitterStats-radios-time").appendChild(br);
     }
@@ -231,7 +228,7 @@ function exportPDF(hasUser) {
     $("#user_time").css("padding", 0);
 
     for (var i = 0; i < 4; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("user_time_chart_content").appendChild(br);
     }
@@ -239,7 +236,7 @@ function exportPDF(hasUser) {
         $("#tweetCounter_contents").slideToggle();
 
     for (var i = 0; i < 30; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("tweetCounter_contents").appendChild(br);
     }
@@ -250,17 +247,17 @@ function exportPDF(hasUser) {
         $("#most_liked").slideToggle();
 
     for (var i = 0; i < 17; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("most_liked").appendChild(br);
     }
 
     var max = 40;
     if (hasUser)
-        max = 15;
+        max = 17;
 
     for (var i = 0; i < max; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("top_words_content").appendChild(br);
     }
@@ -277,7 +274,7 @@ function exportPDF(hasUser) {
 
 
     for (var i = 0; i < 20; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("top_users_content").appendChild(br);
     }
@@ -290,7 +287,7 @@ function exportPDF(hasUser) {
     }*/
 
     $("#url_array").css("margin-left", -100);
-    ctrlP().then(() => {
+    await ctrlP()//.finally(() => {
         document.getElementById("user_time").style = cache_user_time_style;
         Plotly.relayout('user_time_chart', { width: cache_user_chart_width });
 
@@ -302,17 +299,13 @@ function exportPDF(hasUser) {
         $("#url_array").css("margin-left", 0);
 
         Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "block");
-    });
+   // });
 
     async function ctrlP() {
         await delay(500);
         $("#twitterStats-loader").css("display", "none");
 
         window.print();
-
-
-
-
     }
 
 };

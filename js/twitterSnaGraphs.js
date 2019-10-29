@@ -44,11 +44,13 @@ export function generateGraphs(param) {
             document.getElementById("url_array").style.display = "none";
             if (firstHisto)
             document.getElementById("noTweets").style.display = "block";
+            $("#exportButton").css("display", "none"); $("#tweets_export").css("display", "none");
             
         }
         else
         {
             document.getElementById("noTweets").style.display = "none";
+            $("#exportButton").css("display", "block"); $("#tweets_export").css("display", "block");
             
             if (document.getElementById("twitterStats-user").value === "")
             {
