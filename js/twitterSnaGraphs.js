@@ -3,7 +3,6 @@ import { generateEssidHistogramPlotlyJson, generateWordCloudPlotlyJson, generate
 import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
-import "../js/canvas-toBlob.js"
 import * as data from '../js/stopwords.js'
 
 var stopwords = data.default;
