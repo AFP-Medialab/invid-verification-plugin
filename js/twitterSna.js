@@ -142,12 +142,7 @@ function submit_sna_form() {
         return;
 
     $("#twitterStats-loader").css("display", "block");
-    function export_all() {
-        exportPDF(document.getElementById("twitterStats-user").value !== "");
-    }
-    function export_tweets() {
-        exportTweets(param["query"]["search"]["search"], new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
-    }
+    
 
     let response = postRequest(jsonCollectRequest, collect_url);
     if (response == null)
@@ -158,7 +153,12 @@ function submit_sna_form() {
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
-
+                    function export_all() {
+                        exportPDF(document.getElementById("twitterStats-user").value !== "");
+                    }
+                    function export_tweets() {
+                        exportTweets(param["query"]["search"]["search"], new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
+                    }
                     setFirstHisto(true);
                     if (document.getElementById('exportButton').style.display === 'none')
                      {   
