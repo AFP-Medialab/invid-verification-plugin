@@ -1073,10 +1073,32 @@ var cy = cytoscape({
       }
     ]
   });
-  
+
+
+var follow = ["truc", "machin", "bidule", "dupeir", "Alexis", "eric", "Elise", "ValentineALLAR5"]
+
+var fol = ["truc", "Antoine", "bidule", "Patricia", "Chantale", "Riley", "Melissa", "MLP_officiel"]
   cy.on('tap', 'node', function(evt){
     var node = evt.target;
     console.log( 'tapped ' + node.id() );
+    var i = 0;
+    var data = follow.map(d => {console.log(d); return{group: 'nodes', data: {id: d}, position: {x: node.position().x + 150, y : node.position().y + (i++) *75}}})
+    var edgeData = follow.map(f => {return{group: 'edges', data: {id: f + '-' + node.id(), source: f, target: node.id()}}})
+   // data.forEach(d => console.log(d);
+    cy.add(data
+        /*[
+        { group: 'nodes', data: {id: "follower"}, position: {x: node.position().x + 150, y : node.position().y}},
+        { group: 'nodes', data: {id: 'following' }, position: { x: node.position().x + 150, y: node.position().y +150} },
+        { group: 'edges', data: {id:'follower-' + node.id(), source: "follower", target: node.id()}},
+        { group: 'edges', data: {id: node.id() + '-following', source:  node.id(), target:"following"}}
+      ]*/);
+    cy.add(
+       edgeData)
+   /* cy.add({
+        edges: [
+            
+        ]
+    })*/
   });
 
 //console.log(cy)
