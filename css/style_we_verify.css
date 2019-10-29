@@ -1174,8 +1174,9 @@ table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
 }
 
-
-.non-optionnal-fields {
-	display: inline;
-	width: 40%!important;
+#exportWordsCloud {
+	opacity: 0;
+	text-align: right;
 }
+
+

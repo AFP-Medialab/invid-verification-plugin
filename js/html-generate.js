@@ -223,11 +223,12 @@ function update_twitter_sna(lang)
 
 	//Chart titles
 	setInnerHtml("user_time_chart_title",			"▲ " + json_lang_translate[lang]["user_time_chart_title"]);
-	setInnerHtml("tweetCounter_title", "▼ " + json_lang_translate[lang]["tweetCounter_title"]);
+	setInnerHtml("tweetCounter_title", 				"▼ " + json_lang_translate[lang]["tweetCounter_title"]);
 	setInnerHtml("hashtag_cloud_chart_title",		"▼ " + json_lang_translate[lang]["hashtag_cloud_chart_title"]);
 	setInnerHtml("retweets_cloud_chart_title",		"▼ " + json_lang_translate[lang]["retweets_cloud_chart_title"]);
 	setInnerHtml("likes_cloud_chart_title",			"▼ " + json_lang_translate[lang]["likes_cloud_chart_title"]);
 	setInnerHtml("top_users_pie_chart_title",		"▼ " + json_lang_translate[lang]["top_users_pie_chart_title"]);
+	setInnerHtml("top_words_cloud_chart_title",		"▼ " + json_lang_translate[lang]["top_words_cloud_chart_title"]);
 
 
 	//Toggle views
@@ -236,6 +237,7 @@ function update_twitter_sna(lang)
 	$("#most_liked").hide();
 	$("#hashtag_cloud_chart_content").hide();
 	$("#top_users_content").hide();
+	$("#top_words_content").hide();
 
 }
 
@@ -382,7 +384,6 @@ function update_about(lang)
 	let languages_item = "";
 	let list = document.getElementById('lang_list');
 	for(let lang_symb in all_lang) {
-		console.log(lang_symb);
 		let link = document.createElement('a');
 		//link.type = "button";
 		link.setAttribute('data-lang', lang_symb);

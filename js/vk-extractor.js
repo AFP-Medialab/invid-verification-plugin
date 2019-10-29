@@ -35,9 +35,10 @@
                 sourceHTML = request.responseText;
 
                 mp4Url = sourceHTML.split(/url240\"/)[1];
-
-                mp4Url = mp4Url.split("\"")[1];
+                if (mp4Url !== undefined) {
+                    mp4Url = mp4Url.split("\"")[1];
                 resolve(mp4Url);
+                }
             }
         };
     }).then(() => { return mp4Url })
@@ -64,10 +65,11 @@
                 request.onreadystatechange = function() {
                     if (request.readyState == 4){
                         var videos = request.responseText
-                                                .match(/video-[0-9]*_[0-9]*/g)
-                                                .filter((value, index, self) => {
-                                                    return self.indexOf(value) === index;
-                                                });
+                                                .match(/video-[0-9]*_[0-9]*/g);
+                        if (videos !== null) {
+                            videos.filter((value, index, self) => {
+                                return self.indexOf(value) === index;
+                            });
                         
                         videos.forEach( video => { 
                             extractOne("https://vk.com/" + video)
@@ -76,8 +78,11 @@
                                 }); 
 
                         });
-
                         resolve();
+
+                    }
+                   /* else
+                        reject();*/
 
                     }
                 }

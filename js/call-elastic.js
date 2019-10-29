@@ -7,7 +7,12 @@ if (dev) {
     elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
 }
 
-export function generateEssidHistogramQuery(sessid, andArgs, retweets, queryStart, queryEnd, givenFrom, givenUntil) {
+//Functions calling elastic search and return a JSON plotly can use
+    
+    //Timeline chart
+export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, givenUntil) {
+    var queryStart = param["from"];
+    var queryEnd = param["until"];
 
     let dateEndQuery = new Date(queryEnd);
     let dateStartQuery = new Date(queryStart);
@@ -16,40 +21,389 @@ export function generateEssidHistogramQuery(sessid, andArgs, retweets, queryStar
     let dateGivenUntil = new Date(givenUntil);
 
     var reProcess = false;
-    let diff = (dateEndQuery - dateStartQuery) / (1000 * 3600 * 24);
+    let diff = (dateGivenUntil - dateGivenFrom) / (1000 * 3600 * 24);
     let interval = "";
-    if (diff > 14)
-    {
+    if (diff > 14) {
         interval = "1d";
-        if ((dateGivenUntil - dateGivenFrom) / (1000 * 3600 * 24) < 14)
+        if ((dateEndQuery - dateStartQuery) / (1000 * 3600 * 24) < 14)
             reProcess = true;
     }
     else
         interval = "1h";
-    let matchPhrase = 
+
+
+    let aggs = constructAggs(interval);
+    let must = [constructMatchPhrase(param, givenFrom, givenUntil)]
+
+    function usersGet(dateObj, infos) {
+
+        dateObj["3"]["buckets"].forEach(obj => {
+            if (obj["1"]["value"] > 5) {
+                infos.push({
+                    date: dateObj['key_as_string'],
+                    key: obj["key"],
+                    nb: obj["1"]["value"]
+                })
+            }
+        });
+    
+        return infos;
+    }
+
+
+    function retweetsGet(dateObj, infos) {
+        infos.push({
+            date: dateObj['key_as_string'],
+            key: "Retweets",
+            nb: dateObj["1"].value
+        });
+        return infos;
+    }
+    
+    const userAction = async (query) => {
+        var str_query = JSON.stringify(query).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body:
+                str_query,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const myJson = await response.json();
+        if (myJson["error"] === undefined) {
+            if (retweets)
+                return getPlotlyJsonHisto(myJson, retweetsGet);
+            else
+                return getPlotlyJsonHisto(myJson, usersGet);
+        }
+        else
+            window.alert("There was a problem calling elastic search");
+    }
+    return userAction(buildQuery(aggs, must)).then(plotlyJSON => {
+
+        if (reProcess) {
+            let aggs = constructAggs("1h");
+            let must = [constructMatchPhrase(param, queryStart, queryEnd)]
+            return (userAction(buildQuery(aggs, must)).then(plotlyJSON2 => {
+
+                var i = 0;
+
+                plotlyJSON2.forEach(plot => {
+                    if (i++ > 1) {
+                        plotlyJSON.forEach(plot2 => {
+
+                             if (plot.name === plot2.name) 
+                             {
+                                plot2.x = [...plot2.x, ...plot.x];
+                                plot2.y = [...plot2.y, ...plot.y];
+                            }
+
+                        });
+                    }
+            });
+
+            return plotlyJSON;
+        }));
+    }
+
+    return plotlyJSON;
+
+    });
+}
+
+    //Tweet count display
+export function generateTweetCountPlotlyJson(param) {
+    var must = [
+        constructMatchPhrase(param)
+    ]
+    return getJson(param, {}, must).then( json => json["hits"]["total"]);
+}
+
+    //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
+export function generateDonutPlotlyJson(param, field) {
+    var mainKey = param["search"]["search"];
+
+    let aggs = constructAggs(field);
+    let must = [ constructMatchPhrase(param) ];
+
+
+    function hashtagsGet(key, values, labels, parents, mainKey) {
+        values.push(key["doc_count"]);
+        labels.push(key["key"]);
+        parents.push(mainKey["key"]);
+    }
+
+    function mostTweetsGet(key, values, labels, parents, mainKey) {
+        if (key["doc_count"] > 0) {
+            values.push(key["doc_count"]);
+            labels.push(key["key"]);
+            parents.push(mainKey);
+        }
+    }
+
+    function mostRetweetGet(key, values, labels, parents, mainKey) {
+        if (key["1"]["value"] > 10) {
+            values.push(key["1"]["value"]);
+            labels.push(key["key"]);
+            parents.push(mainKey);
+        }
+    }
+
+    var query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    const userAction = async () => {
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body:
+                query,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const myJson = await response.json();
+        if (field === "hashtags") {
+            return getPlotlyJsonCloud(myJson, hashtagsGet, mainKey);
+        } else if (field === "nretweets" || field == "nlikes")
+            return getPlotlyJsonCloud(myJson, mostRetweetGet, mainKey);
+        else
+            return getPlotlyJsonCloud(myJson, mostTweetsGet, mainKey);
+
+    }
+    
+    return userAction();
+}
+
+    // Words cloud chart
+export function generateWordCloudPlotlyJson(param) {
+
+    var must = [
+        constructMatchPhrase(param)
+    ]
+
+    var query = JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    const userAction = async () => {
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body:
+                query,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const myJson = await response.json();
+
+        return myJson;
+
+    }
+    return userAction();
+
+
+}
+
+    //URL array 
+export function generateURLArrayHTML(param) {
+
+    let must = [ constructMatchPhrase(param) ]
+    let aggs = constructAggs("urls");
+
+    function getURLArray(json) {
+        var urlArray = [];
+        var buckets = json["aggregations"]["2"]["buckets"];
+        buckets.forEach(bucket => {
+            urlArray.push({ url: bucket["key"], count: bucket["doc_count"] });
+        });
+        return urlArray;
+    }
+    
+    let query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    const userAction = async () => {
+        const response = await fetch(elasticSearch_url, {
+            method: 'POST',
+            body:
+                query, 
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const myJson = await response.json();
+
+
+        let array = getURLArray(myJson);
+
+        let arrayStr = '<table id="url_table">' +
+            '<tr>' +
+            '<td>url</td>' +
+            '<td>count</td>' +
+            '</tr>';
+        array.forEach(row => {
+            arrayStr += '<tr>' +
+                '<td><a href="' + row.url + '" target="_blank">' + row.url + '</a></td>' +
+                '<td>' + row.count + '</td></tr>';
+        });
+        arrayStr += '</table>';
+        return arrayStr;
+    };
+    return userAction();
+}
+
+
+
+
+//Build a query for elastic search
+function buildQuery(aggs, must) {
+    var query = {
+        "aggs": aggs,
+        "size": 10000,
+        "_source": {
+            "excludes": []
+        },
+        "stored_fields": [
+            "*"
+        ],
+        "script_fields": {},
+        "query": {
+            "bool": {
+                "must": must,
+                "filter": [],
+                "should": [],
+                "must_not": []
+            }
+        },
+        "sort" : [
+            { "date" : {"order" : "asc"}}
+        ]
+    }
+    return query;
+}
+
+    //Construct the match phrase (filter for tweets) 
+function constructMatchPhrase(param, startDate, endDate)
+{
+    if (startDate === undefined)
+    {
+        startDate = param["from"];
+        endDate = param["until"];
+    }
+    var andArgs = (param["search"]["and"] === undefined || param["search"]["and"][0] === "")? [] : param["search"]["and"];
+    
+    var match_phrases = JSON.stringify({
+        "query_string": {
+            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
+            "analyze_wildcard": true,
+            "time_zone": "Europe/Paris"
+        }
+    },
+    {
+        "match_all": {}
+    }) 
+
+    // SESSID MATCH
+    match_phrases += ",{" +
+                '"match_phrase": {' +
+                    '"essid": {' +
+                        '"query":"' + param["session"] + '"' + 
+                    '}' +
+                '}' +
+            '}';
+
+
+    // AND ARGS MATCH
+    andArgs.forEach(arg => {
+        if (arg[0] === '#')
         {
-            "match_phrase":
-                {
-                    "essid": {
-                        "query": sessid
+            match_phrases +=  ',{'+
+                '"match_phrase": {' +
+                    '"hashtags": {' +
+                        '"query":"' + arg + '"' +
+                    '}' +
+                '}' +
+            '}'
+        }
+        else
+        {
+            match_phrases +=  ',{' +
+                '"match_phrase": {' +
+                '"tweet": {' +
+                  '"query":"' + arg + '"' +
+                '}' +
+              '}' +
+            '}';
+        }
+    });
+
+    // USERNAME MATCH
+    if (param["user_list"] !== undefined)
+    {
+        param["user_list"].forEach(user => {
+            if (user !== "")
+            {
+                match_phrases += ',{' + 
+                    '"match_phrase": {' +
+                        '"username": {' + 
+                        '"query":"' + user + '"' +
+                        '}' +
+                    '}' +
+                '}';
+            }
+        })
+    }
+    // RANGE SETUP
+    match_phrases += "," + JSON.stringify({
+        "range": {
+            "date": {
+                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+                "gte": startDate,
+                "lte": endDate
+            }
+        }
+    });
+
+    return match_phrases
+   
+
+}
+
+    //Construct the aggregations (chose what information we will have in the response)
+function constructAggs(field)
+{
+
+
+    let fieldInfo = '{' +
+            '"2":'
+    if (field === "hashtags" || field === "urls") {
+        fieldInfo += JSON.stringify({
+            "terms": {
+                "field": field,
+                "order": {
+                    "_count": "desc"
+                },
+                "size": 20
+            }
+        })
+    }
+    else if (field === "nretweets" || field === "nlikes") {
+        fieldInfo += JSON.stringify({
+            "terms": {
+                "field": "username",
+                "order": {
+                    "1": "desc"
+                },
+                "size": 14
+            },
+            "aggs": {
+                "1": {
+                    "sum": {
+                        "field": field
                     }
                 }
-        }
-
-
-    let matchHashTag = (andArgs != null)?
-        {
-            "match_phrase": {
-              "hashtags": {
-                "query": andArgs[0]
-              }
             }
-          }:{}
-    let fieldInfo =
-        {
+        })
+    }
+    else if (field.includes('1')) {
+        fieldInfo += JSON.stringify({
             "date_histogram": {
                 "field": "date",
-                "calendar_interval": interval,
+                "calendar_interval": field,
                 "time_zone": "Europe/Paris",
                 "min_doc_count": 1
             },
@@ -76,500 +430,83 @@ export function generateEssidHistogramQuery(sessid, andArgs, retweets, queryStar
                     }
                 }
             }
-        }
-
-    const userAction = async (startDate, endDate) => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body:
-                (andArgs == null)?JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)):JSON.stringify(getQueryAnd(matchPhrase, matchHashTag, fieldInfo, startDate, endDate)),
-            headers: {
-                'Content-Type': 'application/json'
-            } //*/
         });
-        const myJson = await response.json();
-        if (myJson["error"] === undefined)
-        {
-            if (retweets)
-                return getPlotlyJsonHisto(myJson, retweetsGet);
-            else
-                return getPlotlyJsonHisto(myJson, usersGet);
-        }
-        else
-            window.alert("There was a problem calling elastic search");
     }
-    return userAction(queryStart, queryEnd).then(plotlyJSON =>
-        {
-
-            if (reProcess)
-            {
-                fieldInfo =
-                {
-                    "date_histogram": {
-                        "field": "date",
-                        "calendar_interval": "1h",
-                        "time_zone": "Europe/Paris",
-                        "min_doc_count": 1
-                    },
-                    "aggs": {
-                        "3": {
-                            "terms": {
-                                "field": "username",
-                                "order": {
-                                    "1": "desc"
-                                },
-                                "size": 5
-                            },
-                            "aggs": {
-                                "1": {
-                                    "sum": {
-                                        "field": "nretweets"
-                                    }
-                                }
-                            }
-                        },
-                        "1": {
-                            "sum": {
-                                "field": "nretweets"
-                            }
-                        }
-                    }
-                }
-                
-                return userAction(givenFrom, givenUntil).then(plotlyJSON2 =>
-                    {
-
-
-                        plotlyJSON2.forEach(plot => plotlyJSON.push(plot));
-                        return plotlyJSON;
-                    });
-
-            }
-            else
-                return plotlyJSON;
-           
-        });
-}
-
-export function generateCloudQuery(sessid, andArgs, field, startDate, endDate, mainKey) {
-    let matchPhrase =
-        {
-            "match_phrase":
-                {
-                    "essid": {
-                        "query": sessid
-                    }
-                }
-        }
-        let 
-        matchHashTag = (andArgs != null)?
-        {
-            "match_phrase": {
-              "hashtags": {
-                "query": andArgs[0]
-              }
-            }
-          }:{}
-    let fieldInfo =
-        (field === "hashtags") ?
-            {
+    else {
+        fieldInfo += JSON.stringify({
                 "terms": {
-                    "field": field,
+                    "field": "username",
                     "order": {
                         "_count": "desc"
                     },
                     "size": 14
-                },
-            } :
-            (field === "nretweets" || field === "nlikes") ? {
-                    "terms": {
-                        "field": "username",
-                        "order": {
-                            "1": "desc"
-                        },
-                        "size": 14
-                    },
-                    "aggs": {
-                        "1": {
-                            "sum": {
-                                "field": field
-                            }
-                        }
-                    }
-                } :
-                {
-                    "terms": {
-                        "field": "username",
-                        "order": {
-                            "_count": "desc"
-                        },
-                        "size": 14
-                    }
-                };
-
-    const userAction = async () => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body:
-            (andArgs == null)?JSON.stringify(getQuery(matchPhrase, fieldInfo, startDate, endDate)):JSON.stringify(getQueryAnd(matchPhrase, matchHashTag, fieldInfo, startDate, endDate)),
-            headers: {
-                'Content-Type': 'application/json'
-            } //*/
-        });
-        const myJson = await response.json();
-        json = myJson;
-        if (field === "hashtags") {
-            return getPlotlyJsonCloud(myJson, hashtagsGet, mainKey);
-        } else if (field === "nretweets" || field == "nlikes")
-            return getPlotlyJsonCloud(myJson, mostRetweetGet, mainKey);
-        else
-            return getPlotlyJsonCloud(myJson, mostTweetsGet, mainKey);
-
-    }
-    return userAction();
-}
-
-
-export function generateTweetCount(session, startDate, endDate) {
-    const userAction = async () => {
-        const response = await fetch(elasticSearch_url, {
-            method: 'POST',
-            body: JSON.stringify(getNbTweets(session, startDate, endDate)),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const myJson = await response.json();
-        return myJson["hits"]["total"];
-    };
-    return userAction();
-}
-
-export function generateURLArray(sessid, andArgs, startDate, endDate) {
-    let matchPhrase =
-        {
-            "match_phrase":
-                {
-                    "essid": {
-                        "query": sessid
-                    }
                 }
-        };
-        let
-        matchHashTag = (andArgs != null)?
-        {
-            "match_phrase": {
-              "hashtags": {
-                "query": andArgs[0]
-              }
-            }
-          }:{}
-    let chartInfo = {
-        "terms": {
-            "field": "urls",
-            "order": {
-                "_count": "desc"
-            },
-            "size": 10
+            });
         }
-    };
 
-    const userAction = async () => {
+        fieldInfo += '}'
+        return fieldInfo;
+}
+
+
+
+//To fetch all the tweets (Bypass the 10 000 limit with elastic search)
+async function getJson(param, aggs, must) {
+    const response = await fetch(elasticSearch_url, {
+        method: 'POST',
+        body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    var myJson = await response.json();
+
+    if (myJson["hits"]["total"]["value"] === 10000)
+    {
+        do
+        {
+            var must2 = [
+                constructMatchPhrase({"from": myJson.hits.hits[myJson.hits.hits.length-1]._source.date, "until": param["until"], "search": param.search, "session": param.session })
+            ]
+            myJson = await completeJson(aggs, must2, myJson);
+        }while(myJson.current_total_hits === 10000)
+    }
+    json = myJson;
+    return myJson;
+}
+async function completeJson(aggs, must, myJson)
+{
+         console.log("ElasticSearch: Completing request");
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
-            body:
-            (andArgs == null)?JSON.stringify(getQuery(matchPhrase, chartInfo, startDate, endDate)):JSON.stringify(getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate)),
+            body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
             headers: {
                 'Content-Type': 'application/json'
-            } //*/
+            }
         });
-        const myJson = await response.json();
-
-
-        let array = getURLArray(myJson);
-
-        let arrayStr = '<table id="url_table">' +
-            '<tr>' +
-            '<td>url</td>' +
-            '<td>count</td>' +
-            '</tr>';
-
-        array.forEach(row => {
-            arrayStr += '<tr>' +
-                '<td><a href="' + row.url + '" target="_blank">' + row.url + '</a></td>' +
-                '<td>' + row.count + '</td></tr>';
-        });
-        arrayStr += '</table>';
-        return arrayStr;
-    };
-    return userAction();
-}
-
-function getQuery(matchPhrase, chartInfo, startDate, endDate) {
-    var query =  {
-        "aggs": {
-            "2":
-            chartInfo
-        },
-        "size": 10000,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "query_string": {
-                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                            "analyze_wildcard": true,
-                            "time_zone": "Europe/Paris"
-                        }
-                    },
-                    {
-                        "match_all": {}
-                    },
-                    matchPhrase,
-                    {
-                        "range": {
-                            "date": {
-                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                "gte": startDate,
-                                "lte": endDate
-                            }
-                        }
-                    }
-                ],
-                "filter": [],
-                "should": [],
-                "must_not": []
+        var arr = Array.from(myJson.hits.hits);
+        var id_arr = arr.map(elt => elt._id);
+        const myJson2 = await response.json();
+        Array.from(myJson2.hits.hits).forEach(hit => {
+            if (!id_arr.includes(hit._id))
+            {
+                arr.push(hit);
             }
-        }
-    }
-    return query;
+        })
+        myJson["current_total_hits"] = myJson2.hits.total.value;
+        myJson.hits.hits = arr;
+        myJson.hits.total.value = arr.length;
+        return myJson;
 }
 
-function getQueryAnd(matchPhrase, matchHashTag, chartInfo, startDate, endDate) {
-    var query =  {
-        "aggs": {
-            "2":
-            chartInfo
-        },
-        "size": 10000,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "query_string": {
-                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                            "analyze_wildcard": true,
-                            "time_zone": "Europe/Paris"
-                        }
-                    },
-                    {
-                        "match_all": {}
-                    },
-                    {
-                        "match_all": {}
-                    },
-                    matchHashTag,
-                    matchPhrase,
-                    {
-                        "range": {
-                            "date": {
-                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                "gte": startDate,
-                                "lte": endDate
-                            }
-                        }
-                    }
-                ],
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        }
-    }
-    return query;
-}
 
-function mostTweetsGet(key, values, labels, parents, mainKey) {
-    if (key["doc_count"] > 0) {
-        values.push(key["doc_count"]);
-        labels.push(key["key"]);
-        parents.push(mainKey);
-    }
-}
-
-function getURLArray(json) {
-    var urlArray = [];
-    var buckets = json["aggregations"]["2"]["buckets"];
-
-    buckets.forEach(bucket => {
-        urlArray.push({url: bucket["key"], count: bucket["doc_count"]});
-    });
-    return urlArray;
-}
-
-function getNbTweets(sessid, andArgs, startDate, endDate) {
-
-    return (andArgs == null)?{
-        "aggs": {},
-        "size": 0,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "query_string": {
-                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                            "analyze_wildcard": true,
-                            "time_zone": "Europe/Paris"
-                        }
-                    }, 
-                    {
-                        "match_all": {}
-                    },
-                    {
-                        "match_phrase": {
-                            "essid": {
-                                "query": sessid
-                            }
-                        }
-                    },
-                    {
-                        "range": {
-                            "date": {
-                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                "gte": startDate,
-                                "lte": endDate
-                            }
-                        }
-                    }
-                ],
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        }
-    }:{
-        "aggs": {},
-        "size": 0,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "query_string": {
-                            "query": "NOT _exists_:likes NOT _exists_:retweets NOT _exists_:replies",
-                            "analyze_wildcard": true,
-                            "time_zone": "Europe/Paris"
-                        }
-                    }, 
-                    {
-                        "match_all": {}
-                    },
-                    {
-                        "match_all": {}
-                    }, 
-                    {
-                        "match_phrase": {
-                          "hashtags": {
-                            "query": andArgs[0]
-                          }
-                        }
-                      },
-                    {
-                        "match_phrase": {
-                            "essid": {
-                                "query": sessid
-                            }
-                        }
-                    },
-                    {
-                        "range": {
-                            "date": {
-                                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                                "gte": startDate,
-                                "lte": endDate
-                            }
-                        }
-                    }
-                ],
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        }
-    };
-}
-
-function usersGet(dateObj, infos) {
-
-    dateObj["3"]["buckets"].forEach(obj => {
-        if (obj["1"]["value"] > 5) {
-            infos.push({
-                date: dateObj['key_as_string'],
-                key: obj["key"],
-                nb: obj["1"]["value"]
-            })
-        }
-    });
-
-    return infos;
-}
-
-function retweetsGet(dateObj, infos) {
-    infos.push({
-        date: dateObj['key_as_string'],
-        key: "Retweets",
-        nb: dateObj["1"].value
-    });
-    return infos;
-}
-
-function mostRetweetGet(key, values, labels, parents, mainKey) {
-    if (key["1"]["value"] > 10) {
-        values.push(key["1"]["value"]);
-        labels.push(key["key"]);
-        parents.push(mainKey);
-    }
-}
-
-function hashtagsGet(key, values, labels, parents, mainKey) {
-    values.push(key["doc_count"]);
-    labels.push(key["key"]);
-    parents.push(mainKey["key"]);
-}
-
+//To build the PlotlyJSON from elastic response
 function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
     var labels = [];
     var parents = [];
     var value = [];
 
-    
+
     let keys = json["aggregations"]["2"]["buckets"];
 
     if (keys.length === 0)
@@ -595,8 +532,7 @@ function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
         labels: labels,
         parents: parents,
         values: value,
-        outsidetextfont: {size: 20, color: "#377eb8"},
-        //   leaf: { opacity: 0.4 }
+        outsidetextfont: { size: 20, color: "#377eb8" },
     }];
     return obj;
 }
@@ -623,7 +559,6 @@ function getPlotlyJsonHisto(json, specificGet) {
     var i = 0;
     while (infos.length !== 0) {
 
-        //  var color = getRandomColor(colors, i++);
         let info = infos.pop();
         let date = info.date;
         let nb = info.nb;
@@ -652,12 +587,8 @@ function getPlotlyJsonHisto(json, specificGet) {
     return lines;
 }
 
+
+//To access tweets collection
 export function getTweets() {
     return json
 }
-
-
-/*
-            else if (hashtag !== null)
-
-   // generateQuery().then((json) => responseJson = json);*/

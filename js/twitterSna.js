@@ -1,4 +1,4 @@
-import { generateGraphs, getNbTweets, setFirstHisto } from "./twitterSnaGraphs.js";
+import { generateGraphs, exportTweets, setFirstHisto } from "./twitterSnaGraphs.js";
 
 var collect_url = "http://185.249.140.38/twint-wrapper/collect";
 var status_url = "http://185.249.140.38/twint-wrapper/status/";
@@ -136,29 +136,35 @@ var isFirst = true;
  * @func Submit search form
  */
 function submit_sna_form() {
-
-
+    document.getElementById("top_words_cloud_chart").innerHTML = "";
     let jsonCollectRequest = formToJsonCollectRequest();
     if (jsonCollectRequest == null)
         return;
 
     $("#twitterStats-loader").css("display", "block");
-
+    
 
     let response = postRequest(jsonCollectRequest, collect_url);
     if (response == null)
         alert("Bad request");
     response().then((jsonResponse) => {
+
         if (jsonResponse !== null) {
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
-                    console.log("Param1 : ", param);
-                    if (isFirst)
-                        document.getElementById('exportButton').addEventListener('click', () => {
-                            exportPDF(param["query"]["search"]["search"] + '_' + param["query"]["from"] + '_' + param["query"]["until"] + '.pdf');
-                            isFirst = false
-                        });
+                    function export_all() {
+                        exportPDF(document.getElementById("twitterStats-user").value !== "");
+                    }
+                    function export_tweets() {
+                        exportTweets(param["query"]["search"]["search"], new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
+                    }
+                    setFirstHisto(true);
+                    if (document.getElementById('exportButton').style.display === 'none')
+                     {   
+                         document.getElementById('exportButton').addEventListener('click', export_all); 
+                        document.getElementById('tweets_export').addEventListener('click', export_tweets);
+                    }
 
                     if (param == null) {
                         console.log("error : timeout, or invalid request");
@@ -175,32 +181,34 @@ function submit_sna_form() {
                         console.log("Finished successfully")
                     }
 
-                    $("#twitterStats-loader").css("display", "none");
                     $("#twitterStats-Graphs").css("display", "block");
 
 
-                    generateGraphs(param);
-                    if (document.getElementById("twitterStats-user").value != "") {
-                        $("#retweets_chart_content").hide();
-                        $("#likes_chart_content").hide();
-                        $("#top_users_chart_content").hide();
-                    }
-
-                    (async () => { await delay(2000); $("#exportButton").css("display", "block"); })();
+                    
+                      
+                    (async () => { await generateGraphs(param);  
+                     
+                    $("#twitterStats-loader").css("display", "none");})();
                 });
         }
         else
-            window.alert("Thers was a problem with Twint");
+            window.alert("There was a problem with Twint");
     });
 
 }
 
 
+
 var cache_user_time_style = document.getElementById("user_time").style;
 var cache_user_chart_width = $("#user_time_chart").width;
-function exportPDF() {
+async function exportPDF(hasUser) {
 
-    $("#exportButton").css("display", "none");
+    var v = Array.from(document.getElementsByClassName("toggleVisibility"));
+    v.forEach(elt => elt.style.display = "none");
+    console.log(v);
+    
+    Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "none");
+    $("#tweets_export").css("display", "none");
     $("#submitSna").css("visibility", "hidden");
     $("#twitterStats-loader").css("display", "block");
     $("#user_time").css("margin-left", -120);
@@ -210,7 +218,7 @@ function exportPDF() {
     Array.from(buttons).forEach(button => button.style = "display: none");
 
     for (var i = 0; i < 30; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("twitterStats-radios-time").appendChild(br);
     }
@@ -220,7 +228,7 @@ function exportPDF() {
     $("#user_time").css("padding", 0);
 
     for (var i = 0; i < 4; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("user_time_chart_content").appendChild(br);
     }
@@ -228,7 +236,7 @@ function exportPDF() {
         $("#tweetCounter_contents").slideToggle();
 
     for (var i = 0; i < 30; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("tweetCounter_contents").appendChild(br);
     }
@@ -238,10 +246,20 @@ function exportPDF() {
     if (!$("#most_liked").is(":visible"))
         $("#most_liked").slideToggle();
 
-    for (var i = 0; i < 20; i++) {
-        var br = document.createElement("br");
+    for (var i = 0; i < 17; i++) {
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("most_liked").appendChild(br);
+    }
+
+    var max = 40;
+    if (hasUser)
+        max = 17;
+
+    for (var i = 0; i < max; i++) {
+        let br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("top_words_content").appendChild(br);
     }
 
     if (!$("#hashtag_cloud_chart_content").is(":visible"))
@@ -250,14 +268,26 @@ function exportPDF() {
     if (!$("#top_users_content").is(":visible"))
         $("#top_users_content").slideToggle();
 
+
+    if (!$("#top_words_content").is(":visible"))
+        $("#top_words_content").slideToggle();
+
+
     for (var i = 0; i < 20; i++) {
-        var br = document.createElement("br");
+        let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("top_users_content").appendChild(br);
     }
 
+    /*if (!hasUser)
+    for (var i = 0; i < ; i++) {
+        var br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("top_words_chart_content").appendChild(br);
+    }*/
+
     $("#url_array").css("margin-left", -100);
-    ctrlP().then(() => {
+    await ctrlP()//.finally(() => {
         document.getElementById("user_time").style = cache_user_time_style;
         Plotly.relayout('user_time_chart', { width: cache_user_chart_width });
 
@@ -265,18 +295,17 @@ function exportPDF() {
         $("#submitSna").css("visibility", "visible");
 
         $("#exportButton").css("display", "block");
+        $("#tweets_export").css("display", "block");
         $("#url_array").css("margin-left", 0);
-    });
+
+        Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "block");
+   // });
 
     async function ctrlP() {
         await delay(500);
         $("#twitterStats-loader").css("display", "none");
 
         window.print();
-
-
-
-
     }
 
 };
@@ -334,7 +363,6 @@ async function waitStatusDone(session) {
         await response().then(json => {
             if (json == null)
             {
-                setFirstHisto(true);
                 return null;
             }
           else if (json["status"] === "Done" || json["status"] === "Error")
@@ -349,14 +377,12 @@ async function waitStatusDone(session) {
         });
         if (res !== null)
         {
-            setFirstHisto(true);
             return res;
         }
         await delay(10000);
         cpt--;
     }
 
-    setFirstHisto(true);
     return null;
 }
 /*
@@ -424,6 +450,9 @@ function customSlideToggle(button_id, div_to_toggle_id, lang) {
             setInnerHtml(button_id, "▲ " + json_lang_translate[lang][button_id]);
         $("#" + div_to_toggle_id).slideToggle(250);
     });
+/*
+    if ( div_to_toggle_id === "top_words_content")
+        document.getElementById("exportWordsClous").style.display = "block";*/
 }
 
 $(document).ready(customSlideToggle("user_time_chart_title", "user_time", global_language));
@@ -432,5 +461,6 @@ $(document).ready(customSlideToggle("retweets_cloud_chart_title", "most_retweete
 $(document).ready(customSlideToggle("likes_cloud_chart_title", "most_liked", global_language));
 $(document).ready(customSlideToggle("hashtag_cloud_chart_title", "hashtag_cloud_chart_content", global_language));
 $(document).ready(customSlideToggle("top_users_pie_chart_title", "top_users_content", global_language));
+$(document).ready(customSlideToggle("top_words_cloud_chart_title", "top_words_content", global_language));
 
 
