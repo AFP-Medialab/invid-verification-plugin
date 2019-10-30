@@ -3,7 +3,7 @@
 */
 
 // Whether plugin is running in production mode or not
-var production = false;
+var production = true;
 
 // Main page name (to be added in manifest.json and menu.js too)
 var url_parser = document.createElement("a");
@@ -22,16 +22,16 @@ if( production )
 	// PRODUCTION Params
 
 	// URL where to send feedback data
-	var config_feedback_hook_url = "to-do";
+	var config_feedback_hook_url = "https://hooks.slack.com/services/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";
 
 	// Google map api key
 	var config_google_map_api_key = "to-do";
 
 	// Google analytics key
-	var config_google_analytics_key = "to-do";
+	var config_google_analytics_key = "UA-108570201-1";
 
 	// URL of tsv file holding translation strings
-	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.71/InVIDTraductions.tsv"
+	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.72/InVIDTraductions.tsv"
 }
 else
 {
@@ -44,7 +44,7 @@ else
 	var config_google_map_api_key = "";
 
 	// Google analytics key
-	var config_google_analytics_key = "UA-XXXXXXXX-Y";
+	var config_google_analytics_key = "UA-108570201-1";
 
 	// URL of tsv file holding translation strings
 	var config_url_csv = "../InVIDTraductions.tsv"

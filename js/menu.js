@@ -179,7 +179,7 @@ chrome.contextMenus.create({
 });
 
 chrome.contextMenus.create({
-	title: "Image Reaverse Search - ALL",
+	title: "Image Reverse Search - All",
 	contexts:["image", "link"],
 	onclick: imageReverseSearchAll,
 });
