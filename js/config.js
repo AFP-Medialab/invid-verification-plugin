@@ -22,13 +22,13 @@ if( production )
 	// PRODUCTION Params
 
 	// URL where to send feedback data
-	var config_feedback_hook_url = "https://hooks.slack.com/services/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";
+	var config_feedback_hook_url = "to-do";
 
 	// Google map api key
-	var config_google_map_api_key = "to-do";
+	var config_google_map_api_key = "deprecated";
 
 	// Google analytics key
-	var config_google_analytics_key = "UA-108570201-1";
+	var config_google_analytics_key = "";
 
 	// URL of tsv file holding translation strings
 	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.72/InVIDTraductions.tsv"
@@ -44,7 +44,7 @@ else
 	var config_google_map_api_key = "";
 
 	// Google analytics key
-	var config_google_analytics_key = "UA-108570201-1";
+	var config_google_analytics_key = "";
 
 	// URL of tsv file holding translation strings
 	var config_url_csv = "../InVIDTraductions.tsv"
@@ -56,7 +56,7 @@ else
 if( true )
 {
 	// Keyframes user key
-	var config_keyframes_user_key = "2gzvbfUVUdATyf4ujcnZ8eurEEy8xA2n";
+	var config_keyframes_user_key = "to-do";
 
 	// Keyframes base url
 	var config_keyframes_base_url = "http://multimedia2.iti.gr/video_analysis/";
