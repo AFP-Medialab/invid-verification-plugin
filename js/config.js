@@ -28,14 +28,10 @@ if( production )
 	var config_google_map_api_key = "deprecated";
 
 	// Google analytics key
-<<<<<<< HEAD
-	var config_google_analytics_key = "";
-=======
 	var config_google_analytics_key = "to-do";
->>>>>>> parent of 284f635... corects menu.js
 
 	// URL of tsv file holding translation strings
-	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.71/InVIDTraductions.tsv"
+	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.72/InVIDTraductions.tsv"
 }
 else
 {
@@ -48,11 +44,7 @@ else
 	var config_google_map_api_key = "";
 
 	// Google analytics key
-<<<<<<< HEAD
-	var config_google_analytics_key = "";
-=======
 	var config_google_analytics_key = "UA-XXXXXXXX-Y";
->>>>>>> parent of 284f635... corects menu.js
 
 	// URL of tsv file holding translation strings
 	var config_url_csv = "../InVIDTraductions.tsv"
