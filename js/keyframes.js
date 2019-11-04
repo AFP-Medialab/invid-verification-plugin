@@ -136,86 +136,13 @@ function display_result(data, video_id)
 	document.getElementById("Keyframe_simple_content").innerHTML = "";
 	document.getElementById("Keyframe_datailed_content").innerHTML = "";
 
+	console.log (data.scenes + " et " + data.subshots )
 
 	if( data.scenes && data.scenes.length > 0 )
-	{
-		let scene_count = data.scenes.length;
-		for(scene in data.scenes)
-		{
-			let scene_keyframe = document.createElement("div");
-			scene_keyframe.setAttribute("id", "scene_keyframe");
-			scene_keyframe.setAttribute("class", "row");
+		segmentation_results(data);
 
-			let scene_numer = Number(scene) + 1;
-
-			if (scene_count > 1) {
-				let scene_title = document.createElement("a");
-				scene_title.setAttribute("class", "btn btn-default disabled btn-lg btn-block")
-				let title_text = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString());
-				scene_title.appendChild(title_text);
-				scene_keyframe.appendChild(scene_title);
-			}
-
-
-			// Keyframes of each scenes
-			for(shot in data.scenes[scene].shots) {
-				for (image in data.scenes[scene].shots[shot].keyframes) {
-					let column = document.createElement("div");
-					column.setAttribute("class", "column");
-					let a = document.createElement("a");
-					a.class = "mouse-preview";
-
-					let img = document.createElement("img");
-					img.src = data.scenes[scene].shots[shot].keyframes[image].url + "?dl=0";
-					img.style = "width: 100%; height: auto; cursor:pointer; ";
-					img.onclick = function () {
-						// window.location.href = "/"+page_name+"?img="+this.src;
-						reverseImgSearch('google', this.src);
-					};
-					a.appendChild(img);
-					column.appendChild(a);
-					scene_keyframe.appendChild(column);
-				}
-			}
-			document.getElementById("Keyframe_simple_content").appendChild(scene_keyframe);
-
-			// shots of each scenes
-			let scene_detailed = document.createElement("div");
-			scene_detailed.setAttribute("id", "scene_detailed");
-			scene_detailed.setAttribute("class", "row");
-
-			if (scene_count > 1) {
-				let scene_title2 = document.createElement("a");
-				scene_title2.setAttribute("class", "btn btn-default disabled btn-lg btn-block");
-				let title_text2 = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString());
-				scene_title2.appendChild(title_text2);
-				scene_detailed.appendChild(scene_title2);
-				scene_detailed.appendChild(document.createElement("br"));
-			}
-
-			for (shot in data.scenes[scene].shots) {
-				for (subshot in data.scenes[scene].shots[shot].subshots) {
-					for (image in data.scenes[scene].shots[shot].subshots[subshot].keyframes) {
-						let column = document.createElement("div");
-						column.setAttribute("class", "column");
-						let a = document.createElement("a");
-						a.class = "mouse-preview";
-						let img = document.createElement("img");
-						img.src = data.scenes[scene].shots[shot].subshots[subshot].keyframes[image].url + "?dl=0";
-						img.style = "width: 100%; height: auto; cursor:pointer; ";
-						img.onclick = function () {
-							// window.location.href = "/"+page_name+"?img="+this.src;
-							reverseImgSearch('google', this.src);
-						};
-						a.appendChild(img);
-						column.appendChild(a);
-						scene_detailed.appendChild(column);
-					}
-				}
-			}
-			document.getElementById("Keyframe_datailed_content").appendChild(scene_detailed);
-		}
-	}
+	if (data.subshots && data.subshots.length > 0)
+		subshots_results(data);
 
 	// call to @api.js function (l.140)
 	// activeThumbnail("keyframes-place");
@@ -225,6 +152,123 @@ function display_result(data, video_id)
 	// subshots button
 	var shots = document.getElementById("subshots-download");
 	shots.href = "http://multimedia2.iti.gr/video_analysis/keyframes/" + video_id + "/Subshots";
+}
+
+function subshots_results (data) {
+	let scene_keyframe = document.createElement("div");
+	scene_keyframe.setAttribute("id", "scene_keyframe");
+	scene_keyframe.setAttribute("class", "row");
+
+	let scene_detailed = document.createElement("div");
+	scene_detailed.setAttribute("id", "scene_detailed");
+	scene_detailed.setAttribute("class", "row");
+
+
+	for(subshot in data.subshots)
+	{
+		for (image in data.subshots[subshot].keyframes) {
+			let column = document.createElement("div");
+			column.setAttribute("class", "column");
+			let a = document.createElement("a");
+			a.class = "mouse-preview";
+
+			let img = document.createElement("img");
+			img.src = data.subshots[subshot].keyframes[image].url + "?dl=0";
+			img.style = "width: 100%; height: auto; cursor:pointer; ";
+			img.onclick = function () {
+				// window.location.href = "/"+page_name+"?img="+this.src;
+				reverseImgSearch('google', this.src);
+			};
+			a.appendChild(img);
+			column.appendChild(a);
+			scene_detailed.appendChild(column);
+
+			if (image % 2 === 0)
+				scene_keyframe.appendChild(column);
+		}
+	}
+	document.getElementById("Keyframe_simple_content").appendChild(scene_detailed);
+	document.getElementById("Keyframe_datailed_content").appendChild(scene_keyframe);
+
+}
+
+function segmentation_results (data) {
+	let scene_count = data.scenes.length;
+	for(scene in data.scenes)
+	{
+		let scene_keyframe = document.createElement("div");
+		scene_keyframe.setAttribute("id", "scene_keyframe");
+		scene_keyframe.setAttribute("class", "row");
+
+		let scene_numer = Number(scene) + 1;
+
+		if (scene_count > 1) {
+			let scene_title = document.createElement("a");
+			scene_title.setAttribute("class", "btn btn-default disabled btn-lg btn-block")
+			let title_text = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString());
+			scene_title.appendChild(title_text);
+			scene_keyframe.appendChild(scene_title);
+		}
+
+
+		// Keyframes of each scenes
+		for(shot in data.scenes[scene].shots) {
+			for (image in data.scenes[scene].shots[shot].keyframes) {
+				let column = document.createElement("div");
+				column.setAttribute("class", "column");
+				let a = document.createElement("a");
+				a.class = "mouse-preview";
+
+				let img = document.createElement("img");
+				img.src = data.scenes[scene].shots[shot].keyframes[image].url + "?dl=0";
+				img.style = "width: 100%; height: auto; cursor:pointer; ";
+				img.onclick = function () {
+					// window.location.href = "/"+page_name+"?img="+this.src;
+					reverseImgSearch('google', this.src);
+				};
+				a.appendChild(img);
+				column.appendChild(a);
+				scene_keyframe.appendChild(column);
+			}
+		}
+		document.getElementById("Keyframe_simple_content").appendChild(scene_keyframe);
+
+		// shots of each scenes
+		let scene_detailed = document.createElement("div");
+		scene_detailed.setAttribute("id", "scene_detailed");
+		scene_detailed.setAttribute("class", "row");
+
+		if (scene_count > 1) {
+			let scene_title2 = document.createElement("a");
+			scene_title2.setAttribute("class", "btn btn-default disabled btn-lg btn-block");
+			let title_text2 = document.createTextNode(json_lang_translate[global_language]["scene_title"] + scene_numer.toString());
+			scene_title2.appendChild(title_text2);
+			scene_detailed.appendChild(scene_title2);
+			scene_detailed.appendChild(document.createElement("br"));
+		}
+
+		for (shot in data.scenes[scene].shots) {
+			for (subshot in data.scenes[scene].shots[shot].subshots) {
+				for (image in data.scenes[scene].shots[shot].subshots[subshot].keyframes) {
+					let column = document.createElement("div");
+					column.setAttribute("class", "column");
+					let a = document.createElement("a");
+					a.class = "mouse-preview";
+					let img = document.createElement("img");
+					img.src = data.scenes[scene].shots[shot].subshots[subshot].keyframes[image].url + "?dl=0";
+					img.style = "width: 100%; height: auto; cursor:pointer; ";
+					img.onclick = function () {
+						// window.location.href = "/"+page_name+"?img="+this.src;
+						reverseImgSearch('google', this.src);
+					};
+					a.appendChild(img);
+					column.appendChild(a);
+					scene_detailed.appendChild(column);
+				}
+			}
+		}
+		document.getElementById("Keyframe_datailed_content").appendChild(scene_detailed);
+	}
 }
 
 /**
