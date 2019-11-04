@@ -243,7 +243,7 @@ function send_keyframe_video(video_url)
 	// hide the precedent error message if there was one
 	document.getElementById("error-keyframes").setAttribute("style", "display: none");
 	// create url to send video
-	let post_url = base_url_keyframes + "segmentation";
+	let post_url = base_url_keyframes + "subshot";
 
 	// display wait message status
 	document.getElementById("keyframes-wait").setAttribute("style", "display: block");
