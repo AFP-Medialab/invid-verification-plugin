@@ -1,5 +1,6 @@
 
-import { generateEssidHistogramPlotlyJson, generateWordCloudPlotlyJson, generateDonutPlotlyJson, generateURLArrayHTML, getTweets, generateTweetCountPlotlyJson } from './call-elastic.js';
+import { generateEssidHistogramPlotlyJson, generateWordCloudPlotlyJson, generateDonutPlotlyJson, generateURLArrayHTML, getTweets, generateTweetCountPlotlyJson, generateFollowGraphJson } from './call-elastic.js';
+import { callTwintForFollows } from "../js/twitterSna.js"
 import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
@@ -177,7 +178,7 @@ function mostRetweetPie(param) {
         Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
 
         if (firstHisto)
-            displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets", param["search"]["search"].replace(/ /g, "&"));
+            displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets", param["search"]["search"].replace(/ /g, "&"), param["session"]);
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
@@ -806,7 +807,7 @@ function displayTweetsOfDate(plot, place, button, search) {
 }
 
     //For most retweeted/most liked/most active users charts
-function displayTweetsOfUser(plot, place, button, nb_type, search) {
+function displayTweetsOfUser(plot, place, button, nb_type, search, session) {
 
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
@@ -861,8 +862,9 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
             });
 
             tweetArr += "</tbody><tfoot></tfoot></table>";
-            tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">'
-                + data.points[0].label + "</a><br><br>" + tweetArr;
+            tweetPlace.innerHTML = 'Tweets of <span  id="user_' + data.points[0].label + '">'
+                + data.points[0].label + "</span><br><br>" + tweetArr;
+            document.getElementById("user_" + data.points[0].label).addEventListener('click', () => {callTwintForFollows(data.points[0].label); generateFollowGraphJson(session)});
             label = data.points[0].label;
             tweetPlace.style.display = "block";
             visibilityButton.style.display = "block";

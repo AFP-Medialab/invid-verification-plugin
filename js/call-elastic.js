@@ -2,7 +2,7 @@ var json = {};
 
 var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
 
-let dev = false;
+let dev = true;
 if (dev) {
     elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
 }
@@ -117,7 +117,7 @@ export function generateTweetCountPlotlyJson(param) {
     var must = [
         constructMatchPhrase(param)
     ]
-    return getJson(param, {}, must).then( json => json["hits"]["total"]);
+    return getJson(param, {}, must).then( json => {console.log(json); return json["hits"]["total"]});
 }
 
     //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
@@ -246,6 +246,13 @@ export function generateURLArrayHTML(param) {
     return userAction();
 }
 
+export function generateFollowGraphJson(session)
+{
+    let param = {"session": session, "search": {}}
+    var must = [constructMatchPhrase(param)]
+    getJson(param, {}, must).then(json1 => {console.log(json1);});
+}
+
 
 
 
@@ -273,6 +280,7 @@ function buildQuery(aggs, must) {
             { "date" : {"order" : "asc"}}
         ]
     }
+    console.log(query);
     return query;
 }
 
@@ -348,6 +356,7 @@ function constructMatchPhrase(param, startDate, endDate)
         })
     }
     // RANGE SETUP
+    if (param["follows"] !== undefined)
     match_phrases += "," + JSON.stringify({
         "range": {
             "date": {
@@ -474,6 +483,7 @@ async function getJson(param, aggs, must) {
     json = myJson;
     return myJson;
 }
+
 async function completeJson(aggs, must, myJson)
 {
          console.log("ElasticSearch: Completing request");

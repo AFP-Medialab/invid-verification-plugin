@@ -3,7 +3,7 @@ import { generateGraphs, exportTweets, setFirstHisto } from "./twitterSnaGraphs.
 var collect_url = "http://185.249.140.38/twint-wrapper/collect";
 var status_url = "http://185.249.140.38/twint-wrapper/status/";
 
-let dev = false;
+let dev = true;
 if (dev) {
     collect_url = "http://localhost:8080/twint-wrapper/collect";
     status_url = "http://localhost:8080/twint-wrapper/status/"
@@ -44,6 +44,17 @@ function stringToList(string) {
 
 }
 
+export function callTwintForFollows(user)
+{
+    let CollectRequest = {
+        "search": {},
+        "user_list": stringToList(user),
+        "follows": true
+    };
+    let response = postRequest(CollectRequest, collect_url);
+    console.log("Response : ");
+    response().then(resp => console.log(resp));   
+}
 /**
  *
  * @func Make the json string from fields
@@ -66,6 +77,7 @@ function formToJsonCollectRequest() {
     let user = document.getElementById("twitterStats-user").value;
     let from = document.getElementById("twitterStats-from-date").value;
     let until = document.getElementById("twitterStats-to-date").value;
+
 
     let verified = document.getElementById("twitterStats-radio_yes").checked;
     let media = getMediaValue;
@@ -336,6 +348,7 @@ function postRequest(jsonRequest, url) {
         if (!response.ok)
             return null;
         const myJson = await response.json(); //extract JSON from the http response
+        console.log(myJson);
         // do something with myJson
         return myJson;
     };
