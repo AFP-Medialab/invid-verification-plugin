@@ -143,6 +143,7 @@ imageReverseSearchAll = function(word){
 	imageReverseSearchBing(word);
 	imageReverseSearchTineye(word);
 	imageReverseSearchYandex(word);
+	karmadecaySearch(word);
 };
 
 chrome.contextMenus.create({
