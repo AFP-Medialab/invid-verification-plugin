@@ -56,7 +56,7 @@ else
 if( true )
 {
 	// Keyframes user key
-	var config_keyframes_user_key = "to-do";
+	var config_keyframes_user_key = "2gzvbfUVUdATyf4ujcnZ8eurEEy8xA2n";
 
 	// Keyframes base url
 	var config_keyframes_base_url = "http://multimedia2.iti.gr/video_analysis/";
