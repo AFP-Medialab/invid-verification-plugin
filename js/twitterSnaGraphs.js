@@ -864,7 +864,7 @@ function displayTweetsOfUser(plot, place, button, nb_type, search, session) {
             tweetArr += "</tbody><tfoot></tfoot></table>";
             tweetPlace.innerHTML = 'Tweets of <span  id="user_' + data.points[0].label + '">'
                 + data.points[0].label + "</span><br><br>" + tweetArr;
-            document.getElementById("user_" + data.points[0].label).addEventListener('click', () => {callTwintForFollows(data.points[0].label); generateFollowGraphJson(session)});
+            document.getElementById("user_" + data.points[0].label).addEventListener('click', () => {callTwintForFollows(data.points[0].label).then(user_session => generateFollowGraphJson(user_session))});
             label = data.points[0].label;
             tweetPlace.style.display = "block";
             visibilityButton.style.display = "block";

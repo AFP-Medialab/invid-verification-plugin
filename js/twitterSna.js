@@ -1,10 +1,12 @@
 import { generateGraphs, exportTweets, setFirstHisto } from "./twitterSnaGraphs.js";
 
+var collect_follow_url = "http://185.249.140.38/twint-wrapper/collect-follows";
 var collect_url = "http://185.249.140.38/twint-wrapper/collect";
 var status_url = "http://185.249.140.38/twint-wrapper/status/";
 
 let dev = true;
 if (dev) {
+    collect_follow_url = "http://localhost:8080/twint-wrapper/collect-follows";
     collect_url = "http://localhost:8080/twint-wrapper/collect";
     status_url = "http://localhost:8080/twint-wrapper/status/"
 }
@@ -46,14 +48,11 @@ function stringToList(string) {
 
 export function callTwintForFollows(user)
 {
-    let CollectRequest = {
-        "search": {},
-        "user_list": stringToList(user),
-        "follows": true
+    let collectRequest = {
+        'user': user
     };
-    let response = postRequest(CollectRequest, collect_url);
-    console.log("Response : ");
-    response().then(resp => console.log(resp));   
+    let response = postRequest(JSON.stringify(collectRequest), collect_follow_url);
+    return response().then(resp => resp.session);   
 }
 /**
  *
@@ -336,6 +335,8 @@ function exportPDF(hasUser) {
  *
  * */
 function postRequest(jsonRequest, url) {
+    console.log("URL:" + url);
+    console.log(jsonRequest);
     return async () => {
         const response = await
             fetch(url, {

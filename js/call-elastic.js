@@ -1,10 +1,12 @@
 var json = {};
 
 var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
+var elasticSearchFollow_url = 'http://185.249.140.38/elk/twintgraph/_search';
 
 let dev = true;
 if (dev) {
     elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
+    elasticSearchFollow_url = 'http://localhost:9200/twintgraph/_search';
 }
 
 //Functions calling elastic search and return a JSON plotly can use
@@ -33,8 +35,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 
 
     let aggs = constructAggs(interval);
-    let must = [constructMatchPhrase(param, givenFrom, givenUntil)]
-
+    let must = "[" + constructMatchPhrase(param, givenFrom, givenUntil) + "]";
     function usersGet(dateObj, infos) {
 
         dateObj["3"]["buckets"].forEach(obj => {
@@ -61,7 +62,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     }
     
     const userAction = async (query) => {
-        var str_query = JSON.stringify(query).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+        var str_query = query.replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
             body:
@@ -80,12 +81,12 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         else
             window.alert("There was a problem calling elastic search");
     }
-    return userAction(buildQuery(aggs, must)).then(plotlyJSON => {
+    return userAction(buildQuery(aggs, must, true)).then(plotlyJSON => {
 
         if (reProcess) {
             let aggs = constructAggs("1h");
-            let must = [constructMatchPhrase(param, queryStart, queryEnd)]
-            return (userAction(buildQuery(aggs, must)).then(plotlyJSON2 => {
+            let must = "[" + constructMatchPhrase(param, queryStart, queryEnd) + "]";
+            return (userAction(buildQuery(aggs, must, true)).then(plotlyJSON2 => {
 
                 var i = 0;
 
@@ -114,18 +115,20 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 
     //Tweet count display
 export function generateTweetCountPlotlyJson(param) {
-    var must = [
-        constructMatchPhrase(param)
-    ]
-    return getJson(param, {}, must).then( json => {console.log(json); return json["hits"]["total"]});
+    var must = "[" +
+        constructMatchPhrase(param) +
+    "]";
+    return getJson(param, "{}", must, elasticSearch_url, true).then( myJson => {
+        json = myJson; return json["hits"]["total"]});
 }
 
     //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
 export function generateDonutPlotlyJson(param, field) {
+
     var mainKey = param["search"]["search"];
 
     let aggs = constructAggs(field);
-    let must = [ constructMatchPhrase(param) ];
+    let must = "[" + constructMatchPhrase(param) + "]";
 
 
     function hashtagsGet(key, values, labels, parents, mainKey) {
@@ -150,7 +153,7 @@ export function generateDonutPlotlyJson(param, field) {
         }
     }
 
-    var query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    var query = buildQuery(aggs, must, true).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -175,12 +178,11 @@ export function generateDonutPlotlyJson(param, field) {
 
     // Words cloud chart
 export function generateWordCloudPlotlyJson(param) {
+    var must = "[" +
+        constructMatchPhrase(param) +
+   "]";
 
-    var must = [
-        constructMatchPhrase(param)
-    ]
-
-    var query = JSON.stringify(buildQuery({}, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    var query = buildQuery("{}", must, true).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -202,8 +204,7 @@ export function generateWordCloudPlotlyJson(param) {
 
     //URL array 
 export function generateURLArrayHTML(param) {
-
-    let must = [ constructMatchPhrase(param) ]
+    let must = "[" + constructMatchPhrase(param) + "]";
     let aggs = constructAggs("urls");
 
     function getURLArray(json) {
@@ -215,7 +216,7 @@ export function generateURLArrayHTML(param) {
         return urlArray;
     }
     
-    let query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    let query = buildQuery(aggs, must, true).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -249,38 +250,38 @@ export function generateURLArrayHTML(param) {
 export function generateFollowGraphJson(session)
 {
     let param = {"session": session, "search": {}}
-    var must = [constructMatchPhrase(param)]
-    getJson(param, {}, must).then(json1 => {console.log(json1);});
+    var must = "[" + constructMatchPhrase(param) + "]";
+    getJson(param, "{}", must, elasticSearchFollow_url, false).then(json1 => {console.log(json1);});
 }
 
 
 
 
 //Build a query for elastic search
-function buildQuery(aggs, must) {
-    var query = {
-        "aggs": aggs,
-        "size": 10000,
-        "_source": {
-            "excludes": []
-        },
-        "stored_fields": [
-            "*"
-        ],
-        "script_fields": {},
-        "query": {
-            "bool": {
-                "must": must,
-                "filter": [],
-                "should": [],
-                "must_not": []
-            }
-        },
-        "sort" : [
-            { "date" : {"order" : "asc"}}
-        ]
-    }
-    console.log(query);
+function buildQuery(aggs, must, sort) {
+    var query = '{' +
+        '"aggs":' + aggs + ',' +
+        '"size": 10000,' +
+        '"_source": {' +
+            '"excludes": []' +
+        '},' + 
+        '"stored_fields": [' +
+            '"*"' +
+        '],' +
+        '"script_fields": {},' +
+        '"query": {' +
+            '"bool": {' +
+                '"must":' + must + ',' +
+                '"filter": [],' +
+                '"should": [],' +
+                '"must_not": []' + 
+            '}' +
+        '}' +  ((sort)? 
+                    ', "sort": [' +
+                        '{ "date" : {"order" : "asc"}}' +
+                    ']'
+                : "") +
+    '}';
     return query;
 }
 
@@ -375,8 +376,6 @@ function constructMatchPhrase(param, startDate, endDate)
     //Construct the aggregations (chose what information we will have in the response)
 function constructAggs(field)
 {
-
-
     let fieldInfo = '{' +
             '"2":'
     if (field === "hashtags" || field === "urls") {
@@ -454,16 +453,19 @@ function constructAggs(field)
         }
 
         fieldInfo += '}'
+
         return fieldInfo;
 }
 
 
 
 //To fetch all the tweets (Bypass the 10 000 limit with elastic search)
-async function getJson(param, aggs, must) {
-    const response = await fetch(elasticSearch_url, {
+async function getJson(param, aggs, must, url, sort) {
+
+    let query = buildQuery(aggs, must, sort).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    const response = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+        body: query,
         headers: {
             'Content-Type': 'application/json'
         }
@@ -474,13 +476,12 @@ async function getJson(param, aggs, must) {
     {
         do
         {
-            var must2 = [
-                constructMatchPhrase({"from": myJson.hits.hits[myJson.hits.hits.length-1]._source.date, "until": param["until"], "search": param.search, "session": param.session })
-            ]
+            var must2 = "[" +
+                constructMatchPhrase({"from": myJson.hits.hits[myJson.hits.hits.length-1]._source.date, "until": param["until"], "search": param.search, "session": param.session }) +
+            "]";
             myJson = await completeJson(aggs, must2, myJson);
         }while(myJson.current_total_hits === 10000)
     }
-    json = myJson;
     return myJson;
 }
 
@@ -489,7 +490,7 @@ async function completeJson(aggs, must, myJson)
          console.log("ElasticSearch: Completing request");
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
-            body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+            body: buildQuery(aggs, must, true).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
             headers: {
                 'Content-Type': 'application/json'
             }
