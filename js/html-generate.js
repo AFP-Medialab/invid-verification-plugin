@@ -504,7 +504,7 @@ function update_about(lang)
 			document.cookie = "unlock=0; " + "path=/; " + expires;
 			for( var i = 1; i <= config_quiz_max_items; i++ ) {
 				if( document.getElementById("quiz_explanation_"+i) ) {
-					document.getElementById("quiz_explanation_"+i).className = "hidden";
+					document.getElementById("quiz_explanation_"+i).className = "d-none";
 				}
 			}
 		}
@@ -638,7 +638,7 @@ function update_classroom(lang)
 			itm = '<div class="row">';
 			itm+= '	<div class="col-sm-9 col-xs-12 text-left padding-top-10">'+pic+'<span class="lesson-title">'+title+'</span></div>';
 			itm+= '	<div class="col-sm-3 col-xs-12 text-right">'+btn+'</div>';
-			itm+= '	<div class="hidden">'+i+'</div>';
+			itm+= '	<div class="d-none">'+i+'</div>';
 			itm+= '</div>';
 			content+= itm;
 		}
@@ -752,7 +752,7 @@ function update_quiz(lang)
 			main_div.style.height = "auto";
 			if( classname == "" ) {
 				main_div.className = "";
-				classname = "hidden";
+				classname = "d-none";
 			} else {
 				main_div.className = classname;
 			}
@@ -816,7 +816,7 @@ function update_quiz(lang)
 				btn.style.backgroundImage = "none";
 				btn.addEventListener( 'click', function() {
 					for( i = 1; i <= config_quiz_max_items; i++ ) {
-						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
+						if( ! $("#quiz_item_"+i).hasClass("d-none") ) {
 							var image_url = "https://www.google.com/searchbyimage?image_url=";
 							image_url+= $("#quiz_image_"+i).attr("src");
 							ga("send", "Interactive", "similaritySearch", 'click', i);
@@ -836,7 +836,7 @@ function update_quiz(lang)
 				btn.style.backgroundImage = "none";
 				btn.addEventListener( 'click', function() {
 					for( i = 1; i <= config_quiz_max_items; i++ ) {
-						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
+						if( ! $("#quiz_item_"+i).hasClass("d-none") ) {
 							var image_url = page_name+"?imgforen=";
 							image_url+= encodeURIComponent( $("#quiz_image_"+i).attr("src") );
 							window.location.href = image_url;
@@ -858,7 +858,7 @@ function update_quiz(lang)
 				btn.style.backgroundImage = "none";
 				btn.addEventListener( 'click', function() {
 					for( i = 1; i <= config_quiz_max_items; i++ ) {
-						if( ! $("#quiz_item_"+i).hasClass("hidden") ) {
+						if( ! $("#quiz_item_"+i).hasClass("d-none") ) {
 							var youtube_url = $("#quiz_iframe_"+i).attr("src");
 							var video_url = page_name+"?imgkey=";
 							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=') );
@@ -893,9 +893,9 @@ function update_quiz(lang)
 				}
 				if( locked ) {
 					alert( json_lang_translate[lang]["quiz_unlock_message"] );
-					document.getElementById("quiz_explanation_"+this.index).className = "hidden";
+					document.getElementById("quiz_explanation_"+this.index).className = "d-none";
 				} else {
-					document.getElementById("quiz_explanation_"+this.index).className = ( d == "hidden" ? "" : "hidden" );
+					document.getElementById("quiz_explanation_"+this.index).className = ( d == "d-none" ? "" : "d-none" );
 				}
 			}, true);
 			if( cookie_value( "unlock" ) == "1" ) {
@@ -915,7 +915,7 @@ function update_quiz(lang)
 			div.style.textAlign = "justify";
 			div.style.padding = "15px";
 			div.style.backgroundColor= "#f8f8f8";
-			div.className = "hidden";
+			div.className = "d-none";
 			div.style.margin = "0";
 			main_div.appendChild(div);
 			var br = document.createElement("br");
@@ -1007,7 +1007,7 @@ function updateHomeTutorial(lang)
 			main_div.style.height = "auto";
 			if( classname == "" ) {
 				main_div.className = "";
-				classname = "hidden";
+				classname = "d-none";
 			} else {
 				main_div.className = classname;
 			}
@@ -1067,13 +1067,17 @@ function quiz_toggle_items( index )
 	var lst = 0;
 	if( idx > 0 ) {
 		if( quiz_current_index + idx <= config_quiz_max_items ) {
+			console.log(quiz_current_index);
 			for( var i = 1; i <= config_quiz_max_items; i++ ) {
 				if( document.getElementById("quiz_item_"+i) ) {
+					console.log("quiz_item_"+i);
+					
 					lst = i;
 					if( i == quiz_current_index + idx ) {
+						console.log("quiz_item_"+i);
 						document.getElementById("quiz_item_"+i).className = "";
 					} else {
-						document.getElementById("quiz_item_"+i).className = "hidden";
+						document.getElementById("quiz_item_"+i).className = "d-none";
 					}
 				}
 			}
@@ -1088,7 +1092,7 @@ function quiz_toggle_items( index )
 					if( i == quiz_current_index + idx ) {
 						document.getElementById("quiz_item_"+i).className = "";
 					} else {
-						document.getElementById("quiz_item_"+i).className = "hidden";
+						document.getElementById("quiz_item_"+i).className = "d-none";
 					}
 				}
 			}
@@ -1116,7 +1120,7 @@ function tutorial_toggle_items( index )
 					if( i == tutorial_current_index + idx ) {
 						document.getElementById("tutorial_item_"+i).className = "";
 					} else {
-						document.getElementById("tutorial_item_"+i).className = "hidden";
+						document.getElementById("tutorial_item_"+i).className = "d-none";
 					}
 				}
 			}
@@ -1131,7 +1135,7 @@ function tutorial_toggle_items( index )
 					if( i == tutorial_current_index + idx ) {
 						document.getElementById("tutorial_item_"+i).className = "";
 					} else {
-						document.getElementById("tutorial_item_"+i).className = "hidden";
+						document.getElementById("tutorial_item_"+i).className = "d-none";
 					}
 				}
 			}
