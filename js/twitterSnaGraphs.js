@@ -861,10 +861,24 @@ function displayTweetsOfUser(plot, place, button, nb_type, search, session) {
                 }
             });
 
+            var onUserClick = function() {
+               return callTwintForFollows(data.points[0].label).then(user_session => generateFollowGraphJson(user_session).then(json =>
+                {
+                    console.log(json);
+                    let hits = Array.from(json.hits.hits);
+                    let followers = [];
+                    hits.forEach(hit => {
+                        followers.push(hit._source.user);
+                    })
+
+                    displayFollowGraph(data.points[0].label, followers);
+                    return json;
+                }));
+            }
             tweetArr += "</tbody><tfoot></tfoot></table>";
             tweetPlace.innerHTML = 'Tweets of <span  id="user_' + data.points[0].label + '">'
                 + data.points[0].label + "</span><br><br>" + tweetArr;
-            document.getElementById("user_" + data.points[0].label).addEventListener('click', () => {callTwintForFollows(data.points[0].label).then(user_session => generateFollowGraphJson(user_session))});
+            document.getElementById("user_" + data.points[0].label).addEventListener('click', () => {onUserClick()});
             label = data.points[0].label;
             tweetPlace.style.display = "block";
             visibilityButton.style.display = "block";
@@ -1000,26 +1014,41 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
 
 
 //GRAPHS TESTS
+function displayFollowGraph(user, followers){
+// Get the modal
+var modal = document.getElementById("followGraphModal");
 
-var nodes = [{data: {id: 'MLP_officiel'}}]
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("graph-modal-close")[0];
+
+// When the user clicks the button, open the modal 
+  modal.style.display = "block";
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+
+var nodes = [{data: {id: user}}]
 var edges = [];
-var fr = new FileReader();
-var MLPfollowers = ["christi07127725", "Romane74807670", "ValentineALLAR5", "Abdulla83224674", "XgW4JUgvjCyJ63P", "kouassi_emery", "inkune_ricardo", "Rom1lerom1", "SoroMoh14984341"]
+var MLPfollowers = followers; //["christi07127725", "Romane74807670", "ValentineALLAR5", "Abdulla83224674", "XgW4JUgvjCyJ63P", "kouassi_emery", "inkune_ricardo", "Rom1lerom1", "SoroMoh14984341"]
 MLPfollowers.forEach(follower => {
     nodes.push({data: {id: follower}});
-    edges.push({data: {id: follower + '-MLP_officiel', source: follower, target: "MLP_officiel"}})
+    edges.push({data: {id: follower + '-' + user, source: follower, target: user}})
 })
-var MLPfollowings = ["ZirnheldBenjam1", "B_Paluteau", "AndreRougeOff", "ZinebElRhazoui", "MarcDeFleurian"];
+console.log(nodes);
+/*var MLPfollowings = ["ZirnheldBenjam1", "B_Paluteau", "AndreRougeOff", "ZinebElRhazoui", "MarcDeFleurian"];
 MLPfollowings.forEach(following => {
     nodes.push({data: {id: following}});
     edges.push({data: {id:'MLP_officiel-' + following, source: "MLP_officiel", target: following}})
-})
+})*/
 
 var layout = {
     name: 'concentric',
 
     fit: true, // whether to fit the viewport to the graph
-    padding: 10, // the padding on fit
+    padding: 20, // the padding on fit
     startAngle: 3 / 2 * Math.PI, // where nodes start in radians
     sweep: undefined, // how many radians should be between the first and last node (defaults to full circle)
     clockwise: true, // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
@@ -1056,7 +1085,7 @@ var cy = cytoscape({
     },
   
     layout: layout,
-    zoomingEnabled: false,
+   // zoomingEnabled: false,
   
     // so we can see the ids
     style: [
@@ -1077,30 +1106,21 @@ var cy = cytoscape({
   });
 
 
-var follow = ["truc", "machin", "bidule", "dupeir", "Alexis", "eric", "Elise", "ValentineALLAR5"]
+//var follow = ["truc", "machin", "bidule", "dupeir", "Alexis", "eric", "Elise", "ValentineALLAR5"]
 
-var fol = ["truc", "Antoine", "bidule", "Patricia", "Chantale", "Riley", "Melissa", "MLP_officiel"]
-  cy.on('tap', 'node', function(evt){
+//var fol = ["truc", "Antoine", "bidule", "Patricia", "Chantale", "Riley", "Melissa", "MLP_officiel"]
+ 
+///*  WHEN A NODE IS CLICKED
+
+cy.on('tap', 'node', function(evt){
     var node = evt.target;
     console.log( 'tapped ' + node.id() );
     var i = 0;
     var data = follow.map(d => {console.log(d); return{group: 'nodes', data: {id: d}, position: {x: node.position().x + 150, y : node.position().y + (i++) *75}}})
     var edgeData = follow.map(f => {return{group: 'edges', data: {id: f + '-' + node.id(), source: f, target: node.id()}}})
-   // data.forEach(d => console.log(d);
-    cy.add(data
-        /*[
-        { group: 'nodes', data: {id: "follower"}, position: {x: node.position().x + 150, y : node.position().y}},
-        { group: 'nodes', data: {id: 'following' }, position: { x: node.position().x + 150, y: node.position().y +150} },
-        { group: 'edges', data: {id:'follower-' + node.id(), source: "follower", target: node.id()}},
-        { group: 'edges', data: {id: node.id() + '-following', source:  node.id(), target:"following"}}
-      ]*/);
-    cy.add(
-       edgeData)
-   /* cy.add({
-        edges: [
-            
-        ]
-    })*/
-  });
 
+    cy.add(
+       edgeData);
+  });//*/
+}
 //console.log(cy)

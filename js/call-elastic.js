@@ -251,7 +251,7 @@ export function generateFollowGraphJson(session)
 {
     let param = {"session": session, "search": {}}
     var must = "[" + constructMatchPhrase(param) + "]";
-    getJson(param, "{}", must, elasticSearchFollow_url, false).then(json1 => {console.log(json1);});
+    return getJson(param, "{}", must, elasticSearchFollow_url, false)
 }
 
 
