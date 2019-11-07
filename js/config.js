@@ -25,14 +25,13 @@ if( production )
 	var config_feedback_hook_url = "to-do";
 
 	// Google map api key
-	var config_google_map_api_key = "deprecated";
+	var config_google_map_api_key = "to-do";
 
 	// Google analytics key
 	var config_google_analytics_key = "to-do";
 
 	// URL of tsv file holding translation strings
-
-	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.72/InVIDTraductions.tsv"
+	var config_url_csv = "https://raw.githubusercontent.com/AFP-Medialab/InVID-Translations/v0.71/InVIDTraductions.tsv"
 }
 else
 {

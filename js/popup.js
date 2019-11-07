@@ -106,15 +106,6 @@
 				"height: 100px; width: 100px; background-color: inherit;");
 	}
 
-	function upImg(img) {
-		if (img.offsetLeft !== 0)
-			img.setAttribute("style", 
-				"height: 100px; width: 100px; background-color: inherit; position: absolute");
-		else
-			img.setAttribute("style", 
-				"height: 100px; width: 100px; background-color: inherit;");
-	}
-
 	function addImg(div, url) {
 		var img = document.createElement("img");
 		img.src = url;
@@ -146,6 +137,11 @@
 		}, function callback(results) {
 			var domText = document.getElementById(divId);
 			if (results && results.length && results[0] && results[0].length) {
+				
+				//if (domText.childNodes.length == 1)
+				//	domText.innerHTML = "";
+
+
 				for (var url of results[0]) {
 					if (isYtUrl(url))
 					{
@@ -163,7 +159,21 @@
 			}
 
 
+
+			//	var isEmpty = true;
+			//	var forLoop = async function () {
+			//		var i = 0;
+				//	promises.forEach(promise => {
+				//		i++;
+				//		promise.then((response) => {
+				//			if (domText.innerHTML != "")
+				//				isEmpty = false;
+				//		})
+				//		.catch((err) => {
+				//			window.alert("ERROR: " + err);
+				//		})
 		})
+
 	}
 
 	function getTabUrl(callback) {
