@@ -247,9 +247,10 @@ export function generateURLArrayHTML(param) {
     return userAction();
 }
 
+    //Followers-Following graph
 export function generateFollowGraphJson(session)
 {
-    let param = {"session": session, "search": {}}
+    let param = {'session': session, "search": {}}
     var must = "[" + constructMatchPhrase(param) + "]";
     return getJson(param, "{}", must, elasticSearchFollow_url, false)
 }

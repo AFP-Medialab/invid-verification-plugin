@@ -726,8 +726,10 @@
 
                                     <!-- Modal content -->
                                     <div class="graph-modal-content">
-                                      <span class="graph-modal-close">&times;</span>
-                                      <div id="cy"></div>
+                                        <span class="graph-modal-close">&times;</span>
+
+                                        <div id="graph-modal-loader" class="loader" style="display: none;"></div>
+                                        <div id="cy"></div>
                                     </div>
                                   
                                   </div>
@@ -1167,6 +1169,7 @@
 
 <!-- For Graphs -->
 <script src="js/cytoscape.js/dist/cytoscape.min.js"></script>
+<script src="js/cytoscape.js/dist/cytoscape-euler.js"></script>
 
 <!-- For canvas-toBlob & FileSaver : wordCloud jpg export -->
 <script src="js/canvas-toBlob.js"></script>

@@ -806,6 +806,20 @@ function displayTweetsOfDate(plot, place, button, search) {
     }
 }
 
+function buildFollowersList(user)
+{
+    return (async() => {
+        let user_session = await callTwintForFollows(user);
+        var json = await generateFollowGraphJson(user_session.session);
+
+        let hits = Array.from(json.hits.hits);
+        let followers = [];
+        hits.forEach(hit => {
+            followers.push(hit._source.user);
+        })
+        return followers;
+    })();
+}
     //For most retweeted/most liked/most active users charts
 function displayTweetsOfUser(plot, place, button, nb_type, search, session) {
 
@@ -861,19 +875,27 @@ function displayTweetsOfUser(plot, place, button, nb_type, search, session) {
                 }
             });
 
-            var onUserClick = function() {
-               return callTwintForFollows(data.points[0].label).then(user_session => generateFollowGraphJson(user_session).then(json =>
-                {
-                    console.log(json);
-                    let hits = Array.from(json.hits.hits);
-                    let followers = [];
-                    hits.forEach(hit => {
-                        followers.push(hit._source.user);
-                    })
+            var onUserClick = async function() {
+                // Get the modal
+                var modal = document.getElementById("followGraphModal");
 
-                    displayFollowGraph(data.points[0].label, followers);
-                    return json;
-                }));
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("graph-modal-close")[0];
+
+                // When the user clicks the button, open the modal 
+                modal.style.display = "block";
+                document.getElementById("graph-modal-loader").style.display = "block";
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function() {
+                modal.style.display = "none";
+                }
+                let followers = await buildFollowersList(data.points[0].label);
+                document.getElementById("graph-modal-loader").style.display = "none";
+                displayFollowGraph(data.points[0].label, followers);
+                
+                return json;;
+    
             }
             tweetArr += "</tbody><tfoot></tfoot></table>";
             tweetPlace.innerHTML = 'Tweets of <span  id="user_' + data.points[0].label + '">'
@@ -1015,56 +1037,45 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
 
 //GRAPHS TESTS
 function displayFollowGraph(user, followers){
-// Get the modal
-var modal = document.getElementById("followGraphModal");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("graph-modal-close")[0];
-
-// When the user clicks the button, open the modal 
-  modal.style.display = "block";
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-
-var nodes = [{data: {id: user}}]
+    var nodes_color = {};
+    nodes_color[user] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+var nodes = [{data: {id: user, color: nodes_color[user], level: 1}}]
 var edges = [];
 var MLPfollowers = followers; //["christi07127725", "Romane74807670", "ValentineALLAR5", "Abdulla83224674", "XgW4JUgvjCyJ63P", "kouassi_emery", "inkune_ricardo", "Rom1lerom1", "SoroMoh14984341"]
 MLPfollowers.forEach(follower => {
-    nodes.push({data: {id: follower}});
-    edges.push({data: {id: follower + '-' + user, source: follower, target: user}})
+    nodes_color[follower] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+    nodes.push({data: {id: follower, color: nodes_color[follower], level: 3}});
+    edges.push({data: {id: follower + '-' + user, source: follower, target: user, color: nodes_color[user]}});
 })
-console.log(nodes);
 /*var MLPfollowings = ["ZirnheldBenjam1", "B_Paluteau", "AndreRougeOff", "ZinebElRhazoui", "MarcDeFleurian"];
 MLPfollowings.forEach(following => {
     nodes.push({data: {id: following}});
     edges.push({data: {id:'MLP_officiel-' + following, source: "MLP_officiel", target: following}})
 })*/
 
+var start = 0
 var layout = {
     name: 'concentric',
 
     fit: true, // whether to fit the viewport to the graph
-    padding: 20, // the padding on fit
-    startAngle: 3 / 2 * Math.PI, // where nodes start in radians
+    padding: 5, // the padding on fit
+    startAngle: start, // where nodes start in radians
     sweep: undefined, // how many radians should be between the first and last node (defaults to full circle)
     clockwise: true, // whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false)
     equidistant: false, // whether levels have an equal radial distance betwen them, may cause bounding box overflow
-    minNodeSpacing: 50, // min spacing between outside of nodes (used for radius adjustment)
+    minNodeSpacing: 2, // min spacing between outside of nodes (used for radius adjustment)
     boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
     avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
-    nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+    nodeDimensionsIncludeLabels: true, // Excludes the label when calculating node bounding boxes for the layout algorithm
     height: undefined, // height of layout area (overrides container height)
     width: undefined, // width of layout area (overrides container width)
-    spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+    spacingFactor: 2, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
     concentric: function( node ){ // returns numeric value for each node, placing higher nodes in levels towards the centre
-    return node.degree();
+    return 10 - node.data("level");
     },
     levelWidth: function( nodes ){ // the letiation of concentric values in each level
-    return nodes.maxDegree() / 4;
+    return 2;
     },
     animate: false, // whether to transition the node positions
     animationDuration: 500, // duration of animation in ms if enabled
@@ -1092,14 +1103,22 @@ var cy = cytoscape({
       {
         selector: 'node',
         style: {
+            'font-size': 42,
+            'background-color': 'data(color)',
+            'width': 100,
+            'height': 100,
           'label': 'data(id)'
         }
       },
       {
         selector: 'edge',
         css: {
-          'curve-style': 'bezier',
-          'target-arrow-shape': 'triangle'
+            'width': 10,
+            'curve-style': 'bezier',
+            'target-arrow-shape': 'triangle',
+            'line-color': 'data(color)',
+            'target-arrow-color': 'data(color)'
+
         }
       }
     ]
@@ -1113,14 +1132,32 @@ var cy = cytoscape({
 ///*  WHEN A NODE IS CLICKED
 
 cy.on('tap', 'node', function(evt){
+    (async() => {
+        cy.layout(layout).stop();
     var node = evt.target;
-    console.log( 'tapped ' + node.id() );
     var i = 0;
-    var data = follow.map(d => {console.log(d); return{group: 'nodes', data: {id: d}, position: {x: node.position().x + 150, y : node.position().y + (i++) *75}}})
-    var edgeData = follow.map(f => {return{group: 'edges', data: {id: f + '-' + node.id(), source: f, target: node.id()}}})
-
-    cy.add(
-       edgeData);
+    node.data('level', 2);
+    start = start + Math.PI/2;
+    var followers = await buildFollowersList(node.id());
+    var data = followers.map(d => {nodes_color[d] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6); return{group: 'nodes', data: {id: d, color: nodes_color[d], level: 3}, position: {x: node.position().x + 150, y : node.position().y + (i++) *75}}})
+    
+    var edgeData = followers.map(f => {return{group: 'edges', data: {id: f + '-' + node.id(), source: f, target: node.id(), color: nodes_color[node.id()]}}})
+    
+    cy.add(data);
+    cy.add(edgeData);
+    cy.layout(layout).run();
+    console.log(cy.data());
+    })();
   });//*/
+
+
+  cy.on("cxttap", "node", function(evt){
+      var node = evt.target;
+      var parents = node.data('parent');
+      console.log(parents);
+     /* var nodes = cy.filter((cur, i , all) => {
+        return (cur.isNode() && 
+      })*/
+  })
 }
 //console.log(cy)

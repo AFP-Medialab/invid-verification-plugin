@@ -46,13 +46,20 @@ function stringToList(string) {
 
 }
 
-export function callTwintForFollows(user)
+export async function callTwintForFollows(user)
 {
     let collectRequest = {
         'user': user
     };
     let response = postRequest(JSON.stringify(collectRequest), collect_follow_url);
-    return response().then(resp => resp.session);   
+    let jsonResp; // = {status: ""};
+
+    do {
+        jsonResp = await response();
+        await delay(2000);
+    }while(jsonResp.status !== "Done")
+
+    return jsonResp;
 }
 /**
  *
@@ -219,7 +226,6 @@ function exportPDF(hasUser) {
 
     var v = Array.from(document.getElementsByClassName("toggleVisibility"));
     v.forEach(elt => elt.style.display = "none");
-    console.log(v);
     
     Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "none");
     $("#tweets_export").css("display", "none");
@@ -349,7 +355,7 @@ function postRequest(jsonRequest, url) {
         if (!response.ok)
             return null;
         const myJson = await response.json(); //extract JSON from the http response
-        console.log(myJson);
+        
         // do something with myJson
         return myJson;
     };
