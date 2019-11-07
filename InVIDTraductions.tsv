@@ -543,15 +543,15 @@ twitterStatsErrorMessage2	Keyword, Since or Until dates are empty	Mot clé, Depu
 twitter_sna_title	Twitter Social network analysis	Analyse du réseau social Twitter	Análisis de la red social Twitter
 twitter_sna_local_time	Local time	Heure locale	Hora local
 twitter_sna_gmt	GMT	GMT	GMT
-twitter_sna_search	＊Keyword or #	＊Mot clé ou #	＊Palabra clave o #
+twitter_sna_search	Keyword or #	Mot clé ou #	Palabra clave o #
 twitter_sna_and	All words to include in the query (AND)	Tous les mots à inclure dans la requête (et)	Todas las palabras a incluir en la consulta (y)
 twitter_sna_or	Words that can be in the query (OR)	Mots pouvant être inclus dans la requête (ou)	Palabras que se pueden incluir en la consulta (o)
 twitter_sna_not	Words to exclude in the query	Mots à exclure de la requête	Palabras a excluir en la consulta
 twitter_sna_user	Tweeted by (Twitter account name)	Tweeté par (Nom de compte Twitter)	Twiteado por (Nombre de una cuenta de Twitter)
 twitter_sna_verified	Only verified users :	Utilisateurs verifiés uniquement :	Únicamente usuarios verificados :
 twitter_sna_media	Filters :	Filtres :	Filtros :
-twitter_sna_from_date	＊Since	＊Depuis	＊Desde
-twitter_sna_until_date	＊Until	＊Jusqu'à	＊Hasta
+twitter_sna_from_date	Since	Depuis	Desde
+twitter_sna_until_date	Until	Jusqu'à	Hasta
 twitterStats_media_none	none	aucune	ninguna
 twitterStats_media_images	pictures	images	fotos
 twitterStats_media_videos	videos	vidéos	vídeo
@@ -590,6 +590,7 @@ user_time_chart_title	Propagation timeline	Frise chronologique de propagation	L�
 hashtag_cloud_chart_title	Most associated hashtags	Hashtags les plus associés	Hashtags más Asociados
 retweets_cloud_chart_title	Most retweeted users	Utilisateurs les plus retweetés	Usuarios más retweeteados
 likes_cloud_chart_title	Most liked users	Utilisateurs les plus likés	Usuarios más retweeteados
+top_words_cloud_chart_title	Most used words in tweets	Mots les plus utilisés dans les tweets	Palabras más utilizadas en tweets
 keyframe_title_get_detail	+ Show detailed view	+ Afficher la vue détaillée	+ Mostrar la vista detallada
 keyframe_title_get_simple	- Show simple view	- Afficher la vue minimal	- Mostrar vista simple
 scene_title	Scene n°	Scène n°	Escena n°
