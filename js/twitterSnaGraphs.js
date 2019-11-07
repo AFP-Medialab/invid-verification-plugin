@@ -924,7 +924,7 @@ function displayTweetsOfWord(word, place, button, search) {
 
 
 
-    $('#tweet_view_histo').DataTable({
+    $('#tweet_view_wordcloud').DataTable({
         autoWidth: false,
         fixedColumns: true,
         "columnDefs": [
