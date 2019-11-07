@@ -109,14 +109,6 @@ function ValidURL(str)
 }
 
 /**
- * @func ValidOnlineUrl()
- */
-function ValidOnlineUrl(str) {
-    var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-    return regex.test(str);
-}
-
-/**
 * @func Submit image url
 */
 function submit_img()
@@ -142,16 +134,10 @@ function submit_img()
         }
         document.getElementById("place-crop").style.display = "none";
         document.getElementById("copy_url_img_magnifier").style.display = (histo.local_path) ? "" : "none";
-        if (ValidURL(img_url)) {
-
-            if (!ValidOnlineUrl(img_url)) {
-                document.getElementById("lst_search_btn").setAttribute("style", "display: none");
-                document.getElementById("magnifier-content").style.display = (histo.local_path) ? "" : "none";
-                console.log(histo.local_path)
-            } else {
-                document.getElementById("lst_search_btn").setAttribute("style", "display: inline");
-                document.getElementById("magnifier-content").style.display = "";
-            }
+        if( ! ValidURL(img_url) ) {
+            document.getElementById("lst_search_btn").setAttribute("style", "display: none");
+            document.getElementById("magnifier-content").style.display = (histo.local_path) ? "" : "none";
+            console.log(histo.local_path)
         }
         else {
             document.getElementById("lst_search_btn").setAttribute("style", "display: inline");
@@ -362,7 +348,7 @@ document.getElementById("copy_url_img_magnifier").addEventListener("click", func
         text = Filters.filterImage(document.getElementById("test"), "none", 1);
 	}
     copyText(text);
-    this.innerHTML = json_lang_translate[global_language]["magnifier_url_copied"];
+    this.innerHTML = "URL copied";
     openTab("https://www.google.com/searchbyimage?&image_url=")
 });
 

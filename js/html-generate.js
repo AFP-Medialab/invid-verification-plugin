@@ -651,7 +651,6 @@ function update_classroom(lang)
 		$("#lesson_modal_title").html(json_lang_translate[global_language]["classroom_title"]);
 		// ID of lesson (1 to 5)
 		var id = $(this).parent().next().html();
-		ga("send", "event", "lesson", 'click', id);
 		// Lesson name
 		$("#lesson_modal_description").html(json_lang_translate[global_language]["classroom_title_"+id]);
 		// Lesson embed
@@ -686,7 +685,6 @@ function update_classroom(lang)
 		$("#lesson_modal_description").hide();
 		// Lesson iframe
 		var embed = $(this).parent().prev().find("input").val();
-		ga("send", "event", "lesson", 'click', embed);
 		var is_iframe = ( embed.substr(0, 7) == "<iframe" ? true : false );
 		if( is_iframe ) {
 			// Lesson embed iframe
@@ -819,7 +817,6 @@ function update_quiz(lang)
 						if( ! $("#quiz_item_"+i).hasClass("d-none") ) {
 							var image_url = "https://www.google.com/searchbyimage?image_url=";
 							image_url+= $("#quiz_image_"+i).attr("src");
-							ga("send", "Interactive", "similaritySearch", 'click', i);
 							openTab( image_url );
 							break;
 						}
@@ -840,7 +837,6 @@ function update_quiz(lang)
 							var image_url = page_name+"?imgforen=";
 							image_url+= encodeURIComponent( $("#quiz_image_"+i).attr("src") );
 							window.location.href = image_url;
-							ga("send", "Interactive", "forensic", 'click', i);
 							break;
 						}
 					}
@@ -863,7 +859,6 @@ function update_quiz(lang)
 							var video_url = page_name+"?imgkey=";
 							video_url+= encodeURIComponent( youtube_url.replace( '/embed/', '/watch?v=') );
 							window.location.href = video_url;
-							ga("send", "Interactive", "keyframes", 'click', i);
 							break;
 						}
 					}
@@ -884,7 +879,6 @@ function update_quiz(lang)
 				var d = document.getElementById("quiz_explanation_"+this.index).className;
 				var cook_val = cookie_value( "unlock" );
 				var locked;
-				ga("send", "Interactive", "explanation", 'click', this.index);
 				//Hack for firefox addon that do not support cookies
 				if(!cook_val){
 					locked = (document.getElementById("checkbox_explain").checked)? false : true ;
@@ -945,7 +939,7 @@ function update_quiz(lang)
 		quiz_toggle_items( "1" );
 	});
 
-	let quiz_all = document.createElement("div");
+	var quiz_all = document.createElement("div");
 	quiz_all.id = "quiz_all";
 	quiz_all.style.overflow = "hidden";
 	quiz_all.appendChild(quiz_prev);
@@ -953,22 +947,6 @@ function update_quiz(lang)
 	quiz_all.appendChild(quiz_next);
 
 	quiz_tab.appendChild(quiz_all);
-
-	let footer_img = document.createElement("div");
-	footer_img.style.textAlign = "center";
-	let image = document.createElement("img");
-	image.src = "img/you-check.png";
-	image.style.maxWidth = "20%";
-	image.style.marginTop = "20px";
-	image.style.height = "auto";
-	footer_img.appendChild(image);
-	quiz_all.appendChild(footer_img);
-
-	let footer = document.createElement("div");
-	footer.className = "footer_quiz";
-	footer.innerHTML = json_lang_translate[lang]["footer_quiz"];
-	quiz_all.appendChild(footer);
-
 }
 
 /**

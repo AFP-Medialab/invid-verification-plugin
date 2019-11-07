@@ -195,16 +195,17 @@ chrome.contextMenus.create({
 });
 
 chrome.contextMenus.create({
+ title: "Image Reverse Search - Baidu",
+ contexts:["image", "link"],  
+ onclick: imageReverseSearchBaidu,
+// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, // "*://*/*.png"]
+});
+
+chrome.contextMenus.create({
  title: "Image Reverse Search - Yandex",
  contexts:["image", "link"],
  onclick: imageReverseSearchYandex,
 //targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, // "*://*/*.png"]
-});
-
-chrome.contextMenus.create({
-	title: "Image Reverse Search - Bing",
-	contexts:["image"],
-	onclick: imageReverseSearchBing,
 });
 
 chrome.contextMenus.create({
@@ -215,10 +216,9 @@ chrome.contextMenus.create({
 });
 
 chrome.contextMenus.create({
- title: "Image Reverse Search - Baidu",
- contexts:["image", "link"],  
- onclick: imageReverseSearchBaidu,
-// targetUrlPatterns: ["*://*/*.jpg*", "*://*/*.jpg:large", "*://*/*.jpeg*"]//, // "*://*/*.png"]
+	title: "Image Reverse Search - Bing",
+	contexts:["image"],
+	onclick: imageReverseSearchBing,
 });
 
 chrome.contextMenus.create({

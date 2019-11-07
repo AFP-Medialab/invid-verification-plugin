@@ -46,7 +46,6 @@ $(document).ready( function() {
 					displayErrorMessage(status + ": " + ((response.responseJSON != undefined) ? response.responseJSON.message : "servor not responding. Try again later."));
 				}
 			});
-			ga("send", "url", "Url_provided", 'submit', videoURL);
 		} else {
 			displayErrorMessage("Please enter a valid Youtube, Twitter or Facebook video URL");
 		}
