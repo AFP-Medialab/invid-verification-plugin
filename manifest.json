@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
 "name" :"Fake news debunker by InVID & WeVerify",
-=======
-"name" :"Fake video news debunker by InVID",
->>>>>>> Revert "SuperMerge master into dev"
 "version" :"0.72",
 "manifest_version": 2,
 "description" :"InVID extension",

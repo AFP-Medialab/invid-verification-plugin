@@ -95,7 +95,6 @@
 		addCopy(domText, url);
 		domText.appendChild(document.createElement("br"));
 		console.log("IN ADD URL");
-<<<<<<< HEAD
 	}
 
 	function upImg(img) {
@@ -105,8 +104,6 @@
 		else
 			img.setAttribute("style", 
 				"height: 100px; width: 100px; background-color: inherit;");
-=======
->>>>>>> vk-scrapper: fixed no data available async pb + add loader
 	}
 
 	function addImg(div, url) {
