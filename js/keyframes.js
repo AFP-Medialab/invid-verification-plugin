@@ -136,7 +136,6 @@ function display_result(data, video_id)
 	document.getElementById("Keyframe_simple_content").innerHTML = "";
 	document.getElementById("Keyframe_datailed_content").innerHTML = "";
 
-	console.log (data.scenes + " et " + data.subshots )
 
 	if( data.scenes && data.scenes.length > 0 )
 		segmentation_results(data);
@@ -163,14 +162,20 @@ function subshots_results (data) {
 	scene_detailed.setAttribute("id", "scene_detailed");
 	scene_detailed.setAttribute("class", "row");
 
-
 	for(subshot in data.subshots)
 	{
 		for (image in data.subshots[subshot].keyframes) {
-			let column = document.createElement("div");
-			column.setAttribute("class", "column");
-			let a = document.createElement("a");
-			a.class = "mouse-preview";
+			let aSimple = document.createElement("a");
+			aSimple.class = "mouse-preview";
+
+			let aDetailed = document.createElement("a");
+			aDetailed.class = "mouse-preview";
+
+			let columnSimple = document.createElement("div");
+			columnSimple.setAttribute("class", "column");
+
+			let columnDetailed = document.createElement("div");
+			columnDetailed.setAttribute("class", "column");
 
 			let img = document.createElement("img");
 			img.src = data.subshots[subshot].keyframes[image].url + "?dl=0";
@@ -179,16 +184,29 @@ function subshots_results (data) {
 				// window.location.href = "/"+page_name+"?img="+this.src;
 				reverseImgSearch('google', this.src);
 			};
-			a.appendChild(img);
-			column.appendChild(a);
-			scene_detailed.appendChild(column);
 
-			if (image % 2 === 0)
-				scene_keyframe.appendChild(column);
+			let imgDetailed = document.createElement("img");
+			imgDetailed.src = data.subshots[subshot].keyframes[image].url + "?dl=0";
+			imgDetailed.style = "width: 100%; height: auto; cursor:pointer; ";
+			imgDetailed.onclick = function () {
+				// window.location.href = "/"+page_name+"?img="+this.src;
+				reverseImgSearch('google', this.src);
+			};
+
+			aDetailed.appendChild(imgDetailed);
+			columnDetailed.appendChild(aDetailed);
+			scene_detailed.appendChild(columnDetailed);
+
+			if (parseInt(image, 10) === 1) {
+				aSimple.appendChild(img);
+				columnSimple.appendChild(aSimple);
+				scene_keyframe.appendChild(columnSimple);
+				console.log(image)
+			}
 		}
 	}
-	document.getElementById("Keyframe_simple_content").appendChild(scene_detailed);
-	document.getElementById("Keyframe_datailed_content").appendChild(scene_keyframe);
+	document.getElementById("Keyframe_simple_content").appendChild(scene_keyframe);
+	document.getElementById("Keyframe_datailed_content").appendChild(scene_detailed);
 
 }
 
