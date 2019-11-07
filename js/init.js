@@ -122,12 +122,6 @@ $(document).ready( function() {
 		$("#help_modal_iframe").prop("src", "");
 	});
 
-	// Accordion of classroom lessons
-	$(".resources-title").on( "click", function() {
-		$(".resources-content").hide();
-		$(this).next().fadeIn(500);
-	});
-
 	// Manages params received in url for right button menu accesses
 	checkParam();
 
@@ -142,11 +136,11 @@ $(document).ready( function() {
 	$("#apibox").prop("value", "");
 	window.addEventListener( 'message', function(e) {
 		fb_access_token = e.data[1];
-		$('#facebook_connect_iframe').hide();
-		if( (fb_access_token !== undefined || fb_access_token != "") && $("#video_form2").length > 0 ) {
+		if( (fb_access_token !== undefined && fb_access_token !== "") && $("#video_form2").length > 0 ) {
 			var url = $("#apibox").val();
 			var tmp = url.split( "facebook.com" );
 			if( tmp.length == 2 ) {
+				$('#facebook_connect_iframe').hide();
 				$("#video_analysis_submit").click();
 			}
 		}

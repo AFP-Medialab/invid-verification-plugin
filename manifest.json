@@ -1,8 +1,9 @@
 {
-"name" :"Fake video news debunker by InVID",
+
+"name" :"Fake news debunker by InVID & WeVerify",
 "version" :"0.72",
 "manifest_version": 2,
-"description" :"InVID extension",
+"description" :"InVID WeVerify extension",
 "permissions": [
      "contextMenus",
      "tabs",
