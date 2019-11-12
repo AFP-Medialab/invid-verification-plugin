@@ -348,6 +348,7 @@ twitter_geocode	Geocode (e.g. -22.912214,-43.230182,1km or -22.912214,-43.230182
 twitter_near	Near (city name)	Proche de : (nom de ville)	Cerca de (nombre de ciudad)
 twitter_within	Within (e.g. 15mi or 15km)	Dans (ex: 15mi ou 15km)	Dentro de (ej: 15mi o 15 km)
 twitter_from-date	Since	Depuis	Desde
+twitter_url-filter	URL	URL	URL
 twitter_to-date	Until	Jusqu'à	Hasta
 twitter_local_time	Local time	Heure locale	Hora local
 twitter_gmt	GMT	GMT	GMT
