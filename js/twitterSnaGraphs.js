@@ -269,7 +269,6 @@ function topHashtagPie(param) {
             plot.on('plotly_click', data => {
                 let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
 
-                firstTopUsers = false;
             });
 
 
