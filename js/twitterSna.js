@@ -131,10 +131,19 @@ function getMediaValue() {
     else
         return "both";
 }
-var isFirst = true;
 /**
  * @func Submit search form
  */
+
+function export_all() {
+    exportPDF(document.getElementById("twitterStats-user").value !== "");
+}
+function export_tweets() {
+    exportTweets(document.getElementById('twitterStats-search').value, new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
+}
+
+document.getElementById('exportButton').addEventListener('click', export_all); 
+document.getElementById('tweets_export').addEventListener('click', export_tweets);
 function submit_sna_form() {
     document.getElementById("top_words_cloud_chart").innerHTML = "";
     let jsonCollectRequest = formToJsonCollectRequest();
@@ -145,6 +154,7 @@ function submit_sna_form() {
     
 
     let response = postRequest(jsonCollectRequest, collect_url);
+
     if (response == null)
         alert("Bad request");
     response().then((jsonResponse) => {
@@ -153,18 +163,9 @@ function submit_sna_form() {
             waitStatusDone(jsonResponse["session"])
 
                 .then((param) => {
-                    function export_all() {
-                        exportPDF(document.getElementById("twitterStats-user").value !== "");
-                    }
-                    function export_tweets() {
-                        exportTweets(param["query"]["search"]["search"], new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
-                    }
+                  
                     setFirstHisto(true);
-                    if (document.getElementById('exportButton').style.display === 'none')
-                     {   
-                         document.getElementById('exportButton').addEventListener('click', export_all); 
-                        document.getElementById('tweets_export').addEventListener('click', export_tweets);
-                    }
+               
 
                     if (param == null) {
                         console.log("error : timeout, or invalid request");
@@ -205,7 +206,6 @@ async function exportPDF(hasUser) {
 
     var v = Array.from(document.getElementsByClassName("toggleVisibility"));
     v.forEach(elt => elt.style.display = "none");
-    console.log(v);
     
     Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "none");
     $("#tweets_export").css("display", "none");

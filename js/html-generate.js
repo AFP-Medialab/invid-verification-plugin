@@ -163,6 +163,7 @@ function update_twitter(lang)
 	setPlaceholder("within",					json_lang_translate[lang]["twitter_within"]);
 	setPlaceholder("from-date",					json_lang_translate[lang]["twitter_from-date"]);
 	setPlaceholder("to-date",					json_lang_translate[lang]["twitter_to-date"]);
+	setPlaceholder("url-filter",				json_lang_translate[lang]["twitter_url-filter"]);
 }
 
 /**
