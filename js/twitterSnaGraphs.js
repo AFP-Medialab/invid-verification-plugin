@@ -1056,9 +1056,10 @@ MLPfollowings.forEach(following => {
 
 var start = 0
 var layout = {
-    name: 'concentric',
+    name: 'breadthfirst',
+    root: '[id = "' + user + '"]'
 
-    fit: true, // whether to fit the viewport to the graph
+  /*  fit: true, // whether to fit the viewport to the graph
     padding: 5, // the padding on fit
     startAngle: start, // where nodes start in radians
     sweep: undefined, // how many radians should be between the first and last node (defaults to full circle)
@@ -1070,7 +1071,7 @@ var layout = {
     nodeDimensionsIncludeLabels: true, // Excludes the label when calculating node bounding boxes for the layout algorithm
     height: undefined, // height of layout area (overrides container height)
     width: undefined, // width of layout area (overrides container width)
-    spacingFactor: 2, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+    spacingFactor: 1, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
     concentric: function( node ){ // returns numeric value for each node, placing higher nodes in levels towards the centre
     return 10 - node.data("level");
     },
@@ -1084,7 +1085,7 @@ var layout = {
     ready: undefined, // callback on layoutready
     stop: undefined, // callback on layoutstop
     transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts
-
+*/
 }
 var cy = cytoscape({
     container: document.getElementById('cy'), // container to render in
@@ -1130,22 +1131,27 @@ var cy = cytoscape({
 //var fol = ["truc", "Antoine", "bidule", "Patricia", "Chantale", "Riley", "Melissa", "MLP_officiel"]
  
 ///*  WHEN A NODE IS CLICKED
-
+var level = 2;
 cy.on('tap', 'node', function(evt){
     (async() => {
+
+        document.getElementById("graph-modal-loader").style.display = "block";
+        level++;
         cy.layout(layout).stop();
     var node = evt.target;
     var i = 0;
     node.data('level', 2);
     start = start + Math.PI/2;
     var followers = await buildFollowersList(node.id());
-    var data = followers.map(d => {nodes_color[d] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6); return{group: 'nodes', data: {id: d, color: nodes_color[d], level: 3}, position: {x: node.position().x + 150, y : node.position().y + (i++) *75}}})
+    var data = followers.map(d => {nodes_color[d] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6); return{group: 'nodes', data: {id: d, color: nodes_color[d], level: level}, position: {x: node.position().x + 150, y : node.position().y + (i++) *75}}})
     
     var edgeData = followers.map(f => {return{group: 'edges', data: {id: f + '-' + node.id(), source: f, target: node.id(), color: nodes_color[node.id()]}}})
     
     cy.add(data);
     cy.add(edgeData);
     cy.layout(layout).run();
+
+    document.getElementById("graph-modal-loader").style.display = "none";
     console.log(cy.data());
     })();
   });//*/
@@ -1153,11 +1159,26 @@ cy.on('tap', 'node', function(evt){
 
   cy.on("cxttap", "node", function(evt){
       var node = evt.target;
-      var parents = node.data('parent');
-      console.log(parents);
-     /* var nodes = cy.filter((cur, i , all) => {
-        return (cur.isNode() && 
-      })*/
+      var parents = Array.from(node.connectedEdges()).map(edge => edge._private.data.id.split('-')[0]);
+     var nodes = Array.from(cy.filter((cur, i , all) => {
+        // console.log(cur.isNode());
+        return (cur.isNode() && !parents.includes(cur.data("id")));
+      }))
+      var spareEdges = Array.from(node.connectedEdges()).filter(edge => !edge.data("id").includes(node.data("id")));
+      nodes.shift();
+      nodes.forEach(nodeTohide => {
+            if (nodeTohide.style("display") == "none") 
+                nodeTohide.style("display", "element");
+            else
+                nodeTohide.style("display", "none");
+        });
+    spareEdges.forEach(edgeToHide => {
+        if (edgeToHide.style("display") == "none") 
+        edgeToHide.style("display", "element");
+    else
+        edgeToHide.style("display", "none");
+    })
+      console.log(nodes);
   })
 }
 //console.log(cy)

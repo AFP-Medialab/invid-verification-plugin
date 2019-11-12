@@ -226,7 +226,7 @@ function exportPDF(hasUser) {
 
     var v = Array.from(document.getElementsByClassName("toggleVisibility"));
     v.forEach(elt => elt.style.display = "none");
-    
+
     Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "none");
     $("#tweets_export").css("display", "none");
     $("#submitSna").css("visibility", "hidden");
@@ -341,8 +341,6 @@ function exportPDF(hasUser) {
  *
  * */
 function postRequest(jsonRequest, url) {
-    console.log("URL:" + url);
-    console.log(jsonRequest);
     return async () => {
         const response = await
             fetch(url, {
