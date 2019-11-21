@@ -24,16 +24,15 @@ export function generateGraphs(param) {
         until: document.getElementById("twitterStats-to-date").value,
         search: {
             search: document.getElementById("twitterStats-search").value,
-            and : document.getElementById("twitterStats-search-and").value.split(' ')
+            and: document.getElementById("twitterStats-search-and").value.split(' ')
         },
         user_list: document.getElementById("twitterStats-user").value.split(" "),
         session: param.session
     }
-    
+
     return getNbTweets(entries).then(() => {
 
-        if (nb_tweets === 0)
-        {
+        if (nb_tweets === 0) {
             document.getElementById("retweets_chart_content").style.display = "none";
             document.getElementById("likes_chart_content").style.display = "none";
             document.getElementById("top_users_chart_content").style.display = "none";
@@ -43,32 +42,29 @@ export function generateGraphs(param) {
             document.getElementById("tweetCounter_div").style.display = "none";
             document.getElementById("url_array").style.display = "none";
             if (firstHisto)
-            document.getElementById("noTweets").style.display = "block";
+                document.getElementById("noTweets").style.display = "block";
             $("#exportButton").css("display", "none"); $("#tweets_export").css("display", "none");
-            
+
         }
-        else
-        {
+        else {
             document.getElementById("noTweets").style.display = "none";
             $("#exportButton").css("display", "block"); $("#tweets_export").css("display", "block");
-            
-            if (document.getElementById("twitterStats-user").value === "")
-            {
-            
+
+            if (document.getElementById("twitterStats-user").value === "") {
+
                 document.getElementById("retweets_chart_content").style.display = "block";
                 document.getElementById("likes_chart_content").style.display = "block";
-                document.getElementById("top_users_chart_content").style.display = "block"; 
+                document.getElementById("top_users_chart_content").style.display = "block";
                 document.getElementById("hashtags_chart_content").style.display = "block";
                 document.getElementById("top_words_chart_content").style.display = "block";
                 document.getElementById("user_time_chart_content").style.display = "block";
                 document.getElementById("tweetCounter_div").style.display = "block";
                 document.getElementById("url_array").style.display = "block";
             }
-            else
-            {
+            else {
                 document.getElementById("retweets_chart_content").style.display = "none";
                 document.getElementById("likes_chart_content").style.display = "none";
-                document.getElementById("top_users_chart_content").style.display = "none"; 
+                document.getElementById("top_users_chart_content").style.display = "none";
                 document.getElementById("hashtags_chart_content").style.display = "block";
                 document.getElementById("top_words_chart_content").style.display = "block";
                 document.getElementById("user_time_chart_content").style.display = "block";
@@ -76,14 +72,14 @@ export function generateGraphs(param) {
                 document.getElementById("url_array").style.display = "block";
             }
 
-                mostRetweetPie(entries);
-                mostLikePie(entries);
-                mostTweetPie(entries);
+            mostRetweetPie(entries);
+            mostLikePie(entries);
+            mostTweetPie(entries);
             topHashtagPie(entries);
             urlArray(entries);
             if (firstHisto)
                 mostUsedWordsCloud(entries);
-              
+
             return showEssidHistogram(entries, givenFrom, givenUntil);
         }
     })
@@ -93,45 +89,45 @@ export function generateGraphs(param) {
 
 //Functions building the charts
 
-    //Timeline Chart
+//Timeline Chart
 async function showEssidHistogram(param, givenFrom, givenUntil) {
     var plotlyJson = await generateEssidHistogramPlotlyJson(param, false, givenFrom, givenUntil)//.then(plotlyJson => {
 
-        var layout = {
-            title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            xaxis: {
-                range: [ param["from"], param["until"]],
-                rangeslider: { range: [givenFrom, givenUntil] },
-            },
-            autosize: true
-        };
+    var layout = {
+        title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
+        automargin: true,
+        xaxis: {
+            range: [param["from"], param["until"]],
+            rangeslider: { range: [givenFrom, givenUntil] },
+        },
+        autosize: true
+    };
 
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Timeline",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
+    var config = {
+        toImageButtonOptions: {
+            format: 'png', // one of png, svg, jpeg, webp
+            filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Timeline",
+            scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+        },
 
-            responsive: true,
-            modeBarButtons: [["toImage"]],
-            displaylogo: false
-        };
+        responsive: true,
+        modeBarButtons: [["toImage"]],
+        displaylogo: false
+    };
 
-        let plot = document.getElementById("user_time_chart");
-        if (plotlyJson.length !== 0)
-            Plotly.newPlot('user_time_chart', plotlyJson, layout, config);
+    let plot = document.getElementById("user_time_chart");
+    if (plotlyJson.length !== 0)
+        Plotly.newPlot('user_time_chart', plotlyJson, layout, config);
 
-        if (firstHisto)
-            displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility", param["search"]["search"].replace(" ", '&').replace(/#/g, ""));
+    if (firstHisto)
+        displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility", param["search"]["search"].replace(" ", '&').replace(/#/g, ""));
 
-        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
-        return plotlyJson;
-   // });
+    Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+    return plotlyJson;
+    // });
 }
 
-    //Tweets Count
+//Tweets Count
 function getNbTweets(param, givenFrom, givenUntil) {
     return generateTweetCountPlotlyJson(param, givenFrom, givenUntil).then(res => {
         document.getElementById("tweetCounter_contents").innerHTML = "";
@@ -151,7 +147,7 @@ function getNbTweets(param, givenFrom, givenUntil) {
     })
 }
 
-    //Most retweeted users chart
+//Most retweeted users chart
 function mostRetweetPie(param) {
     generateDonutPlotlyJson(param, "nretweets").then(plotlyJson => {
         var cloudlayout = {
@@ -167,7 +163,7 @@ function mostRetweetPie(param) {
                 filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets",
                 scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
             },
-            modeBarButtons: [["toImage"],[]], displaylogo: false
+            modeBarButtons: [["toImage"], []], displaylogo: false
         };
 
 
@@ -182,7 +178,7 @@ function mostRetweetPie(param) {
     });
 }
 
-    //Most liked user chart
+//Most liked user chart
 function mostLikePie(param) {
     generateDonutPlotlyJson(param, "nlikes").then(plotlyJson => {
         let cloudlayout = {
@@ -212,7 +208,7 @@ function mostLikePie(param) {
     });
 }
 
-    //Most activ users chart
+//Most activ users chart
 function mostTweetPie(param) {
     //Utilisateurs les actifs
     generateDonutPlotlyJson(param, "ntweets").then(plotlyJson => {
@@ -244,7 +240,7 @@ function mostTweetPie(param) {
     });
 }
 
-    //Most used hashtags chart
+//Most used hashtags chart
 function topHashtagPie(param) {
     generateDonutPlotlyJson(param, "hashtags").then(plotlyJson => {
         let cloudlayout = {
@@ -281,7 +277,7 @@ function topHashtagPie(param) {
 
 }
 
-    //Most used words in tweets chart
+//Most used words in tweets chart
 var serverDown = false;
 async function mostUsedWordsCloud(param) {
     let mainArr = param["search"]["search"].split(' ').map(word => word.replace('#', ""));
@@ -291,7 +287,8 @@ async function mostUsedWordsCloud(param) {
     if (param["search"]["and"] !== undefined)
         stopwords["glob"] = [...stopwords["glob"], ...param["search"]["and"]];
     var words_map = new Map();
-    
+    var twitieMap = new Map();
+
     generateWordCloudPlotlyJson(param).then(json => {
         $('.top_words_loader').css('display', "block");
         nb_treated = 0;
@@ -302,16 +299,16 @@ async function mostUsedWordsCloud(param) {
             persons: [],
         }
 
-        var tweetIE = {text: ""};
+        var tweetIE = { text: "" };
 
         const forLoop = async () => {
             var hits = Array.from(json.hits.hits);
             for (var i = 0; i < hits.length; i++) {
-                tweetIE.text = hits[i]._source.tweet;
+                tweetIE.text = hits[i]._source.twittieTweet;
                 nb_treated++;
-                if (!serverDown)
+                /*if (!serverDown)
                 {
-                    const tweetie_json = await buildTweetieJson(tweetIE)
+                   // const tweetie_json = await buildTweetieJson(tweetIE)
 
                     if (tweetie_json.error !== undefined)
                     {
@@ -324,44 +321,53 @@ async function mostUsedWordsCloud(param) {
                         tokens_JSON.persons = [...tokens_JSON.persons, ...tweetie_json.persons];
                         tokens_JSON.organisations = [...tokens_JSON.organisations, ...tweetie_json.organisations];
                         tokens_JSON.userIDs = [...tokens_JSON.userIDs, ...tweetie_json.userIDs];
-                    }
-                }
-                var map = getOccurences(tweetIE);
+                     }
+                }*/
 
+
+                var map = hits[i]._source.wit;//getOccurences(tweetIE);
+
+                while (map === undefined)
+                    map = hits[i]._source.wit;
+
+                    console.log(map);
                 document.getElementById('progress_state_place').innerHTML = nb_treated + '/' + nb_tweets;
                 for (var word in map) {
 
-                    if(word.length > 1)
-                        words_map.set(word, (words_map.get(word)|| 0) + map[word]);
+                    //   if(map[word].nbOccurences > 1)
+                    words_map.set(map[word].word, (words_map.get(map[word].word) || 0) + map[word].nbOccurences);
+                    if (map[word].entity !== null)
+                        twitieMap.set(map[word].word, map[word].entity);
                 }
-    
+                console.log(map);
+
             };
 
         }
         forLoop().then(() => {
-               
+
             var final_map = getnMax(words_map, 100);
             var words_arr = Array.from(final_map.keys());
-            var words =  words_arr.map(word => {
-                let obj = { text: word, size: final_map.get(word), color: getColor(word, tokens_JSON) }; 
+            var words = words_arr.map(word => {
+                let obj = { text: word, size: final_map.get(word), color: getColor(word, twitieMap) };
                 return obj;
             });
 
             var fontScale = d3.scaleLinear()
-                                    .domain([0, d3.max(words, function(d) { return d.size} )])
-                                    .range([10, 95]);
-            
-            var layout = d3.layout  .cloud()
-                                    .size([500, 500])
-                                    .words(words)
+                .domain([0, d3.max(words, function (d) { return d.size })])
+                .range([10, 95]);
 
-                                    .padding(5)
-                                    .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
-                                    .font("Impact")
-                                    .fontSize(d => fontScale(d.size))
-                                    .on("end", draw);
-            
-                    
+            var layout = d3.layout.cloud()
+                .size([500, 500])
+                .words(words)
+
+                .padding(5)
+                .rotate(function () { return (~~(Math.random() * 6) - 3) * 15; })
+                .font("Impact")
+                .fontSize(d => fontScale(d.size))
+                .on("end", draw);
+
+
             layout.start();
 
 
@@ -372,26 +378,26 @@ async function mostUsedWordsCloud(param) {
                 if (!serverDown)
                     document.getElementById("top_words_cloud_chart").innerHTML = "";
                 else
-                  document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were unable to fetch named entities</p>';
+                    document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were unable to fetch named entities</p>';
 
                 var svg = d3.select("#top_words_cloud_chart").append("svg")
-                            .attr("width", layout.size()[0])
-                            .attr("height", layout.size()[1])
-                            .append("g")
-                            .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                            .selectAll("text")
-                            .data(words)
-                            .enter().append("text")
-                            .style("font-size", function (d) { return d.size + "px"; })
-                            .style("font-family", "Impact")
-                            .attr("text-anchor", "middle")
-                            .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
-                            .text(function (d) { return d.text; })
-                            .style("fill", fillColor)
-                            .style("cursor", "default")
-                            .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
-                            .append("svg:title")
-                            .text(d => "Used " + final_map.get(d.text) + " times");
+                    .attr("width", layout.size()[0])
+                    .attr("height", layout.size()[1])
+                    .append("g")
+                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                    .selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", function (d) { return d.size + "px"; })
+                    .style("font-family", "Impact")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+                    .text(function (d) { return d.text; })
+                    .style("fill", fillColor)
+                    .style("cursor", "default")
+                    .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
+                    .append("svg:title")
+                    .text(d => "Used " + final_map.get(d.text) + " times");
 
                 var width = 300, height = 300;
 
@@ -399,29 +405,29 @@ async function mostUsedWordsCloud(param) {
                 document.getElementById('progress_state_place').innerHTML = "";
 
 
-                d3  .select('#exportWordsCloudJpg')
-                    .on('click', 
+                d3.select('#exportWordsCloudJpg')
+                    .on('click',
                         () => {
-                            
+
                             svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save);
-                    
+
                             function save(dataBlob, filesize) {
                                 saveAs(dataBlob, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.png');
                             }
-                    });
-                d3  .select('#exportWordsCloudSvg')
-                    .on('click', 
+                        });
+                d3.select('#exportWordsCloudSvg')
+                    .on('click',
                         () => {
                             var svgEl = document.getElementById("top_words_cloud_chart").children[0];
                             svgDownload(svgEl, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.svg');
 
                         })
-                    
+
             }
         });
     })
 }
-    //URL array
+//URL array
 function urlArray(param) {
     generateURLArrayHTML(param).then(arrayStr => {
         document.getElementById('url_array').innerHTML = arrayStr;
@@ -434,9 +440,8 @@ function urlArray(param) {
 
 //Function helping building words cloud
 
-    //Check if a tweet is English or French (May change for language detection allowing other languages)
-function isEnglish(text)
-{
+//Check if a tweet is English or French (May change for language detection allowing other languages)
+function isEnglish(text) {
     var percentEnglish = 0.00;
     var percentFrench = 0.00;
     var englishLenght = stopwords["en"].length;
@@ -457,43 +462,41 @@ function isEnglish(text)
     return (percentEnglish > percentFrench);
 }
 
-    //Count the number of occurence of each word in a tweet
+//Count the number of occurence of each word in a tweet
 function getOccurences(tweet) {
 
     var treatedTweet = tweet.text;
 
-                               //Put the tweet in lower case
+    //Put the tweet in lower case
     treatedTweet = treatedTweet.toLowerCase()
-                               //Remove URLS
-                               .replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
-                               //Remove ponctuation, numbers & emoticones
-                               .replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, " ")
+        //Remove URLS
+        .replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '')
+        //Remove ponctuation, numbers & emoticones
+        .replace(/[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\'\#\ \;\-\&\|]+|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, " ")
 
     if (treatedTweet === "")
         return [];
-            
+
     var counts = treatedTweet.split(' ') //=> Array of words
-                            //Count the number of occurence of each word (except stopwords cf. js/stopwords.js) & return the associated map
-                             .reduce(function (map, word) {
-                                if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(word) && !stopwords["glob"].includes(word))
-                                {
-                                    map[word] = (map[word] || 0) + 1;
-                                    if (word.includes('_'))
-                                    {
-                                        word.split('_').forEach(w => { 
-                                            if (!stopwords[(isEnglish(treatedTweet))?"en":"fr"].includes(w) && !stopwords["glob"].includes(w))
-                                                map[w] = (map[w] || 0) + 1; 
-                                        })
-                                    }
-                                    
-                                }
-                                return map;
-                            }, Object.create(null));
+        //Count the number of occurence of each word (except stopwords cf. js/stopwords.js) & return the associated map
+        .reduce(function (map, word) {
+            if (!stopwords[(isEnglish(treatedTweet)) ? "en" : "fr"].includes(word) && !stopwords["glob"].includes(word)) {
+                map[word] = (map[word] || 0) + 1;
+                if (word.includes('_')) {
+                    word.split('_').forEach(w => {
+                        if (!stopwords[(isEnglish(treatedTweet)) ? "en" : "fr"].includes(w) && !stopwords["glob"].includes(w))
+                            map[w] = (map[w] || 0) + 1;
+                    })
+                }
+
+            }
+            return map;
+        }, Object.create(null));
 
     return counts;
 }
 
-    //Get the n element which have the greatest values in a map
+//Get the n element which have the greatest values in a map
 function getnMax(map, n) {
     const mapSort = new Map([...map.entries()].filter(elt => elt[1] > 1).sort((a, b) => b[1] - a[1]));
     let res_map = new Map([...mapSort.entries()].splice(0, n));
@@ -501,7 +504,7 @@ function getnMax(map, n) {
 
 }
 
-    //Call tweetie and build a json with named entities
+//Call tweetie and build a json with named entities
 async function buildTweetieJson(tweet) {
     const tweetIEcall = async () => {
         const response = await fetch(tweetIE_URL, {
@@ -510,25 +513,25 @@ async function buildTweetieJson(tweet) {
                 tweet.text,
             headers: {
                 'Content-Type': 'text/plain'
-            } 
+            }
         })
 
-            if (!response.ok) {
-                return {
-                   error: response.status
-                }
+        if (!response.ok) {
+            return {
+                error: response.status
             }
-            const tweetIE_JSON1 = await response.json();
-           
-            let tweet_tmp = tweet.text;
+        }
+        const tweetIE_JSON1 = await response.json();
 
-            const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
-            var persons = [];
-            var organisations = [];
-            var userIDs = [];
-            var locations = []
+        let tweet_tmp = tweet.text;
 
-            if (tweetIE_JSON[':Location'] !== undefined)
+        const tweetIE_JSON = tweetIE_JSON1['response']['annotations'];
+        var persons = [];
+        var organisations = [];
+        var userIDs = [];
+        var locations = []
+
+        if (tweetIE_JSON[':Location'] !== undefined)
             tweetIE_JSON[':Location'].forEach(location => {
                 let loc = tweet_tmp.substring(location.start, location.end);
                 let loc_ = loc.replace(/ /g, '_').toLowerCase();
@@ -537,7 +540,7 @@ async function buildTweetieJson(tweet) {
                     locations = [...locations, loc_];
             })
 
-            if (tweetIE_JSON[':Organization'] !== undefined)
+        if (tweetIE_JSON[':Organization'] !== undefined)
             tweetIE_JSON[':Organization'].forEach(organisation => {
                 let orga = tweet_tmp.substring(organisation.start, organisation.end);
                 let orga_ = orga.replace(/ /g, '_').toLowerCase();
@@ -546,15 +549,14 @@ async function buildTweetieJson(tweet) {
                     organisations = [...organisations, orga_];
             })
 
-            if (tweetIE_JSON[':Person'] !== undefined)
+        if (tweetIE_JSON[':Person'] !== undefined)
             tweetIE_JSON[':Person'].forEach(person => {
                 let firstname = person['features'].firstName;
                 let lastname = person['features'].surname;
 
-                if (firstname !== undefined && lastname !== undefined)
-                {
+                if (firstname !== undefined && lastname !== undefined) {
                     let fullname = firstname.toLowerCase() + '_' + lastname.toLowerCase();
-                    
+
                     tweet.text = tweet.text.replace(firstname + ' ' + lastname, fullname);
                     if (!persons.includes(fullname))
                         persons = [...persons, fullname, lastname.toLowerCase()];
@@ -565,30 +567,31 @@ async function buildTweetieJson(tweet) {
                     persons = [...persons, lastname.toLowerCase()];
             })
 
-            if (tweetIE_JSON[':UserID'] !== undefined)
+        if (tweetIE_JSON[':UserID'] !== undefined)
             tweetIE_JSON[':UserID'].forEach(user => {
-                userIDs.push(tweet.text.substring(user.start -1, user.end).toLowerCase());
+                userIDs.push(tweet.text.substring(user.start - 1, user.end).toLowerCase());
             })
 
-            const tokens_JSON = {
-                locations: locations,
-                organisations: organisations,
-                userIDs: userIDs,
-                persons: persons,
-            }
-            return tokens_JSON;
+        const tokens_JSON = {
+            locations: locations,
+            organisations: organisations,
+            userIDs: userIDs,
+            persons: persons,
         }
+        return tokens_JSON;
+    }
     return tweetIEcall().then(res => res);
 }
 
-    //Get the color associated with the named entities
-function getColor(word, tokens_JSON)
-{
-    if (tokens_JSON.persons.includes(word)) return '8242BB';
-    if (tokens_JSON.organisations.includes(word)) return 'BB424F';
-    if (tokens_JSON.userIDs.includes(word)) return '42BB9E';
-    if (tokens_JSON.locations.includes(word)) return 'BB7042';
-    
+//Get the color associated with the named entities
+function getColor(word, tokens_JSON) {
+    console.log(word);
+    console.log(tokens_JSON);
+    if (tokens_JSON.get(word) === "Person") return '8242BB';
+    if (tokens_JSON.get(word) === "Organization") return 'BB424F';
+    if (tokens_JSON.get(word) === "UserID") return '42BB9E';
+    if (tokens_JSON.get(word) === "Location") return 'BB7042';
+
     return '35347B';
 }
 
@@ -608,53 +611,51 @@ function unrotateMainHashtag(search) {
 
 
 //Download functions
-
     //Download as PNG
 function svgString2Image(svg, width, height, format, callback) {
-var format = format ? format : 'png';
+    var format = format ? format : 'png';
 
-svg.style.backgroundColor = "white";
-var serializer = new XMLSerializer();
-var svgString = serializer.serializeToString(svg);
+    svg.style.backgroundColor = "white";
+    var serializer = new XMLSerializer();
+    var svgString = serializer.serializeToString(svg);
 
-var canvas = document.createElement("canvas");
-var context = canvas.getContext("2d");
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
 
-canvas.width = width;
-canvas.height = height;
+    canvas.width = width;
+    canvas.height = height;
 
-var DOMURL = self.URL || self.webkitURL || self;
+    var DOMURL = self.URL || self.webkitURL || self;
 
-var svg = new Blob([svgString], {
-    type: 'image/svg+xml;charset=utf-8'
-});
-
-var url = DOMURL.createObjectURL(svg);
-var image = new Image();
-image.addEventListener('load', function() {  
-    context.clearRect(0, 0, width, height);
-    context.drawImage(image, 0, 0, width, height);
-
-    canvas.toBlob(function(blob) {
-        var filesize = Math.round(blob.length / 1024) + ' KB';
-        if (callback) callback(blob, filesize);
+    var svg = new Blob([svgString], {
+        type: 'image/svg+xml;charset=utf-8'
     });
-});
 
-image.setAttribute("src", url);
+    var url = DOMURL.createObjectURL(svg);
+    var image = new Image();
+    image.addEventListener('load', function () {
+        context.clearRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
 
-image.onerror = error => {return alert("IMG ERROR: " + error);}
+        canvas.toBlob(function (blob) {
+            var filesize = Math.round(blob.length / 1024) + ' KB';
+            if (callback) callback(blob, filesize);
+        });
+    });
+
+    image.setAttribute("src", url);
+
+    image.onerror = error => { return alert("IMG ERROR: " + error); }
 
 }
 
     //Download as SVG
-function svgDownload(svgEl, name)
-{
+function svgDownload(svgEl, name) {
 
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     var svgData = svgEl.outerHTML;
     var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-    var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+    var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
     var svgUrl = URL.createObjectURL(svgBlob);
     var downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
@@ -662,33 +663,31 @@ function svgDownload(svgEl, name)
     downloadLink.click();
 }
 
-    //Download tweets ad CSV
-export function exportTweets(search, start, end)
-{
-    var csvArr =  "";
+//Download tweets ad CSV
+export function exportTweets(search, start, end) {
+    var csvArr = "";
     var json = getTweets();
-    csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
+    csvArr += "Username,Date,Tweet,Nb of retweets,Nb of likes,link\n";
 
-    json.hits.hits.forEach(tweetObj => 
-    {        
+    json.hits.hits.forEach(tweetObj => {
         var date = new Date(tweetObj._source.date);
 
-        csvArr += tweetObj._source.username  + ',' + 
-        date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
-    })  
-    
+        csvArr += tweetObj._source.username + ',' +
+            date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+            tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + ',' + tweetObj._source.link + '\n';
+    })
+
     var blob = new Blob([csvArr], { type: 'text/csv;charset=utf-8;' });
 
-       // var encodedUri = encodeURI(csvArr);
-       var url = URL.createObjectURL(blob);
-        let link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    // var encodedUri = encodeURI(csvArr);
+    var url = URL.createObjectURL(blob);
+    let link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth() + 1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth() + 1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
 
 }
@@ -703,7 +702,7 @@ export function setFirstHisto(first) {
 
 // When a chart is clicked: To display the tweets of each chart
 
-    //For TimeLine Chart
+//For TimeLine Chart
 function displayTweetsOfDate(plot, place, button, search) {
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
@@ -713,71 +712,68 @@ function displayTweetsOfDate(plot, place, button, search) {
     var json = getTweets();
     var maxDate;
     var minDate;
-        plot.on('plotly_click', data => {
+    plot.on('plotly_click', data => {
 
-            var tweetArr = '<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">';
+        var tweetArr = '<table id="tweet_view_histo" class="table" cellspacing="0" style="width: 100%">';
 
-            tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th></tr></thead><tbody>';
-            csvArr += "Username,Date,Tweet,Nb of retweets\n";
-            let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
-            let i = 0;
-            data.points.forEach(point => {
-                var pointDate = new Date(point.x);
-                json.hits.hits.forEach(tweetObj => {
-                    if (tweetObj._source.username === point.data.name) {
-                        var objDate = new Date(tweetObj._source.date);
-                        if (isInRange(pointDate, objDate, isDays)) {
-                            if (minDate === undefined)
-                                minDate = objDate;
-                            if (maxDate === undefined)
-                                maxDate = objDate;
-                            let date = new Date(tweetObj._source.date);
-                            tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' +
-                                '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
-                                date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                                '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
-                                '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td></tr>';
-                            csvArr += point.data.name + ',' + 
-                                      date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                                      tweetObj._source.tweet + '",' + tweetObj._source.nretweets + '\n';
-                        
-                            if (minDate > objDate)
-                            {
-                                minDate = objDate
-                            }
-                            if (maxDate < objDate)
-                            {
-                                maxDate = objDate;
-                            }
-                           
+        tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th></tr></thead><tbody>';
+        csvArr += "Username,Date,Tweet,Nb of retweets\n";
+        let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
+        let i = 0;
+        data.points.forEach(point => {
+            var pointDate = new Date(point.x);
+            json.hits.hits.forEach(tweetObj => {
+                if (tweetObj._source.username === point.data.name) {
+                    var objDate = new Date(tweetObj._source.date);
+                    if (isInRange(pointDate, objDate, isDays)) {
+                        if (minDate === undefined)
+                            minDate = objDate;
+                        if (maxDate === undefined)
+                            maxDate = objDate;
+                        let date = new Date(tweetObj._source.date);
+                        tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' +
+                            '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '<br /> ' +
+                            date.getHours() + 'h' + date.getMinutes() + '</td>' +
+                            '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                            '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td></tr>';
+                        csvArr += point.data.name + ',' +
+                            date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                            tweetObj._source.tweet + '",' + tweetObj._source.nretweets + '\n';
+
+                        if (minDate > objDate) {
+                            minDate = objDate
                         }
-                    }  
-                });
-                i++;
+                        if (maxDate < objDate) {
+                            maxDate = objDate;
+                        }
+
+                    }
+                }
             });
-            if (minDate !== undefined)
-            {
-            fullDate = minDate.getDate() + '.' + (minDate.getMonth()+1) + '.' + minDate.getFullYear() + '_' + minDate.getHours() + 'h' + minDate.getMinutes() + '_' +
-                       maxDate.getDate() + '.' + (maxDate.getMonth()+1) + '.' + maxDate.getFullYear() + '_' + maxDate.getHours() + 'h' + maxDate.getMinutes()
-            }
-            
-            
-            tweetArr += "</tbody><tfoot></tfoot></table>"
-            tweetPlace.innerHTML = tweetArr;
-            tweetPlace.style.display = "block";
-            visibilityButton.style.display = "block";
-            exportButton.style.display = "block";
+            i++;
+        });
+        if (minDate !== undefined) {
+            fullDate = minDate.getDate() + '.' + (minDate.getMonth() + 1) + '.' + minDate.getFullYear() + '_' + minDate.getHours() + 'h' + minDate.getMinutes() + '_' +
+                maxDate.getDate() + '.' + (maxDate.getMonth() + 1) + '.' + maxDate.getFullYear() + '_' + maxDate.getHours() + 'h' + maxDate.getMinutes()
+        }
 
-            $('#tweet_view_histo').DataTable({
-                autoWidth: false,
-                fixedColumns: true,
-                "columnDefs": [
-                    { "orderable": false, "targets": 2 },
-                ],
 
-            }).columns.adjust();
-            $('.dataTables_length').addClass('bs-select');
-        })
+        tweetArr += "</tbody><tfoot></tfoot></table>"
+        tweetPlace.innerHTML = tweetArr;
+        tweetPlace.style.display = "block";
+        visibilityButton.style.display = "block";
+        exportButton.style.display = "block";
+
+        $('#tweet_view_histo').DataTable({
+            autoWidth: false,
+            fixedColumns: true,
+            "columnDefs": [
+                { "orderable": false, "targets": 2 },
+            ],
+
+        }).columns.adjust();
+        $('.dataTables_length').addClass('bs-select');
+    })
 
     visibilityButton.onclick = e => {
         tweetPlace.style.display = "none";
@@ -789,12 +785,12 @@ function displayTweetsOfDate(plot, place, button, search) {
         var link = document.createElement("a");
         link.setAttribute("href", encodedUri);
         link.setAttribute("download", "tweets_" + fullDate + "_" + search + ".csv");
-        document.body.appendChild(link); 
+        document.body.appendChild(link);
         link.click();
     }
 }
 
-    //For most retweeted/most liked/most active users charts
+//For most retweeted/most liked/most active users charts
 function displayTweetsOfUser(plot, place, button, nb_type, search) {
 
     var visibilityButton = document.getElementById(button);
@@ -804,69 +800,69 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
     var csvArr = "data:text/csv;charset=utf-8,";
     var label;
 
-        plot.on('plotly_click', data => {
+    plot.on('plotly_click', data => {
 
-            var json = getTweets();
-            var tweetArr = '<table id="tweet_view_' + nb_type + '" class="table" cellspacing="0" style="width: 100%">'
+        var json = getTweets();
+        var tweetArr = '<table id="tweet_view_' + nb_type + '" class="table" cellspacing="0" style="width: 100%">'
 
-            tweetArr += '<thead><tr><th scope="col">Date</th><th scope="col">Tweet</th>';
-            csvArr += "Date,Tweet";
-            if (nb_type !== "retweets") {
-                tweetArr += '<th scope="col">Nb of likes</th>';
-                csvArr += ',Nb of likes';
-            }
-            if (nb_type !== "likes") {
-                tweetArr += '<th scope="col">Nb of retweets</th>';
-                csvArr += ',Nb of retweets';
-            }
+        tweetArr += '<thead><tr><th scope="col">Date</th><th scope="col">Tweet</th>';
+        csvArr += "Date,Tweet";
+        if (nb_type !== "retweets") {
+            tweetArr += '<th scope="col">Nb of likes</th>';
+            csvArr += ',Nb of likes';
+        }
+        if (nb_type !== "likes") {
+            tweetArr += '<th scope="col">Nb of retweets</th>';
+            csvArr += ',Nb of retweets';
+        }
 
-            tweetArr += '</tr></thead><tbody>';
-            csvArr += "\n";
+        tweetArr += '</tr></thead><tbody>';
+        csvArr += "\n";
 
-            json.hits.hits.forEach(tweetObj => {
-                if (tweetObj._source.username === data.points[0].label) {
-                    let nb;
-                    if (nb_type === "retweets")
-                        nb = tweetObj._source.nretweets;
-                    else
-                        nb = tweetObj._source.nlikes;
-                    let date = new Date(tweetObj._source.date);
+        json.hits.hits.forEach(tweetObj => {
+            if (tweetObj._source.username === data.points[0].label) {
+                let nb;
+                if (nb_type === "retweets")
+                    nb = tweetObj._source.nretweets;
+                else
+                    nb = tweetObj._source.nlikes;
+                let date = new Date(tweetObj._source.date);
 
-                    tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + ' ' +
-                        date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                        '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
-                        '<td class="tweet_arr tweet_arr_nretweet">' + nb + '</td>';
-                    
-                    csvArr += date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                              tweetObj._source.tweet + '",' + nb;
-          
-                    if (nb_type === "tweets") {
-                        tweetArr += '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>';
-                        csvArr += ',' + tweetObj._source.nretweets;
-                    }
-                    tweetArr += '</tr>';
-                    csvArr += '\n';
+                tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' ' +
+                    date.getHours() + 'h' + date.getMinutes() + '</td>' +
+                    '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                    '<td class="tweet_arr tweet_arr_nretweet">' + nb + '</td>';
+
+                csvArr += date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                    tweetObj._source.tweet + '",' + nb;
+
+                if (nb_type === "tweets") {
+                    tweetArr += '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>';
+                    csvArr += ',' + tweetObj._source.nretweets;
                 }
-            });
-
-            tweetArr += "</tbody><tfoot></tfoot></table>";
-            tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">'
-                + data.points[0].label + "</a><br><br>" + tweetArr;
-            label = data.points[0].label;
-            tweetPlace.style.display = "block";
-            visibilityButton.style.display = "block";
-            exportButton.style.display = "block";
-
-            $('#tweet_view_' + nb_type).DataTable({
-                autoWidth: false,
-                fixedColumns: true,
-                "columnDefs": [
-                    { "orderable": false, "targets": 1 },
-                ],
-
-            }).columns.adjust();
-            $('.dataTables_length').addClass('bs-select');
+                tweetArr += '</tr>';
+                csvArr += '\n';
+            }
         });
+
+        tweetArr += "</tbody><tfoot></tfoot></table>";
+        tweetPlace.innerHTML = 'Tweets of <a  href="https://twitter.com/' + data.points[0].label + '" target="_blank">'
+            + data.points[0].label + "</a><br><br>" + tweetArr;
+        label = data.points[0].label;
+        tweetPlace.style.display = "block";
+        visibilityButton.style.display = "block";
+        exportButton.style.display = "block";
+
+        $('#tweet_view_' + nb_type).DataTable({
+            autoWidth: false,
+            fixedColumns: true,
+            "columnDefs": [
+                { "orderable": false, "targets": 1 },
+            ],
+
+        }).columns.adjust();
+        $('.dataTables_length').addClass('bs-select');
+    });
 
 
     visibilityButton.onclick = e => {
@@ -880,12 +876,12 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
         var link = document.createElement("a");
         link.setAttribute("href", encodedUri);
         link.setAttribute("download", "tweets_" + label + "_" + search.replace(/#/g, '') + ".csv");
-        document.body.appendChild(link); 
+        document.body.appendChild(link);
         link.click();
     }
 }
 
-    //For words cloud chart
+//For words cloud chart
 function displayTweetsOfWord(word, place, button, search) {
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
@@ -894,26 +890,26 @@ function displayTweetsOfWord(word, place, button, search) {
 
     var exportButton = document.getElementById(place.replace("place", "export"));
     var csvArr = "data:text/csv;charset=utf-8,";
-    
+
     word = word.replace(/_/g, " ");
-    var tweetArr = '<table id="tweet_view_wordcloud" class="table" cellspacing="0" style="width: 100%">' 
+    var tweetArr = '<table id="tweet_view_wordcloud" class="table" cellspacing="0" style="width: 100%">'
 
     tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th><th scope="col">Nb of likes</th></tr></thead><tbody>';
     csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
     json.hits.hits.forEach(tweetObj => {
         if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
             var date = new Date(tweetObj._source.date);
-          
-                tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + tweetObj._source.username + '" target="_blank">' + tweetObj._source.username + '</a></td>' +
-                    '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
-                    date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                    '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
-                    '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>' +
-                    '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nlikes + '</td></tr>';
-                csvArr += tweetObj._source.username  + ',' + 
-                            date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-                            tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
-            }
+
+            tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + tweetObj._source.username + '" target="_blank">' + tweetObj._source.username + '</a></td>' +
+                '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '<br /> ' +
+                date.getHours() + 'h' + date.getMinutes() + '</td>' +
+                '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>' +
+                '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nlikes + '</td></tr>';
+            csvArr += tweetObj._source.username + ',' +
+                date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
+                tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
+        }
     });
     tweetArr += "</tbody><tfoot></tfoot></table>"
     tweetPlace.innerHTML = "Tweets containing : <b>" + word + "</b><br />" + tweetArr;
@@ -943,12 +939,12 @@ function displayTweetsOfWord(word, place, button, search) {
         var link = document.createElement("a");
         link.setAttribute("href", encodedUri);
         link.setAttribute("download", "tweets_" + word + "_" + search + ".csv");
-        document.body.appendChild(link); 
+        document.body.appendChild(link);
         link.click();
     }
 }
 
-    //Check if a tweet is in a range of date depending on the time scale in timeline chart
+//Check if a tweet is in a range of date depending on the time scale in timeline chart
 function isInRange(pointDate, objDate, isDays) {
     if (!isDays)
         return ((((pointDate.getDate() === objDate.getDate()
@@ -965,22 +961,22 @@ function isInRange(pointDate, objDate, isDays) {
 //Export icon for wordCloud event handler
 
 $("#top_words_content").on("mouseenter", event => {
-    $(".export-icon").css({"opacity": 0.33});
+    $(".export-icon").css({ "opacity": 0.33 });
 })
 
 $("#top_words_content").on("mouseleave", event => {
-    $(".export-icon").css({"opacity": 0, "cursor": "normal"});
+    $(".export-icon").css({ "opacity": 0, "cursor": "normal" });
 })
 $("#exportWordsCloudJpg").on("mouseenter", event => {
-    $("#exportWordsCloudJpg").css({"opacity": 0.66, "cursor": "pointer"});
+    $("#exportWordsCloudJpg").css({ "opacity": 0.66, "cursor": "pointer" });
 });
 
 $("#exportWordsCloudJpg").on("mouseleave", event => {
-    $("#exportWordsCloudJpg").css({"opacity": 0.33});
+    $("#exportWordsCloudJpg").css({ "opacity": 0.33 });
 });
 $("#exportWordsCloudSvg").on("mouseenter", event => {
-    $("#exportWordsCloudSvg").css({"opacity": 0.66, "cursor": "pointer"});
+    $("#exportWordsCloudSvg").css({ "opacity": 0.66, "cursor": "pointer" });
 });
 $("#exportWordsCloudJpg").on("mouseleave", event => {
-    $("#exportWordsCloudSvg").css({"opacity": 0.33});
+    $("#exportWordsCloudSvg").css({ "opacity": 0.33 });
 });

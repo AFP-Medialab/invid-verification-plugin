@@ -2,7 +2,7 @@ var json = {};
 
 var elasticSearch_url = 'http://185.249.140.38/elk/twinttweets/_search';
 
-let dev = false;
+let dev = true;
 if (dev) {
     elasticSearch_url = 'http://localhost:9200/twinttweets/_search';
 }
@@ -452,6 +452,7 @@ function constructAggs(field)
 
 //To fetch all the tweets (Bypass the 10 000 limit with elastic search)
 async function getJson(param, aggs, must) {
+    console.log(JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"));
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
         body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
@@ -472,6 +473,7 @@ async function getJson(param, aggs, must) {
         }while(myJson.current_total_hits === 10000)
     }
     json = myJson;
+    console.log(myJson);
     return myJson;
 }
 async function completeJson(aggs, must, myJson)

@@ -3,7 +3,7 @@ import { generateGraphs, exportTweets, setFirstHisto } from "./twitterSnaGraphs.
 var collect_url = "http://185.249.140.38/twint-wrapper/collect";
 var status_url = "http://185.249.140.38/twint-wrapper/status/";
 
-let dev = false;
+let dev = true;
 if (dev) {
     collect_url = "http://localhost:8080/twint-wrapper/collect";
     status_url = "http://localhost:8080/twint-wrapper/status/"
@@ -369,6 +369,7 @@ async function waitStatusDone(session) {
                 res = json;
             else {
 
+                console.log(json["status"]);
                 $("#twitterStats-Graphs").css("display", "block");
                 generateGraphs(json);
 
