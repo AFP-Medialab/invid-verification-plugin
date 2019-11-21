@@ -669,7 +669,8 @@ function svgString2Image(svg, width, height, format, callback) {
     image.setAttribute("src", url);
 
 
-    document.getElementById("we-verify").display = "none";
+  
+    d3.select("#we-verify").attr("style", "display: none");
     image.onerror = error => {return alert("IMG ERROR: " + error);}
 
 }
@@ -678,6 +679,7 @@ function svgString2Image(svg, width, height, format, callback) {
 function svgDownload(svgEl, name)
 {
 
+    d3.select("#we-verify").attr("style", "font-size: 20px;");
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     var svgData = svgEl.outerHTML;
     var preface = '<?xml version="1.0" standalone="no"?>\r\n';
@@ -687,6 +689,8 @@ function svgDownload(svgEl, name)
     downloadLink.href = svgUrl;
     downloadLink.download = name;
     downloadLink.click();
+
+    d3.select("#we-verify").attr("style", "display: none");
 }
 
     //Download tweets ad CSV
