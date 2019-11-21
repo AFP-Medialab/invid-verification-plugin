@@ -165,7 +165,7 @@ function getNbTweets(param, givenFrom, givenUntil) {
     //Most retweeted users chart
 function mostRetweetPie(param) {
     generateDonutPlotlyJson(param, "nretweets").then(plotlyJson => {
-        
+
         var cloudlayout = generateLayout("<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
         var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets");
 
@@ -345,12 +345,16 @@ async function mostUsedWordsCloud(param) {
                 else
                   document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were unable to fetch named entities</p>';
 
-                var svg = d3.select("#top_words_cloud_chart").append("svg")
+                var svg = d3.select("#top_words_cloud_chart")
+                            .append("svg").attr("id", "svg_words")
+                            .attr("width", layout.size()[0])
+                            .attr("height", layout.size()[1] + 50)
+                            .append("g")
                             .attr("width", layout.size()[0])
                             .attr("height", layout.size()[1])
-                            .append("g")
                             .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
                             .selectAll("text")
+                            
                             .data(words)
                             .enter().append("text")
                             .style("font-size", function (d) { return d.size + "px"; })
@@ -363,9 +367,18 @@ async function mostUsedWordsCloud(param) {
                             .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
                             .append("svg:title")
                             .text(d => "Used " + final_map.get(d.text) + " times");
+                
+                      d3.select("#svg_words").append("text")
+                        .attr("id", "we-verify")
+                        .attr("style", "display: none")
+                        .attr("transform", "translate(" + (layout.size()[0] - 200) + "," + (layout.size()[1] + 10) + ")")
+                        .text("we-verify.eu");
 
-                var width = 300, height = 300;
-
+                var width = 300, height = 300; 
+               // var node = document.createElement();
+                //node.appendChild(document.createTextNode('we-verify.eu'));
+                
+                console.log(svg);
                 $('.top_words_loader').css('display', "none");
                 document.getElementById('progress_state_place').innerHTML = "";
 
@@ -519,6 +532,7 @@ async function buildTweetieJson(tweet) {
             } 
         })
 
+        console.log("TWITTIE");
             if (!response.ok) {
                 return {
                    error: response.status
@@ -617,39 +631,46 @@ function unrotateMainHashtag(search) {
 
     //Download as PNG
 function svgString2Image(svg, width, height, format, callback) {
-var format = format ? format : 'png';
 
-svg.style.backgroundColor = "white";
-var serializer = new XMLSerializer();
-var svgString = serializer.serializeToString(svg);
+    d3.select("#we-verify").attr("style", "font-size: 20px;");
+    var format = format ? format : 'png';
+    svg.style.backgroundColor = "white";
+    var serializer = new XMLSerializer();
 
-var canvas = document.createElement("canvas");
-var context = canvas.getContext("2d");
+    var node = document.createElement('text');
+   
+    var svgString = serializer.serializeToString(svg);
 
-canvas.width = width;
-canvas.height = height;
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
 
-var DOMURL = self.URL || self.webkitURL || self;
+    canvas.width = width;
+    canvas.height = height;
 
-var svg = new Blob([svgString], {
-    type: 'image/svg+xml;charset=utf-8'
-});
+    var DOMURL = self.URL || self.webkitURL || self;
 
-var url = DOMURL.createObjectURL(svg);
-var image = new Image();
-image.addEventListener('load', function() {  
-    context.clearRect(0, 0, width, height);
-    context.drawImage(image, 0, 0, width, height);
-
-    canvas.toBlob(function(blob) {
-        var filesize = Math.round(blob.length / 1024) + ' KB';
-        if (callback) callback(blob, filesize);
+    var svg = new Blob([svgString], {
+        type: 'image/svg+xml;charset=utf-8'
     });
-});
+    console.log(canvas);
 
-image.setAttribute("src", url);
+    var url = DOMURL.createObjectURL(svg);
+    var image = new Image();
+    image.addEventListener('load', function() {  
+        context.clearRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
 
-image.onerror = error => {return alert("IMG ERROR: " + error);}
+        canvas.toBlob(function(blob) {
+            var filesize = Math.round(blob.length / 1024) + ' KB';
+            if (callback) callback(blob, filesize);
+        });
+    });
+
+    image.setAttribute("src", url);
+
+
+    document.getElementById("we-verify").display = "none";
+    image.onerror = error => {return alert("IMG ERROR: " + error);}
 
 }
 
