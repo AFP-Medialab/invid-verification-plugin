@@ -104,6 +104,16 @@ async function showEssidHistogram(param, givenFrom, givenUntil) {
                 range: [ param["from"], param["until"]],
                 rangeslider: { range: [givenFrom, givenUntil] },
             },
+            annotations: [{
+                xref: 'paper',
+                yref: 'paper',
+                x: 1.2,
+                xanchor: 'right',
+                y: -0.4,
+                yanchor: 'top',
+                text: 'we-verify.eu',
+                showarrow: false
+              }],
             autosize: true
         };
 
@@ -127,6 +137,7 @@ async function showEssidHistogram(param, givenFrom, givenUntil) {
             displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility", param["search"]["search"].replace(" ", '&').replace(/#/g, ""));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         return plotlyJson;
    // });
 }
@@ -154,22 +165,9 @@ function getNbTweets(param, givenFrom, givenUntil) {
     //Most retweeted users chart
 function mostRetweetPie(param) {
     generateDonutPlotlyJson(param, "nretweets").then(plotlyJson => {
-        var cloudlayout = {
-            title: "<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
-
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"],[]], displaylogo: false
-        };
-
+        
+        var cloudlayout = generateLayout("<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets");
 
         var plot = document.getElementById("retweets_cloud_chart");
         Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
@@ -177,29 +175,20 @@ function mostRetweetPie(param) {
         if (firstHisto)
             displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets", param["search"]["search"].replace(/ /g, "&"));
 
-        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+            Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+            Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
+        
         unrotateMainHashtag(param["search"]["search"]);
     });
 }
 
+
     //Most liked user chart
 function mostLikePie(param) {
     generateDonutPlotlyJson(param, "nlikes").then(plotlyJson => {
-        let cloudlayout = {
-            title: "<b>Most liked users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
-
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Likes",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"]], displaylogo: false
-        };
+        let cloudlayout = generateLayout("<b>Most liked users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"])
+           
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Likes");
 
         let plot = document.getElementById("likes_cloud_chart");
         Plotly.react('likes_cloud_chart', plotlyJson, cloudlayout, config);
@@ -208,6 +197,7 @@ function mostLikePie(param) {
             displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes", param["search"]["search"].replace(/ /g, "&"));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
     });
 }
@@ -216,22 +206,9 @@ function mostLikePie(param) {
 function mostTweetPie(param) {
     //Utilisateurs les actifs
     generateDonutPlotlyJson(param, "ntweets").then(plotlyJson => {
-        var cloudlayout = {
-            title: "<b>Most active users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
+        var cloudlayout = generateLayout("<b>Most active users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
 
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Tweets",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"]], displaylogo: false
-        };
-
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Tweets");
 
         var plot = document.getElementById("top_users_pie_chart");
         Plotly.react('top_users_pie_chart', plotlyJson, cloudlayout, config);
@@ -240,6 +217,7 @@ function mostTweetPie(param) {
             displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets", param["search"]["search"].replace(/ /g, "&"));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
     });
 }
@@ -247,24 +225,15 @@ function mostTweetPie(param) {
     //Most used hashtags chart
 function topHashtagPie(param) {
     generateDonutPlotlyJson(param, "hashtags").then(plotlyJson => {
-        let cloudlayout = {
-            title: "<b>Most associated hashtags</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
 
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Hashtags",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"]], displaylogo: false
-        };
+        let cloudlayout = generateLayout("<b>Most associated hashtags</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
+
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Hashtags");
 
         let plot = document.getElementById("hashtag_cloud_chart");
         Plotly.react('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
+
+       // document.getElementById("hashtag_cloud_chart").firstChild.firstChild.firstChild.append('');
         if (firstHisto)
             plot.on('plotly_click', data => {
                 let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
@@ -275,6 +244,7 @@ function topHashtagPie(param) {
 
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
 
     });
@@ -431,7 +401,42 @@ function urlArray(param) {
 
 
 
+// Functions building plots needed
 
+    //Generate the layouts
+function generateLayout(title)
+{
+    return {
+        title: title,
+        automargin: true,
+        width: 500,
+        height: 500,
+        annotations: [{
+            xref: 'paper',
+            yref: 'paper',
+            x: 1,
+            xanchor: 'bottom',
+            y: 0,
+            yanchor: 'right',
+            text: 'we-verify.eu',
+            showarrow: false
+          }]
+        
+    }
+}
+
+    //Generate config
+function generateConfig(title)
+{
+    return {
+        toImageButtonOptions: {
+            format: 'png', // one of png, svg, jpeg, webp
+            filename: title,
+            scale: 0.8 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        modeBarButtons: [["toImage"]], displaylogo: false
+    };
+}
 
 //Function helping building words cloud
 
