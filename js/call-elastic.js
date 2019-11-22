@@ -207,10 +207,18 @@ export function generateURLArrayHTML(param) {
     let aggs = constructAggs("urls");
 
     function getURLArray(json) {
-        var urlArray = [];
+        var urlArray = new Map();
+      
+   
         var buckets = json["aggregations"]["2"]["buckets"];
+        console.log(buckets);
         buckets.forEach(bucket => {
-            urlArray.push({ url: bucket["key"], count: bucket["doc_count"] });
+            let key =  bucket["key"];
+            var isIn = Array.from(urlArray.keys).includes(bucket["key"].substring(0, bucket["key"].length - 1));
+           if (isIn)
+                key = bucket["key"].substring(0, bucket["key"].length - 1);
+           
+        (!isIn)?urlArray.set(key, bucket["doc_count"]):urlArray.set(key, bucket["doc_count"] + urlArray.get(key));
         });
         return urlArray;
     }
@@ -230,16 +238,20 @@ export function generateURLArrayHTML(param) {
 
         let array = getURLArray(myJson);
 
+        var row = array.entries();
         let arrayStr = '<table id="url_table">' +
             '<tr>' +
             '<td>url</td>' +
             '<td>count</td>' +
             '</tr>';
-        array.forEach(row => {
+        var val;
+        while((val = row.next().value) !== undefined)
+         {
+            console.log(val);
             arrayStr += '<tr>' +
-                '<td><a href="' + row.url + '" target="_blank">' + row.url + '</a></td>' +
-                '<td>' + row.count + '</td></tr>';
-        });
+                '<td><a href="' + val[0] + '" target="_blank">' + val[0] + '</a></td>' +
+                '<td>' + val[1] + '</td></tr>';
+        };
         arrayStr += '</table>';
         return arrayStr;
     };
@@ -474,6 +486,7 @@ async function getJson(param, aggs, must) {
     json = myJson;
     return myJson;
 }
+
 async function completeJson(aggs, must, myJson)
 {
          console.log("ElasticSearch: Completing request");
