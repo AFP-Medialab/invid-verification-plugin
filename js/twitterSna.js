@@ -3,7 +3,7 @@ import { generateGraphs, exportTweets, setFirstHisto } from "./twitterSnaGraphs.
 var collect_url = "http://185.249.140.38/twint-wrapper/collect";
 var status_url = "http://185.249.140.38/twint-wrapper/status/";
 
-let dev = false;
+let dev = true;
 if (dev) {
     collect_url = "http://localhost:8080/twint-wrapper/collect";
     status_url = "http://localhost:8080/twint-wrapper/status/"
@@ -138,6 +138,7 @@ function getMediaValue() {
 function export_all() {
     exportPDF(document.getElementById("twitterStats-user").value !== "");
 }
+
 function export_tweets() {
     exportTweets(document.getElementById('twitterStats-search').value, new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
 }
