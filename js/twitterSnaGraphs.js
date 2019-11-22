@@ -320,7 +320,7 @@ async function mostUsedWordsCloud(param) {
 
             var fontScale = d3.scaleLinear()
                                     .domain([0, d3.max(words, function(d) { return d.size} )])
-                                    .range([10, 95]);
+                                    .range([10, 90]);
             
             var layout = d3.layout  .cloud()
                                     .size([500, 500])
@@ -378,7 +378,6 @@ async function mostUsedWordsCloud(param) {
                // var node = document.createElement();
                 //node.appendChild(document.createTextNode('we-verify.eu'));
                 
-                console.log(svg);
                 $('.top_words_loader').css('display', "none");
                 document.getElementById('progress_state_place').innerHTML = "";
 
@@ -531,8 +530,6 @@ async function buildTweetieJson(tweet) {
                 'Content-Type': 'text/plain'
             } 
         })
-
-        console.log("TWITTIE");
             if (!response.ok) {
                 return {
                    error: response.status
