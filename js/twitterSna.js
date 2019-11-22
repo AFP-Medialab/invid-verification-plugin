@@ -204,6 +204,7 @@ var cache_user_time_style = document.getElementById("user_time").style;
 var cache_user_chart_width = $("#user_time_chart").width;
 async function exportPDF(hasUser) {
 
+    d3.select("#glob-we-verify").attr("style", "display: block");
     var v = Array.from(document.getElementsByClassName("toggleVisibility"));
     v.forEach(elt => elt.style.display = "none");
     
@@ -213,7 +214,17 @@ async function exportPDF(hasUser) {
     $("#twitterStats-loader").css("display", "block");
     $("#user_time").css("margin-left", -120);
 
+    var update =  {
+        width: 500,
+        height: 500
+    }
     Plotly.relayout('user_time_chart', { width: 1000});
+    Plotly.relayout('retweets_cloud_chart', update);
+
+    Plotly.relayout('likes_cloud_chart', update);
+    Plotly.relayout('top_users_pie_chart', update);
+    Plotly.relayout('hashtag_cloud_chart', update);
+
     var buttons = document.getElementsByClassName("modebar-group");
     Array.from(buttons).forEach(button => button.style = "display: none");
 
@@ -289,8 +300,9 @@ async function exportPDF(hasUser) {
     $("#url_array").css("margin-left", -100);
     await ctrlP()//.finally(() => {
         document.getElementById("user_time").style = cache_user_time_style;
-        Plotly.relayout('user_time_chart', { width: cache_user_chart_width });
+        //Plotly.relayout('user_time_chart', { width: auto });
 
+        d3.select("#glob-we-verify").attr("style", "display: none");
         Array.from(document.getElementsByClassName("toRemove")).forEach(br => br.remove());
         $("#submitSna").css("visibility", "visible");
 
@@ -298,6 +310,17 @@ async function exportPDF(hasUser) {
         $("#tweets_export").css("display", "block");
         $("#url_array").css("margin-left", 0);
 
+        console.log(window.innerWidth);
+        var update2 =  {
+            width: window.innerHeight/2,
+            height: window.innerHeigth/2
+        }
+     //   Plotly.relayout('user_time_chart', { width: auto});
+        Plotly.relayout('retweets_cloud_chart', update2);
+    
+        Plotly.relayout('likes_cloud_chart', update2);
+        Plotly.relayout('top_users_pie_chart', update2);
+        Plotly.relayout('hashtag_cloud_chart', update2);
         Array.from(document.getElementsByClassName("export-icon")).forEach(icon => icon.style.display = "block");
    // });
 
@@ -306,6 +329,7 @@ async function exportPDF(hasUser) {
         $("#twitterStats-loader").css("display", "none");
 
         window.print();
+
     }
 
 };

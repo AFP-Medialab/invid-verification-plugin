@@ -13,7 +13,6 @@ var tweetIE_URL = 'http://185.249.140.38/weverify-twitie/process?annotations=:Pe
 var nb_treated, nb_tweets;
 
 
-
 //Call all the graph generation handling the display
 export function generateGraphs(param) {
     let givenFrom = param["query"]["from"];
@@ -421,8 +420,8 @@ function generateLayout(title)
     return {
         title: title,
         automargin: true,
-        width: 500,
-        height: 500,
+        width: window.innerWidth/2,
+        height: window.innerWidth/2,
         annotations: [{
             xref: 'paper',
             yref: 'paper',
