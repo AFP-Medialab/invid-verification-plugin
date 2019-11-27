@@ -397,7 +397,14 @@ async function mostUsedWordsCloud(param) {
                             var svgEl = document.getElementById("top_words_cloud_chart").children[0];
                             svgDownload(svgEl, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.svg');
 
+                    })
+                d3  .select('#exportWordsCloudCsv')
+                    .on('click', 
+                        () => {
+                            exportWords(final_map, 'WordCloud_' + param.search.search, param.from, param.until);
+
                         })
+                        
                     
             }
         });
@@ -689,6 +696,22 @@ function svgDownload(svgEl, name)
     d3.select("#we-verify").attr("style", "display: none");
 }
 
+function exportCSV(csvArr, search, start, end)
+{
+    var blob = new Blob([csvArr], { type: 'text/csv;charset=utf-8;' });
+
+    // var encodedUri = encodeURI(csvArr);
+    var url = URL.createObjectURL(blob);
+     let link = document.createElement("a");
+     link.setAttribute("href", url);
+     link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
+     link.style.visibility = 'hidden';
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+
+}
+
     //Download tweets ad CSV
 export function exportTweets(search, start, end)
 {
@@ -705,21 +728,23 @@ export function exportTweets(search, start, end)
         tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
     })  
     
-    var blob = new Blob([csvArr], { type: 'text/csv;charset=utf-8;' });
-
-       // var encodedUri = encodeURI(csvArr);
-       var url = URL.createObjectURL(blob);
-        let link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
+    exportCSV(csvArr, search, start, end);
 
 }
 
+export function exportWords(words, search, start, end)
+{
+    var csvArr =  "";
+    csvArr += "Word,NbOccurence\n";
+
+    words.forEach((value, key, map) => 
+    {        
+        csvArr += key + "," + value + "\n";
+    })  
+    
+    exportCSV(csvArr, search, new Date(start), new Date(end));
+
+}
 var firstHisto = true;
 export function setFirstHisto(first) {
     firstHisto = first
@@ -1008,6 +1033,13 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
 $("#exportWordsCloudSvg").on("mouseenter", event => {
     $("#exportWordsCloudSvg").css({"opacity": 0.66, "cursor": "pointer"});
 });
-$("#exportWordsCloudJpg").on("mouseleave", event => {
+$("#exportWordsCloudSvg").on("mouseleave", event => {
     $("#exportWordsCloudSvg").css({"opacity": 0.33});
 });
+$("#exportWordsCloudCsv").on("mouseenter", event => {
+    $("#exportWordsCloudCsv").css({"opacity": 0.66, "cursor": "pointer"});
+});
+$("#exportWordsCloudCsv").on("mouseleave", event => {
+    $("#exportWordsCloudCsv").css({"opacity": 0.33});
+});
+
