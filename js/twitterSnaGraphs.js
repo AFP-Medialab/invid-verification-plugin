@@ -1,5 +1,5 @@
 
-import { generateEssidHistogramPlotlyJson, generateWordCloudPlotlyJson, generateDonutPlotlyJson, generateURLArrayHTML, getTweets, generateTweetCountPlotlyJson } from './call-elastic.js';
+import { generateEssidHistogramPlotlyJson,/*generateHeatMapJson, */generateWordCloudPlotlyJson, generateDonutPlotlyJson, generateURLArrayHTML, getTweets, generateTweetCountPlotlyJson } from './call-elastic.js';
 import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
@@ -28,7 +28,7 @@ export function generateGraphs(param) {
         user_list: document.getElementById("twitterStats-user").value.split(" "),
         session: param.session
     }
-    
+    /*
     return getNbTweets(entries).then(() => {
 
         if (nb_tweets === 0)
@@ -85,7 +85,11 @@ export function generateGraphs(param) {
               
             return showEssidHistogram(entries, givenFrom, givenUntil);
         }
-    })
+    })*/
+    getNbTweets(entries).then(() => {
+        showEssidHistogram(entries, givenFrom, givenUntil);
+        heatMap(param, givenFrom, givenUntil);
+    });
 
 }
 
@@ -140,6 +144,84 @@ async function showEssidHistogram(param, givenFrom, givenUntil) {
         return plotlyJson;
    // });
 }
+
+function getNbTweetsInHour(date, bucket)
+{
+    var nbTweets = 0;
+    var day = date.toLocaleDateString();
+    var hour = date.getHours();
+    //TODO
+    bucket.forEach(tweet => {
+        var tweetDate = new Date(tweet._source.date);
+        var TweetDay = tweetDate.toLocaleDateString();
+        var tweetHour = tweetDate.getHours();
+
+        if (day === TweetDay && tweetHour == hour)
+            nbTweets++;
+    //    console.log(tweetDate);
+    });
+    return nbTweets;
+}
+async function heatMap(param)
+{
+    var entries = {
+        from: document.getElementById("twitterStats-from-date").value,
+        until: document.getElementById("twitterStats-to-date").value,
+        search: {
+            search: document.getElementById("twitterStats-search").value,
+            and : document.getElementById("twitterStats-search-and").value.split(' ')
+        },
+        user_list: document.getElementById("twitterStats-user").value.split(" "),
+        session: param.session
+    }
+    var hits = getTweets().hits.hits;
+    console.log(entries.from);
+    var firstDate = new Date(entries.from);
+    firstDate.setHours(1);
+    firstDate.setMinutes(0);
+    firstDate.setSeconds(0);
+    var firstArrElt = new Date(firstDate); 
+    var lastDate = new Date(entries.until);
+    lastDate.setHours(1);
+    lastDate.setMinutes(0);
+    lastDate.setSeconds(0);
+    console.log(firstDate);
+    var datesX = [firstArrElt];
+    while (firstDate.getTime() !== lastDate.getTime())
+    {
+        var newDate = new Date(firstDate); 
+        firstDate.setDate(firstDate.getDate() + 1);
+        newDate.setDate(newDate.getDate() + 1);
+       // console.log(firstDate);
+        datesX = [...datesX, newDate]
+    }
+    console.log(datesX);
+
+    var hoursY = ['12:00:00 AM', '1:00:00 AM', '2:00:00 AM', '3:00:00 AM', '4:00:00 AM', '5:00:00 AM', '6:00:00 AM', '7:00:00 AM', '8:00:00 AM', '9:00:00 AM', '10:00:00 AM', '11:00:00 AM', '12:00:00 PM','1:00:00 PM', '2:00:00 PM', '3:00:00 PM', '4:00:00 PM', '5:00:00 PM', '6:00:00 PM', '7:00:00 PM', '8:00:00 PM', '9:00:00 PM', '10:00:00 PM', '11:00:00 PM'];
+       
+    var nbTweetsZ = [];
+    var i = 0;
+    
+    hoursY.forEach(time => {
+        nbTweetsZ.push([])
+        datesX.forEach(date => {
+          //  console.log(date);
+            date.setHours(i);
+            nbTweetsZ[i].push(getNbTweetsInHour(date, hits));
+        });
+        i++;
+    });
+    console.log(nbTweetsZ);
+    var data = [{
+        z: nbTweetsZ,
+        x: datesX,
+        y: hoursY,
+        colorscale: 'Reds',
+        type: 'heatmap'
+      }];
+      Plotly.newPlot('myDiv', data);
+}
+
 
     //Tweets Count
 function getNbTweets(param, givenFrom, givenUntil) {

@@ -112,12 +112,62 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     });
 }
 
+/*export function generateHeatMapJson(param, givenFrom, givenUntil)
+{
+    let aggs = constructAggs("1d");
+    let must = [constructMatchPhrase(param, givenFrom, givenUntil)]
+
+        
+        var query = buildQuery(aggs, must);
+
+        const userAction = async () => {
+            var str_query = JSON.stringify(query).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+            console.log(str_query);
+            const response = await fetch(elasticSearch_url, {
+                method: 'POST',
+                body:
+                    str_query,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const myJson = await response.json();
+            console.log(myJson);
+            if (myJson["error"] === undefined) {
+                myJson["3"]["buckets"].forEach(obj => {
+                    if (obj["1"]["value"] > 5) {
+                        infos.push({
+                            date: dateObj['key_as_string'],
+                            key: obj["key"],
+                            nb: obj["1"]["value"]
+                        })
+                    
+                    }
+                })
+            }
+            else
+                window.alert("There was a problem calling elastic search");
+
+   
+            
+        return infos;
+        }
+        var dateObj = userAction();
+
+       
+}*/
+
     //Tweet count display
 export function generateTweetCountPlotlyJson(param) {
     var must = [
         constructMatchPhrase(param)
     ]
-    return getJson(param, {}, must).then( json => json["hits"]["total"]);
+    
+    return getJson(param, {}, must).then(myJson => {
+        json = myJson;
+        return json["hits"]["total"];
+    });
+    
 }
 
     //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
@@ -483,7 +533,7 @@ async function getJson(param, aggs, must) {
             myJson = await completeJson(aggs, must2, myJson);
         }while(myJson.current_total_hits === 10000)
     }
-    json = myJson;
+   // json = myJson;
     return myJson;
 }
 
