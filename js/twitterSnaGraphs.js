@@ -236,8 +236,8 @@ function topHashtagPie(param) {
        // document.getElementById("hashtag_cloud_chart").firstChild.firstChild.firstChild.append('');
         if (firstHisto)
             plot.on('plotly_click', data => {
-                let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
-
+              //  let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
+                displayTweetsOfWord(data.points[0].label, "tweets_arr_hashtag_place", "hashtags_tweets_toggle_visibility", param["search"]["search"]);
                 firstTopUsers = false;
             });
 
@@ -903,7 +903,7 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
             json.hits.hits.forEach(tweetObj => {
                 if (tweetObj._source.username === data.points[0].label) {
 
-                    let tweet = getTweetWithClickableLink(tweetObj._source.tweet);
+                    let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);
                     let nb;
                     if (nb_type === "retweets")
                         nb = tweetObj._source.nretweets;
@@ -983,7 +983,7 @@ function displayTweetsOfWord(word, place, button, search) {
         if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
             var date = new Date(tweetObj._source.date);
           
-            let tweet = getTweetWithClickableLink(tweetObj._source.tweet);
+            let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);
                 tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + tweetObj._source.username + '" target="_blank">' + tweetObj._source.username + '</a></td>' +
                     '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
                     date.getHours() + 'h' + date.getMinutes() + '</td>' +
