@@ -971,13 +971,16 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
     }
 }
 
-function buildEdges(hashtags, bucket)
+function buildEdges(hashtags, bucket, colors)
 {
     var edges = [];
     bucket.forEach(tweet => {
+        var tweetHashtags = tweet._source.hashtags.map(h => h.toLowerCase());
+        console.log(tweet._source.hashtags);
         hashtags.forEach(hashtag => {
-            if (tweet._source.tweet.includes(hashtag))
-                edges.push({data: {id: tweet._source.username + '-' + hashtag, source: tweet._source.username, target: hashtag}});
+            console.log(hashtag);
+            if (tweetHashtags.includes(hashtag))
+                edges.push({data: {id: tweet._source.username + '-' + hashtag, source: tweet._source.username, target: hashtag, color: colors[hashtag]}});
         })
     })
     return edges;
@@ -988,25 +991,32 @@ function displayHashtagsUsersGraph(hashtags){
     var bucket = getTweets().hits.hits;
     console.log(bucket)
     console.log(hashtags);
-  //  var nodes_color = {};
-    //nodes_color[user] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+    var hashtag_color = {};
+  // hashtag_color[user] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
     var nodes = []
     bucket.forEach(tweet => {
     //nodes_color[tweet] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-        nodes.push({data: {id: tweet._source.username/*, color: nodes_color[follower], level: 3*/}});
+        nodes.push({data: {id: tweet._source.username, color: "black", level: 2}});
   //  edges.push({data: {id: follower + '-' + user, source: follower, target: user, color: nodes_color[user]}});
     })
     hashtags.forEach(hashtag => {
-            nodes.push({data: {id: hashtag/*, color: nodes_color[follower], level: 3*/}});
+        hashtag_color[hashtag] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+            nodes.push({data: {id: hashtag, color: hashtag_color[hashtag], level: 1}});
         })
 
-        var edges = buildEdges(hashtags, bucket);
+        var edges = buildEdges(hashtags, bucket, hashtag_color);
     
 //var start = 0
 var layout = {
-    name: 'breadthfirst',
-    root: '[id = "' + "" + '"]'
-
+    name: 'concentric',
+   // root: '[id = "' + hashtags[0] + '"]'
+   concentric: function(node) {
+    return 10 - node.data('level');
+  },
+  levelWidth: function() {
+    return 1;
+  },
+  spacingFactor: 5
 }
 var cy = cytoscape({
     container: document.getElementById('hashtag-users'), // container to render in
@@ -1026,7 +1036,7 @@ var cy = cytoscape({
         selector: 'node',
         style: {
             'font-size': 42,
-          //  'background-color': 'data(color)',
+            'background-color': 'data(color)',
             'width': 100,
             'height': 100,
           'label': 'data(id)'
@@ -1038,8 +1048,8 @@ var cy = cytoscape({
             'width': 10,
             'curve-style': 'bezier',
             'target-arrow-shape': 'triangle',
-            //'line-color': 'data(color)',
-          //  'target-arrow-color': 'data(color)'
+            'line-color': 'data(color)',
+            'target-arrow-color': 'data(color)'
 
         }
       }
