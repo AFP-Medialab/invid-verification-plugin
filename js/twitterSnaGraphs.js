@@ -237,8 +237,12 @@ function topHashtagPie(param) {
         if (firstHisto)
             plot.on('plotly_click', data => {
               //  let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
+                
                 displayTweetsOfWord(data.points[0].label, "tweets_arr_hashtag_place", "hashtags_tweets_toggle_visibility", param["search"]["search"]);
-                firstTopUsers = false;
+                $("#tweets_arr_hashtag_word").on("click", event => {
+                    onHashtagClick();
+                });
+                //firstTopUsers = false;
             });
 
 
@@ -746,6 +750,7 @@ export function exportWords(words, search, start, end)
     exportCSV(csvArr, search, new Date(start), new Date(end));
 
 }
+
 var firstHisto = true;
 export function setFirstHisto(first) {
     firstHisto = first
@@ -964,6 +969,27 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
     }
 }
 
+function onHashtagClick() {
+      // Get the modal
+      var modal = document.getElementById("followGraphModal");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("graph-modal-close")[0];
+
+      // When the user clicks the button, open the modal 
+      modal.style.display = "block";
+      document.getElementById("graph-modal-loader").style.display = "block";
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+      modal.style.display = "none";
+      }
+     // let followers = await buildFollowersList(data.points[0].label);
+      document.getElementById("graph-modal-loader").style.display = "none";
+      displayFollowGraph(data.points[0].label, followers);
+}
+
+
     //For words cloud chart
 function displayTweetsOfWord(word, place, button, search) {
     var visibilityButton = document.getElementById(button);
@@ -996,7 +1022,7 @@ function displayTweetsOfWord(word, place, button, search) {
             }
     });
     tweetArr += "</tbody><tfoot></tfoot></table>"
-    tweetPlace.innerHTML = "Tweets containing : <b>" + word + "</b><br />" + tweetArr;
+    tweetPlace.innerHTML = 'Tweets containing : <span id="' + place.replace("place", "word") + '"><b>' + word + "</b></span><br />" + tweetArr;
     tweetPlace.style.display = "block";
     visibilityButton.style.display = "block";
     exportButton.style.display = "block";
