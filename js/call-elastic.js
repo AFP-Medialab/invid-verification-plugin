@@ -36,17 +36,14 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
     let must = [constructMatchPhrase(param, givenFrom, givenUntil)]
 
     function usersGet(dateObj, infos) {
-
         dateObj["3"]["buckets"].forEach(obj => {
-            if (obj["1"]["value"] > 5) {
+            console.log(obj);
                 infos.push({
                     date: dateObj['key_as_string'],
                     key: obj["key"],
                     nb: obj["1"]["value"]
                 })
-            }
         });
-    
         return infos;
     }
 
@@ -71,6 +68,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             }
         });
         const myJson = await response.json();
+        console.log(myJson);
         if (myJson["error"] === undefined) {
             if (retweets)
                 return getPlotlyJsonHisto(myJson, retweetsGet);
@@ -80,6 +78,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
         else
             window.alert("There was a problem calling elastic search");
     }
+
     return userAction(buildQuery(aggs, must)).then(plotlyJSON => {
 
         if (reProcess) {
@@ -211,7 +210,7 @@ export function generateURLArrayHTML(param) {
       
    
         var buckets = json["aggregations"]["2"]["buckets"];
-        console.log(buckets);
+        //console.log(buckets);
         buckets.forEach(bucket => {
             let key =  bucket["key"];
             var isIn = Array.from(urlArray.keys).includes(bucket["key"].substring(0, bucket["key"].length - 1));
@@ -247,7 +246,7 @@ export function generateURLArrayHTML(param) {
         var val;
         while((val = row.next().value) !== undefined)
          {
-            console.log(val);
+           // console.log(val);
             arrayStr += '<tr>' +
                 '<td><a href="' + val[0] + '" target="_blank">' + val[0] + '</a></td>' +
                 '<td>' + val[1] + '</td></tr>';
@@ -569,7 +568,6 @@ function getPlotlyJsonHisto(json, specificGet) {
         });
     });
     var lines = [];
-    var i = 0;
     while (infos.length !== 0) {
 
         let info = infos.pop();
