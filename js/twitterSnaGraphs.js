@@ -755,16 +755,22 @@ export function setFirstHisto(first) {
 
 
 // When a chart is clicked: To display the tweets of each chart
-function getTweetWithClickableLink(tweet)
+function getTweetWithClickableLink(tweet, link)
 {
     tweet = tweet.replace(
         /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g,
         '<a href="$1" target="_blank">$1</a>');
 
     tweet = tweet.replace(
-        /(pic\.twitter\.com\/)/,
+        /(pic\.twitter\.com\/)/g,
         'http://pic.twitter.com/');
+
+    
+    
       
+
+    tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
+        console.log(tweet);
     return tweet;
 }
     //For TimeLine Chart
@@ -795,8 +801,7 @@ function displayTweetsOfDate(plot, place, button, search) {
 
                         var objDate = new Date(tweetObj._source.date);
                         if (isInRange(pointDate, objDate, isDays)) {
-                            let tweet = getTweetWithClickableLink(tweetObj._source.tweet);
-                                console.log(tweet);
+                            let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);//
                                 
                             console.log("IS IN RANGE");
                             if (minDate === undefined)
