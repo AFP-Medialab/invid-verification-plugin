@@ -755,7 +755,18 @@ export function setFirstHisto(first) {
 
 
 // When a chart is clicked: To display the tweets of each chart
+function getTweetWithClickableLink(tweet)
+{
+    tweet = tweet.replace(
+        /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g,
+        '<a href="$1" target="_blank">$1</a>');
 
+    tweet = tweet.replace(
+        /(pic\.twitter\.com\/)/,
+        'http://pic.twitter.com/');
+      
+    return tweet;
+}
     //For TimeLine Chart
 function displayTweetsOfDate(plot, place, button, search) {
     var visibilityButton = document.getElementById(button);
@@ -784,13 +795,7 @@ function displayTweetsOfDate(plot, place, button, search) {
 
                         var objDate = new Date(tweetObj._source.date);
                         if (isInRange(pointDate, objDate, isDays)) {
-                            let tweet = tweetObj._source.tweet.replace(
-                                /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g,
-                                '<a href="$1" target="_blank">$1</a>');
-
-                               tweet = tweet.replace(
-                                    /(pic\.twitter\.com\/)/,
-                                    'http://pic.twitter.com/');
+                            let tweet = getTweetWithClickableLink(tweetObj._source.tweet);
                                 console.log(tweet);
                                 
                             console.log("IS IN RANGE");
@@ -892,6 +897,8 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
 
             json.hits.hits.forEach(tweetObj => {
                 if (tweetObj._source.username === data.points[0].label) {
+
+                    let tweet = getTweetWithClickableLink(tweetObj._source.tweet);
                     let nb;
                     if (nb_type === "retweets")
                         nb = tweetObj._source.nretweets;
@@ -901,7 +908,7 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
 
                     tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + ' ' +
                         date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                        '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                        '<td class="tweet_arr tweet_arr_tweets">' + tweet + '</td>' +
                         '<td class="tweet_arr tweet_arr_nretweet">' + nb + '</td>';
                     
                     csvArr += date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
@@ -971,10 +978,11 @@ function displayTweetsOfWord(word, place, button, search) {
         if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
             var date = new Date(tweetObj._source.date);
           
+            let tweet = getTweetWithClickableLink(tweetObj._source.tweet);
                 tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + tweetObj._source.username + '" target="_blank">' + tweetObj._source.username + '</a></td>' +
                     '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
                     date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                    '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                    '<td class="tweet_arr tweet_arr_tweets">' + tweet + '</td>' +
                     '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>' +
                     '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nlikes + '</td></tr>';
                 csvArr += tweetObj._source.username  + ',' + 
