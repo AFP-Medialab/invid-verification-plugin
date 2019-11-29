@@ -37,7 +37,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
 
     function usersGet(dateObj, infos) {
         dateObj["3"]["buckets"].forEach(obj => {
-            console.log(obj);
+           // console.log(obj);
                 infos.push({
                     date: dateObj['key_as_string'],
                     key: obj["key"],
@@ -68,7 +68,7 @@ export function generateEssidHistogramPlotlyJson(param, retweets, givenFrom, giv
             }
         });
         const myJson = await response.json();
-        console.log(myJson);
+      //  console.log(myJson);
         if (myJson["error"] === undefined) {
             if (retweets)
                 return getPlotlyJsonHisto(myJson, retweetsGet);

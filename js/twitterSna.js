@@ -138,6 +138,7 @@ function getMediaValue() {
 function export_all() {
     exportPDF(document.getElementById("twitterStats-user").value !== "");
 }
+
 function export_tweets() {
     exportTweets(document.getElementById('twitterStats-search').value, new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
 }
@@ -310,7 +311,7 @@ async function exportPDF(hasUser) {
         $("#tweets_export").css("display", "block");
         $("#url_array").css("margin-left", 0);
 
-        console.log(window.innerWidth);
+       // console.log(window.innerWidth);
         var update2 =  {
             width: window.innerHeight/2,
             height: window.innerHeigth/2

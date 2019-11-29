@@ -3,6 +3,7 @@ import { generateEssidHistogramPlotlyJson, generateWordCloudPlotlyJson, generate
 import "../js/d3.js"
 import "../js/html2canvas/dist/html2canvas.js"
 import "../js/FileSaver.js"
+import "../js/cytoscape.js/dist/cytoscape.min.js"
 import * as data from '../js/stopwords.js'
 
 var stopwords = data.default;
@@ -96,7 +97,7 @@ export function generateGraphs(param) {
 async function showEssidHistogram(param, givenFrom, givenUntil) {
     var plotlyJson = await generateEssidHistogramPlotlyJson(param, false, givenFrom, givenUntil)//.then(plotlyJson => {
 
-    console.log(plotlyJson);
+    //console.log(plotlyJson);
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
@@ -226,6 +227,7 @@ function mostTweetPie(param) {
 function topHashtagPie(param) {
     generateDonutPlotlyJson(param, "hashtags").then(plotlyJson => {
 
+       // console.log(plotlyJson);
         let cloudlayout = generateLayout("<b>Most associated hashtags</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
 
         var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Hashtags");
@@ -240,7 +242,7 @@ function topHashtagPie(param) {
                 
                 displayTweetsOfWord(data.points[0].label, "tweets_arr_hashtag_place", "hashtags_tweets_toggle_visibility", param["search"]["search"]);
                 $("#tweets_arr_hashtag_word").on("click", event => {
-                    onHashtagClick();
+                    onHashtagClick(plotlyJson[0].labels);
                 });
                 //firstTopUsers = false;
             });
@@ -660,7 +662,7 @@ function svgString2Image(svg, width, height, format, callback) {
     var svg = new Blob([svgString], {
         type: 'image/svg+xml;charset=utf-8'
     });
-    console.log(canvas);
+   // console.log(canvas);
 
     var url = DOMURL.createObjectURL(svg);
     var image = new Image();
@@ -775,7 +777,7 @@ function getTweetWithClickableLink(tweet, link)
       
 
     tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
-        console.log(tweet);
+     //   console.log(tweet);
     return tweet;
 }
     //For TimeLine Chart
@@ -786,7 +788,7 @@ function displayTweetsOfDate(plot, place, button, search) {
     var csvArr = "data:text/csv;charset=utf-8,";
     var fullDate = "";
     var json = getTweets();
-    console.log(json);
+  //  console.log(json);
     var maxDate;
     var minDate;
         plot.on('plotly_click', data => {
@@ -799,7 +801,7 @@ function displayTweetsOfDate(plot, place, button, search) {
             let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
             let i = 0;
             data.points.forEach(point => {
-                console.log(point);
+              //  console.log(point);
                 var pointDate = new Date(point.x);
                 json.hits.hits.forEach(tweetObj => {
                     if (tweetObj._source.username === point.data.name) {
@@ -808,7 +810,7 @@ function displayTweetsOfDate(plot, place, button, search) {
                         if (isInRange(pointDate, objDate, isDays)) {
                             let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);//
                                 
-                            console.log("IS IN RANGE");
+                            //console.log("IS IN RANGE");
                             if (minDate === undefined)
                                 minDate = objDate;
                             if (maxDate === undefined)
@@ -969,7 +971,83 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
     }
 }
 
-function onHashtagClick() {
+function buildEdges(hashtags, bucket)
+{
+    var edges = [];
+    bucket.forEach(tweet => {
+        hashtags.forEach(hashtag => {
+            if (tweet._source.tweet.includes(hashtag))
+                edges.push({data: {id: tweet._source.username + '-' + hashtag, source: tweet._source.username, target: hashtag}});
+        })
+    })
+    return edges;
+}
+
+function displayHashtagsUsersGraph(hashtags){
+
+    var bucket = getTweets().hits.hits;
+    console.log(bucket)
+    console.log(hashtags);
+  //  var nodes_color = {};
+    //nodes_color[user] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+    var nodes = []
+    bucket.forEach(tweet => {
+    //nodes_color[tweet] = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+        nodes.push({data: {id: tweet._source.username/*, color: nodes_color[follower], level: 3*/}});
+  //  edges.push({data: {id: follower + '-' + user, source: follower, target: user, color: nodes_color[user]}});
+    })
+    hashtags.forEach(hashtag => {
+            nodes.push({data: {id: hashtag/*, color: nodes_color[follower], level: 3*/}});
+        })
+
+        var edges = buildEdges(hashtags, bucket);
+    
+//var start = 0
+var layout = {
+    name: 'breadthfirst',
+    root: '[id = "' + "" + '"]'
+
+}
+var cy = cytoscape({
+    container: document.getElementById('hashtag-users'), // container to render in
+    
+
+    elements: {
+      nodes: nodes,
+      edges: edges
+    },
+  
+    layout: layout,
+   // zoomingEnabled: false,
+  
+    // so we can see the ids
+    style: [
+      {
+        selector: 'node',
+        style: {
+            'font-size': 42,
+          //  'background-color': 'data(color)',
+            'width': 100,
+            'height': 100,
+          'label': 'data(id)'
+        }
+      },
+      {
+        selector: 'edge',
+        css: {
+            'width': 10,
+            'curve-style': 'bezier',
+            'target-arrow-shape': 'triangle',
+            //'line-color': 'data(color)',
+          //  'target-arrow-color': 'data(color)'
+
+        }
+      }
+    ]
+  });
+}
+
+function onHashtagClick(hashtags) {
       // Get the modal
       var modal = document.getElementById("followGraphModal");
 
@@ -986,7 +1064,8 @@ function onHashtagClick() {
       }
      // let followers = await buildFollowersList(data.points[0].label);
       document.getElementById("graph-modal-loader").style.display = "none";
-      displayFollowGraph(data.points[0].label, followers);
+      displayHashtagsUsersGraph(hashtags);
+      //displayFollowGraph(data.points[0].label, followers);
 }
 
 
