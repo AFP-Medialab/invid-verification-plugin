@@ -13,7 +13,6 @@ var tweetIE_URL = 'http://185.249.140.38/weverify-twitie/process?annotations=:Pe
 var nb_treated, nb_tweets;
 
 
-
 //Call all the graph generation handling the display
 export function generateGraphs(param) {
     let givenFrom = param["query"]["from"];
@@ -104,6 +103,16 @@ async function showEssidHistogram(param, givenFrom, givenUntil) {
                 range: [ param["from"], param["until"]],
                 rangeslider: { range: [givenFrom, givenUntil] },
             },
+            annotations: [{
+                xref: 'paper',
+                yref: 'paper',
+                x: 1.2,
+                xanchor: 'right',
+                y: -0.4,
+                yanchor: 'top',
+                text: 'we-verify.eu',
+                showarrow: false
+              }],
             autosize: true
         };
 
@@ -127,6 +136,7 @@ async function showEssidHistogram(param, givenFrom, givenUntil) {
             displayTweetsOfDate(plot, "tweets_arr_user_time_place", "user_time_tweets_toggle_visibility", param["search"]["search"].replace(" ", '&').replace(/#/g, ""));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         return plotlyJson;
    // });
 }
@@ -154,22 +164,9 @@ function getNbTweets(param, givenFrom, givenUntil) {
     //Most retweeted users chart
 function mostRetweetPie(param) {
     generateDonutPlotlyJson(param, "nretweets").then(plotlyJson => {
-        var cloudlayout = {
-            title: "<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
 
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"],[]], displaylogo: false
-        };
-
+        var cloudlayout = generateLayout("<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets");
 
         var plot = document.getElementById("retweets_cloud_chart");
         Plotly.react('retweets_cloud_chart', plotlyJson, cloudlayout, config);
@@ -177,29 +174,20 @@ function mostRetweetPie(param) {
         if (firstHisto)
             displayTweetsOfUser(plot, 'tweets_arr_retweet_place', 'most_retweeted_tweets_toggle_visibility', "retweets", param["search"]["search"].replace(/ /g, "&"));
 
-        Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+            Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+            Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
+        
         unrotateMainHashtag(param["search"]["search"]);
     });
 }
 
+
     //Most liked user chart
 function mostLikePie(param) {
     generateDonutPlotlyJson(param, "nlikes").then(plotlyJson => {
-        let cloudlayout = {
-            title: "<b>Most liked users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
-
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Likes",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"]], displaylogo: false
-        };
+        let cloudlayout = generateLayout("<b>Most liked users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"])
+           
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Likes");
 
         let plot = document.getElementById("likes_cloud_chart");
         Plotly.react('likes_cloud_chart', plotlyJson, cloudlayout, config);
@@ -208,6 +196,7 @@ function mostLikePie(param) {
             displayTweetsOfUser(plot, 'tweets_arr_like_place', 'most_liked_tweets_toggle_visibility', "likes", param["search"]["search"].replace(/ /g, "&"));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
     });
 }
@@ -216,22 +205,9 @@ function mostLikePie(param) {
 function mostTweetPie(param) {
     //Utilisateurs les actifs
     generateDonutPlotlyJson(param, "ntweets").then(plotlyJson => {
-        var cloudlayout = {
-            title: "<b>Most active users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
+        var cloudlayout = generateLayout("<b>Most active users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
 
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Tweets",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"]], displaylogo: false
-        };
-
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Tweets");
 
         var plot = document.getElementById("top_users_pie_chart");
         Plotly.react('top_users_pie_chart', plotlyJson, cloudlayout, config);
@@ -240,6 +216,7 @@ function mostTweetPie(param) {
             displayTweetsOfUser(plot, "tweets_arr_place", "top_users_tweets_toggle_visibility", "tweets", param["search"]["search"].replace(/ /g, "&"));
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
     });
 }
@@ -247,33 +224,26 @@ function mostTweetPie(param) {
     //Most used hashtags chart
 function topHashtagPie(param) {
     generateDonutPlotlyJson(param, "hashtags").then(plotlyJson => {
-        let cloudlayout = {
-            title: "<b>Most associated hashtags</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"],
-            automargin: true,
-            width: 500,
-            height: 500,
-        };
 
-        var config = {
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Hashtags",
-                scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-            },
-            modeBarButtons: [["toImage"]], displaylogo: false
-        };
+        let cloudlayout = generateLayout("<b>Most associated hashtags</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
+
+        var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Hashtags");
 
         let plot = document.getElementById("hashtag_cloud_chart");
         Plotly.react('hashtag_cloud_chart', plotlyJson, cloudlayout, config);
+
+       // document.getElementById("hashtag_cloud_chart").firstChild.firstChild.firstChild.append('');
         if (firstHisto)
             plot.on('plotly_click', data => {
-                let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
-
+              //  let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
+                displayTweetsOfWord(data.points[0].label, "tweets_arr_hashtag_place", "hashtags_tweets_toggle_visibility", param["search"]["search"]);
+               
             });
 
 
 
         Array.from(document.getElementsByClassName("g-gtitle")).forEach(title => title.style = "display: none");
+        Array.from(document.getElementsByClassName("annotation")).forEach(title => title.style = "display: none");
         unrotateMainHashtag(param["search"]["search"]);
 
     });
@@ -349,7 +319,7 @@ async function mostUsedWordsCloud(param) {
 
             var fontScale = d3.scaleLinear()
                                     .domain([0, d3.max(words, function(d) { return d.size} )])
-                                    .range([10, 95]);
+                                    .range([10, 90]);
             
             var layout = d3.layout  .cloud()
                                     .size([500, 500])
@@ -374,12 +344,16 @@ async function mostUsedWordsCloud(param) {
                 else
                   document.getElementById("top_words_cloud_chart").innerHTML = '<p style="color: red">We were unable to fetch named entities</p>';
 
-                var svg = d3.select("#top_words_cloud_chart").append("svg")
+                var svg = d3.select("#top_words_cloud_chart")
+                            .append("svg").attr("id", "svg_words")
+                            .attr("width", layout.size()[0])
+                            .attr("height", layout.size()[1] + 50)
+                            .append("g")
                             .attr("width", layout.size()[0])
                             .attr("height", layout.size()[1])
-                            .append("g")
                             .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
                             .selectAll("text")
+                            
                             .data(words)
                             .enter().append("text")
                             .style("font-size", function (d) { return d.size + "px"; })
@@ -392,9 +366,17 @@ async function mostUsedWordsCloud(param) {
                             .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
                             .append("svg:title")
                             .text(d => "Used " + final_map.get(d.text) + " times");
+                
+                      d3.select("#svg_words").append("text")
+                        .attr("id", "we-verify")
+                        .attr("style", "display: none")
+                        .attr("transform", "translate(" + (layout.size()[0] - 200) + "," + (layout.size()[1] + 10) + ")")
+                        .text("we-verify.eu");
 
-                var width = 300, height = 300;
-
+                var width = 300, height = 300; 
+               // var node = document.createElement();
+                //node.appendChild(document.createTextNode('we-verify.eu'));
+                
                 $('.top_words_loader').css('display', "none");
                 document.getElementById('progress_state_place').innerHTML = "";
 
@@ -415,7 +397,14 @@ async function mostUsedWordsCloud(param) {
                             var svgEl = document.getElementById("top_words_cloud_chart").children[0];
                             svgDownload(svgEl, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.svg');
 
+                    })
+                d3  .select('#exportWordsCloudCsv')
+                    .on('click', 
+                        () => {
+                            exportWords(final_map, 'WordCloud_' + param.search.search, param.from, param.until);
+
                         })
+                        
                     
             }
         });
@@ -430,7 +419,42 @@ function urlArray(param) {
 
 
 
+// Functions building plots needed
 
+    //Generate the layouts
+function generateLayout(title)
+{
+    return {
+        title: title,
+        automargin: true,
+        width: window.innerWidth/2,
+        height: window.innerWidth/2,
+        annotations: [{
+            xref: 'paper',
+            yref: 'paper',
+            x: 1,
+            xanchor: 'bottom',
+            y: 0,
+            yanchor: 'right',
+            text: 'we-verify.eu',
+            showarrow: false
+          }]
+        
+    }
+}
+
+    //Generate config
+function generateConfig(title)
+{
+    return {
+        toImageButtonOptions: {
+            format: 'png', // one of png, svg, jpeg, webp
+            filename: title,
+            scale: 0.8 // Multiply title/legend/axis/canvas sizes by this factor
+        },
+        modeBarButtons: [["toImage"]], displaylogo: false
+    };
+}
 
 //Function helping building words cloud
 
@@ -512,7 +536,6 @@ async function buildTweetieJson(tweet) {
                 'Content-Type': 'text/plain'
             } 
         })
-
             if (!response.ok) {
                 return {
                    error: response.status
@@ -611,39 +634,46 @@ function unrotateMainHashtag(search) {
 
     //Download as PNG
 function svgString2Image(svg, width, height, format, callback) {
-var format = format ? format : 'png';
 
-svg.style.backgroundColor = "white";
-var serializer = new XMLSerializer();
-var svgString = serializer.serializeToString(svg);
+    d3.select("#we-verify").attr("style", "font-size: 20px;");
+    var format = format ? format : 'png';
+    svg.style.backgroundColor = "white";
+    var serializer = new XMLSerializer();
 
-var canvas = document.createElement("canvas");
-var context = canvas.getContext("2d");
+    var node = document.createElement('text');
+   
+    var svgString = serializer.serializeToString(svg);
 
-canvas.width = width;
-canvas.height = height;
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
 
-var DOMURL = self.URL || self.webkitURL || self;
+    canvas.width = width;
+    canvas.height = height;
 
-var svg = new Blob([svgString], {
-    type: 'image/svg+xml;charset=utf-8'
-});
+    var DOMURL = self.URL || self.webkitURL || self;
 
-var url = DOMURL.createObjectURL(svg);
-var image = new Image();
-image.addEventListener('load', function() {  
-    context.clearRect(0, 0, width, height);
-    context.drawImage(image, 0, 0, width, height);
-
-    canvas.toBlob(function(blob) {
-        var filesize = Math.round(blob.length / 1024) + ' KB';
-        if (callback) callback(blob, filesize);
+    var svg = new Blob([svgString], {
+        type: 'image/svg+xml;charset=utf-8'
     });
-});
 
-image.setAttribute("src", url);
+    var url = DOMURL.createObjectURL(svg);
+    var image = new Image();
+    image.addEventListener('load', function() {  
+        context.clearRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
 
-image.onerror = error => {return alert("IMG ERROR: " + error);}
+        canvas.toBlob(function(blob) {
+            var filesize = Math.round(blob.length / 1024) + ' KB';
+            if (callback) callback(blob, filesize);
+        });
+    });
+
+    image.setAttribute("src", url);
+
+
+  
+    d3.select("#we-verify").attr("style", "display: none");
+    image.onerror = error => {return alert("IMG ERROR: " + error);}
 
 }
 
@@ -651,6 +681,7 @@ image.onerror = error => {return alert("IMG ERROR: " + error);}
 function svgDownload(svgEl, name)
 {
 
+    d3.select("#we-verify").attr("style", "font-size: 20px;");
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     var svgData = svgEl.outerHTML;
     var preface = '<?xml version="1.0" standalone="no"?>\r\n';
@@ -660,6 +691,24 @@ function svgDownload(svgEl, name)
     downloadLink.href = svgUrl;
     downloadLink.download = name;
     downloadLink.click();
+
+    d3.select("#we-verify").attr("style", "display: none");
+}
+
+function exportCSV(csvArr, search, start, end)
+{
+    var blob = new Blob([csvArr], { type: 'text/csv;charset=utf-8;' });
+
+    // var encodedUri = encodeURI(csvArr);
+    var url = URL.createObjectURL(blob);
+     let link = document.createElement("a");
+     link.setAttribute("href", url);
+     link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
+     link.style.visibility = 'hidden';
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+
 }
 
     //Download tweets ad CSV
@@ -678,21 +727,23 @@ export function exportTweets(search, start, end)
         tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
     })  
     
-    var blob = new Blob([csvArr], { type: 'text/csv;charset=utf-8;' });
-
-       // var encodedUri = encodeURI(csvArr);
-       var url = URL.createObjectURL(blob);
-        let link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", "tweets_" + search.replace(/ /g, "&").replace(/#/g, "") + '_' + start.getDate() + '-' + (start.getMonth()+1) + '-' + start.getFullYear() + '_' + start.getHours() + 'h' + start.getMinutes() + '_' + end.getDate() + '-' + (end.getMonth()+1) + '-' + end.getFullYear() + '_' + end.getHours() + 'h' + end.getMinutes() + ".csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
+    exportCSV(csvArr, search, start, end);
 
 }
 
+export function exportWords(words, search, start, end)
+{
+    var csvArr =  "";
+    csvArr += "Word,NbOccurence\n";
+
+    words.forEach((value, key, map) => 
+    {        
+        csvArr += key + "," + value + "\n";
+    })  
+    
+    exportCSV(csvArr, search, new Date(start), new Date(end));
+
+}
 var firstHisto = true;
 export function setFirstHisto(first) {
     firstHisto = first
@@ -702,7 +753,23 @@ export function setFirstHisto(first) {
 
 
 // When a chart is clicked: To display the tweets of each chart
+function getTweetWithClickableLink(tweet, link)
+{
+    tweet = tweet.replace(
+        /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?|pic\.twitter\.com\/([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g,
+        '<a href="$1" target="_blank">$1</a>');
 
+    tweet = tweet.replace(
+        /(pic\.twitter\.com\/)/g,
+        'http://pic.twitter.com/');
+
+    
+    
+      
+
+    tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
+    return tweet;
+}
     //For TimeLine Chart
 function displayTweetsOfDate(plot, place, button, search) {
     var visibilityButton = document.getElementById(button);
@@ -725,8 +792,11 @@ function displayTweetsOfDate(plot, place, button, search) {
                 var pointDate = new Date(point.x);
                 json.hits.hits.forEach(tweetObj => {
                     if (tweetObj._source.username === point.data.name) {
+
                         var objDate = new Date(tweetObj._source.date);
                         if (isInRange(pointDate, objDate, isDays)) {
+                            let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);//
+                                
                             if (minDate === undefined)
                                 minDate = objDate;
                             if (maxDate === undefined)
@@ -735,7 +805,7 @@ function displayTweetsOfDate(plot, place, button, search) {
                             tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + point.data.name + '" target="_blank">' + point.data.name + '</a></td>' +
                                 '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
                                 date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                                '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                                '<td class="tweet_arr tweet_arr_tweets">' + tweet + '</td>' +
                                 '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td></tr>';
                             csvArr += point.data.name + ',' + 
                                       date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
@@ -825,6 +895,8 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
 
             json.hits.hits.forEach(tweetObj => {
                 if (tweetObj._source.username === data.points[0].label) {
+
+                    let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);
                     let nb;
                     if (nb_type === "retweets")
                         nb = tweetObj._source.nretweets;
@@ -834,7 +906,7 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
 
                     tweetArr += '<tr><td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + ' ' +
                         date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                        '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                        '<td class="tweet_arr tweet_arr_tweets">' + tweet + '</td>' +
                         '<td class="tweet_arr tweet_arr_nretweet">' + nb + '</td>';
                     
                     csvArr += date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
@@ -904,10 +976,11 @@ function displayTweetsOfWord(word, place, button, search) {
         if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
             var date = new Date(tweetObj._source.date);
           
+            let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);
                 tweetArr += '<tr><td class="tweet_arr tweet_arr_users"><a  href="https://twitter.com/' + tweetObj._source.username + '" target="_blank">' + tweetObj._source.username + '</a></td>' +
                     '<td class="tweet_arr tweet_arr_date">' + date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '<br /> ' +
                     date.getHours() + 'h' + date.getMinutes() + '</td>' +
-                    '<td class="tweet_arr tweet_arr_tweets">' + tweetObj._source.tweet + '</td>' +
+                    '<td class="tweet_arr tweet_arr_tweets">' + tweet + '</td>' +
                     '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nretweets + '</td>' +
                     '<td class="tweet_arr tweet_arr_nretweet">' + tweetObj._source.nlikes + '</td></tr>';
                 csvArr += tweetObj._source.username  + ',' + 
@@ -981,6 +1054,13 @@ $("#exportWordsCloudJpg").on("mouseleave", event => {
 $("#exportWordsCloudSvg").on("mouseenter", event => {
     $("#exportWordsCloudSvg").css({"opacity": 0.66, "cursor": "pointer"});
 });
-$("#exportWordsCloudJpg").on("mouseleave", event => {
+$("#exportWordsCloudSvg").on("mouseleave", event => {
     $("#exportWordsCloudSvg").css({"opacity": 0.33});
 });
+$("#exportWordsCloudCsv").on("mouseenter", event => {
+    $("#exportWordsCloudCsv").css({"opacity": 0.66, "cursor": "pointer"});
+});
+$("#exportWordsCloudCsv").on("mouseleave", event => {
+    $("#exportWordsCloudCsv").css({"opacity": 0.33});
+});
+
