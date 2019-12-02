@@ -51,7 +51,10 @@ function stringToList(string) {
  */
 function formToJsonCollectRequest() {
 
-    document.getElementById("tweetCounter_contents").innerHTML = "";
+   // document.getElementById("tweetCounter_contents").innerHTML = "";
+   document.getElementById("counter_number").innerHTML = "";
+   document.getElementById("retweetsCounter").innerHTML = "";
+   document.getElementById("likesCounter").innerHTML = "";
     document.getElementById("tweets_arr_like_place").innerHTML = "";
     document.getElementById('tweets_arr_place').innerHTML = "";
     document.getElementById('tweets_arr_retweet_place').innerHTML = "";

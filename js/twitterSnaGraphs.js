@@ -144,19 +144,47 @@ async function showEssidHistogram(param, givenFrom, givenUntil) {
     //Tweets Count
 function getNbTweets(param, givenFrom, givenUntil) {
     return generateTweetCountPlotlyJson(param, givenFrom, givenUntil).then(res => {
-        document.getElementById("tweetCounter_contents").innerHTML = "";
-        let counter = document.createElement("div");
-        counter.setAttribute("id", "counter_number");
-        let nb_text = document.createTextNode(res.value);
-        counter.appendChild(nb_text);
+     //   document.getElementById("tweetCounter_contents").innerHTML = "";
+        document.getElementById("counter_number").innerHTML = "";
+        document.getElementById("retweetsCounter").innerHTML = "";
+        document.getElementById("likesCounter").innerHTML = "";
 
-        let tweetDiv = document.createElement("div");
+        let counter = document.getElementById("counter_number");
+        let retweetCounter = document.getElementById("retweetsCounter");
+        let likeCounter = document.getElementById("likesCounter");
+       // counter.setAttribute("id", "counter_number");
+       let nb_div = document.createElement("div");
+        let nb_text = document.createTextNode(res.hits.total.value);
+        nb_div.setAttribute("class", "numberNode");
+        nb_div.appendChild(nb_text);
+
+
+       let retweet_div = document.createElement("div");
+        let retweet_text = document.createTextNode(res.aggregations.retweets.value);
+        retweet_div.setAttribute("class", "numberNode");
+        retweet_div.appendChild(retweet_text);
+
+        let like_div = document.createElement("div");
+        let like_text = document.createTextNode(res.aggregations.likes.value);
+        like_div.setAttribute("class", "numberNode");
+        like_div.appendChild(like_text);
+
+        counter.appendChild(nb_div);
+        retweetCounter.appendChild(retweet_div);      
+        likeCounter.appendChild(like_div);
+
+
+       // let tweetDiv = document.createElement("div");
         let tweetText = document.createTextNode("Tweets");
-        tweetDiv.appendChild(tweetText);
+        let retweetText = document.createTextNode("Retweets");
+        let likeText = document.createTextNode("Likes");
+        counter.appendChild(tweetText);
 
+        retweetCounter.appendChild(retweetText);
+        likeCounter.appendChild(likeText);
 
-        document.getElementById("tweetCounter_contents").appendChild(counter);
-        document.getElementById("tweetCounter_contents").appendChild(tweetDiv);
+        //document.getElementById("tweetCounter_contents").appendChild(counter);
+        //document.getElementById("tweetCounter_contents").appendChild(tweetDiv);
         nb_tweets = res.value;
     })
 }
@@ -164,7 +192,6 @@ function getNbTweets(param, givenFrom, givenUntil) {
     //Most retweeted users chart
 function mostRetweetPie(param) {
     generateDonutPlotlyJson(param, "nretweets").then(plotlyJson => {
-
         var cloudlayout = generateLayout("<b>Most retweeted users</b><br>" + param["search"]["search"] + " " + param["from"] + " " + param["until"]);
         var config = generateConfig(param["search"]["search"] + "_" + param["from"] + "_" + param["until"] + "_Retweets");
 

@@ -114,7 +114,8 @@ export function generateTweetCountPlotlyJson(param) {
     var must = [
         constructMatchPhrase(param)
     ]
-    return getJson(param, {}, must).then( json => json["hits"]["total"]);
+    var aggs = constructAggs("glob");
+    return getJson(param, aggs, must).then( json => json);
 }
 
     //Donut charts (Most liked, most retweeted, most used hashtags, most active users)
@@ -148,6 +149,7 @@ export function generateDonutPlotlyJson(param, field) {
     }
 
     var query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    console.log(query);
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -373,10 +375,8 @@ function constructMatchPhrase(param, startDate, endDate)
     //Construct the aggregations (chose what information we will have in the response)
 function constructAggs(field)
 {
+    let fieldInfo = ((field === "glob")? '{"retweets":' : '{"2":');
 
-
-    let fieldInfo = '{' +
-            '"2":'
     if (field === "hashtags" || field === "urls") {
         fieldInfo += JSON.stringify({
             "terms": {
@@ -389,6 +389,7 @@ function constructAggs(field)
         })
     }
     else if (field === "nretweets" || field === "nlikes") {
+
         fieldInfo += JSON.stringify({
             "terms": {
                 "field": "username",
@@ -405,6 +406,7 @@ function constructAggs(field)
                 }
             }
         })
+
     }
     else if (field.includes('1')) {
         fieldInfo += JSON.stringify({
@@ -439,6 +441,12 @@ function constructAggs(field)
             }
         });
     }
+    else if (field === "glob")
+    {
+        fieldInfo += "{" +
+            '"sum" :' +
+                '{"field":"nretweets"}},"likes": {"sum":{"field":"nlikes"}}';
+    }
     else {
         fieldInfo += JSON.stringify({
                 "terms": {
@@ -459,9 +467,10 @@ function constructAggs(field)
 
 //To fetch all the tweets (Bypass the 10 000 limit with elastic search)
 async function getJson(param, aggs, must) {
+    let query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
     const response = await fetch(elasticSearch_url, {
         method: 'POST',
-        body: JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}"),
+        body: query,
         headers: {
             'Content-Type': 'application/json'
         }
@@ -514,7 +523,6 @@ function getPlotlyJsonCloud(json, specificGet, hashTagKey) {
     var parents = [];
     var value = [];
 
-    
     let keys = json["aggregations"]["2"]["buckets"];
 
     if (keys.length === 0)

@@ -1095,10 +1095,18 @@ third-parties-menu div figure:hover{
 	line-height: 22px;
 }
 
-#counter_number {
+.numberNode {
+	margin: 0px auto 0px;
+	padding: 0px 0px 40px;
+	font-size: 60pt;
+	line-height: 60px;
+	/*overflow: hidden;*/
+	overflow-wrap: break-word;
+}
+
+.count {
 	margin: 30px auto 15px;
 	padding: 10px 50px 40px;
-	font-size: 60pt;
 }
 /*
 .username_col {
