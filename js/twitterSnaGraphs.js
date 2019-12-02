@@ -96,7 +96,6 @@ export function generateGraphs(param) {
 async function showEssidHistogram(param, givenFrom, givenUntil) {
     var plotlyJson = await generateEssidHistogramPlotlyJson(param, false, givenFrom, givenUntil)//.then(plotlyJson => {
 
-    console.log(plotlyJson);
         var layout = {
             title: "<b>Propagation Timeline</b> - " + param["search"]["search"] + " " + param["from"] + " " + param["until"],
             automargin: true,
@@ -238,7 +237,7 @@ function topHashtagPie(param) {
             plot.on('plotly_click', data => {
               //  let win = window.open("https://twitter.com/search?q=" + data.points[0].label.replace('#', "%23"), '_blank');
                 displayTweetsOfWord(data.points[0].label, "tweets_arr_hashtag_place", "hashtags_tweets_toggle_visibility", param["search"]["search"]);
-                firstTopUsers = false;
+               
             });
 
 
@@ -656,7 +655,6 @@ function svgString2Image(svg, width, height, format, callback) {
     var svg = new Blob([svgString], {
         type: 'image/svg+xml;charset=utf-8'
     });
-    console.log(canvas);
 
     var url = DOMURL.createObjectURL(svg);
     var image = new Image();
@@ -770,7 +768,6 @@ function getTweetWithClickableLink(tweet, link)
       
 
     tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
-        console.log(tweet);
     return tweet;
 }
     //For TimeLine Chart
@@ -781,7 +778,6 @@ function displayTweetsOfDate(plot, place, button, search) {
     var csvArr = "data:text/csv;charset=utf-8,";
     var fullDate = "";
     var json = getTweets();
-    console.log(json);
     var maxDate;
     var minDate;
         plot.on('plotly_click', data => {
@@ -790,11 +786,9 @@ function displayTweetsOfDate(plot, place, button, search) {
 
             tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th></tr></thead><tbody>';
             csvArr += "Username,Date,Tweet,Nb of retweets\n";
-            //console.log(data);
             let isDays = (((new Date(data.points[0].data.x[0])).getDate() - (new Date(data.points[0].data.x[1])).getDate()) !== 0);
             let i = 0;
             data.points.forEach(point => {
-                console.log(point);
                 var pointDate = new Date(point.x);
                 json.hits.hits.forEach(tweetObj => {
                     if (tweetObj._source.username === point.data.name) {
@@ -803,7 +797,6 @@ function displayTweetsOfDate(plot, place, button, search) {
                         if (isInRange(pointDate, objDate, isDays)) {
                             let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);//
                                 
-                            console.log("IS IN RANGE");
                             if (minDate === undefined)
                                 minDate = objDate;
                             if (maxDate === undefined)
