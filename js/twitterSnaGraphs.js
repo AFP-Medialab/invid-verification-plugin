@@ -743,7 +743,7 @@ export function exportTweets(search, start, end)
 {
     var csvArr =  "";
     var json = getTweets();
-    csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
+    csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes, link\n";
 
     json.hits.hits.forEach(tweetObj => 
     {        
@@ -751,7 +751,7 @@ export function exportTweets(search, start, end)
 
         csvArr += tweetObj._source.username  + ',' + 
         date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear() + '_' + date.getHours() + 'h' + date.getMinutes() + ',"' +
-        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + '\n';
+        tweetObj._source.tweet + '",' + tweetObj._source.nretweets + ',' + tweetObj._source.nlikes + ',' + tweetObj._source.link + '\n';
     })  
     
     exportCSV(csvArr, search, start, end);
@@ -797,6 +797,7 @@ function getTweetWithClickableLink(tweet, link)
     tweet += '<div align="right"><a href="' + link + '" target="_blank" ><img src="img/twitter_logo.png" style="height: 40px"/></a></div>';
     return tweet;
 }
+
     //For TimeLine Chart
 function displayTweetsOfDate(plot, place, button, search) {
     var visibilityButton = document.getElementById(button);
@@ -922,7 +923,7 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
 
             json.hits.hits.forEach(tweetObj => {
                 if (tweetObj._source.username === data.points[0].label) {
-
+                    console.log(tweetObj);
                     let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);
                     let nb;
                     if (nb_type === "retweets")
