@@ -149,6 +149,7 @@ export function generateDonutPlotlyJson(param, field) {
     }
 
     var query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
+    
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
