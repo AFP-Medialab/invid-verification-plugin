@@ -12,6 +12,16 @@ var tweetIE_URL = 'http://185.249.140.38/weverify-twitie/process?annotations=:Pe
 //For words cloud generation loader
 var nb_treated, nb_tweets;
 
+function getMediaValue() {
+    if (document.getElementById("twitterStats-radio_none").checked)
+        return null;
+    else if (document.getElementById('twitterStats-radio-images').checked)
+        return "image";
+    else if (document.getElementById('twitterStats-radio-videos').checked)
+        return "video";
+    else
+        return "both";
+}
 
 //Call all the graph generation handling the display
 export function generateGraphs(param) {
@@ -26,7 +36,8 @@ export function generateGraphs(param) {
             and : document.getElementById("twitterStats-search-and").value.split(' ')
         },
         user_list: document.getElementById("twitterStats-user").value.split(" "),
-        session: param.session
+        session: param.session,
+        media: getMediaValue()
     }
     
     return getNbTweets(entries).then(() => {
@@ -185,7 +196,8 @@ function getNbTweets(param, givenFrom, givenUntil) {
 
         //document.getElementById("tweetCounter_contents").appendChild(counter);
         //document.getElementById("tweetCounter_contents").appendChild(tweetDiv);
-        nb_tweets = res.value;
+
+        nb_tweets = res.hits.total.value;
     })
 }
 
@@ -340,7 +352,7 @@ async function mostUsedWordsCloud(param) {
             var final_map = getnMax(words_map, 100);
             var words_arr = Array.from(final_map.keys());
             var words =  words_arr.map(word => {
-                let obj = { text: word, size: final_map.get(word), color: getColor(word, tokens_JSON) }; 
+                let obj = { text: word.replace(/_/g, ' '), size: final_map.get(word), color: getColor(word, tokens_JSON) }; 
                 return obj;
             });
 
@@ -390,7 +402,7 @@ async function mostUsedWordsCloud(param) {
                             .text(function (d) { return d.text; })
                             .style("fill", fillColor)
                             .style("cursor", "default")
-                            .on("click", d => displayTweetsOfWord(d.text, "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
+                            .on("click", d => displayTweetsOfWord(d.text.replace(/ /g, '_'), "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
                             .append("svg:title")
                             .text(d => "Used " + final_map.get(d.text) + " times");
                 

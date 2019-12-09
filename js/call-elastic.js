@@ -149,7 +149,6 @@ export function generateDonutPlotlyJson(param, field) {
     }
 
     var query = JSON.stringify(buildQuery(aggs, must)).replace(/\\/g, "").replace(/\"{/g, "{").replace(/}\"/g, "}");
-    console.log(query);
     const userAction = async () => {
         const response = await fetch(elasticSearch_url, {
             method: 'POST',
@@ -356,6 +355,28 @@ function constructMatchPhrase(param, startDate, endDate)
             }
         })
     }
+
+    // MEDIA HANDLE
+    if (param.media === 'video' || param.media === 'both')
+    {
+        match_phrases += ',' + JSON.stringify({
+            "range": {
+                "video": {
+                    "gt": 0,
+                }
+            }
+        })
+    }
+    if (param.media === 'image' || param.media === 'both')
+    {
+        match_phrases += ',{' + 
+                        '"exists": {' +
+                            '"field": "photos"' +
+                        '}'+
+                    '}' 
+               
+    }
+
     // RANGE SETUP
     match_phrases += "," + JSON.stringify({
         "range": {
@@ -366,6 +387,8 @@ function constructMatchPhrase(param, startDate, endDate)
             }
         }
     });
+
+
 
     return match_phrases
    

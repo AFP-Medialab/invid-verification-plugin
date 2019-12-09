@@ -71,7 +71,7 @@ function formToJsonCollectRequest() {
     let until = document.getElementById("twitterStats-to-date").value;
 
     let verified = document.getElementById("twitterStats-radio_yes").checked;
-    let media = getMediaValue;
+    let media = getMediaValue();
 
     let retweetsHandling = null;
 
@@ -127,7 +127,7 @@ function formToJsonCollectRequest() {
 function getMediaValue() {
     if (document.getElementById("twitterStats-radio_none").checked)
         return null;
-    else if (document.getElementById('twitterStats-radio-image').checked)
+    else if (document.getElementById('twitterStats-radio-images').checked)
         return "image";
     else if (document.getElementById('twitterStats-radio-videos').checked)
         return "video";
@@ -141,6 +141,7 @@ function getMediaValue() {
 function export_all() {
     exportPDF(document.getElementById("twitterStats-user").value !== "");
 }
+
 function export_tweets() {
     exportTweets(document.getElementById('twitterStats-search').value, new Date(document.getElementById("twitterStats-from-date").value), new Date(document.getElementById("twitterStats-to-date").value));
 }
@@ -391,7 +392,7 @@ async function waitStatusDone(session) {
             {
                 return null;
             }
-          else if (json["status"] === "Done" || json["status"] === "Error")
+            else if (json["status"] === "Done" || json["status"] === "Error")
                 res = json;
             else {
 
