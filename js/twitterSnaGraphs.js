@@ -382,7 +382,7 @@ async function mostUsedWordsCloud(param) {
 
             var fontScale = d3.scaleLinear()
                 .domain([0, d3.max(words, function (d) { return d.size })])
-                .range([10, 80]);
+                .range([12, 80]);
 
             var layout = d3.layout.cloud()
                 .size([500, 500])
@@ -490,8 +490,8 @@ function generateLayout(title) {
     return {
         title: title,
         automargin: true,
-        width: window.innerWidth / 2,
-        height: window.innerWidth / 2,
+        width: window.innerHeight,
+        height: window.innerHeight,
         annotations: [{
             xref: 'paper',
             yref: 'paper',
