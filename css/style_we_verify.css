@@ -1096,17 +1096,20 @@ third-parties-menu div figure:hover{
 }
 
 .numberNode {
-	margin: 0px auto 0px;
-	padding: 0px 0px 40px;
-	font-size: 60pt;
+	margin: auto;
+	font-size: 48pt;
 	line-height: 60px;
-	/*overflow: hidden;*/
-	overflow-wrap: break-word;
 }
 
 .count {
-	margin: 30px auto 15px;
-	padding: 10px 50px 40px;
+	width: fit-content;
+	margin:	auto;
+	/*padding: 10px 50px 40px;*/
+}
+.count-div {
+	width: fit-content;
+	margin:	auto;
+	padding: 30px;
 }
 /*
 .username_col {

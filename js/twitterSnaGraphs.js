@@ -162,33 +162,45 @@ function getNbTweets(param, givenFrom, givenUntil) {
         // counter.setAttribute("id", "counter_number");
         let nb_div = document.createElement("div");
         let nb_text = document.createTextNode(res.hits.total.value);
-        nb_div.setAttribute("class", "numberNode");
+        nb_div.setAttribute("class", "numberNode row");
         nb_div.appendChild(nb_text);
-
 
         let retweet_div = document.createElement("div");
         let retweet_text = document.createTextNode(res.aggregations.retweets.value);
-        retweet_div.setAttribute("class", "numberNode");
+        retweet_div.setAttribute("class", "numberNode row");
         retweet_div.appendChild(retweet_text);
+        
 
         let like_div = document.createElement("div");
         let like_text = document.createTextNode(res.aggregations.likes.value);
-        like_div.setAttribute("class", "numberNode");
+        like_div.setAttribute("class", "numberNode row");
         like_div.appendChild(like_text);
 
+
+        let tweetsDiv = document.createElement("div");
+        tweetsDiv.setAttribute("class", "row count")
+        let tweetText = document.createTextNode("Tweets");
+
+        tweetsDiv.appendChild(tweetText);
+        counter.appendChild(tweetsDiv);
+
+        let retweetText = document.createTextNode("Retweets");
+        let retweetsDiv = document.createElement("div");
+        retweetsDiv.setAttribute("class", "row count")
+        retweetsDiv.appendChild(retweetText);
+        retweetCounter.appendChild(retweetsDiv);
+
+             
+        let likeText = document.createTextNode("Likes");
+        let likesDiv = document.createElement("div");
+        likesDiv.setAttribute("class", "row count")
+        likesDiv.appendChild(likeText);
+        likeCounter.appendChild(likesDiv)
+
         counter.appendChild(nb_div);
+    
         retweetCounter.appendChild(retweet_div);
         likeCounter.appendChild(like_div);
-
-
-        // let tweetDiv = document.createElement("div");
-        let tweetText = document.createTextNode("Tweets");
-        let retweetText = document.createTextNode("Retweets");
-        let likeText = document.createTextNode("Likes");
-        counter.appendChild(tweetText);
-
-        retweetCounter.appendChild(retweetText);
-        likeCounter.appendChild(likeText);
 
         //document.getElementById("tweetCounter_contents").appendChild(counter);
         //document.getElementById("tweetCounter_contents").appendChild(tweetDiv);
