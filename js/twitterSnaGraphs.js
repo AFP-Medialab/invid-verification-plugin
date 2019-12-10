@@ -356,10 +356,13 @@ async function mostUsedWordsCloud(param) {
             };
 
         }
+
         forLoop().then(() => {
 
-            let final_map = getnMax(words_map, 100);;
+            let final_map = getnMax(words_map, 100);
+            let inner_words = new Map();
 
+            //Substract sentenses count to inner words
             var entries = Array.from(final_map.entries())
             entries.forEach(word => {
                // console.log(word);
@@ -367,13 +370,20 @@ async function mostUsedWordsCloud(param) {
                 {
                     if (word[0] !== entries[i][0] && entries[i][0].match(new RegExp('(^|[ _])' + word[0] + '([ _]|$)')))
                     {
-                        console.log(word[0] + " : " +  entries[i][0])
+                        let sentenses = inner_words.get(word[0])
+                        if (sentenses  === undefined)
+                            sentenses = [entries[i][0]];
+                        else
+                            sentenses = [...sentenses, entries[i][0]];
+
+                        inner_words.set(word[0], sentenses)
                         final_map.set(word[0], word[1] - entries[i][1]);
                     }
 
                 }
             })
 
+            console.log(inner_words);
             var words_arr = Array.from(final_map.keys());
             var words = words_arr.map(word => {
                 let obj = { text: word.replace(/_/g, ' '), size: final_map.get(word), color: getColor(word, tokens_JSON) };
@@ -385,7 +395,7 @@ async function mostUsedWordsCloud(param) {
                 .range([12, 80]);
 
             var layout = d3.layout.cloud()
-                .size([500, 500])
+                .size([window.innerWidth, window.innerHeight])
                 .words(words)
 
                 .padding(5)
@@ -401,6 +411,7 @@ async function mostUsedWordsCloud(param) {
             function fillColor(d) {
                 return d.color;
             }
+
             function draw(words) {
                 if (!serverDown)
                     document.getElementById("top_words_cloud_chart").innerHTML = "";
@@ -410,11 +421,11 @@ async function mostUsedWordsCloud(param) {
                 var svg = d3.select("#top_words_cloud_chart")
                     .append("svg").attr("id", "svg_words")
                     .attr("width", layout.size()[0])
-                    .attr("height", layout.size()[1] + 50)
+                    .attr("height", layout.size()[1])
                     .append("g")
                     .attr("width", layout.size()[0])
                     .attr("height", layout.size()[1])
-                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                    .attr("transform", "translate(" + layout.size()[0] / 2.5 + "," + layout.size()[1] / 2 + ")")
                     .selectAll("text")
 
                     .data(words)
@@ -426,7 +437,7 @@ async function mostUsedWordsCloud(param) {
                     .text(function (d) { return d.text; })
                     .style("fill", fillColor)
                     .style("cursor", "default")
-                    .on("click", d => displayTweetsOfWord(d.text.replace(/ /g, '_'), "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
+                    .on("click", d => displayTweetsOfWord(d.text.replace(/ /g, '_'), inner_words, "tweets_word_arr_place", "top_words_tweets_toggle_visibility", param["search"]["search"].replace(/ /g, "&").replace(/#/g, "")))
                     .append("svg:title")
                     .text(d => "Used " + final_map.get(d.text.replace(/ /g, "_")) + " times");
 
@@ -1005,8 +1016,22 @@ function displayTweetsOfUser(plot, place, button, nb_type, search) {
     }
 }
 
+function includesOneOf(tweet, inner_words)
+{
+    if (inner_words === undefined)
+        return false;
+    for (let word in inner_words){
+        if (tweet.match(new RegExp(inner_words[word].replace(/_/g, ' '), 'i')))
+        {
+            return true;
+        }
+    }
+    return false;
+    
+}
+
 //For words cloud chart
-function displayTweetsOfWord(word, place, button, search) {
+function displayTweetsOfWord(word, inner_words, place, button, search) {
     var visibilityButton = document.getElementById(button);
     var tweetPlace = document.getElementById(place);
 
@@ -1021,7 +1046,11 @@ function displayTweetsOfWord(word, place, button, search) {
     tweetArr += '<thead><tr><th class="tweet_arr_users">Username</th><th class="tweet_arr_date">Date</th><th class="tweet_arr_tweets">Tweet</th><th class="tweet_arr">Nb of retweets</th><th scope="col">Nb of likes</th></tr></thead><tbody>';
     csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
     json.hits.hits.forEach(tweetObj => {
-        if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i"))) {
+       
+        console.log(includesOneOf(tweetObj._source.tweet, inner_words.get(word)));
+        if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i") )
+            && !includesOneOf(tweetObj._source.tweet, inner_words.get(word)))
+        { 
             var date = new Date(tweetObj._source.date);
 
             let tweet = getTweetWithClickableLink(tweetObj._source.tweet, tweetObj._source.link);
