@@ -377,13 +377,15 @@ async function mostUsedWordsCloud(param) {
                             sentenses = [...sentenses, entries[i][0]];
 
                         inner_words.set(word[0], sentenses)
-                        final_map.set(word[0], word[1] - entries[i][1]);
+                        if (word[1] - entries[i][1] >= Array.from(final_map)[final_map.size-1][1])
+                            final_map.set(word[0], word[1] - entries[i][1]);
+                        else
+                            final_map.delete(word[0]);
                     }
-
                 }
             })
+            console.log(final_map)
 
-            console.log(inner_words);
             var words_arr = Array.from(final_map.keys());
             var words = words_arr.map(word => {
                 let obj = { text: word.replace(/_/g, ' '), size: final_map.get(word), color: getColor(word, tokens_JSON) };
@@ -447,7 +449,6 @@ async function mostUsedWordsCloud(param) {
                     .attr("transform", "translate(" + (layout.size()[0] - 200) + "," + (layout.size()[1] + 10) + ")")
                     .text("we-verify.eu");
 
-                var width = 300, height = 300;
                 // var node = document.createElement();
                 //node.appendChild(document.createTextNode('we-verify.eu'));
 
@@ -459,7 +460,7 @@ async function mostUsedWordsCloud(param) {
                     .on('click',
                         () => {
 
-                            svgString2Image(svg._parents[0].parentNode, 2 * width, 2 * height, 'png', save);
+                            svgString2Image(svg._parents[0].parentNode, layout.size()[0], layout.size()[1], 'png', save);
 
                             function save(dataBlob, filesize) {
                                 saveAs(dataBlob, 'WordCloud_' + param.search.search.replace(" ", "") + "_" + param.from + "_" + param.until + '.png');
@@ -1047,7 +1048,6 @@ function displayTweetsOfWord(word, inner_words, place, button, search) {
     csvArr += "Username,Date,Tweet,Nb of retweets, Nb of likes\n";
     json.hits.hits.forEach(tweetObj => {
        
-        console.log(includesOneOf(tweetObj._source.tweet, inner_words.get(word)));
         if (tweetObj._source.tweet.match(new RegExp('(.)*[\.\(\)0-9\!\?\'\’\‘\"\:\,\/\\\%\>\<\«\»\ ^#]' + word + '[\.\(\)\!\?\'\’\‘\"\:\,\/\>\<\«\»\ ](.)*', "i") )
             && !includesOneOf(tweetObj._source.tweet, inner_words.get(word)))
         { 
