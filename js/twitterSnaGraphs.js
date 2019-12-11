@@ -397,7 +397,7 @@ async function mostUsedWordsCloud(param) {
                 .range([12, 80]);
 
             var layout = d3.layout.cloud()
-                .size([window.innerWidth, window.innerHeight])
+                .size([window.innerWidth -100, window.innerHeight])
                 .words(words)
 
                 .padding(5)
@@ -778,7 +778,7 @@ function exportCSV(csvArr, search, start, end) {
 
 }
 
-//Download tweets ad CSV
+//Download tweets as CSV
 export function exportTweets(search, start, end) {
     var csvArr = "";
     var json = getTweets();
@@ -807,6 +807,7 @@ export function exportWords(words, search, start, end) {
     exportCSV(csvArr, search, new Date(start), new Date(end));
 
 }
+
 var firstHisto = true;
 export function setFirstHisto(first) {
     firstHisto = first

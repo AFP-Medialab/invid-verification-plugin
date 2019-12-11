@@ -232,7 +232,7 @@ async function exportPDF(hasUser) {
     var buttons = document.getElementsByClassName("modebar-group");
     Array.from(buttons).forEach(button => button.style = "display: none");
 
-    for (var i = 0; i < 30; i++) {
+    for (var i = 0; i < 56; i++) {
         let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("twitterStats-radios-time").appendChild(br);
@@ -250,7 +250,7 @@ async function exportPDF(hasUser) {
     if (!$("#tweetCounter_contents").is(":visible"))
         $("#tweetCounter_contents").slideToggle();
 
-    for (var i = 0; i < 30; i++) {
+    for (var i = 0; i < 3; i++) {
         let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("tweetCounter_contents").appendChild(br);
@@ -261,21 +261,25 @@ async function exportPDF(hasUser) {
     if (!$("#most_liked").is(":visible"))
         $("#most_liked").slideToggle();
 
+    for (var i = 0; i < 10; i++) {
+        let br = document.createElement("br");
+        br.className = "toRemove";
+        document.getElementById("most_retweeted").appendChild(br);
+    }
+    if (hasUser)
     for (var i = 0; i < 17; i++) {
         let br = document.createElement("br");
         br.className = "toRemove";
-        document.getElementById("most_liked").appendChild(br);
+        document.getElementById("hashtag_cloud_chart_content").appendChild(br);
     }
 
-    var max = 40;
-    if (hasUser)
-        max = 17;
+  /* 
 
     for (var i = 0; i < max; i++) {
         let br = document.createElement("br");
         br.className = "toRemove";
         document.getElementById("top_words_content").appendChild(br);
-    }
+    }*/
 
     if (!$("#hashtag_cloud_chart_content").is(":visible"))
         $("#hashtag_cloud_chart_content").slideToggle();
